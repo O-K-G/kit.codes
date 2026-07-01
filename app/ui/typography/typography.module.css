@@ -1,0 +1,305 @@
+.typography {
+  /* ── Body default ── */
+  &[data-variant="body"] {
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.65;
+    font-family:
+      "Inter",
+      system-ui,
+      -apple-system,
+      sans-serif;
+  }
+
+  /* ── Hero name (h1 visual) ── */
+  &[data-variant="hero-name"] {
+    font-family: "Big Shoulders", sans-serif;
+    font-size: clamp(2.1rem, 7vw, 3.4rem);
+    font-weight: 900;
+    line-height: 0.95;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    text-shadow:
+      0 0 22px rgba(255, 111, 156, 0.45),
+      0 2px 18px rgba(0, 0, 0, 0.6);
+  }
+
+  /* ── Section heading (h2) ── */
+  &[data-variant="section-heading"] {
+    font-family: "Big Shoulders", sans-serif;
+    font-size: clamp(1.7rem, 4vw, 2.3rem);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+  }
+
+  /* ── Experience card heading (h3) ── */
+  &[data-variant="card-heading"] {
+    font-family: "Big Shoulders", sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  /* ── Project card heading (h3) ── */
+  &[data-variant="project-heading"] {
+    font-family: "Big Shoulders", sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  /* ── Eyebrow / section label ── */
+  &[data-variant="eyebrow"] {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.78rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.7);
+  }
+
+  /* ── Hero role subtitle ── */
+  &[data-variant="hero-role"] {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.95rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.7);
+  }
+
+  /* ── Hero tagline paragraph ── */
+  &[data-variant="hero-tag"] {
+    font-size: 1rem;
+    font-weight: 400;
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.8);
+    font-family:
+      "Inter",
+      system-ui,
+      -apple-system,
+      sans-serif;
+  }
+
+  /* ── Section body paragraph ── */
+  &[data-variant="section-body"] {
+    font-size: 1rem;
+    font-weight: 400;
+    font-family:
+      "Inter",
+      system-ui,
+      -apple-system,
+      sans-serif;
+  }
+
+  /* ── Section body — strong emphasis ── */
+  &[data-variant="section-body-strong"] {
+    font-size: 1rem;
+    font-weight: 600;
+    font-family:
+      "Inter",
+      system-ui,
+      -apple-system,
+      sans-serif;
+  }
+
+  /* ── Nav logo ── */
+  &[data-variant="nav-logo"] {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── Floor buttons (elevator nav) ── */
+  &[data-variant="floor-btn"] {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.82rem;
+    font-weight: 600;
+  }
+
+  /* ── Buttons (primary & ghost) ── */
+  &[data-variant="button"] {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.85rem;
+    font-weight: 600;
+    /* primary: color #0a0e1a — ghost: color #e8eaf0 */
+  }
+
+  /* ── Unit plate (experience meta: suite number + date) ── */
+  &[data-variant="unit-plate"] {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.74rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── Experience org / subtitle ── */
+  &[data-variant="unit-org"] {
+    font-size: 0.92rem;
+    font-weight: 400;
+    font-style: italic;
+    font-family:
+      "Inter",
+      system-ui,
+      -apple-system,
+      sans-serif;
+  }
+
+  /* ── Experience bullet list ── */
+  &[data-variant="unit-notes"] {
+    font-size: 0.92rem;
+    font-weight: 400;
+    font-family:
+      "Inter",
+      system-ui,
+      -apple-system,
+      sans-serif;
+  }
+
+  /* ── Project card tag (e.g. "Unit 3A") ── */
+  &[data-variant="unit-tag"] {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.74rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── Open sign ── */
+  &[data-variant="open-sign"] {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+
+  /* ── Project card body ── */
+  &[data-variant="project-body"] {
+    font-size: 0.9rem;
+    font-weight: 400;
+    font-family:
+      "Inter",
+      system-ui,
+      -apple-system,
+      sans-serif;
+  }
+
+  /* ── Tech stack pill ── */
+  &[data-variant="stack-pill"] {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.7rem;
+    font-weight: 400;
+  }
+
+  /* ── Project link ── */
+  &[data-variant="project-link"] {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.82rem;
+    font-weight: 400;
+  }
+
+  /* ── Certificate label ── */
+  &[data-variant="cert-label"] {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* ── Certificate stamp ── */
+  &[data-variant="cert-stamp"] {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.68rem;
+    font-weight: 400;
+  }
+
+  /* ── Skill meter row (name + years) ── */
+  &[data-variant="skill-label"] {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.82rem;
+    font-weight: 400;
+    /* grid column widths change at ≤600px: 90px → 78px (name), 48px → 42px (years) */
+  }
+
+  /* ── Certificate "also" note ── */
+  &[data-variant="cert-also"] {
+    font-size: 0.88rem;
+    font-weight: 400;
+    font-family:
+      "Inter",
+      system-ui,
+      -apple-system,
+      sans-serif;
+  }
+
+  /* ── Intercom header label ── */
+  &[data-variant="intercom-head"] {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.78rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── Buzzer (contact button) ── */
+  &[data-variant="buzzer"] {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  /* ── Footer ── */
+  &[data-variant="footer"] {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.76rem;
+    font-weight: 400;
+  }
+
+  /** Colors */
+
+  &[data-color="sky-deep"] {
+    color: var(--sky-deep);
+  }
+
+  &[data-color="sky-warm"] {
+    color: var(--sky-warm);
+  }
+
+  &[data-color="sky-deep"] {
+    color: var(--sky-deep);
+  }
+
+  &[data-color="block"] {
+    color: var(--block);
+  }
+
+  &[data-color="paper"] {
+    color: var(--paper);
+  }
+
+  &[data-color="mist"] {
+    color: var(--mist);
+  }
+
+  &[data-color="window"] {
+    color: var(--window);
+  }
+
+  &[data-color="signage"] {
+    color: var(--signage);
+  }
+
+  &[data-color="add"] {
+    color: var(--add);
+  }
+
+  &[data-color="del"] {
+    color: var(--del);
+  }
+
+  &[data-color="block-border"] {
+    color: var(--block-border);
+  }
+}

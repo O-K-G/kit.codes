@@ -1,0 +1,54 @@
+.buttonStyles {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: clamp(14px, 1.36vw, 18px);
+  line-height: 100%;
+  text-align: center;
+  padding: clamp(11.2px, 1.09vw, 22.4px) clamp(17.6px, 1.7vw, 35.2px);
+  border-radius: clamp(7px, 0.68vw, 12px);
+  transition: all 0.2s ease-in-out;
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+
+  @container style(--is-large-mobile: true) {
+    cursor: pointer;
+  }
+
+  &:focus-visible {
+    outline-offset: 4px;
+    outline: 2px solid var(--window);
+  }
+
+  &[data-variant="outline-paper"] {
+    color: var(--paper);
+    border: 1px solid var(--block-border);
+    background-color: transparent;
+
+    &:focus-visible,
+    &:hover {
+      border-color: var(--window);
+    }
+
+    &:hover {
+      color: var(--window);
+    }
+  }
+
+  &[data-variant="fill-sky-deep"] {
+    color: var(--sky-deep);
+    border: 1px solid var(--sky-deep);
+    background-color: var(--signage);
+
+    &:focus-visible,
+    &:hover {
+      border-color: var(--window);
+    }
+
+    &:hover {
+      box-shadow: 0 15px 30px -10px rgba(179, 44, 85, 0.5);
+      transform: translateY(-4px);
+    }
+  }
+}

@@ -1,0 +1,27 @@
+.hero {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  .eyebrow {
+    margin-bottom: var(--md-margin);
+  }
+
+  h1 {
+    margin-bottom: var(--md-margin);
+  }
+
+  .heroRole {
+    margin-bottom: var(--lg-margin);
+  }
+
+  .heroTag {
+    margin-bottom: var(--lg-margin);
+  }
+
+  p {
+    text-wrap: balance;
+  }
+}
