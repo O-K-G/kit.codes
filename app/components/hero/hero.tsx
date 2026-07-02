@@ -1,7 +1,9 @@
 import Typography from "@ui/typography/typography";
 import styles from "./hero.module.css";
 import HeroButtons from "./heroButtons";
-import VideoBanner from "./videoBanner";
+import VideoBackground from "./videoBackground";
+import Section from "@ui/section/section";
+import Divider from "@ui/divider/divider";
 
 const EYEBROW = "G · Lobby — now showing";
 const TITLE = "Kit Geda";
@@ -40,16 +42,18 @@ const DATA = [
 
 export default function Hero() {
   return (
-    <section className={styles.hero}>
-      {DATA.map(({ content, ...rest }) => (
-        <Typography key={content} {...rest}>
-          {content}
-        </Typography>
-      ))}
-      <HeroButtons />
+    <Section className={styles.hero}>
+      <VideoBackground />
+      <div className={styles.textArea}>
+        {DATA.map(({ content, ...rest }) => (
+          <Typography key={content} {...rest}>
+            {content}
+          </Typography>
+        ))}
+        <HeroButtons />
+      </div>
 
-     
-      <VideoBanner />
-    </section>
+      <Divider />
+    </Section>
   );
 }

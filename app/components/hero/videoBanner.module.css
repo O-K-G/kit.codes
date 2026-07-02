@@ -1,7 +1,0 @@
-.videoBanner {
-  width: 100%;
-  height: 25%;
-  object-fit: cover;
-  border-radius: clamp(7px, 0.68vw, 12px);
-  filter: grayscale(80%) brightness(50%);
-}
