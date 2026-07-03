@@ -13,6 +13,8 @@
 
   /** Margin variables */
   --md-margin: clamp(8px, 0.55vw, 16px);
+  --desktop-margin: clamp(16px, 1.56vw, 32px);
+  --desktop-lg-margin: clamp(32px, 3.12vw, 64px);
   --lg-margin: clamp(24px, 2.34vw, 32px);
 
   /** Resolution breaking points */

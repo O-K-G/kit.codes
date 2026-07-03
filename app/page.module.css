@@ -6,5 +6,5 @@
   justify-content: flex-start;
   align-items: center;
   overflow-y: auto;
-  padding: clamp(16px, 1.56vw, 32px) 25%;
+  padding: var(--desktop-margin) 25%;
 }

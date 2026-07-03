@@ -1,0 +1,10 @@
+.section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  position: relative;
+  padding: var(--desktop-margin);
+  border-bottom: 1px solid var(--block-border);
+}
