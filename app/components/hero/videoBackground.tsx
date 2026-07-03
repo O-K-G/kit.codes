@@ -5,7 +5,6 @@ import styles from "./videoBackground.module.css";
 import { MouseEventHandler } from "react";
 
 export default function VideoBackground() {
-  const handleOnLoadData = () => console.log("xxx");
   const handleContextMenu: MouseEventHandler<HTMLVideoElement> = (e) =>
     e.preventDefault();
 
@@ -16,7 +15,6 @@ export default function VideoBackground() {
         autoPlay
         muted
         onContextMenu={handleContextMenu}
-        onLoadedData={handleOnLoadData}
         className={styles.videoBanner}
         primarySrc="/videos/test.mp4"
         primarySrcType="video/mp4"

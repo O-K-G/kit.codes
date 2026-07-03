@@ -3,7 +3,6 @@ import styles from "./hero.module.css";
 import HeroButtons from "./heroButtons";
 import VideoBackground from "./videoBackground";
 import Section from "@ui/section/section";
-import Divider from "@ui/divider/divider";
 
 const EYEBROW = "G · Lobby — now showing";
 const TITLE = "Kit Geda";
@@ -52,8 +51,6 @@ export default function Hero() {
         ))}
         <HeroButtons />
       </div>
-
-      <Divider />
     </Section>
   );
 }

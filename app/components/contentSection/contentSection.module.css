@@ -1,0 +1,8 @@
+.contentSection {
+  gap: var(--desktop-margin);
+
+  b {
+    color: var(--paper);
+    font-weight: 600;
+  }
+}

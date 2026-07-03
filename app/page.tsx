@@ -1,13 +1,15 @@
 import Hero from "@components/hero/hero";
 import styles from "./page.module.css";
+import About from "@components/about/about";
+import Experience from "@components/experience/experience";
 
- /** TODO: banner. */
 
- 
 export default function Home() {
   return (
     <main className={styles.mainContent}>
       <Hero />
+      <About />
+      <Experience />
     </main>
   );
 }
