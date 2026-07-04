@@ -4,10 +4,9 @@
   left: 0;
   width: 100dvw;
   height: 100dvh;
-  background-color: black;
+  background-color: transparent;
   z-index: -20;
   transition: all 0.5s ease-in-out;
-  opacity: 0;
   visibility: hidden;
   display: flex;
   flex-direction: column;
@@ -15,7 +14,7 @@
   align-items: center;
 
   &[data-modal-open="true"] {
-    opacity: 0.9;
+    background-color: rgba(0, 0, 0, 0.9);
     z-index: 20;
     visibility: visible;
   }
