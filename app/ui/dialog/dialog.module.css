@@ -18,4 +18,16 @@
     z-index: 20;
     visibility: visible;
   }
+
+  div {
+    &[aria-modal="false"] {
+      transition: all 0.5s ease-in-out;
+      opacity: 0;
+    }
+
+    &[aria-modal="true"] {
+      transition: all 0.5s ease-in-out 0.5s;
+      opacity: 1;
+    }
+  }
 }

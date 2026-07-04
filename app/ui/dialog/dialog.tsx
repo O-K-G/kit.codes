@@ -36,8 +36,7 @@ export default function Dialog({
 
   const handleTransitionEnd: TransitionEventHandler = (e) => {
     const el = e.target as HTMLDivElement;
-    const focusableElements = el.querySelectorAll(focusableSelector);
-    const firstElement = focusableElements[0] as HTMLElement;
+    const firstElement = el.querySelectorAll(focusableSelector)?.[0] as HTMLElement;
 
     if (el.dataset.modalOpen === "false") {
       el.dataset.modalOpen = "false";
@@ -52,9 +51,9 @@ export default function Dialog({
 
   useEffect(() => {
     const { current } = dialogRef;
-    
+
     const handleClick = (e: globalThis.KeyboardEvent) => {
-      const { key } = e || {};
+      const { key, shiftKey } = e || {};
 
       if (key === "Escape") {
         openCloseDialog();
@@ -73,7 +72,7 @@ export default function Dialog({
           focusableElements.length - 1
         ] as HTMLElement;
 
-        if (e.shiftKey) {
+        if (shiftKey) {
           if (activeElement === firstElement) {
             lastElement.focus();
             e.preventDefault();
