@@ -6,7 +6,7 @@ import { openCloseDialog } from "@ui/dialog/dialog";
 import InputOrTextarea from "@/app/ui/input/inputOrTextarea";
 import BottomBar from "./bottomBar";
 
-const TITLE = 'Send me an email'
+const TITLE = "Send me an email";
 
 export type DirTypes = "ltr" | "rtl";
 
@@ -22,8 +22,20 @@ export default function MessageForm() {
   };
 
   const inputsObj = [
-    { type: "email", dir, label: "From:", minLength: 3, maxLength: 100 },
-    { type: "text", dir, label: "Subject:", minLength: 3, maxLength: 100 },
+    {
+      type: "email",
+      dir,
+      label: "From:",
+      minLength: 3,
+      maxLength: 100,
+    },
+    {
+      type: "text",
+      dir,
+      label: "Subject:",
+      minLength: 3,
+      maxLength: 100,
+    },
     {
       dir,
       label: "Message:",

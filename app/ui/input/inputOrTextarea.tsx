@@ -1,6 +1,14 @@
 import { concatStyles } from "@/app/utils/concatStyles";
 import styles from "./inputOrTextarea.module.css";
-import { Fragment, HTMLInputTypeAttribute, ReactNode } from "react";
+import DOMPurify from "isomorphic-dompurify";
+import {
+  ChangeEventHandler,
+  Fragment,
+  HTMLInputTypeAttribute,
+  ReactNode,
+  RefObject,
+  useRef,
+} from "react";
 
 type InputProps = {
   dir: "ltr" | "rtl";
@@ -12,6 +20,7 @@ type InputProps = {
   rows?: number;
   label: string;
   children?: ReactNode;
+  onChange?: (val: string) => void;
 
   /** Defaults to 'span'. */
   wrapperComponent?: "span" | "div";
@@ -31,6 +40,7 @@ export default function InputOrTextarea({
   className = "",
   label,
   children,
+  onChange,
   ...rest
 }: InputProps) {
   const selectedId = id || `input-${label}`;
@@ -49,6 +59,14 @@ export default function InputOrTextarea({
     rows,
   };
 
+  const handleChange: ChangeEventHandler<
+    HTMLInputElement | HTMLTextAreaElement
+  > = (e) => {
+    const cleanString = DOMPurify.sanitize(e.target.value);
+    e.target.value = cleanString;
+    onChange?.(cleanString);
+  };
+
   return (
     <WrapperComponent
       data-text-area={isTextArea}
@@ -58,7 +76,7 @@ export default function InputOrTextarea({
       <label htmlFor={selectedId}>{label}</label>
 
       <InputContainerComponent>
-        <Component {...componentProps} />
+        <Component onChange={handleChange} {...componentProps} />
         {children}
       </InputContainerComponent>
     </WrapperComponent>
