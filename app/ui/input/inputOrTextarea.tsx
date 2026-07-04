@@ -6,8 +6,6 @@ import {
   Fragment,
   HTMLInputTypeAttribute,
   ReactNode,
-  RefObject,
-  useRef,
 } from "react";
 
 type InputProps = {
