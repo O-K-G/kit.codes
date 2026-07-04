@@ -1,0 +1,22 @@
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100dvw;
+  height: 100dvh;
+  background-color: black;
+  z-index: -20;
+  transition: all 0.5s ease-in-out;
+  opacity: 0;
+  visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &[data-modal-open="true"] {
+    opacity: 0.9;
+    z-index: 20;
+    visibility: visible;
+  }
+}
