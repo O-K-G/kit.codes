@@ -1,0 +1,21 @@
+.bottomBar {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  .directionButtons {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    width: 33.3333334%;
+    gap: var(--md-margin);
+
+    &[dir="rtl"] {
+      flex-direction: row-reverse;
+      justify-content: flex-end;
+    }
+  }
+}

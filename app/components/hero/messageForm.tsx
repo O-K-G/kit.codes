@@ -3,23 +3,44 @@ import Typography from "@ui/typography/typography";
 import Button from "@ui/button/button";
 import { SubmitEventHandler, useState } from "react";
 import { openCloseDialog } from "@ui/dialog/dialog";
+import InputOrTextarea from "@/app/ui/input/inputOrTextarea";
+import BottomBar from "./bottomBar";
+
+const TITLE = 'Send me an email'
+
+export type DirTypes = "ltr" | "rtl";
 
 export default function MessageForm() {
-  const [dir, setDir] = useState("ltr");
+  const [dir, setDir] = useState<DirTypes>("ltr");
 
   const handleDir = () =>
     setDir((prevValue) => (prevValue === "ltr" ? "rtl" : "ltr"));
 
   const handleSubmit: SubmitEventHandler = (e) => {
     e.preventDefault();
-    console.log(e)
+    console.log(e);
   };
+
+  const inputsObj = [
+    { type: "email", dir, label: "From:", minLength: 3, maxLength: 100 },
+    { type: "text", dir, label: "Subject:", minLength: 3, maxLength: 100 },
+    {
+      dir,
+      label: "Message:",
+      minLength: 3,
+      maxLength: 1000,
+      rows: 10,
+      wrapperComponent: "div",
+      component: "textarea",
+      children: <BottomBar dir={dir} onClick={handleDir} />,
+    },
+  ] as const;
 
   return (
     <form onSubmit={handleSubmit} className={styles.messageForm}>
       <div className={styles.titleBar}>
         <Typography component="h2" color="paper" variant="card-heading">
-          Send me an email
+          {TITLE}
         </Typography>
 
         <span>
@@ -29,35 +50,9 @@ export default function MessageForm() {
         </span>
       </div>
 
-      <span dir={dir} className={styles.inputComponent}>
-        <label htmlFor="from">From:</label>
-        <input minLength={3} maxLength={100} id="from" type="email" />
-      </span>
-
-      <span dir={dir} className={styles.inputComponent}>
-        <label htmlFor="subject">Subject:</label>
-        <input minLength={3} maxLength={100} id="subject" type="text" />
-      </span>
-
-      <div dir={dir} data-text-area className={styles.inputComponent}>
-        <label htmlFor="message">Message:</label>
-
-        <div>
-          <textarea maxLength={1000} id="message" rows={10} />
-          <div className={styles.bottomBar}>
-            <div dir={dir} className={styles.directionButtons}>
-              <Button disabled={dir === "ltr"} onClick={handleDir}>
-                L
-              </Button>
-              <Button disabled={dir === "rtl"} onClick={handleDir}>
-                R
-              </Button>
-            </div>
-            
-              <Button type="submit">Send</Button>
-          </div>
-        </div>
-      </div>
+      {inputsObj.map(({ label, ...rest }) => (
+        <InputOrTextarea key={`i-t-${label}`} label={label} {...rest} />
+      ))}
     </form>
   );
 }

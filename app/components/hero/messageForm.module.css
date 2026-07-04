@@ -4,7 +4,8 @@
   border-radius: clamp(7px, 0.68vw, 12px);
   padding: var(--desktop-margin);
   width: 90dvw;
-  height: 90dvh;
+  min-width: fit-content;
+  min-height: fit-content;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -39,63 +40,6 @@
       flex-direction: row;
       justify-content: flex-end;
       align-items: center;
-    }
-  }
-
-  .inputComponent {
-    width: 100%;
-    display: inline-flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: flex-start;
-    gap: var(--md-margin);
-
-    &[data-text-area] {
-      display: flex;
-    }
-
-    label {
-      width: 10%;
-      flex-shrink: 0;
-      text-transform: uppercase;
-    }
-
-    input,
-    textarea {
-      width: 100%;
-      border-radius: clamp(7px, 0.68vw, 12px);
-      padding: var(--md-margin);
-    }
-
-    div {
-      width: 100%;
-
-      textarea {
-        resize: none;
-        margin-bottom: var(--desktop-margin);
-      }
-    }
-  }
-
-  .bottomBar {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-
-    .directionButtons {
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-start;
-      align-items: center;
-      width: 33.3333334%;
-      gap: var(--md-margin);
-
-      &[dir="rtl"] {
-        flex-direction: row-reverse;
-        justify-content: flex-end;
-      }
     }
   }
 }
