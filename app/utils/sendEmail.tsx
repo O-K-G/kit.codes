@@ -3,6 +3,7 @@
 import DOMPurify from "isomorphic-dompurify";
 import nodemailer from "nodemailer";
 import { handleValidation } from "./handleValidation";
+import { convertComponentToHtml } from "./emailHTMLtemplate";
 
 const STATUS = {
   success: { success: true, message: "Message sent" },
@@ -54,7 +55,7 @@ export async function sendEmail(
         from,
         to: [TO!],
         subject,
-        text: message,
+        html: await convertComponentToHtml({ from, subject, message, dir }),
       });
 
       if (transport?.response?.includes(HOST_SUCCESS_RESPONSE!)) {
@@ -66,7 +67,7 @@ export async function sendEmail(
       return STATUS.fail;
     }
   }
-  
+
   console.error(STATUS.fail);
   return STATUS.fail;
 }
