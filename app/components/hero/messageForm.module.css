@@ -24,6 +24,7 @@
     justify-content: flex-end;
     align-items: center;
     margin-bottom: var(--desktop-margin);
+    text-wrap: balance;
 
     h2,
     span {
@@ -39,6 +40,12 @@
       flex-direction: row;
       justify-content: flex-end;
       align-items: center;
+
+      svg {
+        width: clamp(24px, 2.34vw, 48px);
+        height: auto;
+        fill: var(--paper);
+      }
     }
   }
 
@@ -48,5 +55,10 @@
     flex-direction: column;
     justify-content: center;
     align-items: flex-end;
+  }
+
+  input,
+  textarea {
+    margin-bottom: var(--md-margin);
   }
 }

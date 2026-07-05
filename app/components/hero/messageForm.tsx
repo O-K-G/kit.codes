@@ -1,22 +1,29 @@
 import styles from "./messageForm.module.css";
 import Typography from "@ui/typography/typography";
-import Button from "@ui/button/button";
 import { SubmitEventHandler, useState } from "react";
 import { openCloseDialog } from "@ui/dialog/dialog";
 import InputOrTextarea from "@ui/input/inputOrTextarea";
 import BottomBar from "./bottomBar";
 import { parseLabel } from "@utils/parseLabel";
 import CharactersLeftCounter from "./charactersLeftCounter";
+import IconButton from "@/app/ui/iconButton/iconButton";
+import CloseIcon from "@/app/ui/iconComponents/closeIcon";
 
 const TITLE = "Send me an email";
 const LABELS = { email: "From:", subject: "Subject:", message: "Message:" };
-const PLACEHOLDERS = { email: "myemail@example.com", subject: "What brings you here?", message: "Your message" };
+const PLACEHOLDERS = {
+  email: "myemail@example.com",
+  subject: "What brings you here?",
+  message: "Your message",
+};
+const CLOSE_BUTTON = { ariaLabel: "Close", onClick: openCloseDialog };
 
 export type DirTypes = "ltr" | "rtl";
 
 export default function MessageForm() {
   const [dir, setDir] = useState<DirTypes>("ltr");
   const [counter, setCounter] = useState({});
+  const [statusMessage, setStatusMessage] = useState('')
 
   const handleDir = () =>
     setDir((prevValue) => (prevValue === "ltr" ? "rtl" : "ltr"));
@@ -68,9 +75,13 @@ export default function MessageForm() {
         </Typography>
 
         <span>
-          <Button onClick={openCloseDialog} variant="outline-paper">
-            x
-          </Button>
+          <IconButton
+            aria-label={CLOSE_BUTTON.ariaLabel}
+            onClick={CLOSE_BUTTON.onClick}
+            groupFill
+          >
+            <CloseIcon />
+          </IconButton>
         </span>
       </div>
 
@@ -108,7 +119,11 @@ export default function MessageForm() {
           label={parseLabel(inputsObj[2].label)}
           dir={dir}
         />
-        <BottomBar dir={dir} onClick={handleDir} />
+        <BottomBar
+          statusMessage={statusMessage}
+          dir={dir}
+          onClick={handleDir}
+        />
       </InputOrTextarea>
     </form>
   );

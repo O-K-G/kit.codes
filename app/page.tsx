@@ -8,6 +8,8 @@ export default function Home() {
 
   // TODO
  //  sendEmail({from: 'test', subject: 'test1', text: 'xxx'}).then((x) => console.log(x))
+ // Email form: icons + status message.
+ 
   return (
     <main className={styles.mainContent}>
       <Hero />
