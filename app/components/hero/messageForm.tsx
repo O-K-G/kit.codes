@@ -13,6 +13,7 @@ import { FIELDS } from "@/app/utils/handleValidation";
 
 const TITLE = "Send me an email";
 const LABELS = { email: "From:", subject: "Subject:", message: "Message:" };
+const SENDING_LABEL = 'Sending...'
 const PLACEHOLDERS = {
   email: "myemail@example.com",
   subject: "What brings you here?",
@@ -26,6 +27,8 @@ export default function MessageForm() {
   const [dir, setDir] = useState<DirTypes>("ltr");
   const [counter, setCounter] = useState({});
   const [state, formAction, isPending] = useActionState(sendEmail, null);
+  const sendingMessage = isPending && SENDING_LABEL;
+  const statusMessage = sendingMessage || state?.message;
  
   const handleDir = () =>
     setDir((prevValue) => (prevValue === "ltr" ? "rtl" : "ltr"));
@@ -111,7 +114,7 @@ export default function MessageForm() {
           dir={dir}
         />
         <BottomBar
-          statusMessage={state?.message}
+          statusMessage={statusMessage}
           dir={dir}
           onClick={handleDir}
         />
