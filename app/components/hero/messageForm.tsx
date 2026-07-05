@@ -1,13 +1,14 @@
 import styles from "./messageForm.module.css";
 import Typography from "@ui/typography/typography";
-import { SubmitEventHandler, useState } from "react";
+import {  useActionState, useState } from "react";
 import { openCloseDialog } from "@ui/dialog/dialog";
 import InputOrTextarea from "@ui/input/inputOrTextarea";
 import BottomBar from "./bottomBar";
 import { parseLabel } from "@utils/parseLabel";
 import CharactersLeftCounter from "./charactersLeftCounter";
-import IconButton from "@/app/ui/iconButton/iconButton";
-import CloseIcon from "@/app/ui/iconComponents/closeIcon";
+import IconButton from "@ui/iconButton/iconButton";
+import CloseIcon from "@ui/iconComponents/closeIcon";
+import { sendEmail } from "@utils/sendEmail";
 
 const TITLE = "Send me an email";
 const LABELS = { email: "From:", subject: "Subject:", message: "Message:" };
@@ -23,18 +24,11 @@ export type DirTypes = "ltr" | "rtl";
 export default function MessageForm() {
   const [dir, setDir] = useState<DirTypes>("ltr");
   const [counter, setCounter] = useState({});
-  const [statusMessage, setStatusMessage] = useState('')
-
+  const [statusMessage, setStatusMessage] = useState("");
+  const [state, formAction, isPending] = useActionState(sendEmail, null);
+console.log('state', state, 'ispending', isPending)
   const handleDir = () =>
     setDir((prevValue) => (prevValue === "ltr" ? "rtl" : "ltr"));
-
-  const handleSubmit: SubmitEventHandler<HTMLFormElement> = (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData.entries());
-
-    console.log(data);
-  };
 
   const handleChange = ({ label, str }: { label: string; str: string }) =>
     setCounter((prevValue) => ({ ...prevValue, [parseLabel(label)]: str }));
@@ -68,7 +62,7 @@ export default function MessageForm() {
   ] as const;
 
   return (
-    <form onSubmit={handleSubmit} className={styles.messageForm}>
+    <form action={formAction} className={styles.messageForm}>
       <div className={styles.titleBar}>
         <Typography component="h2" color="paper" variant="card-heading">
           {TITLE}
