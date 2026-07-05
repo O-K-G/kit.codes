@@ -1,6 +1,6 @@
 import styles from "./messageForm.module.css";
 import Typography from "@ui/typography/typography";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { openCloseDialog } from "@ui/dialog/dialog";
 import InputOrTextarea from "@ui/input/inputOrTextarea";
 import BottomBar from "./bottomBar";
@@ -13,7 +13,7 @@ import { FIELDS } from "@/app/utils/handleValidation";
 
 const TITLE = "Send me an email";
 const LABELS = { email: "From:", subject: "Subject:", message: "Message:" };
-const SENDING_LABEL = 'Sending...'
+const SENDING_LABEL = "Sending...";
 const PLACEHOLDERS = {
   email: "myemail@example.com",
   subject: "What brings you here?",
@@ -29,7 +29,9 @@ export default function MessageForm() {
   const [state, formAction, isPending] = useActionState(sendEmail, null);
   const sendingMessage = isPending && SENDING_LABEL;
   const statusMessage = sendingMessage || state?.message;
- 
+  const backupData = useRef({});
+  const formRef = useRef<HTMLFormElement>(null);
+
   const handleDir = () =>
     setDir((prevValue) => (prevValue === "ltr" ? "rtl" : "ltr"));
 
@@ -61,8 +63,54 @@ export default function MessageForm() {
     },
   ] as const;
 
+  const handleFormAction: (e: FormData) => void = (e) => {
+    backupData.current = Object.fromEntries(e.entries());
+    formAction(e);
+  };
+
+  /**
+   * The form resets the inputs even if sending fails.
+   * This preserves the form data on the client in case sending fails.
+   * */
+  useEffect(() => {
+    if (!isPending) {
+      if (state?.success === false) {
+        ["input", "textarea"].forEach((str) =>
+          Array.from(formRef.current?.getElementsByTagName(str) || []).forEach(
+            (field) => {
+              const el = field as (HTMLInputElement | HTMLTextAreaElement) & {
+                dirname: string;
+              };
+              if (Object.keys(backupData.current).includes(el.name)) {
+                el.value =
+                  backupData.current[
+                    el.name as keyof typeof backupData.current
+                  ];
+              }
+
+              if (Object.keys(backupData.current).includes(el.dirname)) {
+                el.dirname =
+                  backupData.current[
+                    el.dirname as keyof typeof backupData.current
+                  ];
+              }
+            },
+          ),
+        );
+      }
+
+      if (state?.success) {
+        backupData.current = {};
+      }
+    }
+  }, [isPending, state?.success]);
+
   return (
-    <form action={formAction} className={styles.messageForm}>
+    <form
+      ref={formRef}
+      action={handleFormAction}
+      className={styles.messageForm}
+    >
       <div className={styles.titleBar}>
         <Typography component="h2" color="paper" variant="card-heading">
           {TITLE}
