@@ -1,5 +1,20 @@
 import { z } from "zod";
 
+export const FIELDS = {
+  email: {
+    minLength: 3,
+    maxLength: 254,
+  },
+  subject: {
+    minLength: 3,
+    maxLength: 100,
+  },
+  message: {
+    minLength: 3,
+    maxLength: 1000,
+  },
+};
+
 type HandleValidationProps = {
   from: string;
   subject: string;
@@ -14,17 +29,32 @@ export async function handleValidation({
   dir,
 }: HandleValidationProps) {
   const emailSchema = z.object({
-    from: z.email({ message: "Invalid email format" }),
+    from: z
+      .email({ message: "Invalid email format" })
+      .min(FIELDS.email.minLength, {
+        message: `Email must be at least ${FIELDS.email.minLength} characters`,
+      })
+      .max(FIELDS.email.maxLength, {
+        message: `Email cannot exceed ${FIELDS.email.maxLength} characters`,
+      }),
 
     subject: z
       .string()
-      .min(3, { message: "Subject must be at least 3 characters" })
-      .max(100, { message: "Subject cannot exceed 100 characters" }),
+      .min(FIELDS.subject.minLength, {
+        message: "Subject must be at least 3 characters",
+      })
+      .max(FIELDS.subject.maxLength, {
+        message: "Subject cannot exceed 100 characters",
+      }),
 
     message: z
       .string()
-      .min(3, { message: "Message must be at least 3 characters" })
-      .max(1000, { message: "Message cannot exceed 1000 characters" }),
+      .min(FIELDS.message.minLength, {
+        message: "Message must be at least 3 characters",
+      })
+      .max(FIELDS.message.maxLength, {
+        message: "Message cannot exceed 1000 characters",
+      }),
 
     dir: z.enum(["ltr", "rtl"], {
       message: "Direction must be either ltr or rtl",

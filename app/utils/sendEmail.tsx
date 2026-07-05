@@ -66,6 +66,7 @@ export async function sendEmail(
       return STATUS.fail;
     }
   }
+  
   console.error(STATUS.fail);
   return STATUS.fail;
 }

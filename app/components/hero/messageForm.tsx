@@ -1,6 +1,6 @@
 import styles from "./messageForm.module.css";
 import Typography from "@ui/typography/typography";
-import {  useActionState, useState } from "react";
+import { useActionState, useState } from "react";
 import { openCloseDialog } from "@ui/dialog/dialog";
 import InputOrTextarea from "@ui/input/inputOrTextarea";
 import BottomBar from "./bottomBar";
@@ -9,6 +9,7 @@ import CharactersLeftCounter from "./charactersLeftCounter";
 import IconButton from "@ui/iconButton/iconButton";
 import CloseIcon from "@ui/iconComponents/closeIcon";
 import { sendEmail } from "@utils/sendEmail";
+import { FIELDS } from "@/app/utils/handleValidation";
 
 const TITLE = "Send me an email";
 const LABELS = { email: "From:", subject: "Subject:", message: "Message:" };
@@ -24,9 +25,8 @@ export type DirTypes = "ltr" | "rtl";
 export default function MessageForm() {
   const [dir, setDir] = useState<DirTypes>("ltr");
   const [counter, setCounter] = useState({});
-  const [statusMessage, setStatusMessage] = useState("");
   const [state, formAction, isPending] = useActionState(sendEmail, null);
-console.log('state', state, 'ispending', isPending)
+ 
   const handleDir = () =>
     setDir((prevValue) => (prevValue === "ltr" ? "rtl" : "ltr"));
 
@@ -38,21 +38,18 @@ console.log('state', state, 'ispending', isPending)
       type: "email",
       label: LABELS.email,
       placeholder: PLACEHOLDERS.email,
-      minLength: 3,
-      maxLength: 100,
+      ...FIELDS.email,
     },
     {
       type: "text",
       label: LABELS.subject,
       placeholder: PLACEHOLDERS.subject,
-      minLength: 3,
-      maxLength: 100,
+      ...FIELDS.subject,
     },
     {
       label: LABELS.message,
       placeholder: PLACEHOLDERS.message,
-      minLength: 3,
-      maxLength: 1000,
+      ...FIELDS.message,
       rows: 10,
       wrapperComponent: "div",
       component: "textarea",
@@ -114,7 +111,7 @@ console.log('state', state, 'ispending', isPending)
           dir={dir}
         />
         <BottomBar
-          statusMessage={statusMessage}
+          statusMessage={state?.message}
           dir={dir}
           onClick={handleDir}
         />
