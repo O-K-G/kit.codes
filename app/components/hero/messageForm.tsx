@@ -13,13 +13,14 @@ import { FIELDS } from "@/app/utils/handleValidation";
 
 const TITLE = "Send me an email";
 const LABELS = { email: "From:", subject: "Subject:", message: "Message:" };
+const CLOSE_BUTTON = { ariaLabel: "Close", onClick: openCloseDialog };
+const INPUT_TYPES = ["input", "textarea"];
 const SENDING_LABEL = "Sending...";
 const PLACEHOLDERS = {
   email: "myemail@example.com",
   subject: "What brings you here?",
   message: "Your message",
 };
-const CLOSE_BUTTON = { ariaLabel: "Close", onClick: openCloseDialog };
 
 export type DirTypes = "ltr" | "rtl";
 
@@ -75,24 +76,22 @@ export default function MessageForm() {
   useEffect(() => {
     if (!isPending) {
       if (state?.success === false) {
-        ["input", "textarea"].forEach((str) =>
+        INPUT_TYPES.forEach((str) =>
           Array.from(formRef.current?.getElementsByTagName(str) || []).forEach(
             (field) => {
+              const backupDataKeys = Object.keys(backupData.current);
               const el = field as (HTMLInputElement | HTMLTextAreaElement) & {
                 dirname: string;
               };
-              if (Object.keys(backupData.current).includes(el.name)) {
-                el.value =
-                  backupData.current[
-                    el.name as keyof typeof backupData.current
-                  ];
+              const nameKey = el.name as keyof typeof backupData.current;
+              const dirnameKey = el.dirname as keyof typeof backupData.current;
+
+              if (backupDataKeys.includes(nameKey)) {
+                el.value = backupData.current[nameKey];
               }
 
-              if (Object.keys(backupData.current).includes(el.dirname)) {
-                el.dirname =
-                  backupData.current[
-                    el.dirname as keyof typeof backupData.current
-                  ];
+              if (backupDataKeys.includes(dirnameKey)) {
+                el.dirname = backupData.current[dirnameKey];
               }
             },
           ),
