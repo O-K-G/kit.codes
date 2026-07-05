@@ -8,7 +8,11 @@ type BottomBarProps = {
   onClick: MouseEventHandler;
 };
 
-export default function BottomBar({ dir, onClick, ...rest }: BottomBarProps) {
+export default function BottomBar({
+  dir,
+  onClick,
+  ...rest
+}: BottomBarProps) {
   return (
     <div className={styles.bottomBar} {...rest}>
       <div dir={dir} className={styles.directionButtons}>

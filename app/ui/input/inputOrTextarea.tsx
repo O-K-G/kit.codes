@@ -1,10 +1,14 @@
-import { concatStyles } from "@/app/utils/concatStyles";
+import { concatStyles } from "@utils/concatStyles";
 import styles from "./inputOrTextarea.module.css";
 import DOMPurify from "isomorphic-dompurify";
+import { parseLabel } from "@utils/parseLabel";
 import {
   ChangeEventHandler,
+  FocusEventHandler,
   Fragment,
   HTMLInputTypeAttribute,
+  MouseEventHandler,
+  ReactEventHandler,
   ReactNode,
 } from "react";
 
@@ -16,8 +20,11 @@ type InputProps = {
   maxLength?: number;
   type?: HTMLInputTypeAttribute;
   rows?: number;
+  cols?: number;
   label: string;
   children?: ReactNode;
+  required?: boolean;
+  placeholder?: string;
   onChange?: (val: string) => void;
 
   /** Defaults to 'span'. */
@@ -27,6 +34,8 @@ type InputProps = {
   component?: "input" | "textarea";
 };
 
+type El = HTMLInputElement | HTMLTextAreaElement;
+
 export default function InputOrTextarea({
   wrapperComponent: WrapperComponent = "span",
   component: Component = "input",
@@ -35,35 +44,62 @@ export default function InputOrTextarea({
   maxLength,
   type,
   rows,
+  cols,
   className = "",
   label,
   children,
+  required,
+  placeholder,
   onChange,
   ...rest
 }: InputProps) {
   const selectedId = id || `input-${label}`;
   const isTextArea = Component === "textarea";
+  const parcedLabel = parseLabel(label);
+  const name = `${parcedLabel}Input`;
+  const dirname = `${parcedLabel}Direction`;
+
   const InputContainerComponent = children ? "div" : Fragment;
-  const parcedLabel = label?.replaceAll(/[^a-zA-Z]/g, "")?.toLocaleLowerCase();
-  const name = `${parcedLabel}-input`;
-  const dirname = `${parcedLabel}-direction`;
+  const inputContainerProps = children
+    ? { className: styles.inputContainer }
+    : {};
   const componentProps = {
     id: selectedId,
     name,
     dirname,
+    required,
     minLength,
     maxLength,
     type,
     rows,
+    cols,
+    placeholder,
   };
 
-  const handleChange: ChangeEventHandler<
-    HTMLInputElement | HTMLTextAreaElement
-  > = (e) => {
+  const handleChange: ChangeEventHandler<El> = (e) => {
     const cleanString = DOMPurify.sanitize(e.target.value);
     e.target.value = cleanString;
     onChange?.(cleanString);
   };
+
+  const handleInvalid: ReactEventHandler<El> = (e) => {
+    e.preventDefault();
+    (e.target as El).dataset.error = "true";
+  };
+
+  const handleError = (target: El) => {
+    const { dataset } = target;
+
+    if (dataset.error === "true") {
+      dataset.error = "false";
+    }
+  };
+
+  const handleClick: MouseEventHandler = ({ target }) =>
+    handleError(target as El);
+
+  const handleFocus: FocusEventHandler<El> = ({ target }) =>
+    handleError(target as El);
 
   return (
     <WrapperComponent
@@ -73,8 +109,15 @@ export default function InputOrTextarea({
     >
       <label htmlFor={selectedId}>{label}</label>
 
-      <InputContainerComponent>
-        <Component onChange={handleChange} {...componentProps} />
+      <InputContainerComponent {...inputContainerProps}>
+        <Component
+          data-error="false"
+          onInvalid={handleInvalid}
+          onChange={handleChange}
+          onClick={handleClick}
+          onFocus={handleFocus}
+          {...componentProps}
+        />
         {children}
       </InputContainerComponent>
     </WrapperComponent>

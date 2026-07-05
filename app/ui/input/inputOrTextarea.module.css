@@ -25,14 +25,20 @@
     width: 100%;
     border-radius: clamp(7px, 0.68vw, 12px);
     padding: var(--md-margin);
+    border: none;
+    outline-color: var(--window);
+
+    &[data-error="true"] {
+      outline: 2px solid var(--signage);
+      outline-offset: 2px;
+    }
   }
 
-  div {
+  .inputContainer {
     width: 100%;
 
     textarea {
       resize: none;
-      margin-bottom: var(--desktop-margin);
     }
   }
 }

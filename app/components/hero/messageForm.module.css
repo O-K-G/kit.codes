@@ -10,7 +10,6 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  gap: var(--desktop-margin);
   overflow: clip;
 
   @container style(--is-desktop: true) {
@@ -41,5 +40,13 @@
       justify-content: flex-end;
       align-items: center;
     }
+  }
+
+  .inputsContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
   }
 }
