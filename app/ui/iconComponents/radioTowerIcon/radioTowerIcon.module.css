@@ -1,0 +1,32 @@
+@keyframes pulseBlink {
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.outerBars {
+  animation: pulseBlink 1.5s infinite ease-in-out;
+  fill: var(--mist) !important;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+.innerBars {
+  animation: pulseBlink 1.5s infinite ease-in-out;
+  animation-delay: 0.25s;
+  fill: var(--signage) !important;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+.tower {
+  fill: var(--paper) !important;
+}

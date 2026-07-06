@@ -1,6 +1,6 @@
 import styles from "./bottomBar.module.css";
 import { DirTypes } from "./messageForm";
-import { MouseEventHandler } from "react";
+import { MouseEventHandler, ReactNode } from "react";
 import IconButton from "@ui/iconButton/iconButton";
 import AlignRightIcon from "@ui/iconComponents/alignRightIcon";
 import AlignLeftIcon from "@ui/iconComponents/alignLeftIcon";
@@ -13,7 +13,7 @@ const SEND_BUTTON_LABEL = "Send";
 
 type BottomBarProps = {
   dir: DirTypes;
-  statusMessage?: string;
+  statusMessage?: ReactNode;
   onClick: MouseEventHandler;
 };
 

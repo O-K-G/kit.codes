@@ -9,13 +9,13 @@ import CharactersLeftCounter from "./charactersLeftCounter";
 import IconButton from "@ui/iconButton/iconButton";
 import CloseIcon from "@ui/iconComponents/closeIcon";
 import { sendEmail } from "@utils/sendEmail";
-import { FIELDS } from "@/app/utils/handleValidation";
+import { FIELDS } from "@utils/handleValidation";
+import SendingAlert from "./sendingAlert";
 
 const TITLE = "Send me an email";
 const LABELS = { email: "From:", subject: "Subject:", message: "Message:" };
 const CLOSE_BUTTON = { ariaLabel: "Close", onClick: openCloseDialog };
 const INPUT_TYPES = ["input", "textarea"];
-const SENDING_LABEL = "Sending...";
 const PLACEHOLDERS = {
   email: "myemail@example.com",
   subject: "What brings you here?",
@@ -28,7 +28,7 @@ export default function MessageForm() {
   const [dir, setDir] = useState<DirTypes>("ltr");
   const [counter, setCounter] = useState({});
   const [state, formAction, isPending] = useActionState(sendEmail, null);
-  const sendingMessage = isPending && SENDING_LABEL;
+  const sendingMessage = isPending && <SendingAlert />;
   const statusMessage = sendingMessage || state?.message;
   const backupData = useRef({});
   const formRef = useRef<HTMLFormElement>(null);

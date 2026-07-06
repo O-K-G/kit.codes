@@ -7,7 +7,7 @@ import { convertComponentToHtml } from "./emailHTMLtemplate";
 
 const STATUS = {
   success: { success: true, message: "Message sent" },
-  fail: { success: false, message: "Message was not sent" },
+  fail: { success: false, message: "Message not sent" },
 };
 
 type ActionState = {

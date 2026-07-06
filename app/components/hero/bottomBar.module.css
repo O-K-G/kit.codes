@@ -1,19 +1,10 @@
-@keyframes blink {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.2;
-  }
-}
-
 .bottomBar {
   width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: stretch;
+  height: calc(clamp(24px, 2.34vw, 48px) + var(--md-margin));
 
   .directionButtons {
     display: flex;
@@ -33,16 +24,8 @@
     display: inline-flex;
     flex-direction: row;
     justify-content: flex-start;
-    align-items: center;
+    align-items: flex-end;
     padding: var(--md-margin);
-
-    span {
-      animation: blink 1.2s 5 forwards ease-in-out;
-
-      @media (prefers-reduced-motion: reduce) {
-        animation: none;
-      }
-    }
   }
 
   svg {
