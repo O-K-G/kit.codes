@@ -1,57 +1,73 @@
-import nodemailer from "nodemailer";
+"use server";
 
-type SendEmailProps = {
-  /** '"Example Sender" <sender@example.com>' */
-  from: string;
-  subject: string;
-  text: string;
+import DOMPurify from "isomorphic-dompurify";
+import nodemailer from "nodemailer";
+import { handleValidation } from "./handleValidation";
+import { convertComponentToHtml } from "./emailHTMLtemplate";
+
+const STATUS = {
+  success: { success: true, message: "Message sent" },
+  fail: { success: false, message: "Message not sent" },
 };
+
+type ActionState = {
+  success: boolean;
+  message: string;
+  errors?: {
+    from?: string[];
+    subject?: string[];
+    message?: string[];
+    dir?: string[];
+  };
+} | null;
 
 const { PASS, SERVICE, USER_NAME, TO, HOST_SUCCESS_RESPONSE } =
   process.env || {};
 
-export async function sendEmail({ from, subject, text }: SendEmailProps) {
-  const transporter = nodemailer.createTransport({
-    service: SERVICE,
-    auth: {
-      user: USER_NAME,
-      pass: PASS,
-    },
-  });
+export async function sendEmail(
+  _prevState: ActionState,
+  data: FormData,
+): Promise<ActionState> {
+  const from = DOMPurify.sanitize((data?.get("fromInput") as string) || "");
+  const subject = DOMPurify.sanitize(
+    (data?.get("subjectInput") as string) || "",
+  );
 
-  try {
-    const transport = await transporter.sendMail({
-      from,
-      to: [TO!],
-      subject,
-      text,
-    });
+  const message = DOMPurify.sanitize(
+    (data?.get("messageInput") as string) || "",
+  );
 
-    if (transport?.response?.includes(HOST_SUCCESS_RESPONSE!)) {
-      const response = new Response(null, {
-        status: 200,
-        statusText: "OK",
-        headers: {
-          "Content-Type": "text/plain",
-          Connection: "close",
-        },
-      });
+  const dir = DOMPurify.sanitize((data?.get("fromDirection") as string) || "");
+  const { success: validated } =
+    (await handleValidation({ from, subject, message, dir })) || {};
 
-      return response;
-    }
-  } catch (err) {
-    console.error(err);
-    const body = "501 Not Implemented: This feature is unavailable.";
-
-    const errorResponse = new Response(body, {
-      status: 501,
-      statusText: "Not Implemented",
-      headers: {
-        "Content-Type": "text/plain; charset=utf-8",
-        Connection: "close",
+  if (validated) {
+    const transporter = nodemailer.createTransport({
+      service: SERVICE,
+      auth: {
+        user: USER_NAME,
+        pass: PASS,
       },
     });
 
-    return errorResponse;
+    try {
+      const transport = await transporter.sendMail({
+        from,
+        to: [TO!],
+        subject,
+        html: await convertComponentToHtml({ from, subject, message, dir }),
+      });
+
+      if (transport?.response?.includes(HOST_SUCCESS_RESPONSE!)) {
+        return STATUS.success;
+      }
+    } catch (err) {
+      console.error(err);
+
+      return STATUS.fail;
+    }
   }
+
+  console.error(STATUS.fail);
+  return STATUS.fail;
 }

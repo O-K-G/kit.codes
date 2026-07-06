@@ -1,0 +1,9 @@
+.counter {
+  direction: ltr;
+  text-align: end;
+  margin-bottom: var(--desktop-margin);
+
+  &[dir="rtl"] {
+    text-align: start;
+  }
+}

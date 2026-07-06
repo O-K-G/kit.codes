@@ -3,6 +3,7 @@
 import Button from "@ui/button/button";
 import styles from "./heroButtons.module.css";
 import Dialog, { openCloseDialog } from "@ui/dialog/dialog";
+import MessageForm from "./messageForm";
 
 export default function HeroButtons() {
   const buttons = [
@@ -24,7 +25,9 @@ export default function HeroButtons() {
           </Button>
         ))}
       </div>
-      <Dialog aria-label="test">TBD</Dialog>
+      <Dialog aria-label="test">
+        <MessageForm />
+      </Dialog>
     </>
   );
 }

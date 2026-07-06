@@ -1,0 +1,44 @@
+.inputOrTextarea {
+  width: 100%;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: var(--md-margin);
+
+  &[data-text-area="true"] {
+    display: flex;
+  }
+
+  @container style(--is-desktop: true) {
+    flex-direction: row;
+  }
+
+  label {
+    width: 10%;
+    flex-shrink: 0;
+    text-transform: uppercase;
+  }
+
+  input,
+  textarea {
+    width: 100%;
+    border-radius: clamp(7px, 0.68vw, 12px);
+    padding: var(--md-margin);
+    border: none;
+    outline-color: var(--window);
+
+    &[data-error="true"] {
+      outline: 2px solid var(--signage);
+      outline-offset: 2px;
+    }
+  }
+
+  .inputContainer {
+    width: 100%;
+
+    textarea {
+      resize: none;
+    }
+  }
+}

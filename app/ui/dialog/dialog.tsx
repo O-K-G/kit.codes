@@ -1,4 +1,4 @@
-import { ReactNode, TransitionEventHandler, useRef } from "react";
+import { ReactNode, TransitionEventHandler, useEffect, useRef } from "react";
 import styles from "./dialog.module.css";
 
 type DialogProps = {
@@ -31,15 +31,65 @@ export default function Dialog({
   ...rest
 }: DialogProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
+  const focusableSelector =
+    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
   const handleTransitionEnd: TransitionEventHandler = (e) => {
     const el = e.target as HTMLDivElement;
+    const firstElement = el.querySelectorAll(focusableSelector)?.[0] as HTMLElement;
+
     if (el.dataset.modalOpen === "false") {
       el.dataset.modalOpen = "false";
       el.ariaHidden = "true";
-      dialogRef.current!.ariaModal = "false";
+      return (dialogRef.current!.ariaModal = "false");
+    }
+
+    if (firstElement) {
+      firstElement.focus();
     }
   };
+
+  useEffect(() => {
+    const { current } = dialogRef;
+
+    const handleClick = (e: globalThis.KeyboardEvent) => {
+      const { key, shiftKey } = e || {};
+
+      if (key === "Escape") {
+        openCloseDialog();
+      }
+
+      if (current) {
+        const focusableElements = current!.querySelectorAll(focusableSelector);
+        const firstElement = focusableElements[0] as HTMLElement;
+        const { activeElement } = document || {};
+
+        if (e.key !== "Tab") {
+          return;
+        }
+
+        const lastElement = focusableElements[
+          focusableElements.length - 1
+        ] as HTMLElement;
+
+        if (shiftKey) {
+          if (activeElement === firstElement) {
+            lastElement.focus();
+            e.preventDefault();
+          }
+        } else {
+          if (activeElement === lastElement) {
+            firstElement.focus();
+            e.preventDefault();
+          }
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleClick);
+
+    return () => window.removeEventListener("keydown", handleClick);
+  }, []);
 
   return (
     <div
@@ -48,7 +98,13 @@ export default function Dialog({
       className={styles.backdrop}
       onTransitionEnd={handleTransitionEnd}
     >
-      <div ref={dialogRef} role="dialog" aria-label={ariaLabel} aria-modal="false" {...rest}>
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-label={ariaLabel}
+        aria-modal="false"
+        {...rest}
+      >
         {children}
       </div>
     </div>

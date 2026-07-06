@@ -1,16 +1,16 @@
-.buttonStyles {
-  font-family: "JetBrains Mono", ui-monospace, monospace;
-  font-size: clamp(14px, 1.36vw, 18px);
-  line-height: 100%;
-  text-align: center;
-  padding: clamp(11.2px, 1.09vw, 22.4px) clamp(17.6px, 1.7vw, 35.2px);
-  border-radius: clamp(7px, 0.68vw, 12px);
-  transition: all 0.2s ease-in-out;
+.iconButton {
   display: inline-flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  font-weight: 600;
+  flex-shrink: 0;
+  padding: clamp(6px, 0.58vw, 8px);
+  transition: all 0.2s ease-in-out;
+  border-radius: clamp(7px, 0.68vw, 12px);
+
+  &[data-circle="true"] {
+    border-radius: 50%;
+  }
 
   @container style(--is-large-mobile: true) {
     cursor: pointer;
@@ -22,7 +22,6 @@
   }
 
   &[data-variant="outline-paper"] {
-    color: var(--paper);
     border: 1px solid var(--block-border);
     background-color: transparent;
 
@@ -32,12 +31,21 @@
     }
 
     &:hover {
-      color: var(--window);
+      &[data-group-fill="true"] {
+        svg {
+          fill: var(--window);
+        }
+      }
+
+      &[data-group-stroke="true"] {
+        svg {
+          stroke: transparent;
+        }
+      }
     }
   }
 
   &[data-variant="fill-sky-deep"] {
-    color: var(--sky-deep);
     border: 1px solid var(--sky-deep);
     background-color: var(--signage);
 
@@ -49,6 +57,18 @@
     &:hover {
       box-shadow: 0 15px 30px -10px rgba(179, 44, 85, 0.5);
       transform: translateY(-4px);
+
+      &[data-group-fill="true"] {
+        svg {
+          fill: var(--sky-deep);
+        }
+      }
+
+      &[data-group-stroke="true"] {
+        svg {
+          stroke: var(--signage);
+        }
+      }
     }
   }
 

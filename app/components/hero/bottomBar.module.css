@@ -1,0 +1,36 @@
+.bottomBar {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: stretch;
+  height: calc(clamp(24px, 2.34vw, 48px) + var(--md-margin));
+
+  .directionButtons {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: var(--md-margin);
+
+    &[dir="rtl"] {
+      flex-direction: row-reverse;
+      justify-content: flex-end;
+    }
+  }
+
+  .statusMessage {
+    width: 100%;
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-end;
+    padding: var(--md-margin);
+  }
+
+  svg {
+    width: clamp(24px, 2.34vw, 48px);
+    height: auto;
+    fill: var(--paper);
+  }
+}
