@@ -6,5 +6,9 @@
   justify-content: flex-start;
   align-items: center;
   overflow-y: auto;
-  padding: var(--desktop-margin) 25%;
+  padding: var(--desktop-margin) clamp(15px, 1.66vw, 50px);
+
+  @container style(--is-large-mobile: true) {
+    padding: var(--desktop-margin) clamp(50px, 20vw, 500px);
+  }
 }
