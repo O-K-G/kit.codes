@@ -4,16 +4,20 @@ import Button from "@ui/button/button";
 import styles from "./heroButtons.module.css";
 import Dialog, { openCloseDialog } from "@ui/dialog/dialog";
 import MessageForm from "./messageForm";
+import { BUTTONS, DIALOG_ARIA_LABEL } from "./heroButtons.constants";
 
 export default function HeroButtons() {
   const buttons = [
     {
-      label: "Email me",
+      label: BUTTONS.email.label,
       variant: "fill-sky-deep",
       onClick: openCloseDialog,
     },
-    { label: "Download Résumé", onClick: () => console.log("TBD") },
-    { label: "GitHub", onClick: () => console.log("TBD") },
+    { label: BUTTONS.resume.label, onClick: () => console.log("TBD") },
+    {
+      label: BUTTONS.gitHub.label,
+      onClick: () => console.log(BUTTONS.gitHub.url),
+    },
   ] as const;
 
   return (
@@ -25,7 +29,7 @@ export default function HeroButtons() {
           </Button>
         ))}
       </div>
-      <Dialog aria-label="test">
+      <Dialog aria-label={DIALOG_ARIA_LABEL}>
         <MessageForm />
       </Dialog>
     </>

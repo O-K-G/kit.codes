@@ -11,16 +11,10 @@ import CloseIcon from "@ui/iconComponents/closeIcon";
 import { sendEmail } from "@utils/sendEmail";
 import { FIELDS } from "@utils/handleValidation";
 import SendingAlert from "./sendingAlert";
+import { LABELS, PLACEHOLDERS, TITLE } from "./messageForm.constants";
 
-const TITLE = "Send me an email";
-const LABELS = { email: "From:", subject: "Subject:", message: "Message:" };
 const CLOSE_BUTTON = { ariaLabel: "Close", onClick: openCloseDialog };
 const INPUT_TYPES = ["input", "textarea"];
-const PLACEHOLDERS = {
-  email: "myemail@example.com",
-  subject: "What brings you here?",
-  message: "Your message",
-};
 
 export type DirTypes = "ltr" | "rtl";
 

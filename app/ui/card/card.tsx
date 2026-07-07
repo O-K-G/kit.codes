@@ -4,7 +4,7 @@ import TopCardBar from "./topCardBar";
 import { concatStyles } from "@/app/utils/concatStyles";
 import { ReactNode } from "react";
 
-export type CardProps = {
+type CardProps = {
   leftSlot: string;
   rightSlot: string;
   title: string;
