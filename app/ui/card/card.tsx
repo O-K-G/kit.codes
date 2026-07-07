@@ -13,6 +13,9 @@ type CardProps = {
   leftBorder?: "window" | "signage";
   leftSlotColor: TypographyProps["color"];
   className?: string;
+
+  /** Defaults to 'div'. */
+  component?: 'div' | 'li'
 };
 
 export default function Card({
@@ -23,11 +26,12 @@ export default function Card({
   children,
   leftBorder,
   leftSlotColor,
+  component: Component = 'div',
   className = "",
   ...rest
 }: CardProps) {
   return (
-    <div
+    <Component
       data-left-border={leftBorder}
       className={concatStyles([styles.card, className])}
       {...rest}
@@ -47,6 +51,6 @@ export default function Card({
       </Typography>
 
       {children}
-    </div>
+    </Component>
   );
 }

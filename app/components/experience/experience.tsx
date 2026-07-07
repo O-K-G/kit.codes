@@ -1,77 +1,33 @@
 import Card from "@ui/card/card";
 import ContentSection from "@components/contentSection/contentSection";
 import List from "@ui/list/list";
-
-const CONTENT = {
-  eyebrow: "2 · Experience",
-  title: "Building directory",
-  paragraph: "A tenant list, top to bottom.",
-};
+import styles from "./experience.module.css";
+import { CARDS, CONTENT } from "./experience.constants";
 
 export default function Experience() {
   return (
     <ContentSection
       {...CONTENT}
       slot={
-        <>
-          <Card
-            leftBorder="window"
-            leftSlot="adfwrgrweg"
-            leftSlotColor="mist"
-            rightSlot="9999 — Present"
-            title="XX SDFG sdgfrsgerg ethrethyrt hrethyrthyurgb eargtyehyrte"
-            subtitle="srgerg ethrethryu ruhjry6uj5yj 5et7yju"
-          >
-            <List
-              data={[
-                "sgerg erghhe ethethye therhyyrt6eh4rhr trtbhrtbhyrtyryrr6t yhr66r",
-                "sgerg erghhe ethethyethertbhrtbhyrtyryrr6tuyryhr66r",
-                "sgerg erghhe ethet hyet herhyyrt6eh4rhrt rtbhrtbhyherhyyrt6eh4rhrt rtbhrtbhyherhyyrt6eh4rhrt rtbhrtbhyherhyyrt6eh4rhrt rtbhrtbhy herhyyrt6eh4rhrt rtbhrtbhyherhyyrt6eh4rhrt rtbhrtbhyherhyyrt6eh4rhrt rtbhrtbhyherhyyrt6eh4rhrt rtbhrtbhyherhyyrt6eh4rhrt rtbhrtbhyherhyyrt6eh4rhrt rtbhrtbhy rtyryrr adf6tuyryhr66r",
-              ]}
-            />
-          </Card>
+        <ul className={styles.cardList}>
+          {CARDS.map(({ rightSlot, list, ...rest }, index) => {
+            const isLast = CARDS.length === index + 1;
+            const leftBorder = isLast ? "signage" : "window";
 
-          <Card
-            leftBorder="window"
-            leftSlot="adfwrgrweg"
-            leftSlotColor="mist"
-            rightSlot="9999 — Present"
-            title="XX SDFG sdgfrsgerg ethrethyrt hrethyrthyurgb eargtyehyrte"
-            subtitle="srgerg ethrethryu ruhjry6uj5yj 5et7yju"
-          >
-            <List
-              data={[
-                "sgerg erghhe ethethye therhyyrt6eh4rhr trtbhrtbhyrtyryrr6t yhr66r",
-                "sgerg erghhe ethethyethertbhrtbhyrtyryrr6tuyryhr66r",
-                "sgerg erghhe ethet hyetherhyyrt6eh4rhrt rtbhrtbhyrtyryrr adf6tuyryhr66r",
-              ]}
-            />
-          </Card>
-          <Card
-            leftBorder="window"
-            leftSlot="adfwrgrweg"
-            leftSlotColor="mist"
-            rightSlot="9999 — Present"
-            title="XX SDFG sdgfrsgerg ethrethyrt hrethyrthyurgb eargtyehyrte"
-            subtitle="srgerg ethrethryu ruhjry6uj5yj 5et7yju"
-          >
-            <List
-              data={[
-                "sgerg erghhe ethethye therhyyrt6eh4rhr trtbhrtbhyrtyryrr6t yhr66r",
-                "sgerg erghhe ethethyethertbhrtbhyrtyryrr6tuyryhr66r",
-                "sgerg erghhe ethet hyetherhyyrt6eh4rhrt rtbhrtbhyrtyryrr adf6tuyryhr66r",
-              ]}
-            />
-          </Card>
-          <Card
-            leftBorder="signage"
-            leftSlot="adfwrgrweg"
-            leftSlotColor="mist"
-            rightSlot="9999 — Present"
-            title="XX SDFG sdgfrsgerg ethrethyrt hrethyrthyurgb eargtyehyrte"
-            subtitle="srgerg ethrethryu ruhjry6uj5yj 5et7yju"
-          />
-        </>
+            return (
+              <Card
+                key={rightSlot}
+                leftBorder={leftBorder}
+                rightSlot={rightSlot}
+                component="li"
+                leftSlotColor="mist"
+                {...rest}
+              >
+                {list && <List data={list} />}
+              </Card>
+            );
+          })}
+        </ul>
       }
     />
   );
