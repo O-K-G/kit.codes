@@ -6,7 +6,7 @@ import { ReactNode } from "react";
 
 type CardProps = {
   leftSlot: string;
-  rightSlot: string;
+  rightSlot: ReactNode;
   title: string;
   subtitle: string;
   children?: ReactNode;
@@ -14,8 +14,11 @@ type CardProps = {
   leftSlotColor: TypographyProps["color"];
   className?: string;
 
+  /** If true, the card will move up 10px on hover. */
+  hoverEffect?: boolean;
+
   /** Defaults to 'div'. */
-  component?: 'div' | 'li'
+  component?: "div" | "li";
 };
 
 export default function Card({
@@ -26,13 +29,15 @@ export default function Card({
   children,
   leftBorder,
   leftSlotColor,
-  component: Component = 'div',
+  hoverEffect,
+  component: Component = "div",
   className = "",
   ...rest
 }: CardProps) {
   return (
     <Component
       data-left-border={leftBorder}
+      data-hover-effect={hoverEffect}
       className={concatStyles([styles.card, className])}
       {...rest}
     >

@@ -1,0 +1,22 @@
+.anchorTag {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.82rem;
+  font-weight: 400;
+  color: var(--window);
+  text-decoration: none;
+
+  &:active {
+    opacity: 0.8;
+  }
+
+  &:hover {
+    text-decoration: underline solid var(--window) 1px;
+    text-underline-offset: 4px;
+  }
+
+  &:focus-visible {
+    outline-offset: 4px;
+    outline: 2px solid var(--window);
+    border-radius: clamp(1px, 0.11vw, 3px);
+  }
+}

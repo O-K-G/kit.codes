@@ -1,0 +1,100 @@
+@keyframes borderBlink {
+  0%,
+  24% {
+    border-color: var(--signage);
+  }
+  25% {
+    border-color: var(--block-border);
+  }
+  26%,
+  59% {
+    border-color: var(--signage);
+  }
+  60% {
+    border-color: var(--block-border);
+  }
+  61% {
+    border-color: var(--block-border);
+  }
+  62%,
+  91% {
+    border-color: var(--signage);
+  }
+  92% {
+    border-color: var(--block-border);
+  }
+  93%,
+  100% {
+    border-color: var(--signage);
+  }
+}
+
+@keyframes textBlink {
+  0%,
+  14.99% {
+    color: var(--signage);
+  }
+  15%,
+  15.99% {
+    color: var(--block-border);
+  }
+  16%,
+  17.99% {
+    color: var(--signage);
+  }
+  18%,
+  18.99% {
+    color: var(--block-border);
+  }
+  19%,
+  39.0% {
+    color: var(--block-border);
+  }
+  39.01%,
+  59.99% {
+    color: var(--signage);
+  }
+  60%,
+  60.99% {
+    color: var(--block-border);
+  }
+  61.0%,
+  100% {
+    color: var(--signage);
+  }
+}
+
+.openSign {
+  padding: clamp(2.4px, 0.234vw, 4.2px) clamp(7.2px, 0.234vw, 12.2px);
+  border-radius: clamp(4px, 0.277vw, 6px);
+
+  &[data-border-color="signage"] {
+    border: 1px solid var(--signage);
+  }
+
+  &[data-border-color="block-border"] {
+    border: 1px solid var(--block-border);
+  }
+
+  &[data-rotate="true"] {
+    rotate: -2deg;
+  }
+
+  &[data-border-blink="true"] {
+    animation: borderBlink 12s infinite linear;
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+    }
+  }
+
+  span {
+    &[data-letter-blink="true"] {
+      animation: textBlink 8s infinite linear;
+
+      @media (prefers-reduced-motion: reduce) {
+        animation: none;
+      }
+    }
+  }
+}
