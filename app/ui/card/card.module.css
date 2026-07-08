@@ -21,4 +21,15 @@
   &[data-left-border="signage"] {
     border-left: 4px solid var(--signage);
   }
+
+  &[data-hover-effect="true"] {
+    @container style(--is-desktop: true) {
+      transition: all 0.2s ease-in-out;
+
+      &:hover {
+        border: 1px solid var(--window);
+        transform: translateY(-10px);
+      }
+    }
+  }
 }

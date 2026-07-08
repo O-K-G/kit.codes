@@ -12,6 +12,7 @@
   --block-border: rgba(232, 234, 240, 0.09);
 
   /** Margin variables */
+  --small-margin: clamp(6px, 0.54vw, 12px);
   --md-margin: clamp(8px, 0.55vw, 16px);
   --desktop-margin: clamp(16px, 1.56vw, 32px);
   --desktop-lg-margin: clamp(32px, 3.12vw, 64px);

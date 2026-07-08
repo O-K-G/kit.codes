@@ -192,13 +192,6 @@
     font-weight: 400;
   }
 
-  /* ── Project link ── */
-  &[data-variant="project-link"] {
-    font-family: "JetBrains Mono", ui-monospace, monospace;
-    font-size: 0.82rem;
-    font-weight: 400;
-  }
-
   /* ── Certificate label ── */
   &[data-variant="cert-label"] {
     font-family: "JetBrains Mono", ui-monospace, monospace;
