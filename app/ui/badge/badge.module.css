@@ -64,9 +64,16 @@
   }
 }
 
-.openSign {
+.badge {
   padding: clamp(2.4px, 0.234vw, 4.2px) clamp(7.2px, 0.234vw, 12.2px);
-  border-radius: clamp(4px, 0.277vw, 6px);
+
+  &[data-badge-border="roundish"] {
+    border-radius: clamp(4px, 0.277vw, 6px);
+  }
+
+  &[data-badge-border="pill"] {
+    border-radius: 9999px;
+  }
 
   &[data-border-color="signage"] {
     border: 1px solid var(--signage);
@@ -76,8 +83,12 @@
     border: 1px solid var(--block-border);
   }
 
-  &[data-rotate="true"] {
+  &[data-rotate="left"] {
     rotate: -2deg;
+  }
+
+  &[data-rotate="right"] {
+    rotate: 2deg;
   }
 
   &[data-border-blink="true"] {

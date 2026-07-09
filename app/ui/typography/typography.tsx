@@ -5,6 +5,7 @@ import { concatStyles } from "@/app/utils/concatStyles";
 export type TypographyProps = {
   children: ReactNode;
   className?: string;
+  htmlFor?: string;
 
   /** Defaults to <p />. */
   component?:
@@ -12,6 +13,7 @@ export type TypographyProps = {
     | "div"
     | "span"
     | "li"
+    | 'label'
     | "h1"
     | "h2"
     | "h3"
