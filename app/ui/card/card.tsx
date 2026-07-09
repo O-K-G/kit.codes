@@ -1,8 +1,8 @@
 import Typography, { TypographyProps } from "@ui/typography/typography";
 import styles from "./card.module.css";
-import TopCardBar from "./topCardBar";
 import { concatStyles } from "@/app/utils/concatStyles";
 import { ReactNode } from "react";
+import TopCardBar from "@ui/topCardBar/topCardBar";
 
 type CardProps = {
   leftSlot: string;

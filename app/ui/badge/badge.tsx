@@ -5,7 +5,7 @@ type BadgeProps = {
   borderBlink?: boolean;
   letterBlink?: boolean;
   label: string;
-  rotate?: boolean;
+  rotate?: "left" | "right";
 
   /** Use this as the letter that splits the label in the animation. */
   breakingLetter?: string;
@@ -15,6 +15,9 @@ type BadgeProps = {
 
   /** Defaults to 'signage'. */
   borderColor?: "signage" | "block-border";
+
+  /** Defaults to 'roundish'. */
+  badgeBorder?: "roundish" | "pill";
 };
 
 export default function Badge({
@@ -23,13 +26,15 @@ export default function Badge({
   label,
   breakingLetter,
   rotate,
+  badgeBorder = "roundish",
   color = "signage",
   borderColor = "signage",
 }: BadgeProps) {
   const badgeObjProps = {
     "data-rotate": rotate,
     "data-border-color": borderColor,
-    className: styles.openSign,
+    "data-badge-border": badgeBorder,
+    className: styles.badge,
     component: "span",
     color,
     variant: "open-sign",

@@ -8,7 +8,7 @@ export const BREAKING_LETTER = "e";
 export const CARDS = [
   {
     leftSlot: "Unit 3A",
-    rightSlot: <Badge rotate label={LABEL} />,
+    rightSlot: <Badge rotate="left" label={LABEL} />,
     title: "Xdfgsfg",
     subtitle:
       "Aadfrwsg rgertey ethbetytr-rg edrgtwwgrt - gwrgrgrrg gr gergr ege trhethe hteth",
@@ -17,7 +17,7 @@ export const CARDS = [
   },
   {
     leftSlot: "Unit 3B",
-    rightSlot: <Badge rotate label={LABEL} />,
+    rightSlot: <Badge rotate="left" label={LABEL} />,
     title: "Asgfrwgrweg",
     subtitle:
       "Aadfrwsg rgertey ethbestytr-rg ergtwwgrt - gwrgrgrrg gr gergr ege trhethe hteth",
@@ -28,7 +28,7 @@ export const CARDS = [
     leftSlot: "Unit 3C",
     rightSlot: (
       <Badge
-        rotate
+        rotate="left"
         label={LABEL}
         breakingLetter={BREAKING_LETTER}
         letterBlink
@@ -43,7 +43,7 @@ export const CARDS = [
   },
   {
     leftSlot: "Unit 3D",
-    rightSlot: <Badge rotate label={LABEL} />,
+    rightSlot: <Badge rotate="left" label={LABEL} />,
     title: "Qsfg dghet hh",
     subtitle:
       "Aadfrwsg rgertey ethbegtytr-rg ergtwwgrt - gwrgrgrrg gr gergr ege trhethe hteth",
