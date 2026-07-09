@@ -6,5 +6,17 @@
   align-items: flex-start;
   position: relative;
   padding: var(--desktop-margin);
-  border-bottom: 1px solid var(--block-border);
+
+  &::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    width: calc(100% - (var(--desktop-margin) * 2));
+    height: 1px;
+    border-bottom: 1px solid var(--block-border);
+  }
 }

@@ -15,5 +15,78 @@
     border: 1px solid var(--block-border);
     border-radius: clamp(7px, 0.68vw, 12px);
     padding: clamp(20px, 1.95vw, 24px);
+
+    .topBar {
+      margin-bottom: var(--desktop-margin);
+    }
+
+    .barsContainer {
+      width: 100%;
+      list-style-type: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: var(--md-margin);
+      margin-bottom: var(--desktop-margin);
+
+      li {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: var(--md-margin);
+        white-space: nowrap;
+
+        label {
+          min-width: 33.333334%;
+          width: 33.333334%;
+          flex-shrink: 0;
+          overflow: clip;
+          text-overflow: ellipsis;
+
+          @container style(--is-mobile: true) {
+            min-width: 10%;
+            width: 10%;
+          }
+        }
+
+        progress {
+          appearance: none;
+          width: 100%;
+          height: clamp(7px, 0.68vw, 10px);
+
+          &::-webkit-progress-bar {
+            border-radius: 9999px;
+            background-color: var(--block-border);
+          }
+
+          &::-webkit-progress-value {
+            border-radius: 9999px;
+            background-color: var(--window);
+          }
+        }
+
+        span {
+          width: 5%;
+          min-width: 5%;
+        }
+      }
+    }
+
+    p {
+      display: inline-flex;
+      flex-direction: row;
+      white-space: nowrap;
+      word-break: break-word;
+
+      strong {
+        white-space: normal;
+        display: inline;
+        width: 100%;
+        color: var(--paper);
+      }
+    }
   }
 }
