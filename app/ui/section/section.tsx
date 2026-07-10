@@ -6,7 +6,7 @@ type SectionProps = {
   children: ReactNode;
   className?: string;
   bottomBorder?: boolean;
-  ref: RefObject<HTMLElement | null>;
+  ref?: RefObject<HTMLElement | null>;
 };
 
 export default function Section({
