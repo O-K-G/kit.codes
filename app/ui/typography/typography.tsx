@@ -14,6 +14,7 @@ export type TypographyProps = {
     | "span"
     | "li"
     | 'label'
+    | 'footer'
     | "h1"
     | "h2"
     | "h3"

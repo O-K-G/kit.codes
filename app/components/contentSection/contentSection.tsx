@@ -10,6 +10,7 @@ type ContentSection = {
   paragraph?: ReactNode;
   slot?: ReactNode;
   className?: string;
+  bottomBorder?: boolean;
 };
 
 export default function ContentSection({
