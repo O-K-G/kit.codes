@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, RefObject } from "react";
 import styles from "./section.module.css";
 import { concatStyles } from "@/app/utils/concatStyles";
 
@@ -6,6 +6,7 @@ type SectionProps = {
   children: ReactNode;
   className?: string;
   bottomBorder?: boolean;
+  ref: RefObject<HTMLElement | null>;
 };
 
 export default function Section({

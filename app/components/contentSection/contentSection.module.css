@@ -1,8 +1,25 @@
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .contentSection {
   gap: var(--desktop-margin);
 
   b {
     color: var(--paper);
     font-weight: 600;
+  }
+
+  &[data-visible="false"] {
+    opacity: 0;
+  }
+
+  &[data-visible="true"] {
+    animation: fadeIn 0.75s ease-in-out forwards;
   }
 }
