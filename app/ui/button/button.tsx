@@ -6,7 +6,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
 
   /** Defaults to "outline-paper". */
-  variant?: "outline-paper" | 'fill-sky-deep'
+  variant?: "outline-paper" | 'fill-sky-deep' | 'buzzer'
 }
 
 export default function Button({
