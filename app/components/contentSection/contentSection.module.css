@@ -17,9 +17,17 @@
 
   &[data-visible="false"] {
     opacity: 0;
+
+    @media (prefers-reduced-motion: reduce) {
+      opacity: 1;
+    }
   }
 
   &[data-visible="true"] {
     animation: fadeIn 0.75s ease-in-out forwards;
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+    }
   }
 }
