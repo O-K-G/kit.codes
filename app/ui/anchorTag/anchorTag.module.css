@@ -1,6 +1,6 @@
 .anchorTag {
   font-family: "JetBrains Mono", ui-monospace, monospace;
-  font-size: 0.82rem;
+  font-size: clamp(13.12px, 1.2813vw, 26.24px);
   font-weight: 400;
   color: var(--window);
   text-decoration: none;

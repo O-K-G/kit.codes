@@ -1,7 +1,7 @@
 .typography {
   /* ── Body default ── */
   &[data-variant="body"] {
-    font-size: 1rem;
+    font-size: clamp(16px, 1.5625vw, 32px);
     font-weight: 400;
     line-height: 1.65;
     font-family:
@@ -14,7 +14,7 @@
   /* ── Hero name (h1 visual) ── */
   &[data-variant="hero-name"] {
     font-family: "Big Shoulders", sans-serif;
-    font-size: clamp(2.1rem, 7vw, 3.4rem);
+    font-size: clamp(33.6px, 3.2813vw, 67.2px);
     font-weight: 900;
     line-height: 0.95;
     text-transform: uppercase;
@@ -27,7 +27,7 @@
   /* ── Section heading (h2) ── */
   &[data-variant="section-heading"] {
     font-family: "Big Shoulders", sans-serif;
-    font-size: clamp(1.7rem, 4vw, 2.3rem);
+    font-size: clamp(27.2px, 2.6563vw, 54.4px);
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.01em;
@@ -36,7 +36,7 @@
   /* ── Experience card heading (h3) ── */
   &[data-variant="card-heading"] {
     font-family: "Big Shoulders", sans-serif;
-    font-size: 1.25rem;
+    font-size: clamp(20px, 1.9531vw, 40px);
     font-weight: 700;
     text-transform: uppercase;
   }
@@ -44,7 +44,7 @@
   /* ── Project card heading (h3) ── */
   &[data-variant="project-heading"] {
     font-family: "Big Shoulders", sans-serif;
-    font-size: 1.15rem;
+    font-size: clamp(18.4px, 1.7969vw, 36.8px);
     font-weight: 700;
     text-transform: uppercase;
   }
@@ -52,7 +52,7 @@
   /* ── Eyebrow / section label ── */
   &[data-variant="eyebrow"] {
     font-family: "JetBrains Mono", ui-monospace, monospace;
-    font-size: 0.78rem;
+    font-size: clamp(12.48px, 1.2188vw, 24.96px);
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.06em;
@@ -62,7 +62,7 @@
   /* ── Hero role subtitle ── */
   &[data-variant="hero-role"] {
     font-family: "JetBrains Mono", ui-monospace, monospace;
-    font-size: 0.95rem;
+    font-size: clamp(15.2px, 1.4844vw, 30.4px);
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.03em;
@@ -71,7 +71,7 @@
 
   /* ── Hero tagline paragraph ── */
   &[data-variant="hero-tag"] {
-    font-size: 1rem;
+    font-size: clamp(16px, 1.5625vw, 32px);
     font-weight: 400;
     text-shadow: 0 1px 10px rgba(0, 0, 0, 0.8);
     font-family:
@@ -83,7 +83,7 @@
 
   /* ── Section body paragraph ── */
   &[data-variant="section-body"] {
-    font-size: 1rem;
+    font-size: clamp(16px, 1.5625vw, 32px);
     font-weight: 400;
     font-family:
       "Inter",
@@ -94,7 +94,7 @@
 
   /* ── Section body — strong emphasis ── */
   &[data-variant="section-body-strong"] {
-    font-size: 1rem;
+    font-size: clamp(16px, 1.5625vw, 32px);
     font-weight: 600;
     font-family:
       "Inter",
@@ -106,7 +106,7 @@
   /* ── Nav logo ── */
   &[data-variant="nav-logo"] {
     font-family: "JetBrains Mono", ui-monospace, monospace;
-    font-size: 0.78rem;
+    font-size: clamp(12.48px, 1.2188vw, 24.96px);
     font-weight: 600;
     letter-spacing: 0.04em;
   }
@@ -114,14 +114,14 @@
   /* ── Floor buttons (elevator nav) ── */
   &[data-variant="floor-btn"] {
     font-family: "JetBrains Mono", ui-monospace, monospace;
-    font-size: 0.82rem;
+    font-size: clamp(13.12px, 1.2813vw, 26.24px);
     font-weight: 600;
   }
 
   /* ── Buttons (primary & ghost) ── */
   &[data-variant="button"] {
     font-family: "JetBrains Mono", ui-monospace, monospace;
-    font-size: 0.85rem;
+    font-size: clamp(13.6px, 1.3281vw, 27.2px);
     font-weight: 600;
     /* primary: color #0a0e1a — ghost: color #e8eaf0 */
   }
@@ -129,7 +129,7 @@
   /* ── Unit plate (experience meta: suite number + date) ── */
   &[data-variant="unit-plate"] {
     font-family: "JetBrains Mono", ui-monospace, monospace;
-    font-size: 0.74rem;
+    font-size: clamp(11.84px, 1.1563vw, 23.68px);
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.04em;
@@ -137,7 +137,7 @@
 
   /* ── Experience org / subtitle ── */
   &[data-variant="unit-org"] {
-    font-size: 0.92rem;
+    font-size: clamp(14.72px, 1.4375vw, 29.44px);
     font-weight: 400;
     font-style: italic;
     font-family:
@@ -149,7 +149,7 @@
 
   /* ── Experience bullet list ── */
   &[data-variant="unit-notes"] {
-    font-size: 0.92rem;
+    font-size: clamp(14.72px, 1.4375vw, 29.44px);
     font-weight: 400;
     font-family:
       "Inter",
@@ -161,7 +161,7 @@
   /* ── Project card tag (e.g. "Unit 3A") ── */
   &[data-variant="unit-tag"] {
     font-family: "JetBrains Mono", ui-monospace, monospace;
-    font-size: 0.74rem;
+    font-size: clamp(11.84px, 1.1563vw, 23.68px);
     font-weight: 400;
     letter-spacing: 0.04em;
   }
@@ -169,14 +169,14 @@
   /* ── Open sign ── */
   &[data-variant="open-sign"] {
     font-family: "JetBrains Mono", ui-monospace, monospace;
-    font-size: 0.68rem;
+    font-size: clamp(10.88px, 1.0625vw, 21.76px);
     font-weight: 700;
     letter-spacing: 0.06em;
   }
 
   /* ── Project card body ── */
   &[data-variant="project-body"] {
-    font-size: 0.9rem;
+    font-size: clamp(14.4px, 1.4063vw, 28.8px);
     font-weight: 400;
     font-family:
       "Inter",
@@ -188,14 +188,14 @@
   /* ── Tech stack pill ── */
   &[data-variant="stack-pill"] {
     font-family: "JetBrains Mono", ui-monospace, monospace;
-    font-size: 0.7rem;
+    font-size: clamp(11.2px, 1.0938vw, 22.4px);
     font-weight: 400;
   }
 
   /* ── Certificate label ── */
   &[data-variant="cert-label"] {
     font-family: "JetBrains Mono", ui-monospace, monospace;
-    font-size: 0.78rem;
+    font-size: clamp(12.48px, 1.2188vw, 24.96px);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.06em;
@@ -204,21 +204,21 @@
   /* ── Certificate stamp ── */
   &[data-variant="cert-stamp"] {
     font-family: "JetBrains Mono", ui-monospace, monospace;
-    font-size: 0.68rem;
+    font-size: clamp(10.88px, 1.0625vw, 21.76px);
     font-weight: 400;
   }
 
   /* ── Skill meter row (name + years) ── */
   &[data-variant="skill-label"] {
     font-family: "JetBrains Mono", ui-monospace, monospace;
-    font-size: 0.82rem;
+    font-size: clamp(13.12px, 1.2813vw, 26.24px);
     font-weight: 400;
     /* grid column widths change at ≤600px: 90px → 78px (name), 48px → 42px (years) */
   }
 
   /* ── Certificate "also" note ── */
   &[data-variant="cert-also"] {
-    font-size: 0.88rem;
+    font-size: clamp(14.08px, 1.375vw, 28.16px);
     font-weight: 400;
     font-family:
       "Inter",
@@ -230,7 +230,7 @@
   /* ── Intercom header label ── */
   &[data-variant="intercom-head"] {
     font-family: "JetBrains Mono", ui-monospace, monospace;
-    font-size: 0.78rem;
+    font-size: clamp(12.48px, 1.2188vw, 24.96px);
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.04em;
@@ -239,14 +239,14 @@
   /* ── Buzzer (contact button) ── */
   &[data-variant="buzzer"] {
     font-family: "JetBrains Mono", ui-monospace, monospace;
-    font-size: 0.8rem;
+    font-size: clamp(12.8px, 1.25vw, 25.6px);
     font-weight: 600;
   }
 
   /* ── Footer ── */
   &[data-variant="footer"] {
     font-family: "JetBrains Mono", ui-monospace, monospace;
-    font-size: 0.76rem;
+    font-size: clamp(12.16px, 1.1875vw, 24.32px);
     font-weight: 400;
   }
 
