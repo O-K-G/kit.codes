@@ -7,11 +7,21 @@ import { concatStyles } from "@utils/concatStyles";
 import styles from "./navLink.module.css";
 
 type NavLinkProps = {
+  id: string;
   label: string;
 };
 
-export default function NavLink({ label, ...rest }: NavLinkProps) {
-  const handleClick: MouseEventHandler = (e) => e.preventDefault();
+export default function NavLink({ id, label, ...rest }: NavLinkProps) {
+  const handleClick: MouseEventHandler = (e) => {
+    e.preventDefault();
+    const el = document.getElementById(id);
+    
+    el?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+      inline: "nearest",
+    });
+  };
 
   return (
     <Link

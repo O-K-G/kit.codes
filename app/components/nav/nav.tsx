@@ -19,9 +19,9 @@ export default function Nav() {
       </header>
 
       <ul>
-        {NAV_LINKS.map(({ label, selected }) => (
+        {NAV_LINKS.map(({ id, label, selected }) => (
           <li data-selected={selected} key={`nav-${label}}`}>
-            <NavLink label={label} />
+            <NavLink id={id} label={label} />
           </li>
         ))}
       </ul>

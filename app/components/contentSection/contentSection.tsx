@@ -14,6 +14,7 @@ type ContentSection = {
   slot?: ReactNode;
   className?: string;
   bottomBorder?: boolean;
+  id: string
 };
 
 export default function ContentSection({

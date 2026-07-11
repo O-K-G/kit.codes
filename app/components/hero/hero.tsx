@@ -4,10 +4,11 @@ import HeroButtons from "./heroButtons";
 import VideoBackground from "./videoBackground";
 import Section from "@ui/section/section";
 import { DATA } from "./hero.constants";
+import { SECTION_IDS } from "@/app/page.constants";
 
 export default function Hero() {
   return (
-    <Section className={styles.hero}>
+    <Section id={SECTION_IDS.hero} className={styles.hero}>
       <VideoBackground />
       <div className={styles.textArea}>
         {DATA.map(({ content, ...rest }) => (

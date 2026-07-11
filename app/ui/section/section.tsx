@@ -6,6 +6,7 @@ type SectionProps = {
   children: ReactNode;
   className?: string;
   bottomBorder?: boolean;
+  id?: string;
   ref?: RefObject<HTMLElement | null>;
 };
 

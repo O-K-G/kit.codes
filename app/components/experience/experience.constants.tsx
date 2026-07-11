@@ -1,4 +1,7 @@
+import { SECTION_IDS } from "@/app/page.constants";
+
 export const CONTENT = {
+  id: SECTION_IDS.experience,
   eyebrow: "2 · Experience",
   title: "Building directory",
   paragraph: "A tenant list, top to bottom.",

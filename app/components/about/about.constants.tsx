@@ -1,4 +1,7 @@
+import { SECTION_IDS } from "@/app/page.constants";
+
 export const CONTENT = {
+  id: SECTION_IDS.about,
   eyebrow: "1 · About",
   title: "The foundation",
   paragraph: (

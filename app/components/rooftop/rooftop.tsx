@@ -2,6 +2,7 @@ import styles from "./rooftop.module.css";
 import ContentSection from "@components/contentSection/contentSection";
 import Button from "@ui/button/button";
 import Typography from "@/app/ui/typography/typography";
+import { SECTION_IDS } from "@/app/page.constants";
 import {
   BUTTONS,
   BUZZER_LABEL,
@@ -13,6 +14,7 @@ import {
 export default function Rooftop() {
   return (
     <ContentSection
+      id={SECTION_IDS.rooftop}
       bottomBorder={false}
       eyebrow={EYEBROW}
       title={TITLE}
