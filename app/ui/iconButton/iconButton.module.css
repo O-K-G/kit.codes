@@ -5,8 +5,20 @@
   align-items: center;
   flex-shrink: 0;
   padding: clamp(6px, 0.58vw, 8px);
-  transition: all 0.2s ease-in-out;
   border-radius: clamp(7px, 0.68vw, 12px);
+  transition:
+    border 0.2s ease-in-out,
+    background-color 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out,
+    transform 0.2s ease-in-out,
+    filter 0.2s ease-in-out,
+    opacity 0.2s ease-in-out;
+
+  svg {
+    transition:
+      stroke 0.2s ease-in-out,
+      fill 0.2s ease-in-out;
+  }
 
   &[data-circle="true"] {
     border-radius: 50%;

@@ -24,7 +24,9 @@
 
   &[data-hover-effect="true"] {
     @container style(--is-desktop: true) {
-      transition: all 0.2s ease-in-out;
+      transition:
+        border 0.2s ease-in-out,
+        transform 0.2s ease-in-out;
 
       &:hover {
         border: 1px solid var(--window);
