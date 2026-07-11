@@ -5,6 +5,11 @@
   justify-content: flex-end;
   align-items: flex-start;
   padding: var(--desktop-margin);
+  scroll-margin-top: var(--desktop-margin);
+
+  @container style(--is-large-mobile: true) {
+    scroll-margin-top: var(--desktop-margin);
+  }
 
   &[data-bottom-border="true"] {
     position: relative;
