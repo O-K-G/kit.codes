@@ -1,9 +1,7 @@
-"use client";
-
 import { ReactNode } from "react";
 import styles from "./section.module.css";
 import { concatStyles } from "@utils/concatStyles";
-import { useFadeIn } from "@/app/hooks/useFadeIn";
+import SectionObserver from "./SectionObserver";
 
 type SectionProps = {
   children: ReactNode;
@@ -19,17 +17,18 @@ export default function Section({
   id,
   ...rest
 }: SectionProps) {
-  useFadeIn({ id });
-
   return (
-    <section
-      id={id}
-      data-bottom-border={bottomBorder}
-      data-in-view="false"
-      className={concatStyles([styles.section, className])}
-      {...rest}
-    >
-      {children}
-    </section>
+    <>
+      <SectionObserver id={id} />
+      <section
+        id={id}
+        data-bottom-border={bottomBorder}
+        data-in-view="false"
+        className={concatStyles([styles.section, className])}
+        {...rest}
+      >
+        {children}
+      </section>
+    </>
   );
 }
