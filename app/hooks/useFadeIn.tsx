@@ -1,21 +1,18 @@
-import { RefObject, useEffect } from "react";
+import { useEffect } from "react";
 
 type UseFadeInProps = {
-  ref: RefObject<HTMLElement | null>;
+  id: string;
 };
 
-export function useFadeIn({ ref }: UseFadeInProps) {
+export function useFadeIn({ id }: UseFadeInProps) {
   useEffect(() => {
-    const { current } = ref || {};
-    const handleObserve = (
-      entries: IntersectionObserverEntry[],
-      observer: IntersectionObserver,
-    ): void => {
+    const sectionEl = document.getElementById(id);
+    const handleObserve = (entries: IntersectionObserverEntry[]): void => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          if (current?.dataset.visible === "false") {
-            current.dataset.visible = "true";
-            observer.disconnect();
+          const el = entry.target as HTMLElement;
+          if (el?.dataset.visible === "false") {
+            el.dataset.visible = "true";
           }
         }
       });
@@ -26,14 +23,14 @@ export function useFadeIn({ ref }: UseFadeInProps) {
       threshold: 0.1,
     });
 
-    if (current) {
-      observer.observe(current);
+    if (sectionEl) {
+      observer.observe(sectionEl);
     }
 
     return () => {
-      if (current) {
+      if (sectionEl) {
         observer.disconnect();
       }
     };
-  }, [ref]);
+  }, [id]);
 }

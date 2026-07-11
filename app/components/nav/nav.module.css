@@ -1,13 +1,49 @@
 .navigation {
   width: 100%;
-  border: 1px solid yellow;
+  overflow-x: clip;
   position: sticky;
   top: 0;
-  left:0;
+  left: 0;
+  background-color: var(--sky-deep);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--md-margin);
+  padding: var(--desktop-margin) clamp(15px, 1.66vw, 50px);
+  border-bottom: 1px solid var(--block-border);
 
   @container style(--is-large-mobile: true) {
     width: unset;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0px clamp(15px, 1.66vw, 20px);
+    border-bottom: unset;
+    border-right: 1px solid var(--block-border);
+  }
+
+  header {
+    a {
+      color: var(--window);
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: border-radius 0.2s ease-in-out;
+
+      @container style(--is-large-mobile: true) {
+        display: inline-block;
+        writing-mode: vertical-lr;
+        margin-top: var(--desktop-margin);
+      }
+
+      &:focus-visible {
+        border-radius: clamp(2px, 0.19vw, 4px);
+        outline-offset: 6px;
+        outline: 2px solid var(--window);
+      }
+    }
   }
 
   ul {
@@ -15,11 +51,63 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    gap: var(--md-margin);
     list-style-type: none;
+    padding: var(--md-margin);
 
     @container style(--is-large-mobile: true) {
       flex-direction: column;
-      border: 1px solid blue;
+    }
+
+    li {
+      background-color: var(--block);
+      border: 1px solid var(--block-border);
+      width: clamp(36px, 3.51vw, 48px);
+      height: clamp(36px, 3.51vw, 48px);
+      border-radius: 50%;
+      overflow: clip;
+      transition:
+        border-radius 0.2s ease-in-out,
+        border 0.2s ease-in-out,
+        box-shadow 0.2s ease-in-out,
+        background-color 0.2s ease-in-out;
+
+      &:active {
+        background-color: var(--block-border);
+      }
+
+      &:hover {
+        border: 1px solid var(--window);
+
+        a {
+          color: var(--window);
+        }
+      }
+
+      &:has(a:focus-visible) {
+        border-radius: clamp(7px, 0.68vw, 12px);
+        outline-offset: 4px;
+        outline: 2px solid var(--window);
+      }
+
+      &[data-is-in-view="true"] {
+        pointer-events: none;
+        background-color: var(--window);
+        box-shadow:
+          0 0 8px rgba(242, 180, 109, 0.8),
+          0 0 20px rgba(242, 180, 109, 0.6),
+          0 0 40px rgba(242, 180, 109, 0.4);
+
+        a {
+          color: var(--sky-warm);
+        }
+
+        &:hover {
+          a {
+            color: var(--sky-warm);
+          }
+        }
+      }
     }
   }
 }

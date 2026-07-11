@@ -1,27 +1,34 @@
-import { ReactNode, RefObject } from "react";
+import { ReactNode } from "react";
 import styles from "./section.module.css";
-import { concatStyles } from "@/app/utils/concatStyles";
+import { concatStyles } from "@utils/concatStyles";
+import SectionObserver from "./SectionObserver";
 
 type SectionProps = {
   children: ReactNode;
   className?: string;
   bottomBorder?: boolean;
-  ref?: RefObject<HTMLElement | null>;
+  id: string;
 };
 
 export default function Section({
   children,
   className = "",
   bottomBorder = true,
+  id,
   ...rest
 }: SectionProps) {
   return (
-    <section
-      data-bottom-border={bottomBorder}
-      className={concatStyles([styles.section, className])}
-      {...rest}
-    >
-      {children}
-    </section>
+    <>
+      <SectionObserver id={id} />
+      <section
+        id={id}
+        data-bottom-border={bottomBorder}
+        data-in-view="false"
+        className={concatStyles([styles.section, className])}
+        {...rest}
+      >
+        {children}
+      </section>
+    </>
   );
 }

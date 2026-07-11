@@ -1,11 +1,8 @@
-"use client";
-
 import Section from "@ui/section/section";
 import Typography from "@ui/typography/typography";
 import styles from "./contentSection.module.css";
-import { ReactNode, useRef } from "react";
+import { ReactNode } from "react";
 import { concatStyles } from "@/app/utils/concatStyles";
-import { useFadeIn } from "@/app/hooks/useFadeIn";
 
 type ContentSection = {
   eyebrow: string;
@@ -14,6 +11,7 @@ type ContentSection = {
   slot?: ReactNode;
   className?: string;
   bottomBorder?: boolean;
+  id: string;
 };
 
 export default function ContentSection({
@@ -24,12 +22,8 @@ export default function ContentSection({
   slot,
   ...rest
 }: ContentSection) {
-  const sectionRef = useRef<HTMLElement>(null);
-  useFadeIn({ ref: sectionRef });
-
   return (
     <Section
-      ref={sectionRef}
       data-visible="false"
       className={concatStyles([styles.contentSection, className])}
       {...rest}

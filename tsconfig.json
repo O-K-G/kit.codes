@@ -21,6 +21,7 @@
     "paths": {
       "@/*": ["./*"],
       "@utils/*": ["./app/utils/*"],
+      "@hooks/*": ["./app/hooks/*"],
       "@ui/*": ["./app/ui/*"],
       "@components*": ["./app/components/*"],
       "@constants*": ["./app/constants/*"]

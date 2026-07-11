@@ -3,6 +3,7 @@ import styles from "./skills.module.css";
 import ContentSection from "@components/contentSection/contentSection";
 import Badge from "@ui/badge/badge";
 import Typography from "@ui/typography/typography";
+import { SECTION_IDS } from "@/app/page.constants";
 import {
   ADDITIONAL_DETAILS_LABEL,
   ADDITIONAL_SKILLS,
@@ -15,6 +16,7 @@ import {
 export default function Skills() {
   return (
     <ContentSection
+      id={SECTION_IDS.skills}
       eyebrow={EYEBROW}
       title={TITLE}
       slot={

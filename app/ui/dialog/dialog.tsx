@@ -21,6 +21,11 @@ export function openCloseDialog() {
   }
 
   backdropEl!.dataset.modalOpen = "false";
+  const currentActive = document.activeElement as HTMLElement;
+  if (currentActive && currentActive !== document.body) {
+    currentActive?.blur();
+  }
+
   backdropEl!.ariaHidden = "true";
   dialogEl!.ariaModal = "false";
 }
@@ -36,16 +41,14 @@ export default function Dialog({
 
   const handleTransitionEnd: TransitionEventHandler = (e) => {
     const el = e.target as HTMLDivElement;
-    const firstElement = el.querySelectorAll(focusableSelector)?.[0] as HTMLElement;
+    if (el.dataset.modalOpen === "true") {
+      const firstElement = el.querySelectorAll(
+        focusableSelector,
+      )?.[0] as HTMLElement;
 
-    if (el.dataset.modalOpen === "false") {
-      el.dataset.modalOpen = "false";
-      el.ariaHidden = "true";
-      return (dialogRef.current!.ariaModal = "false");
-    }
-
-    if (firstElement) {
-      firstElement.focus();
+      if (firstElement) {
+        firstElement.focus();
+      }
     }
   };
 
