@@ -22,13 +22,13 @@ export default function Nav() {
         </header>
 
         <ul>
-          {NAV_LINKS.map(({ id, label }) => (
+          {NAV_LINKS.map(({ id, label }, index) => (
             <li
+              key={`nav-${label}}`}
               data-selection-id={id}
               data-is-in-view="false"
-              key={`nav-${label}}`}
             >
-              <NavLink id={id} label={label} />
+              <NavLink id={id} label={label} currentLinkIndex={index} />
             </li>
           ))}
         </ul>
