@@ -1,6 +1,6 @@
 'use client'
 
-import { useFadeIn } from "@/app/hooks/useFadeIn";
+import { useFadeIn } from "@hooks/useFadeIn";
 
 type SectionObserverProps = {
   id: string;

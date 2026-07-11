@@ -14,17 +14,6 @@ export function useFadeIn({ id }: UseFadeInProps) {
           if (el?.dataset.visible === "false") {
             el.dataset.visible = "true";
           }
-
-          document.querySelectorAll("[data-selection-id]").forEach((liEl) => {
-            const navLiEl = liEl as HTMLLIElement;
-            const isIdMatchSectionId = navLiEl.dataset.selectionId === el.id;
-
-            if (isIdMatchSectionId) {
-              return (navLiEl.dataset.isInView = "true");
-            }
-
-            navLiEl.dataset.isInView = "false";
-          });
         }
       });
     };
