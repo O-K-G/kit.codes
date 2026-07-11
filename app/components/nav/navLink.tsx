@@ -39,37 +39,37 @@ export default function NavLink({
       document.querySelectorAll('a[data-variant="floor-btn"]'),
     ) as HTMLElement[];
 
-    if (key === "Enter" || key === " ") {
-      e.preventDefault();
-      handleEvents();
-    }
-
     const nextEl = allLinks[currentLinkIndex + 1];
     const previousEl = allLinks[currentLinkIndex - 1];
     const firstEl = allLinks[0];
     const lastEl = allLinks.at(-1);
+    const lowercaseKey = key?.toLowerCase();
+    const handleSelect = () => {
+      e.preventDefault();
+      handleEvents();
+    };
 
-    if (key === "ArrowLeft") {
-      if (previousEl) {
-        return previousEl.focus();
-      }
-      lastEl!.focus();
-    }
+    const handleKeyStrokes = {
+      home: () => firstEl.focus(),
+      end: () => lastEl!.focus(),
+      enter: handleSelect,
+      " ": handleSelect,
+      arrowleft: () => {
+        if (previousEl) {
+          return previousEl.focus();
+        }
+        lastEl!.focus();
+      },
 
-    if (key === "ArrowRight") {
-      if (nextEl) {
-        return nextEl.focus();
-      }
-      firstEl.focus();
-    }
+      arrowright: () => {
+        if (nextEl) {
+          return nextEl.focus();
+        }
+        firstEl.focus();
+      },
+    }[lowercaseKey];
 
-    if (key === "Home") {
-      firstEl.focus();
-    }
-
-    if (key === "End") {
-      lastEl!.focus();
-    }
+    handleKeyStrokes?.();
   };
 
   return (
