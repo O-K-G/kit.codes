@@ -90,7 +90,7 @@
         outline: 2px solid var(--window);
       }
 
-      &[data-selected="true"] {
+      &[data-is-in-view="true"] {
         pointer-events: none;
         background-color: var(--window);
         box-shadow:

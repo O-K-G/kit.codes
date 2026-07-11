@@ -19,6 +19,7 @@ export default function Section({
   return (
     <section
       data-bottom-border={bottomBorder}
+      data-in-view="false"
       className={concatStyles([styles.section, className])}
       {...rest}
     >

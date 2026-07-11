@@ -9,14 +9,24 @@ export function useFadeIn({ ref }: UseFadeInProps) {
     const { current } = ref || {};
     const handleObserve = (
       entries: IntersectionObserverEntry[],
-      observer: IntersectionObserver,
     ): void => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          if (current?.dataset.visible === "false") {
-            current.dataset.visible = "true";
-            observer.disconnect();
+          const el = entry.target as HTMLElement;
+          if (el?.dataset.visible === "false") {
+            el.dataset.visible = "true";
           }
+
+          document.querySelectorAll("[data-selection-id]").forEach((liEl) => {
+            const navLiEl = liEl as HTMLLIElement;
+            const isIdMatchSectionId = navLiEl.dataset.selectionId === el.id;
+
+            if (isIdMatchSectionId) {
+              return (navLiEl.dataset.isInView = "true");
+            }
+
+            navLiEl.dataset.isInView = "false";
+          });
         }
       });
     };

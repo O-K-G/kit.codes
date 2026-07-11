@@ -9,7 +9,7 @@ export const NAV_LINKS = [
   { label: "G", id: SECTION_IDS.hero },
   { label: "1", id: SECTION_IDS.about },
   { label: "2", id: SECTION_IDS.experience },
-  { label: "3", id: SECTION_IDS.projects, selected: true },
+  { label: "3", id: SECTION_IDS.projects },
   { label: "4", id: SECTION_IDS.skills },
   { label: "R", id: SECTION_IDS.rooftop },
 ];
