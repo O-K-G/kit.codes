@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+const NO_LINE_BREAKS = /^[^\r\n]*$/;
+
 export const FIELDS = {
   email: {
     minLength: 3,
@@ -36,7 +38,8 @@ export async function handleValidation({
       })
       .max(FIELDS.email.maxLength, {
         message: `Email cannot exceed ${FIELDS.email.maxLength} characters`,
-      }),
+      })
+      .regex(NO_LINE_BREAKS, { message: "Email cannot contain line breaks" }),
 
     subject: z
       .string()
@@ -45,6 +48,9 @@ export async function handleValidation({
       })
       .max(FIELDS.subject.maxLength, {
         message: "Subject cannot exceed 100 characters",
+      })
+      .regex(NO_LINE_BREAKS, {
+        message: "Subject cannot contain line breaks",
       }),
 
     message: z

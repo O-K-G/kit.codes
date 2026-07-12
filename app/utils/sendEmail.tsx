@@ -1,9 +1,9 @@
 "use server";
 
-import DOMPurify from "isomorphic-dompurify";
 import nodemailer from "nodemailer";
 import { handleValidation } from "./handleValidation";
 import { convertComponentToHtml } from "./emailHTMLtemplate";
+import { sanitizePlainText } from "./sanitizePlainText";
 
 const STATUS = {
   success: { success: true, message: "Message sent" },
@@ -28,16 +28,16 @@ export async function sendEmail(
   _prevState: ActionState,
   data: FormData,
 ): Promise<ActionState> {
-  const from = DOMPurify.sanitize((data?.get("fromInput") as string) || "");
-  const subject = DOMPurify.sanitize(
+  const from = sanitizePlainText((data?.get("fromInput") as string) || "");
+  const subject = sanitizePlainText(
     (data?.get("subjectInput") as string) || "",
   );
 
-  const message = DOMPurify.sanitize(
+  const message = sanitizePlainText(
     (data?.get("messageInput") as string) || "",
   );
 
-  const dir = DOMPurify.sanitize((data?.get("fromDirection") as string) || "");
+  const dir = sanitizePlainText((data?.get("fromDirection") as string) || "");
   const { success: validated } =
     (await handleValidation({ from, subject, message, dir })) || {};
 

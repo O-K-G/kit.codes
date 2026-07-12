@@ -1,6 +1,6 @@
 import { concatStyles } from "@utils/concatStyles";
 import styles from "./inputOrTextarea.module.css";
-import DOMPurify from "isomorphic-dompurify";
+import { sanitizePlainText } from "@utils/sanitizePlainText";
 import { parseLabel } from "@utils/parseLabel";
 import {
   ChangeEventHandler,
@@ -77,7 +77,7 @@ export default function InputOrTextarea({
   };
 
   const handleChange: ChangeEventHandler<El> = (e) => {
-    const cleanString = DOMPurify.sanitize(e.target.value);
+    const cleanString = sanitizePlainText(e.target.value);
     e.target.value = cleanString;
     onChange?.(cleanString);
   };
