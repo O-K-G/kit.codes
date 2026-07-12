@@ -1,9 +1,10 @@
+import { EXPERIENCE_YEARS } from "@/app/page.constants";
 import styles from "./hero.module.css";
 
 const EYEBROW = "G · Lobby — now showing";
-const TITLE = "Kit Geda";
-const SUBTITLE = "Full-stack web developer";
-const PARAGRAPH = "6 years building for the web for banking and tech";
+const TITLE = "Kit G.";
+const SUBTITLE = "Full-stack Web Developer";
+const PARAGRAPH = `${EXPERIENCE_YEARS} years of full-stack web development`;
 export const VIDEO = {
   primarySrc: "/videos/test.mp4",
   primarySrcType: "video/mp4",

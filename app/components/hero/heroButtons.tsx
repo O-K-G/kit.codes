@@ -5,6 +5,7 @@ import styles from "./heroButtons.module.css";
 import Dialog, { openCloseDialog } from "@ui/dialog/dialog";
 import MessageForm from "./messageForm";
 import { BUTTONS, DIALOG_ARIA_LABEL } from "./heroButtons.constants";
+import { handleOpenExternalWindow } from "@utils/handleOpenExternalWindow";
 
 export default function HeroButtons() {
   const buttons = [
@@ -13,10 +14,13 @@ export default function HeroButtons() {
       variant: "fill-sky-deep",
       onClick: openCloseDialog,
     },
-    { label: BUTTONS.resume.label, onClick: () => console.log("TBD") },
+    {
+      label: BUTTONS.resume.label,
+      onClick: () => handleOpenExternalWindow(BUTTONS.resume.url),
+    },
     {
       label: BUTTONS.gitHub.label,
-      onClick: () => console.log(BUTTONS.gitHub.url),
+      onClick: () => handleOpenExternalWindow(BUTTONS.gitHub.url),
     },
   ] as const;
 

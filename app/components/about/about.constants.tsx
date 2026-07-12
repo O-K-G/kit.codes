@@ -1,4 +1,12 @@
-import { SECTION_IDS } from "@/app/page.constants";
+import { EXPERIENCE_YEARS, SECTION_IDS } from "@/app/page.constants";
+
+export const ABOUT_BADGES = [
+  `${EXPERIENCE_YEARS} yrs experience`,
+  "React & Next.js",
+  "Banking & Tech",
+  "WCAG & AODA",
+  "AI boosted",
+];
 
 export const CONTENT = {
   id: SECTION_IDS.about,
@@ -6,13 +14,15 @@ export const CONTENT = {
   title: "The foundation",
   paragraph: (
     <>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-      tempor <b>incididunt ut labore</b> et dolore magna aliqua. Ut enim ad
-      minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-      ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-      velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-      cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
-      est laborum.
+      A Canada based full-stack web developer, with experience in the corporate
+      banking and tech sectors delivering production ready React.js apps and
+      websites since 2019. Experience includes&nbsp;
+      <b>best industry standards</b> such as typing, linting, accessibility,
+      SEO, internationalization, localization, testing, cross-broswer
+      compatibility, tracking, building everything in a{" "}
+      <b>modular, generic, and well documented architecture</b> - so everyone on
+      all levels can easily understand the code, and of-course - AI tools to
+      speed things up.
     </>
   ),
 };

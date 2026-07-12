@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Kit G. — Portfolio
 
-## Getting Started
+Personal portfolio/CV site for Kit G., a Web Developer building accessible React and Next.js applications for finance and tech. Live at **[https://www.kit.codes](https://www.kit.codes)**.
 
-First, run the development server:
+The site is a single scrolling page (`app/page.tsx`) built around a "rooftop / building" visual metaphor: Hero → About → Experience → Why me → Skills → Rooftop → Footer, with a persistent nav in the root layout.
+
+## Tech stack
+
+- [Next.js 16](https://nextjs.org) (App Router) + [React 19](https://react.dev)
+- TypeScript, CSS Modules
+- Contact form: `nodemailer` (Gmail SMTP), `zod` validation, `isomorphic-dompurify` sanitization
+
+## Getting started
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the site.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+To exercise the contact form locally, create a `.env` file (gitignored) with:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Var | Purpose |
+| --- | --- |
+| `PASS` | SMTP password/app password for the sending Gmail account |
+| `SERVICE` | Nodemailer service name (e.g. `gmail`) |
+| `USER_NAME` | SMTP username / sending address |
+| `TO` | Recipient address for submitted messages |
+| `HOST_SUCCESS_RESPONSE` | Substring matched against the SMTP response to confirm a message was actually accepted |
 
-## Learn More
+## Scripts
 
-To learn more about Next.js, take a look at the following resources:
+- `npm run dev` — start the dev server
+- `npm run build` — production build
+- `npm run start` — run the production build
+- `npm run lint` — run ESLint
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `app/ui/` — generic, reusable presentational primitives (Button, Card, Badge, Dialog, Typography, icons, etc.)
+- `app/components/` — page sections and feature-specific composites (hero, about, experience, whyMe, skills, nav, footer, rooftop)
 
-## Deploy on Vercel
+Each component folder typically pairs `X.tsx` with `X.module.css` and an `X.constants.tsx` holding its copy/labels/data.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+See [`CLAUDE.md`](./CLAUDE.md) for a deeper architecture writeup (path aliases, styling conventions, the fade-in/nav-highlighting hooks, and the contact form flow).

@@ -5,4 +5,12 @@
   justify-content: flex-start;
   align-items: flex-start;
   gap: var(--desktop-margin);
+
+  @container style(--is-lg-desktop: true) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    justify-content: center;
+    align-items: stretch;
+  }
 }

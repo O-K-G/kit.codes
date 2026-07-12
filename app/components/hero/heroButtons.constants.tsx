@@ -1,6 +1,11 @@
+import { URLS } from "@/app/page.constants";
+
 export const DIALOG_ARIA_LABEL = "Send an email dialog";
 export const BUTTONS = {
   email: { label: "Email me" },
-  resume: { label: "Download Résumé" },
-  gitHub: { label: "GitHub", url: "TBD" },
+  gitHub: { label: "GitHub", url: URLS.gitHub },
+  resume: {
+    label: "Download Résumé",
+    url: URLS.resume,
+  },
 };
