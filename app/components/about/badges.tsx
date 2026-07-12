@@ -4,7 +4,7 @@ import Badge from "@ui/badge/badge";
 
 export default function Badges() {
   return (
-    <div className={styles.badgesCOntainer}>
+    <div className={styles.badgesContainer}>
       {ABOUT_BADGES.map((label) => (
         <Badge
           key={`badges-${label}`}

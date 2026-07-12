@@ -5,7 +5,7 @@ export const BUTTONS = {
   email: { label: "Email me" },
   gitHub: { label: "GitHub", url: URLS.gitHub },
   resume: {
-    label: "Download Résumé",
+    label: "Résumé",
     url: URLS.resume,
   },
 };

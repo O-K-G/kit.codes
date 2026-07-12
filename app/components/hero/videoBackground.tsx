@@ -13,6 +13,8 @@ import {
 
 interface VideoObjProps extends VideoHTMLAttributes<HTMLVideoElement> {
   primarySrc: string;
+  backupSrc: string;
+  backupSrcType: string;
   primarySrcType: string;
   isDefaultStyles?: boolean;
   ref?: RefObject<HTMLVideoElement | null>;
