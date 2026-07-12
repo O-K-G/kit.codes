@@ -1,6 +1,6 @@
 {
-  "name": "o-k-g",
-  "version": "0.1.0",
+  "name": "kit.codes",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
