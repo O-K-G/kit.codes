@@ -40,16 +40,11 @@
         white-space: nowrap;
 
         label {
-          min-width: 33.333334%;
-          width: 33.333334%;
+          min-width: clamp(100px, 10vw, 200px);
+          width: clamp(100px, 10vw, 200px);
           flex-shrink: 0;
           overflow: clip;
           text-overflow: ellipsis;
-
-          @container style(--is-mobile: true) {
-            min-width: 10%;
-            width: 10%;
-          }
         }
 
         progress {
@@ -67,24 +62,15 @@
             background-color: var(--window);
           }
         }
-
-        span {
-          width: 5%;
-          min-width: 5%;
-        }
       }
     }
 
     p {
-      display: inline-flex;
-      flex-direction: row;
-      white-space: nowrap;
+      width: 100%;
+      text-align: start;
       word-break: break-word;
 
       strong {
-        white-space: normal;
-        display: inline;
-        width: 100%;
         color: var(--paper);
       }
     }

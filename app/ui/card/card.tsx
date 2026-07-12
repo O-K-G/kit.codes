@@ -55,7 +55,7 @@ export default function Card({
         {subtitle}
       </Typography>
 
-      {children}
+      <div className={styles.childrenContainer}>{children}</div>
     </Component>
   );
 }

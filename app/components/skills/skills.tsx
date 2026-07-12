@@ -10,6 +10,7 @@ import {
   EYEBROW,
   SKILLS,
   TITLE,
+  TOP_BAR,
   YEARS_LABEL,
 } from "./skills.constants";
 
@@ -24,14 +25,14 @@ export default function Skills() {
           <div className={styles.content}>
             <TopCardBar
               leftSlotColor="window"
-              leftSlot={"Proficient in"}
+              leftSlot={TOP_BAR.leftSlot}
               className={styles.topBar}
               rightSlot={
                 <Badge
                   rotate="right"
                   borderColor="block-border"
                   color="mist"
-                  label={"Issued 2026"}
+                  label={TOP_BAR.rightSlot}
                   badgeBorder="pill"
                 />
               }
@@ -58,7 +59,7 @@ export default function Skills() {
                     </progress>
 
                     <Typography
-                      className="span"
+                      component="span"
                       color="mist"
                       variant="skill-label"
                     >

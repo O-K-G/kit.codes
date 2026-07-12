@@ -43,6 +43,12 @@
       --is-desktop: true;
     }
   }
+
+  @media (width >= 2500px) {
+    body {
+      --is-lg-desktop: true;
+    }
+  }
 }
 
 * {

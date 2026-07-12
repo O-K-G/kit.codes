@@ -2,4 +2,8 @@
     width: 100%;
     text-align: center;
     margin-top: 5dvh;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }

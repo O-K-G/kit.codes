@@ -1,7 +1,9 @@
+"use client";
+
 import styles from "./rooftop.module.css";
 import ContentSection from "@components/contentSection/contentSection";
 import Button from "@ui/button/button";
-import Typography from "@/app/ui/typography/typography";
+import Typography from "@ui/typography/typography";
 import { SECTION_IDS } from "@/app/page.constants";
 import {
   BUTTONS,
@@ -26,8 +28,13 @@ export default function Rooftop() {
           </Typography>
 
           <div className={styles.buttonsContainer}>
-            {BUTTONS.map(({ label }) => (
-              <Button variant="buzzer" key={`buzzer-${label}`} type="button">
+            {BUTTONS.map(({ label, ...rest }) => (
+              <Button
+                key={`buzzer-${label}`}
+                variant="buzzer"
+                type="button"
+                {...rest}
+              >
                 {label}
               </Button>
             ))}
