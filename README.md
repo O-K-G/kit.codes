@@ -44,3 +44,7 @@ To exercise the contact form locally, create a `.env` file (gitignored) with:
 Each component folder typically pairs `X.tsx` with `X.module.css` and an `X.constants.tsx` holding its copy/labels/data.
 
 See [`CLAUDE.md`](./CLAUDE.md) for a deeper architecture writeup (path aliases, styling conventions, the fade-in/nav-highlighting hooks, and the contact form flow).
+
+## Credits
+
+- Background video: [Illuminated City At Night](https://www.pexels.com/video/illuminated-city-at-night-14285132/) — free to use.
