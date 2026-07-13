@@ -56,6 +56,13 @@ export default function MessageForm() {
       onChange: (str: string) =>
         handleChange({ label: parseLabel(LABELS.message), str }),
     },
+    {
+      type: "text",
+      label: LABELS.track,
+      name: LABELS.track,
+      dir: "ltr",
+      ...FIELDS.track,
+    },
   ] as const;
 
   const handleFormAction: (e: FormData) => void = (e) => {
@@ -160,6 +167,8 @@ export default function MessageForm() {
           onClick={handleDir}
         />
       </InputOrTextarea>
+
+      <InputOrTextarea className={styles.track} {...inputsObj[3]} />
     </form>
   );
 }
