@@ -5,7 +5,7 @@
   padding: var(--desktop-margin);
   width: 90dvw;
   min-width: fit-content;
-  min-height: fit-content;
+  max-height: fit-content;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

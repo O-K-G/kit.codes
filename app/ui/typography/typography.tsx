@@ -6,6 +6,7 @@ export type TypographyProps = {
   children: ReactNode;
   className?: string;
   htmlFor?: string;
+  dir?: 'ltr' | 'rtl'
 
   /** Defaults to <p />. */
   component?:
