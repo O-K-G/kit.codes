@@ -78,7 +78,10 @@ export default function InputOrTextarea({
 
   const handleChange: ChangeEventHandler<El> = (e) => {
     const cleanString = sanitizePlainText(e.target.value);
-    e.target.value = cleanString;
+    if (cleanString !== e.target.value) {
+      e.target.value = cleanString;
+    }
+
     onChange?.(cleanString);
   };
 
