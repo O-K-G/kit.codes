@@ -63,10 +63,10 @@
   }
 
   .track {
-    /* position: absolute;
+    position: absolute;
     top: -9999px;
     left: -9999px;
     height: 0px;
-    overflow: hidden; */
+    overflow: hidden;
   }
 }
