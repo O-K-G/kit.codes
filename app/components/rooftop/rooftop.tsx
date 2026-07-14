@@ -5,9 +5,7 @@ import ContentSection from "@components/contentSection/contentSection";
 import Button from "@ui/button/button";
 import Typography from "@ui/typography/typography";
 import { SECTION_IDS } from "@/app/page.constants";
-import Dialog from "@ui/dialog/dialog";
-import MessageForm from "../hero/messageForm";
-import { DIALOG_ARIA_LABEL } from "../hero/heroButtons.constants";
+import EmailDialog from "../shared/messageForm/emailDialog";
 import { useState } from "react";
 import {
   BUTTONS,
@@ -57,13 +55,7 @@ export default function Rooftop() {
           </div>
         }
       />
-      <Dialog
-        open={open}
-        aria-label={DIALOG_ARIA_LABEL}
-        onClose={() => setOpen(false)}
-      >
-        <MessageForm onClick={() => setOpen(false)} />
-      </Dialog>
+      <EmailDialog open={open} onClose={() => setOpen(false)} />
     </>
   );
 }

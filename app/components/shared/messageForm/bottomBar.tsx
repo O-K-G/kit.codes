@@ -5,7 +5,7 @@ import IconButton from "@ui/iconButton/iconButton";
 import AlignRightIcon from "@ui/iconComponents/alignRightIcon";
 import AlignLeftIcon from "@ui/iconComponents/alignLeftIcon";
 import SendIcon from "@ui/iconComponents/sendIcon";
-import Typography from "@/app/ui/typography/typography";
+import Typography from "@ui/typography/typography";
 
 const LEFT_BUTTON_LABEL = "Align left";
 const RIGHT_BUTTON_LABEL = "Align right";

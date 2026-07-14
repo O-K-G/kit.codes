@@ -9,8 +9,8 @@ import IconButton from "@ui/iconButton/iconButton";
 import CloseIcon from "@ui/iconComponents/closeIcon";
 import { sendEmail } from "@utils/sendEmail";
 import { FIELDS } from "@utils/handleValidation";
-import SendingAlert from "./sendingAlert";
 import { LABELS, PLACEHOLDERS, TITLE } from "./messageForm.constants";
+import SendingAlert from "./sendingAlert";
 
 const CLOSE_BUTTON = { ariaLabel: "Close" };
 const INPUT_TYPES = ["input", "textarea"];

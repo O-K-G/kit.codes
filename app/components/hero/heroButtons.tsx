@@ -2,11 +2,10 @@
 
 import Button from "@ui/button/button";
 import styles from "./heroButtons.module.css";
-import Dialog from "@ui/dialog/dialog";
-import MessageForm from "./messageForm";
-import { BUTTONS, DIALOG_ARIA_LABEL } from "./heroButtons.constants";
+import { BUTTONS } from "./heroButtons.constants";
 import { handleOpenExternalWindow } from "@utils/handleOpenExternalWindow";
 import { useState } from "react";
+import EmailDialog from "../shared/messageForm/emailDialog";
 
 export default function HeroButtons() {
   const [open, setOpen] = useState(false);
@@ -36,13 +35,7 @@ export default function HeroButtons() {
           </Button>
         ))}
       </div>
-      <Dialog
-        open={open}
-        aria-label={DIALOG_ARIA_LABEL}
-        onClose={() => setOpen(false)}
-      >
-        <MessageForm onClick={() => setOpen(false)} />
-      </Dialog>
+      <EmailDialog open={open} onClose={() => setOpen(false)} />
     </>
   );
 }
