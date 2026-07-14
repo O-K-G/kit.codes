@@ -46,20 +46,27 @@
           overflow: clip;
           text-overflow: ellipsis;
         }
-
         progress {
-          appearance: none;
           width: 100%;
           height: clamp(7px, 0.68vw, 10px);
+          background-color: var(--block-border);
+          border-radius: 9999px;
+          border: none;
 
-          &::-webkit-progress-bar {
+          &::-moz-progress-bar {
             border-radius: 9999px;
-            background-color: var(--block-border);
+            background-color: var(--window);
           }
 
           &::-webkit-progress-value {
             border-radius: 9999px;
             background-color: var(--window);
+          }
+
+          &::-webkit-progress-bar {
+            border-radius: 9999px;
+            background-color: var(--block-border);
+            border: none;
           }
         }
       }
