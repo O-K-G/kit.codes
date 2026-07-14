@@ -1,7 +1,6 @@
 import styles from "./messageForm.module.css";
 import Typography from "@ui/typography/typography";
 import { useActionState, useEffect, useRef, useState } from "react";
-import { openCloseDialog } from "@ui/dialog/dialog";
 import InputOrTextarea from "@ui/input/inputOrTextarea";
 import BottomBar from "./bottomBar";
 import { parseLabel } from "@utils/parseLabel";
@@ -10,15 +9,18 @@ import IconButton from "@ui/iconButton/iconButton";
 import CloseIcon from "@ui/iconComponents/closeIcon";
 import { sendEmail } from "@utils/sendEmail";
 import { FIELDS } from "@utils/handleValidation";
-import SendingAlert from "./sendingAlert";
 import { LABELS, PLACEHOLDERS, TITLE } from "./messageForm.constants";
+import SendingAlert from "./sendingAlert";
 
-const CLOSE_BUTTON = { ariaLabel: "Close", onClick: openCloseDialog };
+const CLOSE_BUTTON = { ariaLabel: "Close" };
 const INPUT_TYPES = ["input", "textarea"];
 
 export type DirTypes = "ltr" | "rtl";
+type MessageFormProps = {
+  onClick: () => void;
+}
 
-export default function MessageForm() {
+export default function MessageForm({onClick}: MessageFormProps) {
   const [dir, setDir] = useState<DirTypes>("ltr");
   const [counter, setCounter] = useState({});
   const [state, formAction, isPending] = useActionState(sendEmail, null);
@@ -119,7 +121,7 @@ export default function MessageForm() {
         <span>
           <IconButton
             aria-label={CLOSE_BUTTON.ariaLabel}
-            onClick={CLOSE_BUTTON.onClick}
+            onClick={onClick}
             groupFill
           >
             <CloseIcon />
