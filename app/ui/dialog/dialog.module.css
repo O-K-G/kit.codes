@@ -12,8 +12,7 @@
   z-index: 10;
   opacity: 1;
   pointer-events: auto;
-  transition:
-    opacity 0.5s ease-in-out;
+  transition: opacity 0.5s ease-in-out;
 
   @starting-style {
     opacity: 0;
@@ -22,5 +21,13 @@
   &[data-open="false"] {
     opacity: 0;
     pointer-events: none;
+  }
+
+  @container style(--is-desktop: true) {
+    cursor: pointer;
+
+    & > div {
+      cursor: default;
+    }
   }
 }

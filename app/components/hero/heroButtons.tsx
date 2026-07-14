@@ -36,7 +36,11 @@ export default function HeroButtons() {
           </Button>
         ))}
       </div>
-      <Dialog open={open} aria-label={DIALOG_ARIA_LABEL}>
+      <Dialog
+        open={open}
+        aria-label={DIALOG_ARIA_LABEL}
+        onClose={() => setOpen(false)}
+      >
         <MessageForm onClick={() => setOpen(false)} />
       </Dialog>
     </>
