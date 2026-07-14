@@ -1,5 +1,3 @@
-'use client'
-
 import { concatStyles } from "@utils/concatStyles";
 import styles from "./inputOrTextarea.module.css";
 import Typography, { TypographyProps } from "@ui/typography/typography";
