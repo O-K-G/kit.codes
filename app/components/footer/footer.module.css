@@ -1,9 +1,6 @@
 .footerText {
-    width: 100%;
-    text-align: center;
-    margin-top: 5dvh;
-    display: inline-flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+  width: 100%;
+  text-align: center;
+  margin-top: 5dvh;
+  text-wrap: balance;
 }
