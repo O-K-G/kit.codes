@@ -28,6 +28,24 @@ export async function sendEmail(
   _prevState: ActionState,
   data: FormData,
 ): Promise<ActionState> {
+  const track = sanitizePlainText((data?.get("trackInput") as string) || "");
+  if (!!track?.length) {
+    const timer = (ms: number) =>
+      new Promise<void>((resolve) => {
+        const id = setTimeout(() => {
+          clearTimeout(id);
+          resolve();
+        }, ms);
+      });
+
+    async function runTask() {
+      await timer(3000);
+    }
+
+    await runTask();
+    return STATUS.success;
+  }
+
   const from = sanitizePlainText((data?.get("fromInput") as string) || "");
   const subject = sanitizePlainText(
     (data?.get("subjectInput") as string) || "",

@@ -1,6 +1,7 @@
 import { parseLabel } from "@utils/parseLabel";
 import styles from "./charactersLeftCounter.module.css";
 import { DirTypes } from "./messageForm";
+import Typography from "@ui/typography/typography";
 
 const CHARACTERS_LEFT = "characters left";
 
@@ -25,8 +26,14 @@ export default function CharactersLeftCounter({
   const charactersLeft = `${maxLength - count} ${CHARACTERS_LEFT}`;
 
   return (
-    <div dir={dir} className={styles.counter} {...rest}>
+    <Typography
+      component="span"
+      color="paper"
+      dir={dir}
+      className={styles.counter}
+      {...rest}
+    >
       {charactersLeft}
-    </div>
+    </Typography>
   );
 }

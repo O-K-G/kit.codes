@@ -19,6 +19,12 @@
   --lg-margin: clamp(24px, 2.34vw, 32px);
 
   /** Resolution breaking points */
+  @media (width >= 400px) {
+    body {
+      --is-sm-mobile: true;
+    }
+  }
+
   @media (width >= 768px) {
     body {
       --is-mobile: true;

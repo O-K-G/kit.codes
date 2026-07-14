@@ -16,6 +16,7 @@
 
   label {
     width: 10%;
+    min-width: 130px;
     flex-shrink: 0;
     text-transform: uppercase;
   }

@@ -15,6 +15,10 @@ export const FIELDS = {
     minLength: 3,
     maxLength: 1000,
   },
+  track: {
+    minLength: 0,
+    maxLength: 50,
+  },
 };
 
 type HandleValidationProps = {

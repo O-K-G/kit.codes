@@ -1,5 +1,7 @@
 import { concatStyles } from "@utils/concatStyles";
 import styles from "./inputOrTextarea.module.css";
+import Typography, { TypographyProps } from "@ui/typography/typography";
+import typographyStyles from "@ui/typography/typography.module.css";
 import { sanitizePlainText } from "@utils/sanitizePlainText";
 import { parseLabel } from "@utils/parseLabel";
 import {
@@ -27,6 +29,15 @@ type InputProps = {
   placeholder?: string;
   onChange?: (val: string) => void;
 
+  /** Defaults to 'paper'. */
+  labelColor?: TypographyProps["color"];
+
+  /** Defaults to 'section-body'. */
+  inputColot?: TypographyProps["color"];
+
+  /** Defaults to 'section-body'. */
+  variant?: TypographyProps["variant"];
+
   /** Defaults to 'span'. */
   wrapperComponent?: "span" | "div";
 
@@ -50,6 +61,9 @@ export default function InputOrTextarea({
   children,
   required,
   placeholder,
+  labelColor = "paper",
+  inputColot = "sky-deep",
+  variant = "section-body",
   onChange,
   ...rest
 }: InputProps) {
@@ -74,11 +88,15 @@ export default function InputOrTextarea({
     rows,
     cols,
     placeholder,
+    className: typographyStyles.typography,
   };
 
   const handleChange: ChangeEventHandler<El> = (e) => {
     const cleanString = sanitizePlainText(e.target.value);
-    e.target.value = cleanString;
+    if (cleanString !== e.target.value) {
+      e.target.value = cleanString;
+    }
+
     onChange?.(cleanString);
   };
 
@@ -107,11 +125,20 @@ export default function InputOrTextarea({
       className={concatStyles([styles.inputOrTextarea, className])}
       {...rest}
     >
-      <label htmlFor={selectedId}>{label}</label>
+      <Typography
+        htmlFor={selectedId}
+        component="label"
+        color={labelColor}
+        variant={variant}
+      >
+        {label}
+      </Typography>
 
       <InputContainerComponent {...inputContainerProps}>
         <Component
           data-error="false"
+          data-color={inputColot}
+          data-variant={variant}
           onInvalid={handleInvalid}
           onChange={handleChange}
           onClick={handleClick}
