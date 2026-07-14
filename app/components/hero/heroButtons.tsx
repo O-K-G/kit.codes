@@ -2,17 +2,20 @@
 
 import Button from "@ui/button/button";
 import styles from "./heroButtons.module.css";
-import Dialog, { openCloseDialog } from "@ui/dialog/dialog";
+import Dialog from "@ui/dialog/dialog";
 import MessageForm from "./messageForm";
 import { BUTTONS, DIALOG_ARIA_LABEL } from "./heroButtons.constants";
 import { handleOpenExternalWindow } from "@utils/handleOpenExternalWindow";
+import { useState } from "react";
 
 export default function HeroButtons() {
+  const [open, setOpen] = useState(false);
+
   const buttons = [
     {
       label: BUTTONS.email.label,
       variant: "fill-sky-deep",
-      onClick: openCloseDialog,
+      onClick: () => setOpen(true),
     },
     {
       label: BUTTONS.resume.label,
@@ -33,8 +36,8 @@ export default function HeroButtons() {
           </Button>
         ))}
       </div>
-      <Dialog aria-label={DIALOG_ARIA_LABEL}>
-        <MessageForm />
+      <Dialog open={open} aria-label={DIALOG_ARIA_LABEL}>
+        <MessageForm onClick={() => setOpen(false)} />
       </Dialog>
     </>
   );
