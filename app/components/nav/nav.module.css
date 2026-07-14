@@ -73,6 +73,16 @@
         box-shadow 0.2s ease-in-out,
         background-color 0.2s ease-in-out;
 
+      @supports (-moz-appearance: none) {
+        width: clamp(25px, 2.44vw, 40px);
+        height: clamp(25px, 2.44vw, 40px);
+
+        @container style(--is-sm-mobile: true) {
+          width: clamp(36px, 3.51vw, 48px);
+          height: clamp(36px, 3.51vw, 48px);
+        }
+      }
+
       &:active {
         background-color: var(--block-border);
       }
