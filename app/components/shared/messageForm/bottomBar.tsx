@@ -34,7 +34,7 @@ export default function BottomBar({
           onClick={onClick}
           groupFill
         >
-          <AlignLeftIcon />
+          <AlignLeftIcon aria-hidden />
         </IconButton>
 
         <IconButton
@@ -43,7 +43,7 @@ export default function BottomBar({
           onClick={onClick}
           groupFill
         >
-          <AlignRightIcon />
+          <AlignRightIcon aria-hidden />
         </IconButton>
       </div>
 
@@ -60,7 +60,7 @@ export default function BottomBar({
       </div>
 
       <IconButton groupFill type="submit" aria-label={SEND_BUTTON_LABEL}>
-        <SendIcon />
+        <SendIcon aria-hidden />
       </IconButton>
     </div>
   );

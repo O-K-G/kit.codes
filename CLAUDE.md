@@ -44,13 +44,13 @@ Components don't branch on className/props for visual variants. Instead they set
 Two behaviors are implemented as DOM/attribute-driven side effects rather than React state, each split into a tiny `"use client"` wrapper that renders `null` plus a hook:
 
 - **Fade-in on scroll**: `Section` (`app/ui/section/section.tsx`) renders a `SectionObserver` (`app/ui/section/SectionObserver.tsx`) alongside the `<section>`. It calls `useFadeIn` (`app/hooks/useFadeIn.tsx`), which uses an `IntersectionObserver` to flip `data-visible` on the section element; CSS handles the actual transition.
-- **Nav link highlighting**: `Nav` renders `TrackAndHighlightNavLinks` (`app/components/nav/trackAndHighlightNavLinks.tsx`), which calls `useHighlightNavLinks` (`app/hooks/useHighlightNavLinks.tsx`). This listens to scroll on `<main>`, computes which `<section>` is active (with special-cased handling for the last two, shorter sections), and toggles `data-is-in-view` on the corresponding `[data-selection-id]` nav `<li>`.
+- **Nav link highlighting**: `Nav` renders `TrackAndHighlightNavLinks` (`app/components/nav/trackAndHighlightNavLinks.tsx`), which calls `useHighlightNavLinks` (`app/hooks/useHighlightNavLinks.tsx`). This listens to scroll on `<main>` (throttled via `requestAnimationFrame`), computes which `<section>` is active (with special-cased handling for the last two, shorter sections), and toggles `data-is-in-view` on the corresponding `[data-selection-id]` nav `<li>` plus `aria-current` on that link's `<a>`.
 
 Any new full-page section should be wrapped in `Section` (`app/ui/section/section.tsx`) with a unique `id` to get fade-in and nav-highlighting for free, and that `id` needs a matching entry in `NAV_LINKS` (`app/components/nav/nav.constants.tsx`) if it should appear in the nav.
 
 ### Dialog pattern
 
-`Dialog` (`app/ui/dialog/dialog.tsx`) is not controlled via React state — `openCloseDialog()` imperatively toggles `data-modal-open`/`aria-hidden`/`aria-modal` on DOM nodes found via `querySelector`. It also implements manual focus trapping (Tab/Shift+Tab cycling) and Escape-to-close via a `keydown` listener. There is exactly one dialog on the page (the contact `MessageForm`), so the querySelector approach assumes a single dialog instance.
+`Dialog` (`app/ui/dialog/dialog.tsx`) is controlled via an `open` boolean prop, driven by `useState`/`useRef`/`useLayoutEffect` — there is no `openCloseDialog()` function. On open it renders with `role="dialog"`/`aria-modal`, moves focus into the first focusable child (restoring focus to whatever was previously focused when it closes), and marks `<main>`/`<nav>` `inert` for the duration via `document.querySelector`. It also implements manual focus trapping (Tab/Shift+Tab cycling) and Escape-to-close via a `keydown` listener. There is exactly one dialog on the page (the contact `MessageForm`), so the `document.querySelector` calls assume a single dialog instance.
 
 ### Contact form / email flow
 

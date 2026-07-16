@@ -28,11 +28,11 @@ export default function ContentSection({
       className={concatStyles([styles.contentSection, className])}
       {...rest}
     >
-      <Typography component="h2" color="mist" variant="eyebrow">
+      <Typography component="p" color="mist" variant="eyebrow">
         {eyebrow}
       </Typography>
 
-      <Typography component="h3" color="paper" variant="section-heading">
+      <Typography component="h2" color="paper" variant="section-heading">
         {title}
       </Typography>
 

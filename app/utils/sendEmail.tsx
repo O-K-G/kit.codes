@@ -38,11 +38,7 @@ export async function sendEmail(
         }, ms);
       });
 
-    async function runTask() {
-      await timer(3000);
-    }
-
-    await runTask();
+    await timer(3000);
     return STATUS.success;
   }
 

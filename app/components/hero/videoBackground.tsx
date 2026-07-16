@@ -45,6 +45,7 @@ export default function VideoBackground() {
     loop: true,
     autoPlay: true,
     muted: true,
+    "aria-hidden": true,
     onContextMenu: handleContextMenu,
     className: styles.videoBanner,
     isDefaultStyles: false,

@@ -53,7 +53,6 @@ export default function NavLink({
       home: () => firstEl.focus(),
       end: () => lastEl!.focus(),
       enter: handleSelect,
-      " ": handleSelect,
       arrowleft: () => {
         if (previousEl) {
           return previousEl.focus();
@@ -78,7 +77,7 @@ export default function NavLink({
       onKeyDown={handleKeyDown}
       className={concatStyles([typographyStyles.typography, styles.navLink])}
       data-variant="floor-btn"
-      href="#"
+      href={`#${id}`}
       {...rest}
     >
       {label}

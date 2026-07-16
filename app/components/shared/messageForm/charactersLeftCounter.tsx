@@ -10,6 +10,7 @@ type CharactersLeftCounterProps = {
   maxLength: number;
   label: string;
   dir: DirTypes;
+  id?: string;
 };
 
 export default function CharactersLeftCounter({
@@ -17,6 +18,7 @@ export default function CharactersLeftCounter({
   label,
   maxLength,
   dir,
+  id,
   ...rest
 }: CharactersLeftCounterProps) {
   const currentParsedLabel = parseLabel(label);
@@ -30,6 +32,8 @@ export default function CharactersLeftCounter({
       component="span"
       color="paper"
       dir={dir}
+      id={id}
+      aria-live="polite"
       className={styles.counter}
       {...rest}
     >

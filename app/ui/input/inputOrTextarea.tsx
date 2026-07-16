@@ -12,6 +12,7 @@ import {
   MouseEventHandler,
   ReactEventHandler,
   ReactNode,
+  useRef,
 } from "react";
 
 type InputProps = {
@@ -28,6 +29,8 @@ type InputProps = {
   required?: boolean;
   placeholder?: string;
   onChange?: (val: string) => void;
+  tabIndex?: number;
+  ariaDescribedBy?: string;
 
   /** Defaults to 'paper'. */
   labelColor?: TypographyProps["color"];
@@ -65,6 +68,8 @@ export default function InputOrTextarea({
   inputColot = "sky-deep",
   variant = "section-body",
   onChange,
+  tabIndex,
+  ariaDescribedBy,
   ...rest
 }: InputProps) {
   const selectedId = id || `input-${label}`;
@@ -72,6 +77,8 @@ export default function InputOrTextarea({
   const parcedLabel = parseLabel(label);
   const name = `${parcedLabel}Input`;
   const dirname = `${parcedLabel}Direction`;
+  const errorId = `${selectedId}-error`;
+  const errorRef = useRef<HTMLSpanElement>(null);
 
   const InputContainerComponent = children ? "div" : Fragment;
   const inputContainerProps = children
@@ -88,6 +95,8 @@ export default function InputOrTextarea({
     rows,
     cols,
     placeholder,
+    tabIndex,
+    "aria-describedby": [ariaDescribedBy, errorId].filter(Boolean).join(" "),
     className: typographyStyles.typography,
   };
 
@@ -102,7 +111,12 @@ export default function InputOrTextarea({
 
   const handleInvalid: ReactEventHandler<El> = (e) => {
     e.preventDefault();
-    (e.target as El).dataset.error = "true";
+    const target = e.target as El;
+    target.dataset.error = "true";
+    target.setAttribute("aria-invalid", "true");
+    if (errorRef.current) {
+      errorRef.current.textContent = target.validationMessage;
+    }
   };
 
   const handleError = (target: El) => {
@@ -110,6 +124,10 @@ export default function InputOrTextarea({
 
     if (dataset.error === "true") {
       dataset.error = "false";
+      target.setAttribute("aria-invalid", "false");
+      if (errorRef.current) {
+        errorRef.current.textContent = "";
+      }
     }
   };
 
@@ -145,6 +163,7 @@ export default function InputOrTextarea({
           onFocus={handleFocus}
           {...componentProps}
         />
+        <span id={errorId} role="alert" ref={errorRef} className={styles.srOnly} />
         {children}
       </InputContainerComponent>
     </WrapperComponent>

@@ -7,6 +7,8 @@ export type TypographyProps = {
   className?: string;
   htmlFor?: string;
   dir?: 'ltr' | 'rtl'
+  id?: string;
+  "aria-live"?: "polite" | "assertive" | "off";
 
   /** Defaults to <p />. */
   component?:

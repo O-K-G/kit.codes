@@ -13,7 +13,9 @@ export function useHighlightNavLinks() {
       return;
     }
 
-    const handleScroll = () => {
+    let ticking = false;
+
+    const updateActiveSection = () => {
       const sections = Array.from(document.getElementsByTagName("section"));
       const navElements = Array.from(
         document.querySelectorAll("[data-selection-id]"),
@@ -50,15 +52,30 @@ export function useHighlightNavLinks() {
       }
 
       navElements.forEach((el) => {
-        if (el.dataset.selectionId === activeSectionId) {
-          el.dataset.isInView = "true";
+        const isActive = el.dataset.selectionId === activeSectionId;
+        el.dataset.isInView = isActive ? "true" : "false";
+
+        const link = el.querySelector("a");
+        if (isActive) {
+          link?.setAttribute("aria-current", "true");
         } else {
-          el.dataset.isInView = "false";
+          link?.removeAttribute("aria-current");
         }
       });
     };
 
-    handleScroll();
+    const handleScroll = () => {
+      if (ticking) {
+        return;
+      }
+      ticking = true;
+      requestAnimationFrame(() => {
+        updateActiveSection();
+        ticking = false;
+      });
+    };
+
+    updateActiveSection();
     mainEl.addEventListener("scroll", handleScroll);
 
     return () => mainEl.removeEventListener("scroll", handleScroll);

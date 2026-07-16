@@ -7,6 +7,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { createPortal } from "react-dom";
 
 type DialogProps = {
   "aria-label": string;
@@ -16,7 +17,7 @@ type DialogProps = {
 };
 
 const FOCUSABLE_SELECTOR =
-  'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
+  'a[href]:not([tabindex="-1"]), button:not([disabled]):not([tabindex="-1"]), textarea:not([disabled]):not([tabindex="-1"]), input:not([disabled]):not([tabindex="-1"]), select:not([disabled]):not([tabindex="-1"]), [tabindex]:not([tabindex="-1"])';
 
 export default function Dialog({
   "aria-label": ariaLabel,
@@ -29,6 +30,7 @@ export default function Dialog({
   const [prevOpen, setPrevOpen] = useState(open);
   const backdropRef = useRef<HTMLDivElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
+  const previouslyFocusedRef = useRef<HTMLElement | null>(null);
 
   if (open !== prevOpen) {
     setPrevOpen(open);
@@ -39,17 +41,34 @@ export default function Dialog({
   }
 
   useLayoutEffect(() => {
+    const main = document.querySelector("main");
+    const nav = document.querySelector("nav");
+
     if (!open) {
+      main?.removeAttribute("inert");
+      nav?.removeAttribute("inert");
+
       const activeElement = document.activeElement as HTMLElement | null;
       if (activeElement && backdropRef.current?.contains(activeElement)) {
         activeElement.blur();
       }
+      previouslyFocusedRef.current?.focus();
+      previouslyFocusedRef.current = null;
       return;
     }
+
+    previouslyFocusedRef.current = document.activeElement as HTMLElement | null;
+    main?.setAttribute("inert", "");
+    nav?.setAttribute("inert", "");
 
     const firstFocusable =
       dialogRef.current?.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
     (firstFocusable ?? dialogRef.current)?.focus();
+
+    return () => {
+      main?.removeAttribute("inert");
+      nav?.removeAttribute("inert");
+    };
   }, [open]);
 
   const handleTransitionEnd = (e: TransitionEvent<HTMLDivElement>) => {
@@ -122,7 +141,7 @@ export default function Dialog({
     return null;
   }
 
-  return (
+  return createPortal(
     <div
       ref={backdropRef}
       data-open={open}
@@ -139,6 +158,7 @@ export default function Dialog({
       >
         {children}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

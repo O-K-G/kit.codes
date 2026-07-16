@@ -114,7 +114,6 @@ export default function MessageForm({onClick}: MessageFormProps) {
       className={styles.messageForm}
     >
       <div className={styles.titleBar}>
- 
         <Typography component="h2" color="paper" variant="card-heading">
           {TITLE}
         </Typography>
@@ -125,13 +124,15 @@ export default function MessageForm({onClick}: MessageFormProps) {
             onClick={onClick}
             groupFill
           >
-            <CloseIcon />
+            <CloseIcon aria-hidden />
           </IconButton>
         </span>
       </div>
 
       {inputsObj.map(({ label, maxLength, ...rest }, index) => {
         if (index < 2) {
+          const counterId = `${parseLabel(label)}-counter`;
+
           return (
             <div
               dir={dir}
@@ -143,10 +144,12 @@ export default function MessageForm({onClick}: MessageFormProps) {
                 dir={dir}
                 label={label}
                 maxLength={maxLength}
+                ariaDescribedBy={counterId}
                 onChange={(str) => handleChange({ label, str })}
                 {...rest}
               />
               <CharactersLeftCounter
+                id={counterId}
                 counter={counter}
                 maxLength={maxLength}
                 label={label}
@@ -157,8 +160,14 @@ export default function MessageForm({onClick}: MessageFormProps) {
         }
       })}
 
-      <InputOrTextarea required dir={dir} {...inputsObj[2]}>
+      <InputOrTextarea
+        required
+        dir={dir}
+        ariaDescribedBy={`${parseLabel(inputsObj[2].label)}-counter`}
+        {...inputsObj[2]}
+      >
         <CharactersLeftCounter
+          id={`${parseLabel(inputsObj[2].label)}-counter`}
           counter={counter}
           maxLength={inputsObj[2].maxLength}
           label={parseLabel(inputsObj[2].label)}
@@ -171,7 +180,12 @@ export default function MessageForm({onClick}: MessageFormProps) {
         />
       </InputOrTextarea>
 
-      <InputOrTextarea className={styles.track} {...inputsObj[3]} />
+      <InputOrTextarea
+        className={styles.track}
+        aria-hidden
+        tabIndex={-1}
+        {...inputsObj[3]}
+      />
     </form>
   );
 }
