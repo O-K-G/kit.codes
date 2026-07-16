@@ -124,8 +124,6 @@ export default function MessageForm({onClick}: MessageFormProps) {
             onClick={onClick}
             groupFill
           >
-            {/* Claude PR: decorative icon inside an already aria-labeled button — hidden
-                from AT so it isn't redundantly announced, matching sendingAlert.tsx. */}
             <CloseIcon aria-hidden />
           </IconButton>
         </span>
@@ -133,9 +131,6 @@ export default function MessageForm({onClick}: MessageFormProps) {
 
       {inputsObj.map(({ label, maxLength, ...rest }, index) => {
         if (index < 2) {
-          // Claude PR: the character counter had no id and wasn't linked to its field,
-          // so a screen reader user tabbing into the input never learned it existed.
-          // ariaDescribedBy ties the two together (see inputOrTextarea.tsx/aria-live above).
           const counterId = `${parseLabel(label)}-counter`;
 
           return (
@@ -185,12 +180,6 @@ export default function MessageForm({onClick}: MessageFormProps) {
         />
       </InputOrTextarea>
 
-      {/* Claude PR: this honeypot field was only hidden off-screen with CSS, so keyboard
-          and screen reader users could still tab into a field labeled "track" and,
-          if filled in (e.g. via autofill), have their real submission silently discarded
-          as spam. aria-hidden removes the whole label+input from the accessibility tree
-          (it lands on the wrapper via ...rest in inputOrTextarea.tsx) and tabIndex={-1}
-          removes the actual input from the tab order. */}
       <InputOrTextarea
         className={styles.track}
         aria-hidden

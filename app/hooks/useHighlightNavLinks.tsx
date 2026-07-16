@@ -13,10 +13,6 @@ export function useHighlightNavLinks() {
       return;
     }
 
-    // Claude PR: this ran full DOM queries + writes on every single scroll event with no
-    // throttling, which is unnecessary work on a frequently-firing listener. Wrapping the
-    // body in a requestAnimationFrame guard collapses bursts of scroll events down to at
-    // most one update per frame.
     let ticking = false;
 
     const updateActiveSection = () => {
@@ -59,9 +55,6 @@ export function useHighlightNavLinks() {
         const isActive = el.dataset.selectionId === activeSectionId;
         el.dataset.isInView = isActive ? "true" : "false";
 
-        // Claude PR: the active section was only reflected visually via data-is-in-view
-        // (a CSS hook), with no equivalent exposed to assistive tech. aria-current on the
-        // link itself (not the <li>) lets screen readers announce which section is active.
         const link = el.querySelector("a");
         if (isActive) {
           link?.setAttribute("aria-current", "true");

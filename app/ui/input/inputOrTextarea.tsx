@@ -29,11 +29,7 @@ type InputProps = {
   required?: boolean;
   placeholder?: string;
   onChange?: (val: string) => void;
-
-  /** Removes the field from the tab order (e.g. for the honeypot field, which is also hidden from AT via aria-hidden on the wrapper). */
   tabIndex?: number;
-
-  /** Id of an element (e.g. a character counter) that describes this field, merged with the internal validation-error id. */
   ariaDescribedBy?: string;
 
   /** Defaults to 'paper'. */
@@ -113,12 +109,6 @@ export default function InputOrTextarea({
     onChange?.(cleanString);
   };
 
-  // Claude PR: handleInvalid suppressed the native validation bubble (the browser's own
-  // mechanism for announcing invalid fields to AT) but only ever set a CSS-only
-  // dataset.error flag, leaving screen reader users with no indication of *why* a
-  // required field failed. Now also flips aria-invalid and fills a hidden role="alert"
-  // span (rendered below, linked via aria-describedby) with the browser's own
-  // validationMessage, so the failure is actually announced.
   const handleInvalid: ReactEventHandler<El> = (e) => {
     e.preventDefault();
     const target = e.target as El;

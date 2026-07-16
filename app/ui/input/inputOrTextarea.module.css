@@ -48,9 +48,6 @@
   }
 }
 
-/* Claude PR: new utility for the validation-error span in inputOrTextarea.tsx —
-   keeps the text available to screen readers (via aria-describedby) without
-   affecting layout, using the standard clip-rect visually-hidden technique. */
 .srOnly {
   position: absolute;
   width: 1px;

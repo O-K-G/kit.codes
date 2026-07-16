@@ -16,12 +16,6 @@ type DialogProps = {
   onClose: () => void;
 };
 
-// Claude PR: previously only the catch-all `[tabindex]:not([tabindex="-1"])` branch
-// excluded tabindex="-1" elements — the native-element branches (input/button/etc.)
-// matched regardless of their tabindex. That meant the message form's honeypot field
-// (now tabIndex={-1}, see messageForm.tsx) was still included in this trap's focusable
-// list, so Shift+Tab wrap-around could programmatically focus it. Each branch now
-// excludes tabindex="-1" explicitly.
 const FOCUSABLE_SELECTOR =
   'a[href]:not([tabindex="-1"]), button:not([disabled]):not([tabindex="-1"]), textarea:not([disabled]):not([tabindex="-1"]), input:not([disabled]):not([tabindex="-1"]), select:not([disabled]):not([tabindex="-1"]), [tabindex]:not([tabindex="-1"])';
 
@@ -46,13 +40,6 @@ export default function Dialog({
     }
   }
 
-  // Claude PR: two things were missing here. (1) Nothing marked the rest of the page
-  // inert while this dialog was open, so screen reader users in browse mode could still
-  // navigate into the nav/main content behind the (visually) modal dialog. (2) Focus was
-  // moved into the dialog on open but never restored anywhere on close, so keyboard users
-  // lost their place on the page. Both are handled in one effect because order matters:
-  // `inert` must be removed from `main`/`nav` *before* we try to focus back into them,
-  // since a browser refuses to focus anything inside an inert subtree.
   useLayoutEffect(() => {
     const main = document.querySelector("main");
     const nav = document.querySelector("nav");
@@ -154,12 +141,6 @@ export default function Dialog({
     return null;
   }
 
-  // Claude PR: this dialog is rendered inline from Rooftop, which is itself a
-  // descendant of <main> — so marking <main> inert (above) was also inertizing the
-  // dialog itself, silently breaking every focus behavior in this file (nothing inside
-  // an inert subtree can receive focus). Portaling to document.body makes the dialog a
-  // sibling of <main>/<nav> instead of a descendant, which is the standard pattern for
-  // modals anyway (also sidesteps any ancestor overflow/stacking-context clipping).
   return createPortal(
     <div
       ref={backdropRef}

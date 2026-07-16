@@ -45,10 +45,6 @@ export default function VideoBackground() {
     loop: true,
     autoPlay: true,
     muted: true,
-    // Claude PR: this is a purely decorative background video with no captions/dialogue;
-    // without aria-hidden it could still be exposed to assistive tech with no useful
-    // context. Hides it from the accessibility tree (forwarded through Video.tsx's
-    // ...rest onto the real <video> element).
     "aria-hidden": true,
     onContextMenu: handleContextMenu,
     className: styles.videoBanner,

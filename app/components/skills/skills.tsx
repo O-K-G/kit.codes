@@ -40,10 +40,6 @@ export default function Skills() {
             />
 
             <ul className={styles.barsContainer}>
-              {/* Claude PR: the per-item stagger delay used to be an inline
-                  style={{ "--index": ... }}, which production's CSP silently blocks
-                  (style-src has no unsafe-inline/unsafe-hashes) — see the :nth-child
-                  rules now supplying --index in contentSection.module.css instead. */}
               {SKILLS.map(({ skill, proficiency, years }) => {
                 const id = `skill-bar-${skill}`;
                 const yearsLabel = `${years} ${YEARS_LABEL}`;

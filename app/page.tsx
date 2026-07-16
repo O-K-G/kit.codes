@@ -6,11 +6,11 @@ import WhyMe from "@components/whyMe/whyMe";
 import Skills from "@components/skills/skills";
 import Rooftop from "@components/rooftop/rooftop";
 import Footer from "@components/footer/footer";
+import { MAIN_CONTENT_ID } from "@ui/skipLink/skipLink.constants";
 
 export default function Home() {
   return (
-    // Claude PR: target for the new skip-to-content link in layout.tsx.
-    <main id="main-content" className={styles.mainContent}>
+    <main id={MAIN_CONTENT_ID} className={styles.mainContent}>
       <Hero />
       <About />
       <Experience />

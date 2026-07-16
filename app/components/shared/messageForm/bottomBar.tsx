@@ -28,8 +28,6 @@ export default function BottomBar({
   return (
     <div className={styles.bottomBar} {...rest}>
       <div dir={dir} className={styles.directionButtons}>
-        {/* Claude PR: decorative icons inside already aria-labeled buttons — hidden from
-            AT so they aren't redundantly announced, matching sendingAlert.tsx. */}
         <IconButton
           aria-label={LEFT_BUTTON_LABEL}
           disabled={isLtr}
