@@ -1,9 +1,11 @@
+import { CSSProperties } from "react";
 import TopCardBar from "@ui/topCardBar/topCardBar";
 import styles from "./skills.module.css";
 import ContentSection from "@components/contentSection/contentSection";
 import Badge from "@ui/badge/badge";
 import Typography from "@ui/typography/typography";
 import { SECTION_IDS } from "@/app/page.constants";
+import ProgressBar from "@ui/progressBar/progressBar";
 import {
   ADDITIONAL_DETAILS_LABEL,
   ADDITIONAL_SKILLS,
@@ -39,33 +41,19 @@ export default function Skills() {
             />
 
             <ul className={styles.barsContainer}>
-              {SKILLS.map(({ skill, proficiency, years }) => {
+              {SKILLS.map(({ skill, proficiency, years }, index) => {
                 const id = `skill-bar-${skill}`;
                 const yearsLabel = `${years} ${YEARS_LABEL}`;
 
                 return (
-                  <li key={id}>
-                    <Typography
-                      component="label"
-                      htmlFor={id}
-                      color="paper"
-                      variant="skill-label"
-                    >
-                      {skill}
-                    </Typography>
-
-                    <progress id={id} max={100} value={proficiency}>
-                      {proficiency}
-                    </progress>
-
-                    <Typography
-                      component="span"
-                      color="mist"
-                      variant="skill-label"
-                    >
-                      {yearsLabel}
-                    </Typography>
-                  </li>
+                  <ProgressBar
+                    key={id}
+                    id={id}
+                    startLabel={skill}
+                    value={proficiency}
+                    endLabel={yearsLabel}
+                    style={{ "--index": index + 1 } as CSSProperties}
+                  />
                 );
               })}
             </ul>

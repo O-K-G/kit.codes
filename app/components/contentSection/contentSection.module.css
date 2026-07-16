@@ -7,6 +7,15 @@
   }
 }
 
+@keyframes fillProgress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
 .contentSection {
   gap: var(--desktop-margin);
 
@@ -25,6 +34,34 @@
 
   &[data-visible="true"] {
     animation: fadeIn 0.75s ease-in-out forwards;
+    li:has(progress) {
+      opacity: 0;
+      animation: fadeIn 0.3s ease-in-out forwards;
+
+      /**
+      * Once FireFox supports it, a one liner should be able to do it:
+      *   animation-delay: calc(sibling-index() * 0.1s);
+      * istead of passing a variable.
+      * https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/sibling-index
+      * https://caniuse.com/?search=css-sibling-index
+       */
+      animation-delay: calc(var(--index, 1) * 0.1s);
+
+      progress {
+        &::-moz-progress-bar,
+        &::-webkit-progress-value {
+          transform-origin: left;
+          transform: scaleX(0);
+          animation: fillProgress 0.6s ease-in-out forwards;
+          animation-delay: calc(var(--index, 1) * 0.1s);
+
+          @media (prefers-reduced-motion: reduce) {
+            animation: none;
+            transform: none;
+          }
+        }
+      }
+    }
 
     @media (prefers-reduced-motion: reduce) {
       animation: none;

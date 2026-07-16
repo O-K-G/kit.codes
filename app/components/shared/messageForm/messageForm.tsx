@@ -52,7 +52,7 @@ export default function MessageForm({onClick}: MessageFormProps) {
       label: LABELS.message,
       placeholder: PLACEHOLDERS.message,
       ...FIELDS.message,
-      rows: 10,
+      rows: 8,
       wrapperComponent: "div",
       component: "textarea",
       onChange: (str: string) =>
@@ -114,6 +114,7 @@ export default function MessageForm({onClick}: MessageFormProps) {
       className={styles.messageForm}
     >
       <div className={styles.titleBar}>
+ 
         <Typography component="h2" color="paper" variant="card-heading">
           {TITLE}
         </Typography>
