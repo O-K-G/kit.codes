@@ -52,7 +52,7 @@ export default function MessageForm({onClick}: MessageFormProps) {
       label: LABELS.message,
       placeholder: PLACEHOLDERS.message,
       ...FIELDS.message,
-      rows: 10,
+      rows: 8,
       wrapperComponent: "div",
       component: "textarea",
       onChange: (str: string) =>

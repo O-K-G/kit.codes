@@ -37,6 +37,10 @@
 
   .inputContainer {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
 
     textarea {
       resize: none;
