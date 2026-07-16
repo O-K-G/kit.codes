@@ -5,6 +5,7 @@ import ContentSection from "@components/contentSection/contentSection";
 import Badge from "@ui/badge/badge";
 import Typography from "@ui/typography/typography";
 import { SECTION_IDS } from "@/app/page.constants";
+import ProgressBar from "@ui/progressBar/progressBar";
 import {
   ADDITIONAL_DETAILS_LABEL,
   ADDITIONAL_SKILLS,
@@ -14,7 +15,6 @@ import {
   TOP_BAR,
   YEARS_LABEL,
 } from "./skills.constants";
-import ProgressBar from "@/app/ui/progressBar/progressBar";
 
 export default function Skills() {
   return (
@@ -52,7 +52,7 @@ export default function Skills() {
                     startLabel={skill}
                     value={proficiency}
                     endLabel={yearsLabel}
-                    style={{ "--i": index + 1 } as CSSProperties}
+                    style={{ "--index": index + 1 } as CSSProperties}
                   />
                 );
               })}

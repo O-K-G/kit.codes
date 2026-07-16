@@ -28,7 +28,15 @@
     li:has(progress) {
       opacity: 0;
       animation: fadeIn 0.3s ease-in-out forwards;
-      animation-delay: calc(var(--i, 1) * 0.1s);
+
+      /**
+      * Once FireFox supports it, a one liner should be able to do it:
+      *   animation-delay: calc(sibling-index() * 0.1s);
+      * istead of passing a variable.
+      * https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/sibling-index
+      * https://caniuse.com/?search=css-sibling-index
+       */
+      animation-delay: calc(var(--index, 1) * 0.1s);
     }
 
     @media (prefers-reduced-motion: reduce) {
