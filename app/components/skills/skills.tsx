@@ -13,6 +13,7 @@ import {
   TOP_BAR,
   YEARS_LABEL,
 } from "./skills.constants";
+import ProgressBar from "@/app/ui/progressBar/progressBar";
 
 export default function Skills() {
   return (
@@ -44,28 +45,13 @@ export default function Skills() {
                 const yearsLabel = `${years} ${YEARS_LABEL}`;
 
                 return (
-                  <li key={id}>
-                    <Typography
-                      component="label"
-                      htmlFor={id}
-                      color="paper"
-                      variant="skill-label"
-                    >
-                      {skill}
-                    </Typography>
-
-                    <progress id={id} max={100} value={proficiency}>
-                      {proficiency}
-                    </progress>
-
-                    <Typography
-                      component="span"
-                      color="mist"
-                      variant="skill-label"
-                    >
-                      {yearsLabel}
-                    </Typography>
-                  </li>
+                  <ProgressBar
+                    key={id}
+                    id={id}
+                    startLabel={skill}
+                    value={proficiency}
+                    endLabel={yearsLabel}
+                  />
                 );
               })}
             </ul>
