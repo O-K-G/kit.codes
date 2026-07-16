@@ -9,7 +9,9 @@ export default async function StructuredData() {
       type="application/ld+json"
       nonce={nonce}
       suppressHydrationWarning
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(PERSON_JSON_LD) }}
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(PERSON_JSON_LD).replace(/</g, "\\u003c"),
+      }}
     />
   );
 }
