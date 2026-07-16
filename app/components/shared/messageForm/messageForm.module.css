@@ -23,13 +23,10 @@
     margin-bottom: var(--desktop-margin);
     text-wrap: balance;
 
-    h2,
-    span {
-      width: 33.33333334%;
-    }
-
     h2 {
       text-align: center;
+      width: 50%;
+      margin-left: 25%;
     }
 
     span {
@@ -37,6 +34,7 @@
       flex-direction: row;
       justify-content: flex-end;
       align-items: center;
+      width: 25%;
 
       svg {
         width: clamp(24px, 2.34vw, 48px);

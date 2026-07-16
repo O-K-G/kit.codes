@@ -114,6 +114,7 @@ export default function MessageForm({onClick}: MessageFormProps) {
       className={styles.messageForm}
     >
       <div className={styles.titleBar}>
+ 
         <Typography component="h2" color="paper" variant="card-heading">
           {TITLE}
         </Typography>
