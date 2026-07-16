@@ -45,6 +45,23 @@
       * https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/sibling-index
       * https://caniuse.com/?search=css-sibling-index
        */
+      /* Claude PR: --index was previously set via an inline style={{ "--index": ... }}
+         attribute in skills.tsx, which the production CSP (style-src 'self', no
+         unsafe-inline/unsafe-hashes) silently blocks — every skill bar animated
+         simultaneously instead of staggered. Setting --index here via :nth-child
+         instead keeps it inside the already CSP-trusted stylesheet. */
+      &:nth-child(1) { --index: 1; }
+      &:nth-child(2) { --index: 2; }
+      &:nth-child(3) { --index: 3; }
+      &:nth-child(4) { --index: 4; }
+      &:nth-child(5) { --index: 5; }
+      &:nth-child(6) { --index: 6; }
+      &:nth-child(7) { --index: 7; }
+      &:nth-child(8) { --index: 8; }
+      &:nth-child(9) { --index: 9; }
+      &:nth-child(10) { --index: 10; }
+      &:nth-child(11) { --index: 11; }
+      &:nth-child(12) { --index: 12; }
       animation-delay: calc(var(--index, 1) * 0.1s);
 
       progress {

@@ -12,6 +12,7 @@ import {
   MouseEventHandler,
   ReactEventHandler,
   ReactNode,
+  useRef,
 } from "react";
 
 type InputProps = {
@@ -28,6 +29,12 @@ type InputProps = {
   required?: boolean;
   placeholder?: string;
   onChange?: (val: string) => void;
+
+  /** Removes the field from the tab order (e.g. for the honeypot field, which is also hidden from AT via aria-hidden on the wrapper). */
+  tabIndex?: number;
+
+  /** Id of an element (e.g. a character counter) that describes this field, merged with the internal validation-error id. */
+  ariaDescribedBy?: string;
 
   /** Defaults to 'paper'. */
   labelColor?: TypographyProps["color"];
@@ -65,6 +72,8 @@ export default function InputOrTextarea({
   inputColot = "sky-deep",
   variant = "section-body",
   onChange,
+  tabIndex,
+  ariaDescribedBy,
   ...rest
 }: InputProps) {
   const selectedId = id || `input-${label}`;
@@ -72,6 +81,8 @@ export default function InputOrTextarea({
   const parcedLabel = parseLabel(label);
   const name = `${parcedLabel}Input`;
   const dirname = `${parcedLabel}Direction`;
+  const errorId = `${selectedId}-error`;
+  const errorRef = useRef<HTMLSpanElement>(null);
 
   const InputContainerComponent = children ? "div" : Fragment;
   const inputContainerProps = children
@@ -88,6 +99,8 @@ export default function InputOrTextarea({
     rows,
     cols,
     placeholder,
+    tabIndex,
+    "aria-describedby": [ariaDescribedBy, errorId].filter(Boolean).join(" "),
     className: typographyStyles.typography,
   };
 
@@ -100,9 +113,20 @@ export default function InputOrTextarea({
     onChange?.(cleanString);
   };
 
+  // Claude PR: handleInvalid suppressed the native validation bubble (the browser's own
+  // mechanism for announcing invalid fields to AT) but only ever set a CSS-only
+  // dataset.error flag, leaving screen reader users with no indication of *why* a
+  // required field failed. Now also flips aria-invalid and fills a hidden role="alert"
+  // span (rendered below, linked via aria-describedby) with the browser's own
+  // validationMessage, so the failure is actually announced.
   const handleInvalid: ReactEventHandler<El> = (e) => {
     e.preventDefault();
-    (e.target as El).dataset.error = "true";
+    const target = e.target as El;
+    target.dataset.error = "true";
+    target.setAttribute("aria-invalid", "true");
+    if (errorRef.current) {
+      errorRef.current.textContent = target.validationMessage;
+    }
   };
 
   const handleError = (target: El) => {
@@ -110,6 +134,10 @@ export default function InputOrTextarea({
 
     if (dataset.error === "true") {
       dataset.error = "false";
+      target.setAttribute("aria-invalid", "false");
+      if (errorRef.current) {
+        errorRef.current.textContent = "";
+      }
     }
   };
 
@@ -145,6 +173,7 @@ export default function InputOrTextarea({
           onFocus={handleFocus}
           {...componentProps}
         />
+        <span id={errorId} role="alert" ref={errorRef} className={styles.srOnly} />
         {children}
       </InputContainerComponent>
     </WrapperComponent>

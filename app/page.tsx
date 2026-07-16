@@ -9,7 +9,8 @@ import Footer from "@components/footer/footer";
 
 export default function Home() {
   return (
-    <main className={styles.mainContent}>
+    // Claude PR: target for the new skip-to-content link in layout.tsx.
+    <main id="main-content" className={styles.mainContent}>
       <Hero />
       <About />
       <Experience />

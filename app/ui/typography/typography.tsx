@@ -7,6 +7,10 @@ export type TypographyProps = {
   className?: string;
   htmlFor?: string;
   dir?: 'ltr' | 'rtl'
+  id?: string;
+
+  /** Claude PR: needed so CharactersLeftCounter can announce itself to screen readers. */
+  "aria-live"?: "polite" | "assertive" | "off";
 
   /** Defaults to <p />. */
   component?:

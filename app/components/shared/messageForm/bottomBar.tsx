@@ -28,13 +28,15 @@ export default function BottomBar({
   return (
     <div className={styles.bottomBar} {...rest}>
       <div dir={dir} className={styles.directionButtons}>
+        {/* Claude PR: decorative icons inside already aria-labeled buttons — hidden from
+            AT so they aren't redundantly announced, matching sendingAlert.tsx. */}
         <IconButton
           aria-label={LEFT_BUTTON_LABEL}
           disabled={isLtr}
           onClick={onClick}
           groupFill
         >
-          <AlignLeftIcon />
+          <AlignLeftIcon aria-hidden />
         </IconButton>
 
         <IconButton
@@ -43,7 +45,7 @@ export default function BottomBar({
           onClick={onClick}
           groupFill
         >
-          <AlignRightIcon />
+          <AlignRightIcon aria-hidden />
         </IconButton>
       </div>
 
@@ -60,7 +62,7 @@ export default function BottomBar({
       </div>
 
       <IconButton groupFill type="submit" aria-label={SEND_BUTTON_LABEL}>
-        <SendIcon />
+        <SendIcon aria-hidden />
       </IconButton>
     </div>
   );

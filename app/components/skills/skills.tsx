@@ -1,4 +1,3 @@
-import { CSSProperties } from "react";
 import TopCardBar from "@ui/topCardBar/topCardBar";
 import styles from "./skills.module.css";
 import ContentSection from "@components/contentSection/contentSection";
@@ -41,7 +40,11 @@ export default function Skills() {
             />
 
             <ul className={styles.barsContainer}>
-              {SKILLS.map(({ skill, proficiency, years }, index) => {
+              {/* Claude PR: the per-item stagger delay used to be an inline
+                  style={{ "--index": ... }}, which production's CSP silently blocks
+                  (style-src has no unsafe-inline/unsafe-hashes) — see the :nth-child
+                  rules now supplying --index in contentSection.module.css instead. */}
+              {SKILLS.map(({ skill, proficiency, years }) => {
                 const id = `skill-bar-${skill}`;
                 const yearsLabel = `${years} ${YEARS_LABEL}`;
 
@@ -52,7 +55,6 @@ export default function Skills() {
                     startLabel={skill}
                     value={proficiency}
                     endLabel={yearsLabel}
-                    style={{ "--index": index + 1 } as CSSProperties}
                   />
                 );
               })}

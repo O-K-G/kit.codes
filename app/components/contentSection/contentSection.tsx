@@ -28,11 +28,19 @@ export default function ContentSection({
       className={concatStyles([styles.contentSection, className])}
       {...rest}
     >
-      <Typography component="h2" color="mist" variant="eyebrow">
+      {/* Claude PR: the eyebrow "kicker" text was an h2 while the visually-primary
+          section title below it was h3 — an inverted heading hierarchy, and it also
+          left the Card titles nested inside sections (also h3) at the same rank as
+          their parent's own title instead of one level deeper. The eyebrow is
+          supplementary label text, not a new topic, so it's no longer a heading at
+          all; the title is now h2, which correctly outranks the nested h3 Card
+          titles. Only the `component` tag changes — `data-variant` stays the same,
+          so styling is untouched. */}
+      <Typography component="p" color="mist" variant="eyebrow">
         {eyebrow}
       </Typography>
 
-      <Typography component="h3" color="paper" variant="section-heading">
+      <Typography component="h2" color="paper" variant="section-heading">
         {title}
       </Typography>
 

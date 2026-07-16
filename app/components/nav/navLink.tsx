@@ -49,11 +49,14 @@ export default function NavLink({
       handleEvents();
     };
 
+    // Claude PR: Space activated this link like a button, which is non-standard —
+    // native <a> elements only activate on Enter. Removed so keyboard behavior matches
+    // what's actually exposed (a link), keeping the Home/End/Arrow roving-focus
+    // enhancement below.
     const handleKeyStrokes = {
       home: () => firstEl.focus(),
       end: () => lastEl!.focus(),
       enter: handleSelect,
-      " ": handleSelect,
       arrowleft: () => {
         if (previousEl) {
           return previousEl.focus();
@@ -73,12 +76,17 @@ export default function NavLink({
   };
 
   return (
+    // Claude PR: href was hardcoded to "#" regardless of the target section, so
+    // right-click "copy link"/"open in new tab", middle-click, and the no-JS fallback
+    // all did nothing useful. Pointing it at the section's real #id fixes all of those
+    // while leaving the JS-enhanced smooth-scroll (still intercepted via preventDefault
+    // in handleClick) unchanged.
     <Link
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       className={concatStyles([typographyStyles.typography, styles.navLink])}
       data-variant="floor-btn"
-      href="#"
+      href={`#${id}`}
       {...rest}
     >
       {label}

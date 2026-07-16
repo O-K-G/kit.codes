@@ -30,6 +30,8 @@ export async function sendEmail(
 ): Promise<ActionState> {
   const track = sanitizePlainText((data?.get("trackInput") as string) || "");
   if (!!track?.length) {
+    // Claude PR: this delay was wrapped in an unnecessary intermediate async function;
+    // inlined to a direct await.
     const timer = (ms: number) =>
       new Promise<void>((resolve) => {
         const id = setTimeout(() => {
@@ -38,11 +40,7 @@ export async function sendEmail(
         }, ms);
       });
 
-    async function runTask() {
-      await timer(3000);
-    }
-
-    await runTask();
+    await timer(3000);
     return STATUS.success;
   }
 

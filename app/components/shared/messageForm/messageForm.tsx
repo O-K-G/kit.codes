@@ -114,7 +114,6 @@ export default function MessageForm({onClick}: MessageFormProps) {
       className={styles.messageForm}
     >
       <div className={styles.titleBar}>
- 
         <Typography component="h2" color="paper" variant="card-heading">
           {TITLE}
         </Typography>
@@ -125,13 +124,20 @@ export default function MessageForm({onClick}: MessageFormProps) {
             onClick={onClick}
             groupFill
           >
-            <CloseIcon />
+            {/* Claude PR: decorative icon inside an already aria-labeled button — hidden
+                from AT so it isn't redundantly announced, matching sendingAlert.tsx. */}
+            <CloseIcon aria-hidden />
           </IconButton>
         </span>
       </div>
 
       {inputsObj.map(({ label, maxLength, ...rest }, index) => {
         if (index < 2) {
+          // Claude PR: the character counter had no id and wasn't linked to its field,
+          // so a screen reader user tabbing into the input never learned it existed.
+          // ariaDescribedBy ties the two together (see inputOrTextarea.tsx/aria-live above).
+          const counterId = `${parseLabel(label)}-counter`;
+
           return (
             <div
               dir={dir}
@@ -143,10 +149,12 @@ export default function MessageForm({onClick}: MessageFormProps) {
                 dir={dir}
                 label={label}
                 maxLength={maxLength}
+                ariaDescribedBy={counterId}
                 onChange={(str) => handleChange({ label, str })}
                 {...rest}
               />
               <CharactersLeftCounter
+                id={counterId}
                 counter={counter}
                 maxLength={maxLength}
                 label={label}
@@ -157,8 +165,14 @@ export default function MessageForm({onClick}: MessageFormProps) {
         }
       })}
 
-      <InputOrTextarea required dir={dir} {...inputsObj[2]}>
+      <InputOrTextarea
+        required
+        dir={dir}
+        ariaDescribedBy={`${parseLabel(inputsObj[2].label)}-counter`}
+        {...inputsObj[2]}
+      >
         <CharactersLeftCounter
+          id={`${parseLabel(inputsObj[2].label)}-counter`}
           counter={counter}
           maxLength={inputsObj[2].maxLength}
           label={parseLabel(inputsObj[2].label)}
@@ -171,7 +185,18 @@ export default function MessageForm({onClick}: MessageFormProps) {
         />
       </InputOrTextarea>
 
-      <InputOrTextarea className={styles.track} {...inputsObj[3]} />
+      {/* Claude PR: this honeypot field was only hidden off-screen with CSS, so keyboard
+          and screen reader users could still tab into a field labeled "track" and,
+          if filled in (e.g. via autofill), have their real submission silently discarded
+          as spam. aria-hidden removes the whole label+input from the accessibility tree
+          (it lands on the wrapper via ...rest in inputOrTextarea.tsx) and tabIndex={-1}
+          removes the actual input from the tab order. */}
+      <InputOrTextarea
+        className={styles.track}
+        aria-hidden
+        tabIndex={-1}
+        {...inputsObj[3]}
+      />
     </form>
   );
 }

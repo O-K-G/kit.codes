@@ -13,7 +13,13 @@ export function useHighlightNavLinks() {
       return;
     }
 
-    const handleScroll = () => {
+    // Claude PR: this ran full DOM queries + writes on every single scroll event with no
+    // throttling, which is unnecessary work on a frequently-firing listener. Wrapping the
+    // body in a requestAnimationFrame guard collapses bursts of scroll events down to at
+    // most one update per frame.
+    let ticking = false;
+
+    const updateActiveSection = () => {
       const sections = Array.from(document.getElementsByTagName("section"));
       const navElements = Array.from(
         document.querySelectorAll("[data-selection-id]"),
@@ -50,15 +56,33 @@ export function useHighlightNavLinks() {
       }
 
       navElements.forEach((el) => {
-        if (el.dataset.selectionId === activeSectionId) {
-          el.dataset.isInView = "true";
+        const isActive = el.dataset.selectionId === activeSectionId;
+        el.dataset.isInView = isActive ? "true" : "false";
+
+        // Claude PR: the active section was only reflected visually via data-is-in-view
+        // (a CSS hook), with no equivalent exposed to assistive tech. aria-current on the
+        // link itself (not the <li>) lets screen readers announce which section is active.
+        const link = el.querySelector("a");
+        if (isActive) {
+          link?.setAttribute("aria-current", "true");
         } else {
-          el.dataset.isInView = "false";
+          link?.removeAttribute("aria-current");
         }
       });
     };
 
-    handleScroll();
+    const handleScroll = () => {
+      if (ticking) {
+        return;
+      }
+      ticking = true;
+      requestAnimationFrame(() => {
+        updateActiveSection();
+        ticking = false;
+      });
+    };
+
+    updateActiveSection();
     mainEl.addEventListener("scroll", handleScroll);
 
     return () => mainEl.removeEventListener("scroll", handleScroll);
