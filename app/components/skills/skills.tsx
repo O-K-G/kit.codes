@@ -1,3 +1,4 @@
+import { CSSProperties } from "react";
 import TopCardBar from "@ui/topCardBar/topCardBar";
 import styles from "./skills.module.css";
 import ContentSection from "@components/contentSection/contentSection";
@@ -40,7 +41,7 @@ export default function Skills() {
             />
 
             <ul className={styles.barsContainer}>
-              {SKILLS.map(({ skill, proficiency, years }) => {
+              {SKILLS.map(({ skill, proficiency, years }, index) => {
                 const id = `skill-bar-${skill}`;
                 const yearsLabel = `${years} ${YEARS_LABEL}`;
 
@@ -51,6 +52,7 @@ export default function Skills() {
                     startLabel={skill}
                     value={proficiency}
                     endLabel={yearsLabel}
+                    style={{ "--i": index + 1 } as CSSProperties}
                   />
                 );
               })}
