@@ -64,7 +64,7 @@ Required env vars (see `.env`, gitignored): `PASS`, `SERVICE`, `USER_NAME`, `TO`
 
 ### Fonts
 
-Local variable fonts (Big Shoulders, Inter, JetBrains Mono) are loaded via `next/font/local` in `app/utils/handleFonts.tsx`. Note the loaded font objects are currently unused (prefixed `_`) and `FONTS_VARIABLES` is an empty string — font CSS variables are not currently wired into `className` on `<html>`.
+Local variable fonts (Big Shoulders, Inter, JetBrains Mono) are loaded via `next/font/local` in `app/utils/handleFonts.tsx`, served as WOFF2. The loaded font objects are unused (prefixed `_`) and `FONTS_VARIABLES` is an empty string — font CSS variables are never wired into `className` on `<html>`. Despite that, the fonts are active: each `localFont()` call's `declarations` sets `font-family` to the literal name (`"Inter"`, `"Big Shoulders"`, `"JetBrains Mono"`), and CSS elsewhere (`typography.module.css`, `button.module.css`, `globals.css`, etc.) references those same literal names directly, so the generated `@font-face` rules apply globally regardless of the unused className wiring. JetBrains Mono has no italic source — `typography.module.css` never pairs `font-style: italic` with it, only with Inter.
 
 ## Linting notes
 
