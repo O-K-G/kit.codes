@@ -32,11 +32,29 @@ services:
       - /app/node_modules
       - /app/.next
 
+  # docker compose --profile playwright up tls-proxy --build
+  # Terminates HTTPS (self-signed, via Caddy's `tls internal`) in front of
+  # `app`. The site's CSP sends `upgrade-insecure-requests`, which makes
+  # browsers silently rewrite every asset request from http to https — over
+  # plain http:3000 those upgraded requests have nothing to TLS-handshake
+  # with and fail, breaking CSS/JS/fonts. This proxy exists purely so the
+  # iphone/mac preview windows have a real https endpoint to hit, without
+  # touching the app's production CSP.
+  tls-proxy:
+    profiles:
+      - playwright
+    image: caddy:2-alpine
+    volumes:
+      - ./playwright/Caddyfile:/etc/caddy/Caddyfile:ro
+    depends_on:
+      - app
+
   # docker compose --profile playwright up iphone --build
-  # Opens a headed WebKit window emulating an iPhone 15 Pro, pointed at the
-  # `app` (production) service. Runs with no timeout — stays open until you
-  # close the window. Authenticates to your host's X server using your own
-  # Xauthority cookie (no `xhost` grant needed).
+  # Opens a headed WebKit window emulating an iPhone 15 Pro, pointed at
+  # tls-proxy (which fronts the `app` production service over https). Runs
+  # with no timeout — stays open until you close the window. Authenticates
+  # to your host's X server using your own Xauthority cookie (no `xhost`
+  # grant needed).
   iphone:
     profiles:
       - playwright
@@ -45,14 +63,14 @@ services:
       target: playwright
     command: ["node", "open-iphone.mjs"]
     environment:
-      APP_URL: http://app:3000
+      APP_URL: https://tls-proxy
       DISPLAY: ${DISPLAY}
       XAUTHORITY: /tmp/.docker.xauth
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
       - ${XAUTHORITY:-${HOME}/.Xauthority}:/tmp/.docker.xauth:ro
     depends_on:
-      - app
+      - tls-proxy
 
   # docker compose --profile playwright up mac --build
   # Same as `iphone`, but opens Desktop Safari (Playwright's only Mac/Safari
@@ -65,11 +83,11 @@ services:
       target: playwright
     command: ["node", "open-mac.mjs"]
     environment:
-      APP_URL: http://app:3000
+      APP_URL: https://tls-proxy
       DISPLAY: ${DISPLAY}
       XAUTHORITY: /tmp/.docker.xauth
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
       - ${XAUTHORITY:-${HOME}/.Xauthority}:/tmp/.docker.xauth:ro
     depends_on:
-      - app
+      - tls-proxy

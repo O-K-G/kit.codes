@@ -5,7 +5,11 @@ const DEVICE = devices["iPhone 15 Pro"];
 const url = process.env.APP_URL || "http://localhost:3000";
 
 const browser = await webkit.launch({ headless: false });
-const context = await browser.newContext({ ...DEVICE });
+// tls-proxy uses a self-signed cert (Caddy's `tls internal`); trust it.
+const context = await browser.newContext({
+  ...DEVICE,
+  ignoreHTTPSErrors: true,
+});
 const page = await context.newPage();
 await page.goto(url);
 

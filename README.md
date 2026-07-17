@@ -57,6 +57,8 @@ Requires `.env` (see above) — both services load it.
 
 Two headed WebKit windows, pointed at the prod `app` service, for manual testing on real Safari rendering. They stay open indefinitely until you close the window. On Linux, they authenticate to your host's X server using your own Xauthority cookie (`$XAUTHORITY`, falling back to `~/.Xauthority`), so no `xhost` setup is needed — just make sure that env var/file exists (it does by default on X11 and XWayland sessions).
 
+They go through a `tls-proxy` service (Caddy, self-signed cert via `tls internal`) instead of hitting `app` directly. The site's CSP sends `upgrade-insecure-requests`, so browsers silently rewrite every asset request from http to https — over plain `app:3000` those upgraded requests have nothing to TLS-handshake with and every asset (CSS, JS, fonts) fails to load. `tls-proxy` gives them a real https endpoint to land on instead, without touching the app's production CSP. It starts automatically as a dependency; no separate command needed.
+
 If the window still fails to open with an X authorization error, grant local access manually as a fallback: `xhost +local:docker` (Arch/CachyOS: `sudo pacman -S xorg-xhost` first).
 
 | Action | Command |
