@@ -35,6 +35,23 @@ To exercise the contact form locally, create a `.env` file (gitignored) with:
 - `npm run build` — production build
 - `npm run start` — run the production build
 - `npm run lint` — run ESLint
+- `npm run test` — run the Jest test suite (also runs automatically before `npm run build`)
+- `npm run test:watch` — run tests in watch mode
+- `npm run test:coverage` — run tests with a coverage report
+
+## Docker
+
+Requires `.env` (see above) — both services load it.
+
+| Action | Command |
+| --- | --- |
+| Start prod | `docker compose up -d` — serves the production build on `:3000` |
+| Stop prod | `docker compose down` |
+| Start dev | `docker compose --profile dev up -d dev` — hot reload via bind mount |
+| Stop dev | `docker compose --profile dev down` |
+| Recreate image + container | add `--build` to any `up` command above |
+| Remove project's images/containers/volumes | `docker compose --profile dev down --rmi all -v` |
+| Remove base Node image | `docker rmi node:24-alpine` |
 
 ## Project structure
 
