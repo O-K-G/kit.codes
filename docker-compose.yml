@@ -35,8 +35,8 @@ services:
   # docker compose --profile playwright up iphone --build
   # Opens a headed WebKit window emulating an iPhone 15 Pro, pointed at the
   # `app` (production) service. Runs with no timeout — stays open until you
-  # close the window. Requires an X server reachable from Docker: on Linux,
-  # run `xhost +local:docker` once first.
+  # close the window. Authenticates to your host's X server using your own
+  # Xauthority cookie (no `xhost` grant needed).
   iphone:
     profiles:
       - playwright
@@ -47,8 +47,10 @@ services:
     environment:
       APP_URL: http://app:3000
       DISPLAY: ${DISPLAY}
+      XAUTHORITY: /tmp/.docker.xauth
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
+      - ${XAUTHORITY:-${HOME}/.Xauthority}:/tmp/.docker.xauth:ro
     depends_on:
       - app
 
@@ -65,7 +67,9 @@ services:
     environment:
       APP_URL: http://app:3000
       DISPLAY: ${DISPLAY}
+      XAUTHORITY: /tmp/.docker.xauth
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
+      - ${XAUTHORITY:-${HOME}/.Xauthority}:/tmp/.docker.xauth:ro
     depends_on:
       - app
