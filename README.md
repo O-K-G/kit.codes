@@ -50,8 +50,18 @@ Requires `.env` (see above) — both services load it.
 | Start dev | `docker compose --profile dev up -d dev` — hot reload via bind mount |
 | Stop dev | `docker compose --profile dev down` |
 | Recreate image + container | add `--build` to any `up` command above |
-| Remove project's images/containers/volumes | `docker compose --profile dev down --rmi all -v` |
-| Remove base Node image | `docker rmi node:24-alpine` |
+| Remove **everything** from this project (all services' images/containers/volumes/network) | `docker compose --profile dev --profile playwright down --rmi all -v` |
+| Remove base Node images | `docker rmi node:24-alpine node:24-bookworm` |
+
+### iOS/Mac Safari preview windows
+
+Two headed WebKit windows, pointed at the prod `app` service, for manual testing on real Safari rendering. They stay open indefinitely until you close the window. On Linux, run `xhost +local:docker` once first so the container can reach your display — on Arch (e.g. CachyOS), this needs the `xorg-xhost` package: `sudo pacman -S xorg-xhost`.
+
+| Action | Command |
+| --- | --- |
+| Open iPhone 15 Pro window | `docker compose --profile playwright up --build iphone` |
+| Open Mac (Desktop Safari) window | `docker compose --profile playwright up --build mac` |
+| Stop + remove just these two (images/containers) | `docker compose --profile playwright down --rmi all -v` |
 
 ## Project structure
 

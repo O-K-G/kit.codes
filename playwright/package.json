@@ -1,0 +1,7 @@
+{
+  "name": "o-k-g-playwright-preview",
+  "private": true,
+  "dependencies": {
+    "playwright": "1.61.1"
+  }
+}

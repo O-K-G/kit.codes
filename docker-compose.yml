@@ -31,3 +31,41 @@ services:
       - .:/app
       - /app/node_modules
       - /app/.next
+
+  # docker compose --profile playwright up iphone --build
+  # Opens a headed WebKit window emulating an iPhone 15 Pro, pointed at the
+  # `app` (production) service. Runs with no timeout — stays open until you
+  # close the window. Requires an X server reachable from Docker: on Linux,
+  # run `xhost +local:docker` once first.
+  iphone:
+    profiles:
+      - playwright
+    build:
+      context: .
+      target: playwright
+    command: ["node", "open-iphone.mjs"]
+    environment:
+      APP_URL: http://app:3000
+      DISPLAY: ${DISPLAY}
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    depends_on:
+      - app
+
+  # docker compose --profile playwright up mac --build
+  # Same as `iphone`, but opens Desktop Safari (Playwright's only Mac/Safari
+  # preset — there's no per-model Mac descriptor).
+  mac:
+    profiles:
+      - playwright
+    build:
+      context: .
+      target: playwright
+    command: ["node", "open-mac.mjs"]
+    environment:
+      APP_URL: http://app:3000
+      DISPLAY: ${DISPLAY}
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    depends_on:
+      - app
