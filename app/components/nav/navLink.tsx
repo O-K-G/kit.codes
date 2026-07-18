@@ -33,7 +33,7 @@ export default function NavLink({
       });
     }
 
-    router.push(fallbackUrl);
+    router.push(fallbackUrl, { scroll: false });
   };
 
   const handleClick: MouseEventHandler = (e) => {
