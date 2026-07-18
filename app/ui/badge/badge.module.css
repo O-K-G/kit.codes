@@ -84,11 +84,11 @@
   }
 
   &[data-rotate="left"] {
-    rotate: -2deg;
+    rotate: -8deg;
   }
 
   &[data-rotate="right"] {
-    rotate: 2deg;
+    rotate: 8deg;
   }
 
   &[data-border-blink="true"] {

@@ -2,8 +2,8 @@ import Badge from "@ui/badge/badge";
 
 export const EYEBROW = "3 · Why me";
 export const TITLE = "Four storefronts, still open.";
-export const LABEL = "Open";
-export const BREAKING_LETTER = "e";
+export const LABEL = "We're Open";
+export const BREAKING_LETTER = "en";
 export const CARDS = [
   {
     leftSlot: "Unit 3A",
@@ -48,7 +48,7 @@ export const CARDS = [
     ),
     title: "Zero-Downtime, Full Ownership",
     subtitle:
-      "Founding-engineer experience: auth, database, and infrastructure owned end-to-end, plus migrations that ran old and new in parallel until launch.",
-    badges: ["Full-stack", "Auth", "Migrations"],
+      "Founding-engineer experience: authentication & authorization, database, and infrastructure owned end-to-end, plus migrations that ran old and new in parallel until launch.",
+    badges: ["Full-stack", "Database", "Migrations"],
   },
 ];

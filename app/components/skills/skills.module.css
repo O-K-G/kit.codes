@@ -35,6 +35,7 @@
       width: 100%;
       text-align: start;
       word-break: break-word;
+      line-height: 150%;
 
       strong {
         color: var(--paper);
