@@ -1,10 +1,9 @@
 "use client";
 
-import styles from "./error.module.css";
 import { useEffect } from "react";
 import Button from "@ui/button/button";
-import Typography from "@ui/typography/typography";
 import { BUTTON_LABEL, LABEL } from "./error.constants";
+import Errors from "@components/errors/errors";
 
 type ErrorProps = {
   error: Error & { digest?: string };
@@ -19,11 +18,8 @@ export default function Error({ error, unstable_retry }: ErrorProps) {
   }, [error]);
 
   return (
-    <div className={styles.error}>
-      <Typography component="h2" color="paper" variant="project-heading">
-        {LABEL}
-      </Typography>
+    <Errors label={LABEL}>
       <Button onClick={handleClick}>{BUTTON_LABEL}</Button>
-    </div>
+    </Errors>
   );
 }

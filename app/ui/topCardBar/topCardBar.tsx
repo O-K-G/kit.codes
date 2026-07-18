@@ -1,7 +1,7 @@
 import Typography, { TypographyProps } from "@ui/typography/typography";
 import styles from "./topCardBar.module.css";
 import { ReactNode } from "react";
-import { concatStyles } from "@/app/utils/concatStyles";
+import { concatStyles } from "@utils/concatStyles";
 
 type TopCardBarProps = {
   leftSlot: string;

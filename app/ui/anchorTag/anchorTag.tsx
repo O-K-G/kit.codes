@@ -1,4 +1,4 @@
-import { concatStyles } from "@/app/utils/concatStyles";
+import { concatStyles } from "@utils/concatStyles";
 import styles from "./anchorTag.module.css";
 import { AnchorHTMLAttributes } from "react";
 

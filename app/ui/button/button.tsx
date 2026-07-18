@@ -1,4 +1,4 @@
-import { concatStyles } from "@/app/utils/concatStyles";
+import { concatStyles } from "@utils/concatStyles";
 import styles from "./button.module.css";
 import { ButtonHTMLAttributes, ReactNode } from "react";
 
