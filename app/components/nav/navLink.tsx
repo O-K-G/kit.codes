@@ -5,6 +5,7 @@ import Link from "next/link";
 import typographyStyles from "@ui/typography/typography.module.css";
 import { concatStyles } from "@utils/concatStyles";
 import styles from "./navLink.module.css";
+import { useRouter } from "next/navigation";
 
 type NavLinkProps = {
   id: string;
@@ -18,14 +19,21 @@ export default function NavLink({
   currentLinkIndex,
   ...rest
 }: NavLinkProps) {
+  const router = useRouter();
+
   const handleEvents = () => {
     const el = document.getElementById(id);
+    const fallbackUrl = `/#${id}`;
 
-    el?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-      inline: "nearest",
-    });
+    if (el) {
+      return el?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+        inline: "nearest",
+      });
+    }
+
+    router.push(fallbackUrl);
   };
 
   const handleClick: MouseEventHandler = (e) => {
