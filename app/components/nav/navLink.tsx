@@ -5,7 +5,6 @@ import Link from "next/link";
 import typographyStyles from "@ui/typography/typography.module.css";
 import { concatStyles } from "@utils/concatStyles";
 import styles from "./navLink.module.css";
-import { useRouter } from "next/navigation";
 
 type NavLinkProps = {
   id: string;
@@ -19,8 +18,6 @@ export default function NavLink({
   currentLinkIndex,
   ...rest
 }: NavLinkProps) {
-  const router = useRouter();
-
   const handleEvents = () => {
     const el = document.getElementById(id);
     const fallbackUrl = `/#${id}`;
@@ -33,7 +30,7 @@ export default function NavLink({
       });
     }
 
-    router.push(fallbackUrl);
+    window.location.assign(fallbackUrl);
   };
 
   const handleClick: MouseEventHandler = (e) => {

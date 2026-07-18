@@ -1,17 +1,9 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { useRouter } from "next/navigation";
 import NavLink from "./navLink";
 
-jest.mock("next/navigation", () => ({
-  useRouter: jest.fn(),
-}));
-
-const mockPush = jest.fn();
-
 beforeEach(() => {
-  mockPush.mockClear();
-  (useRouter as jest.Mock).mockReturnValue({ push: mockPush });
+  window.location.hash = "";
 });
 
 function renderLinks(count = 3) {
@@ -60,16 +52,16 @@ describe("NavLink", () => {
       block: "start",
       inline: "nearest",
     });
-    expect(mockPush).not.toHaveBeenCalled();
+    expect(window.location.hash).toBe("");
     document.body.removeChild(section);
   });
 
-  it("falls back to router.push when the target section is not in the DOM", async () => {
+  it("falls back to window.location.assign when the target section is not in the DOM", async () => {
     const user = userEvent.setup();
     render(<NavLink id="missing" label="G" currentLinkIndex={0} />);
     await user.click(screen.getByRole("link"));
 
-    expect(mockPush).toHaveBeenCalledWith("/#missing");
+    expect(window.location.hash).toBe("#missing");
   });
 
   it("prevents default navigation on click", async () => {

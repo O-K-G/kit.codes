@@ -8,10 +8,14 @@
   padding: var(--desktop-margin) clamp(15px, 1.66vw, 50px);
 
   h2 {
-    max-width: 50%;
     text-wrap: balance;
     text-align: center;
     margin-bottom: var(--desktop-margin);
+
+    @container style(--is-md-mobile: true) {
+      max-width: 50%;
+
+    }
 
     span {
       display: inline-block;
