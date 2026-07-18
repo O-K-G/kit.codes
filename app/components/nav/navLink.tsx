@@ -30,7 +30,7 @@ export default function NavLink({
       });
     }
 
-    window.open(fallbackUrl, "_self", "noreferrer");
+    window.location.assign(fallbackUrl);
   };
 
   const handleClick: MouseEventHandler = (e) => {
