@@ -18,7 +18,7 @@ export const CARDS = [
   {
     leftSlot: "Unit 3B",
     rightSlot: (
-      <Badge rotate="right" label={LABEL} breakingLetter={BREAKING_LETTER} />
+      <Badge rotate="left" label={LABEL} breakingLetter={BREAKING_LETTER} />
     ),
     title: "Accessibility Isn't an Afterthought",
     subtitle:
@@ -44,7 +44,7 @@ export const CARDS = [
   {
     leftSlot: "Unit 3D",
     rightSlot: (
-      <Badge rotate="right" label={LABEL} breakingLetter={BREAKING_LETTER} />
+      <Badge rotate="left" label={LABEL} breakingLetter={BREAKING_LETTER} />
     ),
     title: "Zero-Downtime, Full Ownership",
     subtitle:
