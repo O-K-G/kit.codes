@@ -6,6 +6,10 @@ jest.mock("@hooks/useHighlightNavLinks", () => ({
   useHighlightNavLinks: jest.fn(),
 }));
 
+jest.mock("next/navigation", () => ({
+  useRouter: () => ({ push: jest.fn() }),
+}));
+
 describe("Nav", () => {
   it("renders a <nav> element", () => {
     render(<Nav />);
