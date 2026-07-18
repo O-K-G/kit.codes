@@ -25,6 +25,12 @@
     }
   }
 
+  @media (width >= 600px) {
+    body {
+      --is-md-mobile: true;
+    }
+  }
+
   @media (width >= 768px) {
     body {
       --is-mobile: true;
