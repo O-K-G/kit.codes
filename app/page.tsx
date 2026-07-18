@@ -9,6 +9,7 @@ import Footer from "@components/footer/footer";
 import { MAIN_CONTENT_ID } from "@ui/skipLink/skipLink.constants";
 
 export default function Home() {
+  
   return (
     <main id={MAIN_CONTENT_ID} className={styles.mainContent}>
       <Hero />

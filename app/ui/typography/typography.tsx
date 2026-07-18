@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import styles from "./typography.module.css";
-import { concatStyles } from "@/app/utils/concatStyles";
+import { concatStyles } from "@utils/concatStyles";
 
 export type TypographyProps = {
   children: ReactNode;

@@ -1,7 +1,7 @@
 import AnchorTag from "@ui/anchorTag/anchorTag";
 import styles from "./skipLink.module.css";
 import { LABEL, MAIN_CONTENT_ID } from "./skipLink.constants";
-import { concatStyles } from "@/app/utils/concatStyles";
+import { concatStyles } from "@utils/concatStyles";
 
 type SkipLinkProps = {
   className?: string;

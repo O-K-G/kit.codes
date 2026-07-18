@@ -1,6 +1,6 @@
 import Typography, { TypographyProps } from "@ui/typography/typography";
 import styles from "./card.module.css";
-import { concatStyles } from "@/app/utils/concatStyles";
+import { concatStyles } from "@utils/concatStyles";
 import { ReactNode } from "react";
 import TopCardBar from "@ui/topCardBar/topCardBar";
 

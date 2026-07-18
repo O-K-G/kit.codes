@@ -2,7 +2,7 @@ import Section from "@ui/section/section";
 import Typography from "@ui/typography/typography";
 import styles from "./contentSection.module.css";
 import { ReactNode } from "react";
-import { concatStyles } from "@/app/utils/concatStyles";
+import { concatStyles } from "@utils/concatStyles";
 
 type ContentSection = {
   eyebrow: string;

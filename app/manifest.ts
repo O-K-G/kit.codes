@@ -15,11 +15,25 @@ export default function manifest(): MetadataRoute.Manifest {
         src: `/images/favicon-maple-code-192.png`,
         sizes: "192x192",
         type: "image/png",
+        purpose: "any",
       },
       {
         src: `/images/favicon-maple-code-512.png`,
         sizes: "512x512",
         type: "image/png",
+        purpose: "any",
+      },
+      {
+        src: `/images/favicon-maple-code-192-maskable.png`,
+        sizes: "192x192",
+        type: "image/png",
+        purpose: "maskable",
+      },
+      {
+        src: `/images/favicon-maple-code-512-maskable.png`,
+        sizes: "512x512",
+        type: "image/png",
+        purpose: "maskable",
       },
     ],
   };
