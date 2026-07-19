@@ -14,6 +14,7 @@ import {
   ReactNode,
   Ref,
   RefObject,
+  useEffect,
   useRef,
 } from "react";
 
@@ -86,6 +87,7 @@ export default function InputOrTextarea({
   const errorId = `${selectedId}-error`;
   const errorRef = useRef<HTMLSpanElement>(null);
   const errorBubbleRef = useRef<HTMLSpanElement>(null);
+  const inputRef = useRef<El>(null);
   const wrapperRef = useRef<InputTextAreaRef>(null);
   const selectedWrapperRef = ref || wrapperRef;
 
@@ -155,6 +157,20 @@ export default function InputOrTextarea({
   const handleFocus: FocusEventHandler<El> = ({ target }) =>
     handleError(target as El);
 
+  useEffect(() => {
+    const bubble = errorBubbleRef.current;
+
+    const handleClick = () => {
+      if (inputRef.current) {
+        handleError(inputRef.current);
+      }
+    };
+
+    bubble?.addEventListener("click", handleClick);
+
+    return () => bubble?.removeEventListener("click", handleClick);
+  }, []);
+
   return (
     <WrapperComponent
       ref={selectedWrapperRef as Ref<HTMLDivElement>}
@@ -180,6 +196,7 @@ export default function InputOrTextarea({
 
       <InputContainerComponent {...inputContainerProps}>
         <Component
+          ref={inputRef as Ref<HTMLInputElement & HTMLTextAreaElement>}
           data-error="false"
           data-color={inputColot}
           data-variant={variant}
