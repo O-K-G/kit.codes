@@ -53,6 +53,10 @@
   position: absolute;
   right: 0;
   top: 0;
+  max-width: 100%;
+  overflow: clip;
+  text-align: start;
+  text-overflow: ellipsis;
   color: var(--signage);
   transform: translateY(-50%);
   background: var(--block);
