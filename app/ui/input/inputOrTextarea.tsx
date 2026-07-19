@@ -85,6 +85,7 @@ export default function InputOrTextarea({
   const dirname = `${parcedLabel}Direction`;
   const errorId = `${selectedId}-error`;
   const errorRef = useRef<HTMLSpanElement>(null);
+  const errorBubbleRef = useRef<HTMLSpanElement>(null);
   const wrapperRef = useRef<InputTextAreaRef>(null);
   const selectedWrapperRef = ref || wrapperRef;
 
@@ -127,9 +128,8 @@ export default function InputOrTextarea({
       errorRef.current.textContent = target.validationMessage;
     }
 
-    if (selectedWrapperRef.current) {
-      selectedWrapperRef.current.dataset.errorMessage =
-        target.validationMessage;
+    if (errorBubbleRef.current) {
+      errorBubbleRef.current.dataset.errorMessage = target.validationMessage;
     }
   };
 
@@ -143,8 +143,8 @@ export default function InputOrTextarea({
         errorRef.current.textContent = "";
       }
 
-      if (selectedWrapperRef.current) {
-        selectedWrapperRef.current.dataset.errorMessage = "";
+      if (errorBubbleRef.current) {
+        errorBubbleRef.current.dataset.errorMessage = "";
       }
     }
   };
@@ -159,10 +159,16 @@ export default function InputOrTextarea({
     <WrapperComponent
       ref={selectedWrapperRef as Ref<HTMLDivElement>}
       data-text-area={isTextArea}
-      data-error-message=""
       className={concatStyles([styles.inputOrTextarea, className])}
       {...rest}
     >
+      <span
+        aria-hidden="true"
+        ref={errorBubbleRef}
+        data-error-message=""
+        className={styles.errorBubble}
+      />
+
       <Typography
         htmlFor={selectedId}
         component="label"
