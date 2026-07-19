@@ -3,7 +3,7 @@ import styles from "./inputOrTextarea.module.css";
 import Typography, { TypographyProps } from "@ui/typography/typography";
 import typographyStyles from "@ui/typography/typography.module.css";
 import { parseLabel } from "@utils/parseLabel";
-import DOMPurify from 'dompurify';
+import DOMPurify from "dompurify";
 import {
   ChangeEventHandler,
   FocusEventHandler,
@@ -12,8 +12,12 @@ import {
   MouseEventHandler,
   ReactEventHandler,
   ReactNode,
+  Ref,
+  RefObject,
   useRef,
 } from "react";
+
+type InputTextAreaRef = HTMLDivElement | HTMLSpanElement;
 
 type InputProps = {
   dir: "ltr" | "rtl";
@@ -31,6 +35,7 @@ type InputProps = {
   onChange?: (val: string) => void;
   tabIndex?: number;
   ariaDescribedBy?: string;
+  ref?: RefObject<InputTextAreaRef | null>;
 
   /** Defaults to 'paper'. */
   labelColor?: TypographyProps["color"];
@@ -70,6 +75,7 @@ export default function InputOrTextarea({
   onChange,
   tabIndex,
   ariaDescribedBy,
+  ref,
   ...rest
 }: InputProps) {
   const selectedId = id || `input-${label}`;
@@ -79,6 +85,8 @@ export default function InputOrTextarea({
   const dirname = `${parcedLabel}Direction`;
   const errorId = `${selectedId}-error`;
   const errorRef = useRef<HTMLSpanElement>(null);
+  const wrapperRef = useRef<InputTextAreaRef>(null);
+  const selectedWrapperRef = ref || wrapperRef;
 
   const InputContainerComponent = children ? "div" : Fragment;
   const inputContainerProps = children
@@ -114,8 +122,14 @@ export default function InputOrTextarea({
     const target = e.target as El;
     target.dataset.error = "true";
     target.setAttribute("aria-invalid", "true");
+
     if (errorRef.current) {
       errorRef.current.textContent = target.validationMessage;
+    }
+
+    if (selectedWrapperRef.current) {
+      selectedWrapperRef.current.dataset.errorMessage =
+        target.validationMessage;
     }
   };
 
@@ -128,6 +142,10 @@ export default function InputOrTextarea({
       if (errorRef.current) {
         errorRef.current.textContent = "";
       }
+
+      if (selectedWrapperRef.current) {
+        selectedWrapperRef.current.dataset.errorMessage = "";
+      }
     }
   };
 
@@ -139,7 +157,9 @@ export default function InputOrTextarea({
 
   return (
     <WrapperComponent
+      ref={selectedWrapperRef as Ref<HTMLDivElement>}
       data-text-area={isTextArea}
+      data-error-message=""
       className={concatStyles([styles.inputOrTextarea, className])}
       {...rest}
     >
@@ -163,7 +183,12 @@ export default function InputOrTextarea({
           onFocus={handleFocus}
           {...componentProps}
         />
-        <span id={errorId} role="alert" ref={errorRef} className={styles.srOnly} />
+        <span
+          id={errorId}
+          role="alert"
+          ref={errorRef}
+          className={styles.srOnly}
+        />
         {children}
       </InputContainerComponent>
     </WrapperComponent>
