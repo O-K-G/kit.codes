@@ -103,4 +103,41 @@ describe("InputOrTextarea", () => {
     render(<InputOrTextarea dir="ltr" label="Name" id="name" />);
     expect(screen.getByRole("alert")).toHaveAttribute("id", "name-error");
   });
+
+  it("clicking the error bubble fully resets the error state on the input", () => {
+    const { container } = render(
+      <InputOrTextarea dir="ltr" label="Name" id="name" required />,
+    );
+    const input = screen.getByLabelText("Name");
+    input.dispatchEvent(
+      new Event("invalid", { bubbles: false, cancelable: true }),
+    );
+    expect(input).toHaveAttribute("data-error", "true");
+    expect(input).toHaveAttribute("aria-invalid", "true");
+
+    const bubble = container.querySelector(
+      "[data-error-message]",
+    ) as HTMLElement;
+    bubble.dispatchEvent(new Event("click", { bubbles: true }));
+
+    expect(input).toHaveAttribute("data-error", "false");
+    expect(input).toHaveAttribute("aria-invalid", "false");
+    expect(bubble).toHaveAttribute("data-error-message", "");
+    expect(screen.getByRole("alert")).toHaveTextContent("");
+  });
+
+  it("clicking the error bubble before any error is a no-op", () => {
+    const { container } = render(
+      <InputOrTextarea dir="ltr" label="Name" id="name" />,
+    );
+    const input = screen.getByLabelText("Name");
+    const bubble = container.querySelector(
+      "[data-error-message]",
+    ) as HTMLElement;
+
+    expect(() =>
+      bubble.dispatchEvent(new Event("click", { bubbles: true })),
+    ).not.toThrow();
+    expect(input).toHaveAttribute("data-error", "false");
+  });
 });

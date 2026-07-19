@@ -5,6 +5,7 @@
   justify-content: flex-start;
   align-items: flex-start;
   gap: var(--md-margin);
+  position: relative;
 
   &[data-text-area="true"] {
     display: flex;
@@ -45,6 +46,33 @@
     textarea {
       resize: none;
     }
+  }
+}
+
+.errorBubble {
+  position: absolute;
+  right: 0;
+  top: 0;
+  color: var(--signage);
+  transform: translateY(-50%);
+  background: var(--block);
+  padding: var(--small-margin);
+  border: 1px solid var(--signage);
+  border-radius: clamp(7px, 0.68vw, 12px);
+  font-size: clamp(14.4px, 1.4063vw, 21.6px);
+  font-weight: 400;
+  font-family:
+    "Inter",
+    system-ui,
+    -apple-system,
+    sans-serif;
+
+  &[data-error-message=""] {
+    display: none;
+  }
+
+  &::before {
+    content: attr(data-error-message);
   }
 }
 
