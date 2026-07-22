@@ -38,6 +38,32 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 
+# ---- storybook (dev, hot reload) ---------------------------------------
+# Source is bind-mounted over this at runtime (see docker-compose.yml) for
+# hot reload, same pattern as the `dev` stage; the COPY here just makes the
+# stage runnable standalone too.
+FROM base AS storybook
+ENV NODE_ENV=development
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+EXPOSE 6006
+CMD ["npm", "run", "storybook"]
+
+# ---- storybook-builder --------------------------------------------------
+FROM base AS storybook-builder
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN npm run build-storybook
+
+# ---- storybook-static (serves the built static Storybook site) ----------
+# The Storybook equivalent of the app's builder -> runner split: builds once,
+# then serves the static output with http-server instead of a dev server.
+FROM base AS storybook-static
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=storybook-builder /app/storybook-static ./storybook-static
+EXPOSE 6006
+CMD ["npx", "http-server", "storybook-static", "-p", "6006", "-a", "0.0.0.0"]
+
 # ---- playwright (headed iPhone/Mac Safari preview windows) --------------
 # Points at the already-running `app` (production) service; doesn't build the
 # app itself. See docker-compose.yml for the `iphone`/`mac` services that use

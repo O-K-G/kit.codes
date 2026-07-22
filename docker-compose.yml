@@ -32,6 +32,38 @@ services:
       - /app/node_modules
       - /app/.next
 
+  # docker compose --profile storybook up storybook --build
+  # Runs `npm run storybook` (Storybook's dev server, hot reload); the bind
+  # mount reflects source edits into the container immediately, same pattern
+  # as `dev`. Gated behind the `storybook` profile so it never starts as a
+  # side effect of `docker compose up` (prod) or `--profile dev up`.
+  storybook:
+    profiles:
+      - storybook
+    build:
+      context: .
+      target: storybook
+    ports:
+      - "6006:6006"
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+
+  # docker compose --profile storybook up storybook-build --build
+  # Builds the static Storybook site (`npm run build-storybook`) and serves
+  # it with http-server — the Storybook equivalent of the `app` service's
+  # build-then-serve production flow. Also gated behind the `storybook`
+  # profile.
+  storybook-build:
+    profiles:
+      - storybook
+    build:
+      context: .
+      target: storybook-static
+    ports:
+      - "6006:6006"
+
   # docker compose --profile playwright up tls-proxy --build
   # Terminates HTTPS (self-signed, via Caddy's `tls internal`) in front of
   # `app`. The site's CSP sends `upgrade-insecure-requests`, which makes
