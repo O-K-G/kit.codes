@@ -9,6 +9,7 @@ The site is a single scrolling page (`app/page.tsx`) built around a "rooftop / b
 - [Next.js 16](https://nextjs.org) (App Router) + [React 19](https://react.dev)
 - TypeScript, CSS Modules
 - Contact form: `nodemailer` (Gmail SMTP), `zod` validation, `isomorphic-dompurify` sanitization
+- [Storybook](https://storybook.js.org) for isolated `app/ui/` component development
 
 ## Getting started
 
@@ -38,10 +39,12 @@ To exercise the contact form locally, create a `.env` file (gitignored) with:
 - `npm run test` — run the Jest test suite (also runs automatically before `npm run build`)
 - `npm run test:watch` — run tests in watch mode
 - `npm run test:coverage` — run tests with a coverage report
+- `npm run storybook` — start Storybook at [http://localhost:6006](http://localhost:6006)
+- `npm run build-storybook` — build the static Storybook site to `storybook-static/`
 
 ## Docker
 
-Requires `.env` (see above) — both services load it.
+Requires `.env` (see above) — the `app` and `dev` services load it; the Storybook services don't need it.
 
 | Action | Command |
 | --- | --- |
@@ -49,9 +52,17 @@ Requires `.env` (see above) — both services load it.
 | Stop prod | `docker compose down` |
 | Start dev | `docker compose --profile dev up -d dev` — hot reload via bind mount |
 | Stop dev | `docker compose --profile dev down` |
+| Build + serve static Storybook | `docker compose --profile storybook up -d storybook-build` — serves `storybook-static/` on `:6006` |
+| Run Storybook dev server | `docker compose --profile storybook up -d storybook` — hot reload via bind mount, on `:6006` |
+| Stop Storybook services | `docker compose --profile storybook down` |
+| Stop + remove **all** Storybook images/containers/volumes | `docker compose down storybook storybook-build --rmi all -v` |
 | Recreate image + container | add `--build` to any `up` command above |
-| Remove **everything** from this project (all services' images/containers/volumes/network) | `docker compose --profile dev --profile playwright down --rmi all -v` |
+| Remove **everything** from this project (all services' images/containers/volumes/network) | `docker compose --profile dev --profile storybook --profile playwright down --rmi all -v` |
 | Remove base Node images | `docker rmi node:24-alpine node:24-bookworm` |
+
+`--rmi all` removes images for every service *defined* in the compose file, not just the ones covered by `--profile` — so `docker compose --profile storybook down --rmi all` would also delete the unrelated `app`/`dev` images if they happen to exist locally. Pass the Storybook service names explicitly (`down storybook storybook-build ...`, no `--profile` flag) to scope the removal to just those two, as in the row above.
+
+The `storybook`/`storybook-build` services live behind their own `storybook` profile (same mechanism the `dev`/`playwright` services use), so they never start as a side effect of `docker compose up` or any other profile's commands.
 
 ### iOS/Mac Safari preview windows
 
@@ -72,7 +83,7 @@ If the window still fails to open with an X authorization error, grant local acc
 - `app/ui/` — generic, reusable presentational primitives (Button, Card, Badge, Dialog, Typography, icons, etc.)
 - `app/components/` — page sections and feature-specific composites (hero, about, experience, whyMe, skills, nav, footer, rooftop)
 
-Each component folder typically pairs `X.tsx` with `X.module.css` and an `X.constants.tsx` holding its copy/labels/data.
+Each component folder typically pairs `X.tsx` with `X.module.css` and an `X.constants.tsx` holding its copy/labels/data. Every component in `app/ui/` also has a co-located `X.stories.tsx`, viewable via `npm run storybook`.
 
 See [`CLAUDE.md`](./CLAUDE.md) for a deeper architecture writeup (path aliases, styling conventions, the fade-in/nav-highlighting hooks, and the contact form flow).
 
