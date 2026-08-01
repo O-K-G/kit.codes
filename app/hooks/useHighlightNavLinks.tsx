@@ -1,83 +1,71 @@
 import { useEffect } from "react";
 
 /**
- * This hook tracks on scroll which section is in view, and highlights/turns off the <Nav /> links.
- * The last two sections are relatively small in height, so they required their own exceptions
- * to be detected and flagged as 'in view' properly.
+ * This hook uses an IntersectionObserver (scoped to <main>) to track which section is in view,
+ * and highlights/turns off the <Nav /> links accordingly. The active section is whichever one
+ * has the highest intersection ratio - since that ratio is normalized to each section's own
+ * height, a short section that's fully visible outranks a tall one that's only partly visible,
+ * so short trailing sections don't need any special-casing.
  */
 
 export function useHighlightNavLinks() {
   useEffect(() => {
     const mainEl = document.getElementsByTagName("main")[0];
-    if (!mainEl) {
+    const sections = Array.from(document.getElementsByTagName("section"));
+    const navElements = Array.from(
+      document.querySelectorAll("[data-selection-id]"),
+    ) as HTMLElement[];
+
+    if (!mainEl || sections.length === 0 || navElements.length === 0) {
       return;
     }
 
-    let ticking = false;
+    const ratiosBySectionId = new Map<string, number>();
 
-    const updateActiveSection = () => {
-      const sections = Array.from(document.getElementsByTagName("section"));
-      const navElements = Array.from(
-        document.querySelectorAll("[data-selection-id]"),
-      ) as HTMLElement[];
-
-      if (sections.length === 0 || navElements.length === 0) {
-        return;
-      }
-
-      const remainingScroll =
-        mainEl.scrollHeight - mainEl.clientHeight - mainEl.scrollTop;
-      const isAtBottom = Math.abs(remainingScroll) <= 1;
-      const isAlmostAtBottom = remainingScroll <= 150;
-
-      let activeSectionId = "";
-
-      if (isAtBottom) {
-        activeSectionId = sections[sections.length - 1]?.id;
-      } else if (isAlmostAtBottom) {
-        activeSectionId = sections[sections.length - 2]?.id;
-      } else {
-        const arr = sections.map(
-          (section) => section.offsetTop - mainEl.scrollTop,
-        );
-        const positiveNumbers = arr.filter((num) => num > 0);
-
-        if (positiveNumbers.length > 0) {
-          const minPositiveVal = Math.min(...positiveNumbers);
-          const minIndex = arr.indexOf(minPositiveVal);
-          activeSectionId = sections[minIndex]?.id;
-        } else {
-          activeSectionId = sections[sections.length - 1]?.id;
-        }
-      }
-
+    const setActiveSection = (activeSectionId: string) => {
       navElements.forEach((el) => {
         const isActive = el.dataset.selectionId === activeSectionId;
         el.dataset.isInView = isActive ? "true" : "false";
 
         const link = el.querySelector("a");
         if (isActive) {
-          link?.setAttribute("aria-current", "true");
-        } else {
-          link?.removeAttribute("aria-current");
+          return link?.setAttribute("aria-current", "true");
+        }
+        link?.removeAttribute("aria-current");
+      });
+    };
+
+    const handleObserve = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        ratiosBySectionId.set(
+          entry.target.id,
+          entry.isIntersecting ? entry.intersectionRatio : 0,
+        );
+      });
+
+      let activeSectionId = "";
+      let maxRatio = 0;
+
+      sections.forEach((section) => {
+        const ratio = ratiosBySectionId.get(section.id) ?? 0;
+        if (ratio > maxRatio) {
+          maxRatio = ratio;
+          activeSectionId = section.id;
         }
       });
-    };
 
-    const handleScroll = () => {
-      if (ticking) {
-        return;
+      if (activeSectionId) {
+        setActiveSection(activeSectionId);
       }
-      ticking = true;
-      requestAnimationFrame(() => {
-        updateActiveSection();
-        ticking = false;
-      });
     };
 
-    updateActiveSection();
-    mainEl.addEventListener("scroll", handleScroll);
+    const observer = new IntersectionObserver(handleObserve, {
+      root: mainEl,
+      threshold: [0, 0.25, 0.5, 0.75, 1],
+    });
 
-    return () => mainEl.removeEventListener("scroll", handleScroll);
+    sections.forEach((section) => observer.observe(section));
+
+    return () => observer.disconnect();
   }, []);
 }

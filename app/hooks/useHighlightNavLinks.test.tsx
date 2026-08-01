@@ -1,6 +1,51 @@
 import { renderHook, cleanup } from "@testing-library/react";
 import { useHighlightNavLinks } from "./useHighlightNavLinks";
 
+type ObserveCall = { target: Element };
+
+type MockObserverInstance = {
+  options: IntersectionObserverInit | undefined;
+  observed: ObserveCall[];
+  disconnected: boolean;
+  observe: (target: Element) => void;
+  unobserve: () => void;
+  disconnect: () => void;
+  trigger: (entries: Partial<IntersectionObserverEntry>[]) => void;
+};
+
+let mockObserverInstances: MockObserverInstance[] = [];
+
+function MockIntersectionObserver(
+  callback: IntersectionObserverCallback,
+  options?: IntersectionObserverInit,
+): MockObserverInstance {
+  const observed: ObserveCall[] = [];
+
+  const instance: MockObserverInstance = {
+    options,
+    observed,
+    disconnected: false,
+    observe: (target) => observed.push({ target }),
+    unobserve: () => {},
+    disconnect: () => {
+      instance.disconnected = true;
+    },
+    trigger: (entries) =>
+      callback(entries as IntersectionObserverEntry[], instance as never),
+  };
+
+  mockObserverInstances.push(instance);
+  return instance;
+}
+
+function makeEntry(
+  target: Element,
+  isIntersecting: boolean,
+  intersectionRatio: number,
+): Partial<IntersectionObserverEntry> {
+  return { target, isIntersecting, intersectionRatio };
+}
+
 type Fixture = {
   main: HTMLElement;
   sections: HTMLElement[];
@@ -9,31 +54,12 @@ type Fixture = {
 
 function buildFixture(sectionIds: string[]): Fixture {
   const main = document.createElement("main");
-  const sections = sectionIds.map((id, index) => {
+  const sections = sectionIds.map((id) => {
     const section = document.createElement("section");
     section.id = id;
-    Object.defineProperty(section, "offsetTop", {
-      value: index * 100,
-      configurable: true,
-    });
     main.appendChild(section);
     return section;
   });
-
-  Object.defineProperty(main, "scrollTop", {
-    value: 0,
-    writable: true,
-    configurable: true,
-  });
-  Object.defineProperty(main, "scrollHeight", {
-    value: 1000,
-    configurable: true,
-  });
-  Object.defineProperty(main, "clientHeight", {
-    value: 300,
-    configurable: true,
-  });
-
   document.body.appendChild(main);
 
   const nav = document.createElement("nav");
@@ -51,85 +77,122 @@ function buildFixture(sectionIds: string[]): Fixture {
 }
 
 describe("useHighlightNavLinks", () => {
-  let rafSpy: jest.SpyInstance;
-
   beforeEach(() => {
+    mockObserverInstances = [];
+    (
+      global as unknown as { IntersectionObserver: unknown }
+    ).IntersectionObserver = MockIntersectionObserver;
     document.body.innerHTML = "";
-    rafSpy = jest
-      .spyOn(window, "requestAnimationFrame")
-      .mockImplementation((cb: FrameRequestCallback) => {
-        cb(0);
-        return 0;
-      });
   });
 
   afterEach(() => {
     cleanup();
-    rafSpy.mockRestore();
     document.body.innerHTML = "";
   });
 
-  it("runs once on mount without a scroll event and marks a section active", () => {
-    const { navEls } = buildFixture(["a", "b", "c"]);
+  it("observes every section", () => {
+    const { sections } = buildFixture(["a", "b", "c"]);
 
     renderHook(() => useHighlightNavLinks());
+    const instance = mockObserverInstances[0];
 
-    const activeCount = navEls.filter(
-      (el) => el.dataset.isInView === "true",
-    ).length;
-    expect(activeCount).toBe(1);
+    expect(instance.observed).toHaveLength(3);
+    expect(instance.observed.map((o) => o.target)).toEqual(sections);
   });
 
-  it("marks the section with the smallest positive offsetTop-scrollTop as active", () => {
-    const { main, navEls } = buildFixture(["a", "b", "c"]);
-    (main as unknown as { scrollTop: number }).scrollTop = 50;
+  it("constructs the observer with root scoped to <main>", () => {
+    const { main } = buildFixture(["a", "b", "c"]);
 
     renderHook(() => useHighlightNavLinks());
+    const instance = mockObserverInstances[0];
+
+    expect(instance.options?.root).toBe(main);
+  });
+
+  it("marks the section with the highest intersection ratio as active", () => {
+    const { sections, navEls } = buildFixture(["a", "b", "c"]);
+
+    renderHook(() => useHighlightNavLinks());
+    const instance = mockObserverInstances[0];
+
+    instance.trigger([
+      makeEntry(sections[0], true, 0.2),
+      makeEntry(sections[1], true, 0.9),
+      makeEntry(sections[2], false, 0),
+    ]);
 
     const activeEl = navEls.find((el) => el.dataset.isInView === "true");
     expect(activeEl?.dataset.selectionId).toBe("b");
   });
 
-  it("marks the last section active when scrolled to the bottom", () => {
-    const { main, navEls } = buildFixture(["a", "b", "c"]);
-    Object.defineProperty(main, "scrollHeight", {
-      value: 400,
-      configurable: true,
-    });
-    Object.defineProperty(main, "clientHeight", {
-      value: 100,
-      configurable: true,
-    });
-    (main as unknown as { scrollTop: number }).scrollTop = 300;
+  it("treats a fully-visible short section as more active than a partly-visible tall one", () => {
+    const { sections, navEls } = buildFixture(["a", "b"]);
 
     renderHook(() => useHighlightNavLinks());
+    const instance = mockObserverInstances[0];
 
-    const activeEl = navEls.find((el) => el.dataset.isInView === "true");
-    expect(activeEl?.dataset.selectionId).toBe("c");
-  });
-
-  it("marks the second-to-last section active when almost at the bottom", () => {
-    const { main, navEls } = buildFixture(["a", "b", "c"]);
-    Object.defineProperty(main, "scrollHeight", {
-      value: 1000,
-      configurable: true,
-    });
-    Object.defineProperty(main, "clientHeight", {
-      value: 300,
-      configurable: true,
-    });
-    (main as unknown as { scrollTop: number }).scrollTop = 600;
-
-    renderHook(() => useHighlightNavLinks());
+    instance.trigger([
+      makeEntry(sections[0], true, 0.6),
+      makeEntry(sections[1], true, 1),
+    ]);
 
     const activeEl = navEls.find((el) => el.dataset.isInView === "true");
     expect(activeEl?.dataset.selectionId).toBe("b");
+  });
+
+  it("treats non-intersecting entries as a zero ratio even if intersectionRatio is nonzero", () => {
+    const { sections, navEls } = buildFixture(["a", "b"]);
+
+    renderHook(() => useHighlightNavLinks());
+    const instance = mockObserverInstances[0];
+
+    instance.trigger([
+      makeEntry(sections[0], false, 0.5),
+      makeEntry(sections[1], true, 0.3),
+    ]);
+
+    const activeEl = navEls.find((el) => el.dataset.isInView === "true");
+    expect(activeEl?.dataset.selectionId).toBe("b");
+  });
+
+  it("retains ratios from earlier batches for sections not included in the latest one", () => {
+    const { sections, navEls } = buildFixture(["a", "b"]);
+
+    renderHook(() => useHighlightNavLinks());
+    const instance = mockObserverInstances[0];
+
+    instance.trigger([
+      makeEntry(sections[0], true, 1),
+      makeEntry(sections[1], true, 0),
+    ]);
+    instance.trigger([makeEntry(sections[1], true, 0.4)]);
+
+    const activeEl = navEls.find((el) => el.dataset.isInView === "true");
+    expect(activeEl?.dataset.selectionId).toBe("a");
+  });
+
+  it("does not change the active section when the latest batch has no positive ratios", () => {
+    const { sections, navEls } = buildFixture(["a", "b"]);
+
+    renderHook(() => useHighlightNavLinks());
+    const instance = mockObserverInstances[0];
+
+    instance.trigger([
+      makeEntry(sections[0], true, 1),
+      makeEntry(sections[1], false, 0),
+    ]);
+    instance.trigger([makeEntry(sections[0], false, 0)]);
+
+    const activeEl = navEls.find((el) => el.dataset.isInView === "true");
+    expect(activeEl?.dataset.selectionId).toBe("a");
   });
 
   it("sets aria-current='true' only on the active link's anchor", () => {
-    const { navEls } = buildFixture(["a", "b", "c"]);
+    const { sections, navEls } = buildFixture(["a", "b", "c"]);
 
     renderHook(() => useHighlightNavLinks());
+    const instance = mockObserverInstances[0];
+    instance.trigger([makeEntry(sections[1], true, 1)]);
 
     const activeLi = navEls.find((el) => el.dataset.isInView === "true")!;
     const inactiveLis = navEls.filter((el) => el !== activeLi);
@@ -145,9 +208,11 @@ describe("useHighlightNavLinks", () => {
   });
 
   it("sets data-is-in-view='false' on all non-active nav elements", () => {
-    const { navEls } = buildFixture(["a", "b", "c"]);
+    const { sections, navEls } = buildFixture(["a", "b", "c"]);
 
     renderHook(() => useHighlightNavLinks());
+    const instance = mockObserverInstances[0];
+    instance.trigger([makeEntry(sections[0], true, 1)]);
 
     const inactive = navEls.filter((el) => el.dataset.isInView !== "true");
     inactive.forEach((el) => {
@@ -157,6 +222,7 @@ describe("useHighlightNavLinks", () => {
 
   it("does nothing and does not throw when there is no <main> element", () => {
     expect(() => renderHook(() => useHighlightNavLinks())).not.toThrow();
+    expect(mockObserverInstances).toHaveLength(0);
   });
 
   it("does nothing when there are no sections", () => {
@@ -170,6 +236,7 @@ describe("useHighlightNavLinks", () => {
 
     expect(() => renderHook(() => useHighlightNavLinks())).not.toThrow();
     expect(li.dataset.isInView).toBeUndefined();
+    expect(mockObserverInstances).toHaveLength(0);
   });
 
   it("does nothing when there are no nav elements", () => {
@@ -179,36 +246,16 @@ describe("useHighlightNavLinks", () => {
       .forEach((el) => el.remove());
 
     expect(() => renderHook(() => useHighlightNavLinks())).not.toThrow();
+    expect(mockObserverInstances).toHaveLength(0);
   });
 
-  it("removes the scroll listener on unmount", () => {
-    const { main } = buildFixture(["a", "b", "c"]);
-    const removeSpy = jest.spyOn(main, "removeEventListener");
+  it("disconnects the observer on unmount", () => {
+    buildFixture(["a", "b", "c"]);
 
     const { unmount } = renderHook(() => useHighlightNavLinks());
+    const instance = mockObserverInstances[0];
     unmount();
 
-    expect(removeSpy).toHaveBeenCalledWith("scroll", expect.any(Function));
-  });
-
-  it("throttles rapid scroll events to a single requestAnimationFrame-driven update", () => {
-    const { main } = buildFixture(["a", "b", "c"]);
-    rafSpy.mockRestore();
-    const callbacks: FrameRequestCallback[] = [];
-    rafSpy = jest
-      .spyOn(window, "requestAnimationFrame")
-      .mockImplementation((cb: FrameRequestCallback) => {
-        callbacks.push(cb);
-        return callbacks.length;
-      });
-
-    renderHook(() => useHighlightNavLinks());
-    rafSpy.mockClear();
-
-    main.dispatchEvent(new Event("scroll"));
-    main.dispatchEvent(new Event("scroll"));
-    main.dispatchEvent(new Event("scroll"));
-
-    expect(rafSpy).toHaveBeenCalledTimes(1);
+    expect(instance.disconnected).toBe(true);
   });
 });
