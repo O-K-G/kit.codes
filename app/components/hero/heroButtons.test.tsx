@@ -2,11 +2,6 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import HeroButtons from "./heroButtons";
 import { BUTTONS } from "./heroButtons.constants";
-import { handleOpenExternalWindow } from "@utils/handleOpenExternalWindow";
-
-jest.mock("@utils/handleOpenExternalWindow", () => ({
-  handleOpenExternalWindow: jest.fn(),
-}));
 
 beforeAll(() => {
   class MockIntersectionObserver {
@@ -33,20 +28,21 @@ describe("HeroButtons", () => {
   it("renders the resume button", () => {
     render(<HeroButtons />);
     expect(
-      screen.getByRole("button", { name: BUTTONS.resume.label }),
+      screen.getByRole("link", { name: BUTTONS.resume.label }),
     ).toBeInTheDocument();
   });
 
   it("renders the GitHub button", () => {
     render(<HeroButtons />);
     expect(
-      screen.getByRole("button", { name: BUTTONS.gitHub.label }),
+      screen.getByRole("link", { name: BUTTONS.gitHub.label }),
     ).toBeInTheDocument();
   });
 
-  it("renders exactly three buttons", () => {
+  it("renders exactly one button and two links", () => {
     render(<HeroButtons />);
-    expect(screen.getAllByRole("button")).toHaveLength(3);
+    expect(screen.getAllByRole("button")).toHaveLength(1);
+    expect(screen.getAllByRole("link")).toHaveLength(2);
   });
 
   it("does not render the email dialog by default", () => {
@@ -61,29 +57,20 @@ describe("HeroButtons", () => {
     expect(screen.getByRole("dialog")).toBeInTheDocument();
   });
 
-  it("calls handleOpenExternalWindow with the resume URL when clicked", async () => {
-    const user = userEvent.setup();
+  it("configures the resume element with the correct URL, target, and security rel tags", () => {
     render(<HeroButtons />);
-    await user.click(
-      screen.getByRole("button", { name: BUTTONS.resume.label }),
-    );
-    expect(handleOpenExternalWindow).toHaveBeenCalledWith(BUTTONS.resume.url);
+    const resumeLink = screen.getByRole("link", { name: BUTTONS.resume.label });
+    expect(resumeLink).toHaveAttribute("href", BUTTONS.resume.url);
+    expect(resumeLink).toHaveAttribute("target", "_blank");
+    expect(resumeLink).toHaveAttribute("rel", "noreferrer");
   });
 
-  it("calls handleOpenExternalWindow with the GitHub URL when clicked", async () => {
-    const user = userEvent.setup();
+  it("configures the GitHub element with the correct URL, target, and security rel tags", () => {
     render(<HeroButtons />);
-    await user.click(
-      screen.getByRole("button", { name: BUTTONS.gitHub.label }),
-    );
-    expect(handleOpenExternalWindow).toHaveBeenCalledWith(BUTTONS.gitHub.url);
-  });
-
-  it("does not call handleOpenExternalWindow for the email button", async () => {
-    const user = userEvent.setup();
-    render(<HeroButtons />);
-    await user.click(screen.getByRole("button", { name: BUTTONS.email.label }));
-    expect(handleOpenExternalWindow).not.toHaveBeenCalled();
+    const githubLink = screen.getByRole("link", { name: BUTTONS.gitHub.label });
+    expect(githubLink).toHaveAttribute("href", BUTTONS.gitHub.url);
+    expect(githubLink).toHaveAttribute("target", "_blank");
+    expect(githubLink).toHaveAttribute("rel", "noreferrer");
   });
 
   it("closes the dialog after opening and clicking close", async () => {

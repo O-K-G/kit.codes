@@ -87,9 +87,15 @@
     }
   }
 
-  &:disabled {
-    filter: grayscale(100%);
-    opacity: 0.5;
-    pointer-events: none;
+  &[data-component="a"] {
+    text-decoration: none;
+  }
+
+  &[data-component="button"] {
+    &:disabled {
+      filter: grayscale(100%);
+      opacity: 0.5;
+      pointer-events: none;
+    }
   }
 }

@@ -45,7 +45,6 @@ export default function Rooftop() {
                 <Button
                   key={`buzzer-${label}`}
                   variant="buzzer"
-                  type="button"
                   {...rest}
                 >
                   {label}

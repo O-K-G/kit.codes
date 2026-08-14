@@ -46,14 +46,16 @@ describe("Hero", () => {
 
   it("renders the hero buttons", () => {
     render(<Hero />);
+
     expect(
       screen.getByRole("button", { name: BUTTONS.email.label }),
     ).toBeInTheDocument();
+
     expect(
-      screen.getByRole("button", { name: BUTTONS.resume.label }),
+      screen.getByRole("link", { name: BUTTONS.resume.label }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: BUTTONS.gitHub.label }),
+      screen.getByRole("link", { name: BUTTONS.gitHub.label }),
     ).toBeInTheDocument();
   });
 

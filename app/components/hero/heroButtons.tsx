@@ -3,7 +3,6 @@
 import Button from "@ui/button/button";
 import styles from "./heroButtons.module.css";
 import { BUTTONS } from "./heroButtons.constants";
-import { handleOpenExternalWindow } from "@utils/handleOpenExternalWindow";
 import { useState } from "react";
 import EmailDialog from "../shared/messageForm/emailDialog";
 
@@ -18,11 +17,13 @@ export default function HeroButtons() {
     },
     {
       label: BUTTONS.resume.label,
-      onClick: () => handleOpenExternalWindow(BUTTONS.resume.url),
+      href: BUTTONS.resume.url,
+      component: "a",
     },
     {
       label: BUTTONS.gitHub.label,
-      onClick: () => handleOpenExternalWindow(BUTTONS.gitHub.url),
+      href: BUTTONS.gitHub.url,
+      component: "a",
     },
   ] as const;
 
