@@ -82,4 +82,53 @@ describe("Button", () => {
       "Send message",
     );
   });
+
+  /* Polymorphic & Link Coverage Tests */
+
+  it("renders as an internal anchor link when component is 'a'", () => {
+    render(
+      <Button component="a" href="/dashboard">
+        Go to Dashboard
+      </Button>,
+    );
+    const link = screen.getByRole("link", { name: "Go to Dashboard" });
+    expect(link).toBeInTheDocument();
+    expect(link).toHaveAttribute("href", "/dashboard");
+    expect(link).toHaveAttribute("target", "_self");
+    expect(link).not.toHaveAttribute("rel");
+  });
+
+  it("renders as an external anchor link with safety defaults for absolute URLs", () => {
+    render(
+      <Button component="a" href="https://example.com">
+        Visit External
+      </Button>,
+    );
+    const link = screen.getByRole("link", { name: "Visit External" });
+    expect(link).toHaveAttribute("href", "https://example.com");
+    expect(link).toHaveAttribute("target", "_blank");
+    expect(link).toHaveAttribute("rel", "noreferrer");
+  });
+
+  it("renders as an external link with custom target and rel values when provided", () => {
+    render(
+      <Button component="a" href="https://example.com" target="_parent" rel="noopener">
+        Custom Link
+      </Button>,
+    );
+    const link = screen.getByRole("link", { name: "Custom Link" });
+    expect(link).toHaveAttribute("target", "_parent");
+    expect(link).toHaveAttribute("rel", "noopener");
+  });
+
+  it("identifies mailto and tel links as external links", () => {
+    render(
+      <Button component="a" href="mailto:test@example.com">
+        Email Us
+      </Button>,
+    );
+    const link = screen.getByRole("link", { name: "Email Us" });
+    expect(link).toHaveAttribute("target", "_blank");
+    expect(link).toHaveAttribute("rel", "noreferrer");
+  });
 });

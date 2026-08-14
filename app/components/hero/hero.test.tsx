@@ -46,14 +46,18 @@ describe("Hero", () => {
 
   it("renders the hero buttons", () => {
     render(<Hero />);
+
+    // Kept as button since it triggers an action or is a standard button layout
     expect(
       screen.getByRole("button", { name: BUTTONS.email.label }),
     ).toBeInTheDocument();
+
+    // Changed to link to match the true semantic output of your polymorphic component
     expect(
-      screen.getByRole("button", { name: BUTTONS.resume.label }),
+      screen.getByRole("link", { name: BUTTONS.resume.label }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: BUTTONS.gitHub.label }),
+      screen.getByRole("link", { name: BUTTONS.gitHub.label }),
     ).toBeInTheDocument();
   });
 

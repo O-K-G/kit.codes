@@ -29,7 +29,9 @@ jest.mock("../shared/messageForm/emailDialog", () => {
     open: boolean;
     onClose: () => void;
   }) {
-    return open ? <div data-testid="email-dialog">Email dialog open</div> : null;
+    return open ? (
+      <div data-testid="email-dialog">Email dialog open</div>
+    ) : null;
   };
 });
 
@@ -63,10 +65,10 @@ describe("Rooftop", () => {
     ).toBeInTheDocument();
   });
 
-  it("renders a button for each BUTTONS entry", () => {
+  it("renders a link for each BUTTONS entry", () => {
     render(<Rooftop />);
     BUTTONS.forEach(({ label }) => {
-      expect(screen.getByRole("button", { name: label })).toBeInTheDocument();
+      expect(screen.getByRole("link", { name: label })).toBeInTheDocument();
     });
   });
 
@@ -82,18 +84,25 @@ describe("Rooftop", () => {
     expect(screen.getByTestId("email-dialog")).toBeInTheDocument();
   });
 
-  it("calls the onClick handler for a non-email buzzer button", async () => {
-    const user = userEvent.setup();
+  it("configures non-email buzzer navigation items as valid external anchor links", () => {
     render(<Rooftop />);
-    const githubButton = screen.getByRole("button", { name: "GitHub" });
-    await expect(user.click(githubButton)).resolves.not.toThrow();
+    const githubLink = screen.getByRole("link", { name: "GitHub" });
+    expect(githubLink).toHaveAttribute("target", "_blank");
+    expect(githubLink).toHaveAttribute("rel", "noreferrer");
+    expect(githubLink.getAttribute("href")).toContain("github.com");
   });
 
-  it("renders all buttons with the buzzer variant", () => {
+  it("renders all interactive elements with the buzzer variant attribute", () => {
     render(<Rooftop />);
     const allButtons = screen.getAllByRole("button");
+    const allLinks = screen.getAllByRole("link");
+
     allButtons.forEach((btn) => {
       expect(btn).toHaveAttribute("data-variant", "buzzer");
+    });
+
+    allLinks.forEach((link) => {
+      expect(link).toHaveAttribute("data-variant", "buzzer");
     });
   });
 });
