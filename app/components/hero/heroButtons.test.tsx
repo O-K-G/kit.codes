@@ -60,15 +60,15 @@ describe("HeroButtons", () => {
   it("configures the resume element with the correct URL, target, and security rel tags", () => {
     render(<HeroButtons />);
     const resumeLink = screen.getByRole("link", { name: BUTTONS.resume.label });
-    expect(resumeLink).toHaveAttribute("href", BUTTONS.resume.url);
-    expect(resumeLink).toHaveAttribute("target", "_blank");
+    expect(resumeLink).toHaveAttribute("href", BUTTONS.resume.href);
+    expect(resumeLink).toHaveAttribute("target", "_self");
     expect(resumeLink).toHaveAttribute("rel", "noreferrer");
   });
 
   it("configures the GitHub element with the correct URL, target, and security rel tags", () => {
     render(<HeroButtons />);
     const githubLink = screen.getByRole("link", { name: BUTTONS.gitHub.label });
-    expect(githubLink).toHaveAttribute("href", BUTTONS.gitHub.url);
+    expect(githubLink).toHaveAttribute("href", BUTTONS.gitHub.href);
     expect(githubLink).toHaveAttribute("target", "_blank");
     expect(githubLink).toHaveAttribute("rel", "noreferrer");
   });
