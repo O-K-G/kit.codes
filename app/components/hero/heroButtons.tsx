@@ -8,23 +8,15 @@ import EmailDialog from "../shared/messageForm/emailDialog";
 
 export default function HeroButtons() {
   const [open, setOpen] = useState(false);
+  const { email, resume, gitHub } = BUTTONS;
 
   const buttons = [
     {
-      label: BUTTONS.email.label,
-      variant: "fill-sky-deep",
+      ...email,
       onClick: () => setOpen(true),
     },
-    {
-      label: BUTTONS.resume.label,
-      href: BUTTONS.resume.url,
-      component: "a",
-    },
-    {
-      label: BUTTONS.gitHub.label,
-      href: BUTTONS.gitHub.url,
-      component: "a",
-    },
+    resume,
+    gitHub,
   ] as const;
 
   return (

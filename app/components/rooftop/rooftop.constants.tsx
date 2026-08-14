@@ -12,5 +12,5 @@ export const BUTTONS = [
     href: URLS.linkedIn,
     component: "a",
   },
-  { label: "Résumé", href: URLS.resume, component: "a" },
+  { label: "Résumé", href: URLS.resume, component: "a", target: "_self" },
 ] as const;
