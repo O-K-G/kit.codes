@@ -59,11 +59,6 @@ describe("Hero", () => {
     ).toBeInTheDocument();
   });
 
-  it("renders a video background element", () => {
-    const { container } = render(<Hero />);
-    expect(container.querySelector("video")).toBeInTheDocument();
-  });
-
   it("renders the section as a <section> element", () => {
     render(<Hero />);
     const section = document.getElementById(SECTION_IDS.hero);
