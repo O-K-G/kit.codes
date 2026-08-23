@@ -5,12 +5,7 @@ const EYEBROW = "G · Lobby — now showing";
 const TITLE = "Kit G.";
 const SUBTITLE = "Full-stack Web Developer";
 const PARAGRAPH = `${EXPERIENCE_YEARS} years of full-stack web development`;
-export const VIDEO = {
-  primarySrc: "/videos/city-night.webm",
-  primarySrcType: "video/webm",
-  backupSrc: "/videos/city-night.mp4",
-  backupSrcType: "video/mp4",
-};
+
 export const DATA = [
   {
     component: "p",

@@ -4,7 +4,7 @@
   --sky-warm: #1c1530;
   --block: #161c2e;
   --paper: #e8eaf0;
-  --mist: #8b93a8;
+  --mist: #ffffff;
   --window: #f2b46d;
   --signage: #ff6f9c;
   --add: #74b478;
@@ -79,13 +79,14 @@ html {
     display: flex;
     flex-direction: column;
     color: var(--paper);
-    background: var(--sky-deep);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/images/Background.webp') no-repeat center / cover;
+    backdrop-filter: grayscale(100%) contrast(100%); 
     font-family:
       Inter, "JetBrains Mono", "Big Shoulders", Arial, Helvetica, sans-serif;
   }
