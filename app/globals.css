@@ -72,7 +72,6 @@
 html {
   height: 100dvh;
   max-width: 100vw;
-  filter: grayscale(70%);
 
   body {
     height: 100%;
