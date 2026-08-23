@@ -86,10 +86,10 @@ html {
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    background:
-      linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-      url("/images/Background.webp") no-repeat center / cover;
     backdrop-filter: grayscale(100%) contrast(105%);
+    background:
+    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("/images/Background.webp") no-repeat center / cover;
     font-family:
       Inter, "JetBrains Mono", "Big Shoulders", Arial, Helvetica, sans-serif;
   }
