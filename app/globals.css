@@ -1,8 +1,8 @@
 :root {
   /** Color Variables */
-  --sky-deep: #0a0e1a;
+  --sky-deep: #08090c;
   --sky-warm: #1c1530;
-  --block: #161c2e;
+  --block: #0e0f13c7;
   --paper: #e8eaf0;
   --mist: #ffffff;
   --window: #f2b46d;
@@ -72,6 +72,7 @@
 html {
   height: 100dvh;
   max-width: 100vw;
+  filter: grayscale(70%);
 
   body {
     height: 100%;
@@ -85,8 +86,10 @@ html {
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/images/Background.webp') no-repeat center / cover;
-    backdrop-filter: grayscale(100%) contrast(100%); 
+    background:
+      linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+      url("/images/Background.webp") no-repeat center / cover;
+    backdrop-filter: grayscale(100%) contrast(105%);
     font-family:
       Inter, "JetBrains Mono", "Big Shoulders", Arial, Helvetica, sans-serif;
   }

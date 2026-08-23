@@ -14,7 +14,7 @@ export const CONTENT = {
   title: "The foundation",
   paragraph: (
     <>
-      A Canada based full-stack web developer, with experience in the corporate
+      A full-stack web developer based in Canada, with experience in the corporate
       banking and tech sectors delivering production ready React.js apps and
       websites since 2019. Experience includes&nbsp;
       <b>best industry standards</b> such as typing, linting, accessibility,
