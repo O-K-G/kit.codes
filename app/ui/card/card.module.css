@@ -13,13 +13,47 @@
   overflow: clip;
   word-break: break-word;
   text-wrap: pretty;
+  position: relative;
+
+  &::before {
+    transition: top 0.2s ease-in-out;
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    width: 0;
+    height: 50%;
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+  }
+
+  &:hover {
+    &[data-left-border] {
+      &::before {
+        @container style(--is-desktop: true) {
+          top: 0;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          @container style(--is-desktop: true) {
+            top: 50%;
+          }
+        }
+      }
+    }
+  }
 
   &[data-left-border="window"] {
-    border-left: 4px solid var(--window);
+    &::before {
+      border-left: 10px solid var(--window);
+    }
   }
 
   &[data-left-border="signage"] {
-    border-left: 4px solid var(--signage);
+    &::before {
+      border-left: 10px solid var(--signage);
+    }
   }
 
   &[data-hover-effect="true"] {
