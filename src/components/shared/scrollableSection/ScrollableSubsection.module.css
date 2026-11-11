@@ -20,15 +20,11 @@
   top: 0;
   bottom: 0;
   z-index: 10;
-  height: 3.5rem;
+  height: clamp(3.5rem, 3.2107rem + 1.4465vw, 6.375rem);
   margin-block: auto;
 
   &:disabled {
     opacity: 30%;
-  }
-
-  @media (width >= 64rem) {
-    height: 6.375rem;
   }
 }
 

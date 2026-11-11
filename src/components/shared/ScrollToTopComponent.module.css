@@ -15,11 +15,11 @@
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  width: 2.246rem;
-  height: 3rem;
+  width: clamp(2.246rem, 2.133rem + 0.565vw, 3.369rem);
+  height: clamp(3rem, 2.8994rem + 0.5031vw, 4rem);
   padding: 0.125rem;
   border: 0 solid var(--color-title-purple);
-  border-top-width: 4px;
+  border-top-width: clamp(0.25rem, 0.2311rem + 0.0946vw, 0.438rem);
   border-radius: 1rem;
 
   @media (hover: hover) {
@@ -49,22 +49,16 @@
   }
 
   @media (width >= 48rem) {
-    width: 2.808rem;
-    height: 3.5rem;
-    border-top-width: 0.3rem;
     border-radius: 1.5rem;
   }
 
   @media (width >= 64rem) {
-    width: 3.369rem;
-    height: 4rem;
-    border-top-width: 0.438rem;
     border-radius: 9999px;
   }
 }
 
 .icon {
-  height: 1.25rem;
+  height: clamp(1.25rem, 1.1947rem + 0.2767vw, 1.8rem);
   fill: var(--color-title-purple);
 
   @media (hover: hover) {
@@ -79,13 +73,5 @@
 
   button:active & {
     fill: var(--color-title-purple-dark);
-  }
-
-  @media (width >= 48rem) {
-    height: 1.75rem;
-  }
-
-  @media (width >= 64rem) {
-    height: 1.8rem;
   }
 }

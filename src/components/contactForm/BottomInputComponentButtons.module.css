@@ -37,8 +37,8 @@
   position: relative;
   height: 100%;
   padding: 0.5rem;
-  font-size: 1.25rem;
-  line-height: 1.75rem;
+  font-size: clamp(1.25rem, min(0.625rem + 3.125vw, 1.5953rem + 0.6993vw), 3.125rem);
+  line-height: clamp(1.75rem, min(1.25rem + 2.5vw, 1.7745rem + 1.1888vw), 4.375rem);
   text-transform: uppercase;
   outline-style: none;
 
@@ -77,11 +77,6 @@
   &:focus::before,
   &:active::before {
     background-color: rgb(0 0 0 / 70%);
-  }
-
-  @media (width >= 40rem) {
-    font-size: 1.875rem;
-    line-height: 2.25rem;
   }
 }
 

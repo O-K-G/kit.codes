@@ -162,15 +162,10 @@
   width: 100%;
   text-align: center;
   font-family: var(--font-mono);
-  font-size: 1rem;
-  line-height: 1.5rem;
+  font-size: clamp(1rem, min(0.75rem + 1.25vw, 0.9703rem + 0.6993vw), 2.5rem);
+  line-height: clamp(1.5rem, min(1.25rem + 1.25vw, 1.3024rem + 1.1189vw), 3.75rem);
   color: oklch(68.5% 0.169 237.323);
   animation: flash-loader-text 1s linear infinite;
-
-  @media (width >= 40rem) {
-    font-size: 1.25rem;
-    line-height: 1.75rem;
-  }
 }
 
 .cogwheelsSeparator {

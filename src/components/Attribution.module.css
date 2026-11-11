@@ -36,18 +36,8 @@
   height: 100%;
   overflow-wrap: break-word;
   font-family: var(--font-montserrat);
-  font-size: 1rem;
-  line-height: 1.5rem;
-
-  @media (width >= 40rem) {
-    font-size: 1.125rem;
-    line-height: 1.75rem;
-  }
-
-  @media (width >= 48rem) {
-    font-size: 1.25rem;
-    line-height: 1.75rem;
-  }
+  font-size: clamp(1rem, min(0.8214rem + 0.8929vw, 0.8986rem + 0.7321vw), 2.5rem);
+  line-height: clamp(1.5rem, min(1.25rem + 1.25vw, 1.3024rem + 1.1189vw), 3.75rem);
 }
 
 .inlineBlock {
@@ -88,8 +78,8 @@
 .button {
   z-index: 10;
   font-family: var(--font-bebas-neue);
-  font-size: 1rem;
-  line-height: 1.5rem;
+  font-size: clamp(1.5rem, 0.75rem + 3.75vw, 3.75rem);
+  line-height: clamp(1.5rem, 0.75rem + 3.75vw, 3.75rem);
   color: #fff;
   text-transform: uppercase;
   outline-style: none;
@@ -113,22 +103,7 @@
     color: var(--color-title-purple-dark);
   }
 
-  @media (width >= 40rem) {
-    font-size: 1.25rem;
-    line-height: 1.75rem;
-  }
-
-  @media (width >= 48rem) {
-    font-size: 2.25rem;
-    line-height: 2.5rem;
-  }
-
   @media (width >= 64rem) {
     cursor: pointer;
-  }
-
-  @media (width >= 80rem) {
-    font-size: 3.75rem;
-    line-height: 1;
   }
 }

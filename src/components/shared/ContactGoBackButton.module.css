@@ -2,8 +2,8 @@
   top: 0;
   z-index: 10;
   margin-top: 1rem;
-  font-size: 1rem;
-  line-height: 1.5rem;
+  font-size: clamp(1.5rem, 0.75rem + 3.75vw, 3.75rem);
+  line-height: clamp(1.5rem, 0.75rem + 3.75vw, 3.75rem);
   color: #fff;
   text-transform: uppercase;
   outline-style: none;
@@ -36,36 +36,13 @@
     color: var(--color-title-purple-dark);
   }
 
-  @media (width >= 40rem) {
-    font-size: 1.25rem;
-    line-height: 1.75rem;
-  }
-
-  @media (width >= 48rem) {
-    font-size: 2.25rem;
-    line-height: 2.5rem;
-  }
-
   @media (width >= 64rem) {
     cursor: pointer;
   }
 
-  @media (width >= 80rem) {
-    font-size: 3.75rem;
-    line-height: 1;
-  }
-
   /* Hebrew line heights - more specific, so they win at every breakpoint. */
   &:lang(he) {
-    line-height: 1rem;
-
-    @media (width >= 40rem) {
-      line-height: 1.25rem;
-    }
-
-    @media (width >= 48rem) {
-      line-height: 2rem;
-    }
+    line-height: clamp(1rem, min(0.2857rem + 3.5714vw, 1.8594rem + 0.2928vw), 2.5rem);
   }
 }
 

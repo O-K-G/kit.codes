@@ -3,30 +3,11 @@
   top: 0.125rem;
   right: 0;
   left: 0;
-  height: 1.25rem;
+  --scroll-icon-top: clamp(-1.05rem, -0.6648rem - 0.1761vw, -0.7rem);
+  height: clamp(1.25rem, 1.1947rem + 0.2767vw, 1.8rem);
   margin-inline: auto;
   fill: var(--color-title-purple);
   animation: scroll-icon 2s linear 3 alternate;
-
-  @media screen and (max-width: 768px) {
-    --scroll-icon-top: -0.7rem;
-  }
-
-  @media screen and (min-width: 768px) and (max-width: 1024px) {
-    --scroll-icon-top: -0.95rem;
-  }
-
-  @media screen and (min-width: 1024px) {
-    --scroll-icon-top: -1.05rem;
-  }
-
-  @media (width >= 48rem) {
-    height: 1.75rem;
-  }
-
-  @media (width >= 64rem) {
-    height: 1.8rem;
-  }
 }
 
 @keyframes scroll-icon {

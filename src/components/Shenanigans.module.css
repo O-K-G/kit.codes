@@ -126,13 +126,8 @@
 
 .heading {
   text-align: center;
-  font-size: 1.125rem;
-  line-height: 1.75rem;
-
-  @media (width >= 40rem) {
-    font-size: 1.25rem;
-    line-height: 1.75rem;
-  }
+  font-size: clamp(1.125rem, min(1rem + 0.625vw, 0.9003rem + 0.8741vw), 2.8125rem);
+  line-height: clamp(1.75rem, 1.4858rem + 1.3208vw, 4.375rem);
 }
 
 .headingBold {
@@ -167,8 +162,8 @@
 
 .button {
   z-index: 10;
-  font-size: 1rem;
-  line-height: 1.5rem;
+  font-size: clamp(1rem, min(0.75rem + 1.25vw, 0.9703rem + 0.6993vw), 2.5rem);
+  line-height: clamp(1.5rem, min(1.25rem + 1.25vw, 1.3024rem + 1.1189vw), 3.75rem);
   color: #fff;
   text-transform: uppercase;
   outline-style: none;
@@ -199,11 +194,6 @@
 
   &:active {
     color: var(--color-title-purple-dark);
-  }
-
-  @media (width >= 40rem) {
-    font-size: 1.25rem;
-    line-height: 1.75rem;
   }
 
   @media (width >= 64rem) {

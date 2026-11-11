@@ -29,47 +29,25 @@
 
   &:lang(en) {
     font-family: var(--font-just-in-the-firestorm);
-    font-size: 1rem;
-    line-height: 1.5rem;
-
-    @media (width >= 40rem) {
-      font-size: 1.5rem;
-      line-height: 2rem;
-    }
-
-    @media (width >= 48rem) {
-      font-size: 1.875rem;
-      line-height: 2.25rem;
-    }
-
-    @media (width >= 64rem) {
-      font-size: 2.25rem;
-      line-height: 2.5rem;
-    }
+    font-size: clamp(1rem, min(0.375rem + 3.125vw, 2.1555rem + 0.1575vw), 2.5rem);
+    line-height: clamp(1.5rem, min(0.9643rem + 2.6786vw, 2.056rem + 0.7744vw), 3.75rem);
   }
 
   &:lang(he) {
     font-family: var(--font-stop-motion);
-    font-size: 1.5rem;
-    line-height: 2rem;
+    font-size: clamp(1.5rem, min(0.4286rem + 5.3571vw, 2.7892rem + 0.4392vw), 3.75rem);
+    line-height: clamp(2rem, min(1.2857rem + 3.5714vw, 2.4378rem + 1.1713vw), 5rem);
     letter-spacing: 0.05em;
 
-    @media (width >= 40rem) {
-      font-size: 1.875rem;
-      line-height: 2.25rem;
-    }
-
     @media (width >= 48rem) {
-      font-size: 3rem;
-      line-height: 1;
       letter-spacing: 0em;
     }
   }
 }
 
 .subtitle {
-  font-size: 1.5rem;
-  line-height: 2rem;
+  font-size: clamp(1.8rem, 0.6rem + 6vw, 4.5rem);
+  line-height: max(clamp(2rem, min(1rem + 5vw, 4.2647rem + 0.3361vw), 5rem), 1em);
   color: #fff;
 
   &:lang(en) {
@@ -79,16 +57,6 @@
   &:lang(he) {
     font-family: var(--font-sans);
     font-weight: 700;
-  }
-
-  @media (width >= 40rem) {
-    font-size: 3rem;
-    line-height: 1;
-  }
-
-  @media (width >= 80rem) {
-    font-size: 4.5rem;
-    line-height: 1;
   }
 }
 
@@ -109,18 +77,10 @@
     position: absolute;
     top: 0;
     bottom: 0;
-    width: 0.5rem;
+    width: clamp(0.5rem, 0.4497rem + 0.2516vw, 1rem);
     height: 80%;
     margin-block: auto;
     animation: typing-caret 0.75s 5;
-
-    @media (width >= 40rem) {
-      width: 0.75rem;
-    }
-
-    @media (width >= 48rem) {
-      width: 1rem;
-    }
   }
 
   &:dir(ltr)::before {

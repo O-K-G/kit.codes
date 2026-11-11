@@ -31,9 +31,9 @@
 }
 
 .label {
-  width: 3rem;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
+  width: clamp(3rem, 2.6981rem + 1.5094vw, 6rem);
+  font-size: clamp(0.875rem, min(5vw - 0.125rem, 1.8051rem + 0.1748vw), 2.1875rem);
+  line-height: clamp(1.25rem, min(0.25rem + 5vw, 2.0542rem + 0.4895vw), 3.125rem);
   text-transform: uppercase;
 
   &:lang(en) {
@@ -43,12 +43,6 @@
   &:lang(he) {
     font-family: var(--font-sans);
     font-weight: 700;
-  }
-
-  @media (width >= 40rem) {
-    width: 6rem;
-    font-size: 1.875rem;
-    line-height: 2.25rem;
   }
 }
 
@@ -70,8 +64,8 @@
 
 .field {
   width: 100%;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
+  font-size: clamp(0.875rem, min(0.5rem + 1.875vw, 1.0402rem + 0.5245vw), 2.1875rem);
+  line-height: clamp(1.25rem, min(0.75rem + 2.5vw, 1.4423rem + 0.7692vw), 3.125rem);
   outline-style: none;
 
   @media (forced-colors: active) {
@@ -99,11 +93,6 @@
   &:lang(he)::placeholder {
     font-family: var(--font-sans);
     font-weight: 700;
-  }
-
-  @media (width >= 40rem) {
-    font-size: 1.25rem;
-    line-height: 1.75rem;
   }
 }
 
