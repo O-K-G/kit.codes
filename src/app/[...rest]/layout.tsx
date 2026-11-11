@@ -1,5 +1,6 @@
-import RootLayout, { metadata } from '@locale/layout';
+import RootLayout from '@locale/layout';
+import { siteMetadata } from '@constants/siteMetadata';
 
-export { metadata };
+export const metadata = siteMetadata;
 
 export default RootLayout;

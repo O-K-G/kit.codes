@@ -1,11 +1,12 @@
 import "@locale/globals.css";
 import styles from "./layout.module.css";
 import { Metadata, Viewport } from "next";
-import { CACHE_VERSION } from "@root/postcss.config.mjs";
+import { siteMetadata, LOCALE_ALTERNATES, getLocalePath } from "@constants/siteMetadata";
+import { routing } from "@i18n/routing";
 import handleFontsByLocale from "@utils/handleFontsByLocale";
 import getDirByLocale from "@utils/getDirByLocale";
 import { PropsWithChildren, ReactNode } from "react";
-import { NextIntlClientProvider } from "next-intl";
+import { NextIntlClientProvider, hasLocale } from "next-intl";
 
 interface RootLayoutProps extends PropsWithChildren {
   params: Promise<{ locale?: string; rest?: string[] }>;
@@ -13,47 +14,23 @@ interface RootLayoutProps extends PropsWithChildren {
 
 const { fontsByLocale } = handleFontsByLocale();
 
-export const metadata: Metadata = {
-  title: "Dev Space Center",
-  description:
-    "This is my landing page to showcase some of my web development skills. ",
-  applicationName: "devspacecenter",
-  keywords: [
-    "console",
-    "log",
-    "HTML",
-    "React.js",
-    "Async JS",
-    "A11y",
-    "JavaScript",
-    "tailwindcss",
-    "REST API",
-    "i18n",
-    "CSS",
-    "Next.js",
-    "Microservices",
-    "Zod",
-    "TypeScript",
-    "Node.js",
-    "MongoDB",
-    "Unit tests",
-    "Web development",
-  ],
-  manifest: "/manifest.webmanifest",
-  icons: {
-    icon: `/images/icon.png?cacheVersion=${CACHE_VERSION}`,
-    shortcut: `/images/shortcut-icon.png?cacheVersion=${CACHE_VERSION}`,
-    apple: `/images/apple-icon.png?cacheVersion=${CACHE_VERSION}`,
-    other: [
-      {
-        rel: "mask-icon",
-        url: `/images/safari-pinned-tab.svg?cacheVersion=${CACHE_VERSION}`,
-        type: "image/svg+xml",
-        sizes: "any",
-      },
-    ],
-  },
-};
+export async function generateMetadata({
+  params,
+}: Pick<RootLayoutProps, "params">): Promise<Metadata> {
+  const { locale } = await params;
+  const selectedLocale = hasLocale(routing.locales, locale)
+    ? locale
+    : routing.defaultLocale;
+
+  return {
+    ...siteMetadata,
+    alternates: {
+      /** Every section route (/en/about, /en/skills, ...) renders this same page, scrolled to a section. */
+      canonical: getLocalePath(selectedLocale),
+      languages: LOCALE_ALTERNATES,
+    },
+  };
+}
 
 export const viewport: Viewport = {
   width: "device-width",
