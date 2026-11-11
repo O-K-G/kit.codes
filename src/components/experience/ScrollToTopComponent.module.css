@@ -9,7 +9,7 @@
     margin-right: 1rem;
   }
 
-  > button {
+  > a {
     position: relative;
     display: flex;
     align-items: flex-start;
@@ -20,6 +20,12 @@
     border: 0 solid var(--color-title-purple);
     border-top-width: clamp(0.25rem, 0.2311rem + 0.0946vw, 0.438rem);
     border-radius: 1rem;
+    outline-style: none;
+
+    @media (forced-colors: active) {
+      outline: 2px solid transparent;
+      outline-offset: 2px;
+    }
 
     @media (hover: hover) {
       &:hover {
@@ -60,16 +66,16 @@
       fill: var(--color-title-purple);
 
       @media (hover: hover) {
-        button:hover & {
+        a:hover & {
           fill: #fff;
         }
       }
 
-      button:focus & {
+      a:focus & {
         fill: var(--color-title-purple);
       }
 
-      button:active & {
+      a:active & {
         fill: var(--color-title-purple-dark);
       }
     }

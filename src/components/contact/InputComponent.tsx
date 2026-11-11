@@ -19,7 +19,6 @@ export default function InputComponent({
   onClick,
   label,
 }: InputComponentProps) {
-  const isTextarea = Component === 'textarea';
   const [value, setValue] = useState('');
   const t = useTranslations('inputComponentText');
 
@@ -71,11 +70,10 @@ export default function InputComponent({
             minLength={minLength}
             maxLength={maxLength}
             aria-label={ariaLabel}
+            aria-invalid={isError}
             id={id}
             name={id}
-            className={`${styles.field} ${
-              !isTextarea ? styles.input : styles.textarea
-            } ${!isError ? styles.valid : styles.invalid}`}
+            className={styles.field}
             placeholder={placeholder}
             rows={rows}
           />

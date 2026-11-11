@@ -18,17 +18,8 @@ function Row({ children, className = "" }: SkillsListRowProps) {
   );
 }
 
-function SkillBlock({
-  str,
-  "data-visible-mobile": visibleMobile,
-}: SkillBlockProps) {
-  return (
-    <li
-      data-visible-mobile={visibleMobile}
-    >
-      {str}
-    </li>
-  );
+function SkillBlock({ str }: SkillBlockProps) {
+  return <li>{str}</li>;
 }
 
 export default function SkillsList() {
@@ -41,11 +32,7 @@ export default function SkillsList() {
     return (
       <Row key={`skills-${key}`} className={rowClassName}>
         {rowItems.map((str: string) => (
-          <SkillBlock
-            data-visible-mobile={key === "mobileRow" && str === rowItems[3]}
-            key={`skill-item-${str}`}
-            str={str}
-          />
+          <SkillBlock key={`skill-item-${str}`} str={str} />
         ))}
       </Row>
     );

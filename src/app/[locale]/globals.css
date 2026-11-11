@@ -248,6 +248,14 @@
   }
 }
 
+/* Smooth in-page scrolling (e.g. the "#top" scroll-to-top link). Next.js disables it during route
+ * navigations thanks to data-scroll-behavior="smooth" on <html> (see layout.tsx). */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(

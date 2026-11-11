@@ -1,6 +1,6 @@
 .body {
   /* Lock the page scroll while a dialog or the contact aside is open. */
-  &:has(dialog[data-open="true"]),
+  &:has(dialog[open]),
   &:has(main aside[data-open="true"]) {
     overflow: hidden;
   }

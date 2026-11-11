@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import AboutTargetIcon from "@ui/expandableButton/AboutTargetIcon";
 import { ExpandableButtonProps } from "@constants/interfaces";
 import { useTranslations } from "next-intl";
@@ -9,52 +9,35 @@ import styles from "./ExpandableButton.module.css";
 export default function ExpandableButton({
   alternativeLabel,
 }: ExpandableButtonProps) {
-  const [open, setOpen] = useState(false);
-  const [isAnimationEnd, setAnimationEnd] = useState(true);
+  /** `null` until the first toggle, so the label isn't hidden by the toggle animation on mount. */
+  const [open, setOpen] = useState<boolean | null>(null);
+  const isOpen = !!open;
   const t = useTranslations("expandableButtonText");
-  const buttonRef = useRef(null);
 
-  const handleTextAnimation = () => {
-    setAnimationEnd(true);
-    (buttonRef.current as unknown as HTMLButtonElement).removeEventListener(
-      "animationend",
-      handleTextAnimation
-    );
-  };
-
-  const handleClick = () => {
-    setOpen((prevValue) => !prevValue);
-    setAnimationEnd(false);
-    (buttonRef.current as unknown as HTMLButtonElement).addEventListener(
-      "animationend",
-      handleTextAnimation
-    );
-  };
+  const handleClick = () => setOpen((prevValue) => !prevValue);
 
   return (
     <div className={styles.container}>
       <div
-        data-open={open}
+        data-open={isOpen}
       >
-        <AboutTargetIcon open={open} />
+        <AboutTargetIcon open={isOpen} />
         <div
           role="button"
           tabIndex={0}
-          ref={buttonRef}
-          aria-label={!open ? t("clickToOpen") : alternativeLabel}
-          aria-expanded={open}
-          data-open={open}
-          className={`${styles.button} ${
-            !isAnimationEnd ? "" : styles.animationEnded
-          }`}
+          aria-label={!isOpen ? t("clickToOpen") : alternativeLabel}
+          aria-expanded={isOpen}
+          data-open={isOpen}
+          data-toggled={open !== null}
+          className={styles.button}
           onClick={handleClick}
           onKeyDown={handleClick}
         >
           <span>
-            {isAnimationEnd && (!open ? t("clickToOpen") : alternativeLabel)}
+            {!isOpen ? t("clickToOpen") : alternativeLabel}
           </span>
         </div>
-        <AboutTargetIcon bottom open={open} />
+        <AboutTargetIcon bottom open={isOpen} />
       </div>
     </div>
   );

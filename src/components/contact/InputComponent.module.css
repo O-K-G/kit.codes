@@ -93,7 +93,7 @@
         }
       }
 
-      .input {
+      input.field {
         height: 3.188rem;
         padding-inline: 0.5rem;
 
@@ -102,7 +102,7 @@
         }
       }
 
-      .textarea {
+      textarea.field {
         padding: 0.5rem;
         resize: none;
 
@@ -111,7 +111,7 @@
         }
       }
 
-      .valid {
+      .field:not([aria-invalid="true"]) {
         background-color: rgb(206 183 255 / 30%);
 
         @media (hover: hover) {
@@ -126,7 +126,7 @@
         }
       }
 
-      .invalid {
+      .field[aria-invalid="true"] {
         background-color: oklch(63.7% 0.237 25.331 / 70%);
       }
 

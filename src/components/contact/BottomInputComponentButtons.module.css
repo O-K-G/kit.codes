@@ -70,7 +70,7 @@
       }
     }
 
-    .submitButtonIdle {
+    .submitButton:enabled {
       @media (hover: hover) {
         &:hover {
           color: var(--color-title-purple);
@@ -91,7 +91,7 @@
       }
     }
 
-    .submitButtonBusy {
+    .submitButton:disabled {
       color: #fff;
       opacity: 50%;
       cursor: not-allowed;
@@ -162,7 +162,8 @@
         fill: #fff;
       }
 
-      .alignIconFlipped {
+      /* Points towards the direction the form will switch to (the form always carries a dir attribute) */
+      :global(form[dir="ltr"]) & .alignIcon {
         rotate: 180deg;
       }
     }

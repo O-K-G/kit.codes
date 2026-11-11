@@ -1,3 +1,10 @@
+/* Inherited by the label and the focus circle: hides them while the expand/collapse animation runs. */
+@property --expandable-content-display {
+  syntax: "block | none";
+  inherits: true;
+  initial-value: block;
+}
+
 .container {
   position: relative;
   z-index: 10;
@@ -75,7 +82,28 @@
         color: transparent;
         text-transform: uppercase;
         -webkit-text-stroke: 0.125rem #ffffff;
+        align-items: center;
+        filter: drop-shadow(0px 0px 3px rgb(175 25 255));
         animation: collapse-button 1s linear forwards;
+
+        &:focus {
+          filter: none;
+
+          /* Dark circle behind the label */
+          &::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -10;
+            display: var(--expandable-content-display);
+            width: 100%;
+            max-width: 100cqh;
+            height: 100%;
+            margin: auto;
+            border-radius: 9999px;
+            background-color: rgb(0 0 0 / 50%);
+          }
+        }
 
         @media screen and (max-width: 640px) {
           -webkit-text-stroke: 0.05rem #ffffff;
@@ -116,6 +144,9 @@
         text-align: center;
         font-size: clamp(1rem, min(0.75rem + 1.25vw, 0.9703rem + 0.6993vw), 2.5rem);
         line-height: clamp(1.5rem, min(1.25rem + 1.25vw, 1.3024rem + 1.1189vw), 3.75rem);
+        align-items: flex-start;
+        border-color: #fff;
+        overflow-wrap: break-word;
         color: #fff;
         animation: expand-button 1s linear forwards;
 
@@ -132,40 +163,21 @@
         }
       }
 
-      > span {
-        margin-block: auto;
-      }
-    }
+      /* After the first toggle, a second animation hides the label (and the open state's white
+       * side borders) until the expand/collapse animation is over. */
+      &[data-toggled="true"] {
+        &[data-open="false"] {
+          animation: collapse-button 1s linear forwards, toggling-closed 1s;
+        }
 
-    /* Applied once the expand/collapse animation has ended */
-    .animationEnded {
-      &[data-open="false"] {
-        align-items: center;
-        filter: drop-shadow(0px 0px 3px rgb(175 25 255));
-
-        &:focus {
-          filter: none;
-
-          /* Dark circle behind the label */
-          &::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            z-index: -10;
-            width: 100%;
-            max-width: 100cqh;
-            height: 100%;
-            margin: auto;
-            border-radius: 9999px;
-            background-color: rgb(0 0 0 / 50%);
-          }
+        &[data-open="true"] {
+          animation: expand-button 1s linear forwards, toggling-open 1s;
         }
       }
 
-      &[data-open="true"] {
-        align-items: flex-start;
-        border-color: #fff;
-        overflow-wrap: break-word;
+      > span {
+        display: var(--expandable-content-display);
+        margin-block: auto;
       }
     }
   }
@@ -208,5 +220,21 @@
     border-top: 1px solid transparent;
     border-bottom: 1px solid transparent;
     height: 100%;
+  }
+}
+
+@keyframes toggling-closed {
+  from,
+  to {
+    --expandable-content-display: none;
+    filter: none;
+  }
+}
+
+@keyframes toggling-open {
+  from,
+  to {
+    --expandable-content-display: none;
+    border-inline-color: transparent;
   }
 }

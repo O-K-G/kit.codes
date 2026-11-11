@@ -73,7 +73,7 @@ export default async function RootLayout({
     fontsByLocale[selectedLocale as keyof typeof fontsByLocale];
 
   return (
-    <html dir={dir} lang={selectedLocale}>
+    <html dir={dir} lang={selectedLocale} data-scroll-behavior="smooth">
       <NextIntlClientProvider>
         <body
           className={`${styles.body} ${mainTitle} ${borderTitle} ${infoText} ${regularText} ${shenanigansText}`}

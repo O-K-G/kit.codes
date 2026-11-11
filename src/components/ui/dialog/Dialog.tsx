@@ -15,7 +15,6 @@ export default function Dialog() {
 
   return (
     <dialog
-      data-open={!!modalContent}
       data-testid={DIALOG_TEST_ID}
       ref={modalRef}
       className={styles.dialog}

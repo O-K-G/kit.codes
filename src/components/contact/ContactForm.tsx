@@ -91,16 +91,10 @@ export default function ContactForm() {
     }
   };
 
-  const isLtr = dir === "ltr" ? styles.ltrPadding : styles.rtlPadding;
-  const isRtl = dir === "rtl" ? styles.rtlPadding : styles.ltrPadding;
-
-  const ltrPaddingClassName = direction === "ltr" ? isLtr : "";
-  const rtlPaddingClassName = direction === "rtl" ? isRtl : "";
-
   return (
     <form
       dir={dir}
-      className={`${styles.form} ${ltrPaddingClassName} ${rtlPaddingClassName}`}
+      className={styles.form}
       action={(formData) => {
         void handleValidation(formData);
       }}

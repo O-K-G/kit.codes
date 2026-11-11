@@ -274,7 +274,6 @@ export interface SkillsListRowProps {
 
 export interface SkillBlockProps {
   str: string;
-  "data-visible-mobile": boolean;
 }
 
 export interface handleDownloadProps {

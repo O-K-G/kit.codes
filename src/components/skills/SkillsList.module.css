@@ -69,10 +69,6 @@
       display: none;
     }
 
-    &[data-visible-mobile="true"]:last-child {
-      display: flex;
-    }
-
     @media (hover: hover) {
       &:hover {
         background-position: left center;
@@ -96,6 +92,10 @@
 
 .mobileRow {
   flex-wrap: wrap;
+
+  > li:last-child {
+    display: flex;
+  }
 
   @media (width >= 40rem) {
     display: none;

@@ -26,9 +26,7 @@ export default function BottomInputComponentButtons({
           disabled={isBusy}
           type="submit"
           onClick={onSubmit}
-          className={`${styles.submitButton} ${
-            isBusy ? styles.submitButtonBusy : styles.submitButtonIdle
-          }`}
+          className={styles.submitButton}
         >
           {t("send")}
         </button>
@@ -39,11 +37,7 @@ export default function BottomInputComponentButtons({
           onClick={() => onClick?.(isLTR ? "rtl" : "ltr")}
           type="button"
         >
-          <AlignLeftIcon
-            className={`${styles.alignIcon} ${
-              isLTR ? styles.alignIconFlipped : ""
-            }`}
-          />
+          <AlignLeftIcon className={styles.alignIcon} />
         </button>
       </div>
     </div>

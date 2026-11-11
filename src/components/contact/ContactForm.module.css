@@ -23,17 +23,16 @@
       width: calc(8 / 12 * 100%);
     }
   }
-}
 
-/* Leaves room for the side links next to the form */
-.ltrPadding {
+  /* Leaves room for the side links next to the form. Follows the form's own, toggleable, dir
+   * attribute ([dir] rather than :dir(), which Chromium doesn't re-evaluate when it changes). */
   @media (width >= 40rem) {
-    padding-right: 6rem;
-  }
-}
+    &[dir="ltr"] {
+      padding-right: 6rem;
+    }
 
-.rtlPadding {
-  @media (width >= 40rem) {
-    padding-left: 9rem;
+    &[dir="rtl"] {
+      padding-left: 9rem;
+    }
   }
 }
