@@ -29,6 +29,46 @@
       animation-name: show-components;
     }
   }
+
+  .label {
+    width: 100%;
+    text-align: center;
+    font-size: clamp(1rem, min(0.7727rem + 1.1364vw, 1.0864rem + 0.6462vw), 2.5rem);
+    line-height: clamp(1.5rem, min(1.2727rem + 1.1364vw, 1.2763rem + 1.1309vw), 3.75rem);
+    color: var(--color-title-purple);
+    text-transform: uppercase;
+    white-space: nowrap;
+
+    &:lang(en) {
+      font-family: var(--font-bebas-neue);
+    }
+
+    &:lang(he) {
+      font-family: var(--font-sans);
+      font-weight: 700;
+    }
+  }
+
+  .slotFrame {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    width: clamp(2.246rem, 2.133rem + 0.565vw, 3.369rem);
+    height: clamp(3rem, 2.8994rem + 0.5031vw, 4rem);
+    padding: 0.125rem;
+    border: solid var(--color-title-purple);
+    border-width: clamp(0.25rem, 0.2311rem + 0.0946vw, 0.438rem);
+    border-radius: 1rem;
+
+    @media (width >= 48rem) {
+      border-radius: 1.5rem;
+    }
+
+    @media (width >= 64rem) {
+      border-radius: 9999px;
+    }
+  }
 }
 
 .defaultPosition {
@@ -40,46 +80,6 @@
   &:dir(rtl) {
     left: 0;
     margin-left: 1rem;
-  }
-}
-
-.label {
-  width: 100%;
-  text-align: center;
-  font-size: clamp(1rem, min(0.7727rem + 1.1364vw, 1.0864rem + 0.6462vw), 2.5rem);
-  line-height: clamp(1.5rem, min(1.2727rem + 1.1364vw, 1.2763rem + 1.1309vw), 3.75rem);
-  color: var(--color-title-purple);
-  text-transform: uppercase;
-  white-space: nowrap;
-
-  &:lang(en) {
-    font-family: var(--font-bebas-neue);
-  }
-
-  &:lang(he) {
-    font-family: var(--font-sans);
-    font-weight: 700;
-  }
-}
-
-.slotFrame {
-  position: relative;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  width: clamp(2.246rem, 2.133rem + 0.565vw, 3.369rem);
-  height: clamp(3rem, 2.8994rem + 0.5031vw, 4rem);
-  padding: 0.125rem;
-  border: solid var(--color-title-purple);
-  border-width: clamp(0.25rem, 0.2311rem + 0.0946vw, 0.438rem);
-  border-radius: 1rem;
-
-  @media (width >= 48rem) {
-    border-radius: 1.5rem;
-  }
-
-  @media (width >= 64rem) {
-    border-radius: 9999px;
   }
 }
 

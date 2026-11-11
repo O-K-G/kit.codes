@@ -1,45 +1,3 @@
-.oldschoolButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  border: 1px solid #000;
-  font-weight: 700;
-  box-shadow: 0 1px 2px 0 #000;
-  outline-style: none;
-
-  @media (forced-colors: active) {
-    outline: 2px solid transparent;
-    outline-offset: 2px;
-  }
-
-  @media (hover: hover) {
-    &:hover {
-      background-color: oklch(96.7% 0.003 264.542);
-    }
-  }
-
-  &:active {
-    background-color: oklch(88.2% 0.059 254.128);
-  }
-
-  &:focus {
-    .oldschoolButtonLabel {
-      border-style: dashed;
-      border-color: #000;
-    }
-  }
-
-  @media (width >= 64rem) {
-    cursor: pointer;
-  }
-}
-
-.oldschoolButtonLabel {
-  padding-inline: 0.5rem;
-  border: 1px solid transparent;
-}
-
 .backdrop {
   position: fixed;
   top: 0;
@@ -54,110 +12,152 @@
   @media (width >= 64rem) {
     cursor: crosshair;
   }
-}
 
-.window {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  border: 2px solid;
-  border-color: #fff oklch(44.6% 0.03 256.802) oklch(44.6% 0.03 256.802) #fff;
-  background-color: #b4b3b3;
-  color: #000;
-  font-family: var(--font-handjet);
+  .window {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    border: 2px solid;
+    border-color: #fff oklch(44.6% 0.03 256.802) oklch(44.6% 0.03 256.802) #fff;
+    background-color: #b4b3b3;
+    color: #000;
+    font-family: var(--font-handjet);
 
-  @media (width >= 64rem) {
-    cursor: default;
-  }
-}
+    @media (width >= 64rem) {
+      cursor: default;
+    }
 
-.dialogTitle {
-  padding-inline: 1rem;
-  background-color: oklch(44.6% 0.03 256.802);
-  color: #fff;
-  font-size: 1.25rem;
-  line-height: 1.75rem;
-}
+    .dialogTitle {
+      padding-inline: 1rem;
+      background-color: oklch(44.6% 0.03 256.802);
+      color: #fff;
+      font-size: 1.25rem;
+      line-height: 1.75rem;
 
-.closeButtonIcon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.75rem;
-  height: 1.75rem;
-  border-color: #b4b3b3;
-  border-radius: 9999px;
-  background-color: oklch(80.8% 0.114 19.571);
-  box-shadow: inset 0 2px 4px 0 #000;
-  rotate: 180deg;
+      .closeButtonIcon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.75rem;
+        height: 1.75rem;
+        border-color: #b4b3b3;
+        border-radius: 9999px;
+        background-color: oklch(80.8% 0.114 19.571);
+        box-shadow: inset 0 2px 4px 0 #000;
+        rotate: 180deg;
 
-  @media (hover: hover) {
-    button:hover & {
-      background-color: #fff;
+        @media (hover: hover) {
+          button:hover & {
+            background-color: #fff;
+          }
+        }
+
+        button:focus &,
+        button:active & {
+          background-color: #fff;
+        }
+      }
+    }
+
+    .windowBody {
+      width: 100%;
+      height: 100%;
+      padding: 1rem;
+      color: #000;
+
+      .windowContent {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        padding: 1rem;
+        border: 2px solid;
+        border-color: oklch(44.6% 0.03 256.802) #fff #fff oklch(44.6% 0.03 256.802);
+        background-color: #fff;
+
+        .heading {
+          text-align: center;
+          font-size: clamp(1.125rem, min(1rem + 0.625vw, 0.9003rem + 0.8741vw), 2.8125rem);
+          line-height: clamp(1.75rem, 1.4858rem + 1.3208vw, 4.375rem);
+        }
+
+        .headingBold {
+          font-weight: 700;
+        }
+
+        .srOnly {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          padding: 0;
+          margin: -1px;
+          overflow: hidden;
+          clip-path: inset(50%);
+          white-space: nowrap;
+          border-width: 0;
+        }
+
+        .message {
+          margin-top: 0.5rem;
+          font-size: 1rem;
+          line-height: 1.5rem;
+        }
+
+        .quitButtonWrapper {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+          margin-top: 0.5rem;
+
+          .oldschoolButton {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            border: 1px solid #000;
+            font-weight: 700;
+            box-shadow: 0 1px 2px 0 #000;
+            outline-style: none;
+
+            @media (forced-colors: active) {
+              outline: 2px solid transparent;
+              outline-offset: 2px;
+            }
+
+            @media (hover: hover) {
+              &:hover {
+                background-color: oklch(96.7% 0.003 264.542);
+              }
+            }
+
+            &:active {
+              background-color: oklch(88.2% 0.059 254.128);
+            }
+
+            &:focus {
+              .oldschoolButtonLabel {
+                border-style: dashed;
+                border-color: #000;
+              }
+            }
+
+            @media (width >= 64rem) {
+              cursor: pointer;
+            }
+
+            .oldschoolButtonLabel {
+              padding-inline: 0.5rem;
+              border: 1px solid transparent;
+            }
+          }
+        }
+      }
     }
   }
-
-  button:focus &,
-  button:active & {
-    background-color: #fff;
-  }
-}
-
-.windowBody {
-  width: 100%;
-  height: 100%;
-  padding: 1rem;
-  color: #000;
-}
-
-.windowContent {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  padding: 1rem;
-  border: 2px solid;
-  border-color: oklch(44.6% 0.03 256.802) #fff #fff oklch(44.6% 0.03 256.802);
-  background-color: #fff;
-}
-
-.heading {
-  text-align: center;
-  font-size: clamp(1.125rem, min(1rem + 0.625vw, 0.9003rem + 0.8741vw), 2.8125rem);
-  line-height: clamp(1.75rem, 1.4858rem + 1.3208vw, 4.375rem);
-}
-
-.headingBold {
-  font-weight: 700;
-}
-
-.srOnly {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-  border-width: 0;
-}
-
-.message {
-  margin-top: 0.5rem;
-  font-size: 1rem;
-  line-height: 1.5rem;
-}
-
-.quitButtonWrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  margin-top: 0.5rem;
 }
 
 .button {

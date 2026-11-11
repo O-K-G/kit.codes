@@ -10,41 +10,43 @@
   @media (width >= 64rem) {
     height: 200dvh;
   }
-}
 
-/* The titles slide from below the viewport to their own --top-var position, driven by the scroll position. */
-.title {
-  position: fixed;
-  top: 110vh;
+  /* The titles slide from below the viewport to their own --top-var position, driven by the scroll position. */
+  .title {
+    position: fixed;
+    top: 110vh;
 
-  @media (prefers-reduced-motion: no-preference) {
-    animation-fill-mode: forwards;
-    animation-timing-function: linear;
-    animation-timeline: view();
-    animation-range-start: 0;
-    animation-range-end: 200svh;
-    animation-name: skills;
-  }
-
-  @media screen and (min-width: 1024px) {
-    animation-range-end: 200dvh;
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .mainTitle {
-    --top-var: 12svh;
+    @media (prefers-reduced-motion: no-preference) {
+      animation-fill-mode: forwards;
+      animation-timing-function: linear;
+      animation-timeline: view();
+      animation-range-start: 0;
+      animation-range-end: 200svh;
+      animation-name: skills;
+    }
 
     @media screen and (min-width: 1024px) {
-      --top-var: 12dvh;
+      animation-range-end: 200dvh;
+    }
+  }
+
+  .mainTitle {
+    @media (prefers-reduced-motion: no-preference) {
+      --top-var: 12svh;
+
+      @media screen and (min-width: 1024px) {
+        --top-var: 12dvh;
+      }
     }
   }
 
   .subtitle {
-    --top-var: 25svh;
+    @media (prefers-reduced-motion: no-preference) {
+      --top-var: 25svh;
 
-    @media screen and (min-width: 1024px) {
-      --top-var: 25dvh;
+      @media screen and (min-width: 1024px) {
+        --top-var: 25dvh;
+      }
     }
   }
 }

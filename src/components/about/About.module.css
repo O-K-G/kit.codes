@@ -11,12 +11,12 @@
   @media (width >= 64rem) {
     height: 100dvh;
   }
-}
 
-.header {
-  margin-top: 2rem;
+  .header {
+    margin-top: 2rem;
 
-  @media (width >= 40rem) {
-    margin-top: 0;
+    @media (width >= 40rem) {
+      margin-top: 0;
+    }
   }
 }

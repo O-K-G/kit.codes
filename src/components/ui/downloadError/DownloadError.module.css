@@ -24,18 +24,18 @@
     min-height: 10dvw;
     cursor: default;
   }
-}
 
-.dialogTitle {
-  font-size: 1.25rem;
-  line-height: 1.75rem;
-}
+  .dialogTitle {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
 
-.text {
-  width: 100%;
-  height: 100%;
-  overflow-wrap: break-word;
-  font-family: var(--font-montserrat);
-  font-size: clamp(1rem, min(0.8214rem + 0.8929vw, 0.8986rem + 0.7321vw), 2.5rem);
-  line-height: clamp(1.5rem, min(1.25rem + 1.25vw, 1.3024rem + 1.1189vw), 3.75rem);
+  .text {
+    width: 100%;
+    height: 100%;
+    overflow-wrap: break-word;
+    font-family: var(--font-montserrat);
+    font-size: clamp(1rem, min(0.8214rem + 0.8929vw, 0.8986rem + 0.7321vw), 2.5rem);
+    line-height: clamp(1.5rem, min(1.25rem + 1.25vw, 1.3024rem + 1.1189vw), 3.75rem);
+  }
 }

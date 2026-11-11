@@ -5,29 +5,29 @@
   width: 100vw;
   height: 100vh;
   clip-path: inset(0);
+
+  /* Zooms in according to the page's scroll position. */
+  .image {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    object-position: left;
+    opacity: 60%;
+
+    @media (prefers-reduced-motion: no-preference) {
+      animation-name: background-scale;
+      scale: 1;
+      animation-timing-function: linear;
+      animation-timeline: scroll();
+    }
+  }
 }
 
 .minHeightFull {
   min-height: 100%;
-}
-
-/* Zooms in according to the page's scroll position. */
-.image {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  object-fit: cover;
-  object-position: left;
-  opacity: 60%;
-
-  @media (prefers-reduced-motion: no-preference) {
-    animation-name: background-scale;
-    scale: 1;
-    animation-timing-function: linear;
-    animation-timeline: scroll();
-  }
 }
 
 @keyframes background-scale {

@@ -6,6 +6,23 @@
   justify-content: center;
   width: 100%;
   margin-top: 0.5rem;
+
+  .fields {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 0.5rem;
+    width: 100%;
+
+    @media (width >= 40rem) {
+      gap: 2.5rem;
+    }
+
+    @media (width >= 48rem) {
+      width: calc(8 / 12 * 100%);
+    }
+  }
 }
 
 /* Leaves room for the side links next to the form */
@@ -18,22 +35,5 @@
 .rtlPadding {
   @media (width >= 40rem) {
     padding-left: 9rem;
-  }
-}
-
-.fields {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 0.5rem;
-  width: 100%;
-
-  @media (width >= 40rem) {
-    gap: 2.5rem;
-  }
-
-  @media (width >= 48rem) {
-    width: calc(8 / 12 * 100%);
   }
 }

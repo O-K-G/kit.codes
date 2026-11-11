@@ -10,12 +10,12 @@
   @media (width >= 64rem) {
     cursor: pointer;
   }
-}
 
-.content {
-  position: absolute;
-  inset: 0;
-  width: fit-content;
-  height: fit-content;
-  margin: auto;
+  .content {
+    position: absolute;
+    inset: 0;
+    width: fit-content;
+    height: fit-content;
+    margin: auto;
+  }
 }

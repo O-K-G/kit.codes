@@ -1,43 +1,3 @@
-.listItem {
-  width: 100%;
-}
-
-.languageButton {
-  width: 100%;
-  padding: 0.5rem 1rem;
-  text-align: center;
-  font-size: 1rem;
-  line-height: 1.5rem;
-  outline-style: none;
-
-  @media (forced-colors: active) {
-    outline: 2px solid transparent;
-    outline-offset: 2px;
-  }
-
-  &[data-current-locale="false"] {
-    color: #fff;
-  }
-
-  &[data-current-locale="true"] {
-    color: var(--color-title-purple);
-  }
-
-  @media (hover: hover) {
-    &:hover {
-      background-color: rgb(255 255 255 / 30%);
-    }
-  }
-
-  &:focus {
-    background-color: rgb(255 255 255 / 30%);
-  }
-
-  &:active {
-    background-color: rgb(255 255 255 / 50%);
-  }
-}
-
 .languagesList {
   display: flex;
   flex-direction: column;
@@ -63,19 +23,59 @@
   @media (width >= 48rem) {
     width: 25svw;
   }
-}
 
-.dialogTitle {
-  font-size: 1.25rem;
-  line-height: 1.75rem;
-}
+  .dialogTitle {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
 
-.list {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
+  .list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
+    .listItem {
+      width: 100%;
+
+      .languageButton {
+        width: 100%;
+        padding: 0.5rem 1rem;
+        text-align: center;
+        font-size: 1rem;
+        line-height: 1.5rem;
+        outline-style: none;
+
+        @media (forced-colors: active) {
+          outline: 2px solid transparent;
+          outline-offset: 2px;
+        }
+
+        &[data-current-locale="false"] {
+          color: #fff;
+        }
+
+        &[data-current-locale="true"] {
+          color: var(--color-title-purple);
+        }
+
+        @media (hover: hover) {
+          &:hover {
+            background-color: rgb(255 255 255 / 30%);
+          }
+        }
+
+        &:focus {
+          background-color: rgb(255 255 255 / 30%);
+        }
+
+        &:active {
+          background-color: rgb(255 255 255 / 50%);
+        }
+      }
+    }
+  }
 }
 
 /* Same look as the side links (see SideLinks.module.css) */
@@ -95,24 +95,24 @@
   &:active {
     scale: 1.5;
   }
-}
 
-.icon {
-  width: 100%;
-  height: 100%;
-  fill: var(--color-title-purple);
-
-  @media (hover: hover) {
-    button:hover & {
-      fill: #fff;
-    }
-  }
-
-  button:focus & {
+  .icon {
+    width: 100%;
+    height: 100%;
     fill: var(--color-title-purple);
-  }
 
-  button:active & {
-    fill: var(--color-title-purple-dark);
+    @media (hover: hover) {
+      button:hover & {
+        fill: #fff;
+      }
+    }
+
+    button:focus & {
+      fill: var(--color-title-purple);
+    }
+
+    button:active & {
+      fill: var(--color-title-purple-dark);
+    }
   }
 }
