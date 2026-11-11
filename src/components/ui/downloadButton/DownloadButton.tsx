@@ -21,7 +21,7 @@ export default function DownloadButton({ hide }: CvProps) {
   return (
     <IconButton
       className={styles.iconButton}
-      icon={<CvIcon className={styles.icon} />}
+      icon={<CvIcon />}
       aria-label={t('download')}
       onClick={() =>
         handleDownload({

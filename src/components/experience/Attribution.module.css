@@ -25,12 +25,12 @@
     cursor: default;
   }
 
-  .dialogTitle {
+  > div {
     font-size: 1.25rem;
     line-height: 1.75rem;
   }
 
-  .text {
+  > p {
     width: 100%;
     height: 100%;
     overflow-wrap: break-word;
@@ -47,7 +47,7 @@
       margin-top: 0.5rem;
     }
 
-    .link {
+    > a {
       color: var(--color-title-purple);
       outline-style: none;
 

@@ -12,7 +12,7 @@
     height: 100dvh;
   }
 
-  .header {
+  > header {
     margin-top: 2rem;
 
     @media (width >= 40rem) {

@@ -17,7 +17,7 @@
   }
 
   /* Rotates according to the page's scroll position. */
-  .rotator {
+  > div {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -44,7 +44,7 @@
       animation-timeline: scroll();
     }
 
-    .image {
+    > img {
       max-height: 50svh;
       border-radius: 9999px;
 

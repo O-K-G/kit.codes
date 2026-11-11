@@ -9,7 +9,7 @@
     margin-right: 1rem;
   }
 
-  .button {
+  > button {
     position: relative;
     display: flex;
     align-items: flex-start;
@@ -55,7 +55,7 @@
       border-radius: 9999px;
     }
 
-    .icon {
+    > svg {
       height: clamp(1.25rem, 1.1947rem + 0.2767vw, 1.8rem);
       fill: var(--color-title-purple);
 

@@ -54,7 +54,6 @@ export default function InputComponent({
       <div className={styles.labelWrapper}>
         <label
           htmlFor={id}
-          className={styles.label}
         >
           {label}:
         </label>

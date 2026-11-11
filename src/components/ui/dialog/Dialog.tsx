@@ -20,7 +20,7 @@ export default function Dialog() {
       ref={modalRef}
       className={styles.dialog}
     >
-      <div className={styles.content}>
+      <div>
         {modalContent}
       </div>
     </dialog>

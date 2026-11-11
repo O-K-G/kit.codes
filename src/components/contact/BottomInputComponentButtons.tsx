@@ -38,7 +38,6 @@ export default function BottomInputComponentButtons({
           aria-label={`${t("alignFormText")} ${t(isLTR ? "right" : "left")}`}
           onClick={() => onClick?.(isLTR ? "rtl" : "ltr")}
           type="button"
-          className={styles.alignButton}
         >
           <AlignLeftIcon
             className={`${styles.alignIcon} ${

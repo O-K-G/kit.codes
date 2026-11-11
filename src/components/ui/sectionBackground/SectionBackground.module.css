@@ -7,7 +7,7 @@
   clip-path: inset(0);
 
   /* Zooms in according to the page's scroll position. */
-  .image {
+  img {
     position: fixed;
     bottom: 0;
     left: 0;

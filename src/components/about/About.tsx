@@ -14,7 +14,7 @@ export default function About() {
       className={styles.section}
       currentSection={CURRENT_SECTION}
     >
-      <header className={styles.header}>
+      <header>
         <Title
           component="h1"
           border

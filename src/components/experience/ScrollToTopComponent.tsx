@@ -14,10 +14,9 @@ export default function ScrollToTopComponent() {
       label={t('scrollToTop')}
     >
       <IconButton
-        className={styles.button}
         aria-label={t('scrollToTop')}
         icon={
-          <ArrowUpIcon className={styles.icon} />
+          <ArrowUpIcon />
         }
         onClick={() => {
           window.scrollTo({

@@ -22,7 +22,7 @@ function SelectLanguageButton({ label, value }: SelectLanguageButtonProps) {
   const { onCloseModal } = useContext(modalContext);
 
   return (
-    <li className={styles.listItem}>
+    <li>
       <button
         data-current-locale={isCurrentLocale}
         onClick={(e) => {
@@ -31,7 +31,6 @@ function SelectLanguageButton({ label, value }: SelectLanguageButtonProps) {
             router.push(pathname.replace(`/${locale as string}`, `/${value}`));
           }
         }}
-        className={styles.languageButton}
         type="button"
         value={value}
       >
@@ -48,11 +47,10 @@ function LanguagesList() {
   return (
     <div className={styles.languagesList}>
       <DialogTitle
-        className={styles.dialogTitle}
         label={t("changeLanguage")}
         onClick={onCloseModal}
       />
-      <ul className={styles.list}>
+      <ul>
         {Object.keys(DIRECTION_BY_LANGUAGE).map((str: string) => (
           <SelectLanguageButton
             key={`${str}-language`}
@@ -74,7 +72,7 @@ export default function ChangeLanguage({ hide }: ChangeLanguageProps) {
       <IconButton
         className={styles.iconButton}
         onClick={() => setModalContent(<LanguagesList />)}
-        icon={<LanguageIcon className={styles.icon} />}
+        icon={<LanguageIcon />}
         aria-label={t("changeLanguage")}
       />
     );

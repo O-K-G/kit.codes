@@ -13,12 +13,11 @@ export default function Border({
       className={styles.border}
     >
       <div
-        className={`${styles.line} ${className}`}
+        className={className}
       />
       {(rightLabel ?? leftLabel) && (
         <span
           data-blink={isTextBlink}
-          className={styles.label}
         >
           {rightLabel ?? leftLabel}
         </span>

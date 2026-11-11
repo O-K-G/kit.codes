@@ -16,15 +16,13 @@ function AttributionContent() {
       className={styles.content}
     >
       <DialogTitle
-        className={styles.dialogTitle}
         label={t("title")}
         onClick={onCloseModal}
       />
-      <p className={styles.text}>
+      <p>
         <span className={styles.inlineBlock}>{t("designBasedOn")}</span>
         <br />
         <a
-          className={styles.link}
           target="_blank"
           rel="noreferrer"
           href={figmaAttribution}
@@ -35,7 +33,6 @@ function AttributionContent() {
         <span className={styles.inlineBlock}>{t("andUsedUnderThe")}</span>
         &nbsp;
         <a
-          className={styles.link}
           target="_blank"
           rel="noreferrer"
           href={ccbyLicense}

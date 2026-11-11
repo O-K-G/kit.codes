@@ -103,7 +103,7 @@ export default function ContactForm() {
         void handleValidation(formData);
       }}
     >
-      <div className={styles.fields}>
+      <div>
         {[
           {
             id: EMAIL_ID,

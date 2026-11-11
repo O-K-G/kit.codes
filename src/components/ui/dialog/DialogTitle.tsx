@@ -9,19 +9,18 @@ export default function DialogTitle({
   onClick,
   className = '',
   closeButtonIcon = (
-    <CloseIcon className={styles.closeIcon} />
+    <CloseIcon />
   ),
 }: DialogTitleProps) {
   const t = useTranslations('dialogComponentText');
 
   return (
     <div className={`${styles.container} ${className}`}>
-      <h2 className={styles.title}>{label}</h2>
-      <div className={styles.actions}>
+      <h2>{label}</h2>
+      <div>
         <IconButton
           aria-label={t('close')}
           onClick={onClick}
-          className={styles.closeButton}
           icon={closeButtonIcon}
         />
       </div>

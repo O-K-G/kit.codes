@@ -97,7 +97,7 @@ export interface InputComponentProps {
 }
 
 export interface IconsProps {
-  className: string;
+  className?: string;
 }
 
 export const FormDataSchema = z.object({

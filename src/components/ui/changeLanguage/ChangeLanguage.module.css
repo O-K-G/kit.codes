@@ -24,22 +24,22 @@
     width: 25svw;
   }
 
-  .dialogTitle {
+  > div {
     font-size: 1.25rem;
     line-height: 1.75rem;
   }
 
-  .list {
+  > ul {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;
 
-    .listItem {
+    > li {
       width: 100%;
 
-      .languageButton {
+      > button {
         width: 100%;
         padding: 0.5rem 1rem;
         text-align: center;
@@ -96,7 +96,7 @@
     scale: 1.5;
   }
 
-  .icon {
+  > svg {
     width: 100%;
     height: 100%;
     fill: var(--color-title-purple);

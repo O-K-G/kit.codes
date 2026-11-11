@@ -28,7 +28,7 @@
       max-width: 6rem;
     }
 
-    .label {
+    > label {
       width: clamp(3rem, 2.6981rem + 1.5094vw, 6rem);
       font-size: clamp(0.875rem, min(5vw - 0.125rem, 1.8051rem + 0.1748vw), 2.1875rem);
       line-height: clamp(1.25rem, min(0.25rem + 5vw, 2.0542rem + 0.4895vw), 3.125rem);

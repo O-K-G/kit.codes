@@ -21,7 +21,6 @@ function OldschoolButton({
   return (
     <button
       onClick={onClick}
-      className={styles.oldschoolButton}
       type="button"
     >
       <span className={styles.oldschoolButtonLabel}>
@@ -50,7 +49,7 @@ function ShenanigansComponent() {
       role="presentation"
       className={styles.backdrop}
     >
-      <div className={styles.window}>
+      <div>
         <DialogTitle
           className={styles.dialogTitle}
           label={t("mainTitle")}
@@ -60,7 +59,7 @@ function ShenanigansComponent() {
           }
         />
         <div className={styles.windowBody}>
-          <div className={styles.windowContent}>
+          <div>
             <h2 className={`${styles.heading} ${styles.headingBold}`}>
               {t("wow")}
             </h2>
@@ -68,7 +67,7 @@ function ShenanigansComponent() {
               {t("make")}
             </h3>
             <div className={styles.srOnly}>{t("graphics")}</div>
-            <p className={styles.message}>
+            <p>
               {t("yourApp")}
               <br />
               {t("nineties")}

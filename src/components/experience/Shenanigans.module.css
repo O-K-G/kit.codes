@@ -13,7 +13,7 @@
     cursor: crosshair;
   }
 
-  .window {
+  > div {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -66,7 +66,7 @@
       padding: 1rem;
       color: #000;
 
-      .windowContent {
+      > div {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -100,7 +100,7 @@
           border-width: 0;
         }
 
-        .message {
+        > p {
           margin-top: 0.5rem;
           font-size: 1rem;
           line-height: 1.5rem;
@@ -113,7 +113,7 @@
           width: 100%;
           margin-top: 0.5rem;
 
-          .oldschoolButton {
+          > button {
             display: flex;
             align-items: center;
             justify-content: center;

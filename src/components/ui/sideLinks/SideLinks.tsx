@@ -26,7 +26,6 @@ function AnchorLink({
         aria-label={ariaLabel}
         rel="noreferrer"
         target="_blank"
-        className={styles.link}
       >
         {icon}
       </a>
@@ -49,13 +48,13 @@ export default function SideLinks({
           data-testid={GH_TEST_ID}
           aria-label={t('ghLinkAriaLabel')}
           url={URLs.gitHub}
-          icon={<GHIcon className={styles.icon} />}
+          icon={<GHIcon />}
         />
         <AnchorLink
           data-testid={LI_TEST_ID}
           aria-label={t('liLinkAriaLabel')}
           url={URLs.linkedIn}
-          icon={<LIIcon className={styles.icon} />}
+          icon={<LIIcon />}
         />
         <ChangeLanguage hide={hideChangeLanguageButton} />
         <DownloadButton />

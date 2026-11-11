@@ -11,7 +11,7 @@
     cursor: pointer;
   }
 
-  .content {
+  > div {
     position: absolute;
     inset: 0;
     width: fit-content;

@@ -26,7 +26,6 @@ export default function ProgressIndicators({
 
       <ProgressIcon
         data-loading={isLoading}
-        className={styles.spinner}
       />
 
       <div

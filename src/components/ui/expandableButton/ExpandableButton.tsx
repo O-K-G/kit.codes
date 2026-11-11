@@ -35,7 +35,6 @@ export default function ExpandableButton({
     <div className={styles.container}>
       <div
         data-open={open}
-        className={styles.frame}
       >
         <AboutTargetIcon open={open} />
         <div
@@ -51,7 +50,7 @@ export default function ExpandableButton({
           onClick={handleClick}
           onKeyDown={handleClick}
         >
-          <span className={styles.label}>
+          <span>
             {isAnimationEnd && (!open ? t("clickToOpen") : alternativeLabel)}
           </span>
         </div>

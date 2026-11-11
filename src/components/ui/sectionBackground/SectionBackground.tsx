@@ -30,7 +30,6 @@ export default function SectionBackground({
           />
         ))}
         <img
-          className={styles.image}
           alt=""
           aria-hidden
           src={`/images/${currentSection}-2xl${SUFFIX}`}

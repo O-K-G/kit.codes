@@ -7,9 +7,8 @@ export default function Planet() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.rotator}>
+      <div>
         <img
-          className={styles.image}
           alt={t("alt")}
           src={`/images/planet.webp?cacheVersion=${CACHE_VERSION}`}
         />

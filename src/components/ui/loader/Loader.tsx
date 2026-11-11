@@ -39,7 +39,7 @@ function Cogwheel({
 function Bolt({ centerPointClassName = "" }: BoltProps) {
   return (
     <div className={styles.bolt}>
-      <div className={styles.boltRing}>
+      <div>
         <div className={`${styles.boltCenter} ${centerPointClassName}`} />
       </div>
     </div>

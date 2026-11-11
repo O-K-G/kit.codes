@@ -89,7 +89,7 @@
         border-radius: 9999px;
         background-color: oklch(88.2% 0.059 254.128);
 
-        .boltRing {
+        > div {
           display: flex;
           align-items: center;
           justify-content: center;

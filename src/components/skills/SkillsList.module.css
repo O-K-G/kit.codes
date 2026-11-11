@@ -23,7 +23,7 @@
     animation-range-end: 200dvh;
   }
 
-  .skill {
+  > li {
     position: relative;
     display: flex;
     align-items: center;

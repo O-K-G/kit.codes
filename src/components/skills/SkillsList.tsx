@@ -25,7 +25,6 @@ function SkillBlock({
   return (
     <li
       data-visible-mobile={visibleMobile}
-      className={styles.skill}
     >
       {str}
     </li>

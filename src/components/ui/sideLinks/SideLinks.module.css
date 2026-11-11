@@ -38,7 +38,7 @@
     border-radius: 9999px;
   }
 
-  .link {
+  > a {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -68,7 +68,7 @@
       scale: 1.5;
     }
 
-    .icon {
+    > svg {
       width: 100%;
       height: 100%;
       fill: var(--color-title-purple);
