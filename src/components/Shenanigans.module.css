@@ -23,6 +23,13 @@
     background-color: oklch(88.2% 0.059 254.128);
   }
 
+  &:focus {
+    .oldschoolButtonLabel {
+      border-style: dashed;
+      border-color: #000;
+    }
+  }
+
   @media (width >= 64rem) {
     cursor: pointer;
   }
@@ -31,11 +38,6 @@
 .oldschoolButtonLabel {
   padding-inline: 0.5rem;
   border: 1px solid transparent;
-
-  .oldschoolButton:focus & {
-    border-style: dashed;
-    border-color: #000;
-  }
 }
 
 .backdrop {
