@@ -1,4 +1,5 @@
 import { ArrowRightIconProps } from '@constants/interfaces';
+import styles from './ArrowRightIcon.module.css';
 
 export default function ArrowRightIcon({
   className = '',
@@ -10,7 +11,7 @@ export default function ArrowRightIcon({
       viewBox="0 0 54 105"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={`shrink-0 size-full ${className}`}
+      className={`${styles.icon} ${className}`}
     >
       <path
         className={strokeClassName}

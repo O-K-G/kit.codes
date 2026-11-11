@@ -1,6 +1,7 @@
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Loader, { LOADER_TEST_ID } from '@components/shared/Loader';
+import styles from '@components/shared/Loader.module.css';
 
 describe('Loader Component - start', () => {
   beforeAll(() => {
@@ -17,7 +18,8 @@ describe('Loader Component - start', () => {
     render(<Loader />);
     const loader = screen.getByTestId(LOADER_TEST_ID);
     expect(loader).toBeInTheDocument();
-    expect(loader.parentElement).toHaveClass('data-[open=true]:opacity-100');
+    expect(loader.parentElement).toHaveClass(styles.loader);
+    expect(loader.parentElement).toHaveAttribute('data-open', 'true');
   });
 });
 
@@ -36,7 +38,8 @@ describe('Loader Component - end', () => {
     render(<Loader />);
     const loader = screen.getByTestId(LOADER_TEST_ID);
 
-    expect(loader.parentElement).toHaveClass('data-[open=false]:opacity-0');
+    expect(loader.parentElement).toHaveClass(styles.loader);
+    expect(loader.parentElement).toHaveAttribute('data-open', 'false');
   });
 
   it('should remove the loader from the DOM after the transition ends', async () => {

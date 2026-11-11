@@ -7,6 +7,7 @@ import CvIcon from '@components/icons/Cv';
 import { CvProps } from '@constants/interfaces';
 import { DownloadError } from '@components/DownloadError';
 import { URLs } from '@constants/urls';
+import styles from './DownloadButton.module.css';
 
 export default function DownloadButton({ hide }: CvProps) {
   const t = useTranslations('cv');
@@ -19,8 +20,8 @@ export default function DownloadButton({ hide }: CvProps) {
 
   return (
     <IconButton
-      className="rounded-full transition-300 hover:scale-150 active:scale-150 focus:scale-150 side-links-clickable-elements-size"
-      icon={<CvIcon className="side-links-icons" />}
+      className={styles.iconButton}
+      icon={<CvIcon className={styles.icon} />}
       aria-label={t('download')}
       onClick={() =>
         handleDownload({

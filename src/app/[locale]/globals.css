@@ -1,110 +1,240 @@
-@import "tailwindcss";
-@import "./styles/main-title.css";
-@import "./styles/icons-scroll-animations.css";
-@import "./styles/expand-collapse-button.css";
-@import "./styles/loader-animations.css";
-@import "./styles/planet-rotate-animations.css";
-@import "./styles/backgrounds.css";
-@import "./styles/skills.css";
-@import "./styles/aside.css";
-@import "./styles/side-links.css";
-@import "./styles/contact-go-button.css";
-@import "./styles/attribution.css";
-
-@theme {
-  --drop-shadow-purple-glow: 0px 0px 0.125rem #b377ff;
-  --drop-shadow-white-glow-sm: 0px 0px 0.313rem #ffffff;
-  --drop-shadow-purple-glow-sm: 0px 0px 0.313rem #b377ff;
-  --drop-shadow-border-purple-glow: 0px 0px 0.09rem #b377ff;
-
-  --rotate-270: 270deg;
-
-  --color-title-purple: #ceb7ff;
-  --color-title-purple-dark: #75629f;
-
-  --font-just-in-the-firestorm: var(--font-just-in-the-firestorm);
-  --font-star-date-81316: var(--font-star-date-81316);
-  --font-bebas-neue: var(--font-bebas-neue);
-  --font-montserrat: var(--font-montserrat);
-  --font-stop-motion: var(--font-stop-motion);
-  --font-karantina-regular: var(--font-karantina-regular);
-  --font-varela-round-regular: var(--font-varela-round-regular);
-  --font-handjet: var(--font-handjet);
-}
-
+/* Base reset - adapted from Tailwind CSS v4 preflight (MIT License, https://tailwindcss.com).
+ * It lives in a layer so that every (unlayered) component style always wins over it. */
 @layer base {
   *,
   ::after,
   ::before,
   ::backdrop,
   ::file-selector-button {
-    border-color: var(--color-gray-200, currentColor);
-  }
-}
-
-@utility hide-scrollbars {
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
-
-@utility center-elements {
-  @apply flex items-center justify-center;
-}
-
-@utility transition-300 {
-  @apply transition-all ease-in-out duration-300;
-}
-
-@utility transition-1000 {
-  @apply transition-all ease-in-out duration-1000;
-}
-
-@utility info-text-font-classNames {
-  &:lang(en) {
-    @apply font-bebas-neue;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0 solid;
+    border-color: oklch(92.8% 0.006 264.531);
   }
 
-  &:lang(he) {
-    @apply font-sans font-bold;
+  html,
+  :host {
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    tab-size: 4;
+    font-family: var(--font-sans);
+    font-feature-settings: normal;
+    font-variation-settings: normal;
+    -webkit-tap-highlight-color: transparent;
   }
-}
 
-@utility regular-text-font-by-locale {
-  &:lang(en) {
-    @apply font-montserrat;
+  hr {
+    height: 0;
+    color: inherit;
+    border-top-width: 1px;
   }
 
-  &:lang(he) {
-    @apply font-varela-round-regular;
+  abbr:where([title]) {
+    -webkit-text-decoration: underline dotted;
+    text-decoration: underline dotted;
   }
-}
 
-/* Shorthand for animation breaks in production environment with FireFox after upgrade to Tailwind 4.0.9. */
-@utility animate-scroll-polyfill {
-  @media (prefers-reduced-motion: no-preference) {
-    @supports not (animation-timeline: scroll()) {
-      animation-fill-mode: forwards;
-      animation-timing-function: linear;
-      animation-duration: 1s;
-      animation-delay: calc(var(--scroll) * -1s);
-      animation-play-state: paused;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-size: inherit;
+    font-weight: inherit;
+  }
+
+  a {
+    color: inherit;
+    -webkit-text-decoration: inherit;
+    text-decoration: inherit;
+  }
+
+  b,
+  strong {
+    font-weight: bolder;
+  }
+
+  code,
+  kbd,
+  samp,
+  pre {
+    font-family: var(--font-mono);
+    font-feature-settings: normal;
+    font-variation-settings: normal;
+    font-size: 1em;
+  }
+
+  small {
+    font-size: 80%;
+  }
+
+  sub,
+  sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+  }
+
+  sub {
+    bottom: -0.25em;
+  }
+
+  sup {
+    top: -0.5em;
+  }
+
+  table {
+    text-indent: 0;
+    border-color: inherit;
+    border-collapse: collapse;
+  }
+
+  :-moz-focusring {
+    outline: auto;
+  }
+
+  progress {
+    vertical-align: baseline;
+  }
+
+  summary {
+    display: list-item;
+  }
+
+  ol,
+  ul,
+  menu {
+    list-style: none;
+  }
+
+  img,
+  svg,
+  video,
+  canvas,
+  audio,
+  iframe,
+  embed,
+  object {
+    display: block;
+    vertical-align: middle;
+  }
+
+  img,
+  video {
+    max-width: 100%;
+    height: auto;
+  }
+
+  button,
+  input,
+  select,
+  optgroup,
+  textarea,
+  ::file-selector-button {
+    font: inherit;
+    font-feature-settings: inherit;
+    font-variation-settings: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+    border-radius: 0;
+    background-color: transparent;
+    opacity: 1;
+  }
+
+  :where(select:is([multiple], [size])) optgroup {
+    font-weight: bolder;
+  }
+
+  :where(select:is([multiple], [size])) optgroup option {
+    padding-inline-start: 20px;
+  }
+
+  ::file-selector-button {
+    margin-inline-end: 4px;
+  }
+
+  ::placeholder {
+    opacity: 1;
+  }
+
+  @supports (not (-webkit-appearance: -apple-pay-button)) or
+    (contain-intrinsic-size: 1px) {
+    ::placeholder {
+      color: currentcolor;
+      color: color-mix(in oklab, currentcolor 50%, transparent);
     }
   }
-}
 
-@utility animate-scroll {
-  @media (prefers-reduced-motion: no-preference) {
-    @supports (animation-timeline: scroll()) {
-      animation-timing-function: linear;
-      animation-timeline: scroll();
-    }
+  textarea {
+    resize: vertical;
+  }
+
+  ::-webkit-search-decoration {
+    -webkit-appearance: none;
+  }
+
+  ::-webkit-date-and-time-value {
+    min-height: 1lh;
+    text-align: inherit;
+  }
+
+  ::-webkit-datetime-edit {
+    display: inline-flex;
+  }
+
+  ::-webkit-datetime-edit-fields-wrapper {
+    padding: 0;
+  }
+
+  ::-webkit-datetime-edit,
+  ::-webkit-datetime-edit-year-field,
+  ::-webkit-datetime-edit-month-field,
+  ::-webkit-datetime-edit-day-field,
+  ::-webkit-datetime-edit-hour-field,
+  ::-webkit-datetime-edit-minute-field,
+  ::-webkit-datetime-edit-second-field,
+  ::-webkit-datetime-edit-millisecond-field,
+  ::-webkit-datetime-edit-meridiem-field {
+    padding-block: 0;
+  }
+
+  ::-webkit-calendar-picker-indicator {
+    line-height: 1;
+  }
+
+  :-moz-ui-invalid {
+    box-shadow: none;
+  }
+
+  button,
+  input:where([type="button"], [type="reset"], [type="submit"]),
+  ::file-selector-button {
+    appearance: button;
+  }
+
+  ::-webkit-inner-spin-button,
+  ::-webkit-outer-spin-button {
+    height: auto;
+  }
+
+  [hidden]:where(:not([hidden="until-found"])) {
+    display: none !important;
   }
 }
 
+/* The locale fonts (--font-bebas-neue, --font-montserrat, etc.) are defined on <body> by next/font. */
 :root {
+  --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+
+  --color-title-purple: #ceb7ff;
+  --color-title-purple-dark: #75629f;
+
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;

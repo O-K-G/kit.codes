@@ -1,0 +1,8 @@
+.main {
+  min-height: 100svh;
+  overflow: hidden;
+
+  @media (width >= 64rem) {
+    min-height: 100dvh;
+  }
+}

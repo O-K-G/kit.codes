@@ -5,6 +5,7 @@ import { URLs } from '@constants/urls';
 import { useTranslations } from 'next-intl';
 import ChangeLanguage from '@components/shared/ChangeLanguage';
 import DownloadButton from '@components/shared/DownloadButton';
+import styles from './SideLinks.module.css';
 
 export const GH_TEST_ID = 'gh-test';
 export const LI_TEST_ID = 'li-test';
@@ -17,7 +18,7 @@ function AnchorLink({
   'data-testid': dataTestId,
 }: AnchorLinkProps) {
   return (
-    <li data-rounded={isRounded} className="data-[rounded=true]:rounded-full">
+    <li data-rounded={isRounded} className={styles.listItem}>
       <a
         data-testid={dataTestId}
         data-rounded={isRounded}
@@ -25,7 +26,7 @@ function AnchorLink({
         aria-label={ariaLabel}
         rel="noreferrer"
         target="_blank"
-        className="data-[rounded=true]:rounded-full overflow-hidden transition-300 hover:scale-150 active:scale-150 focus:scale-150 center-elements group outline-hidden side-links-clickable-elements-size"
+        className={styles.link}
       >
         {icon}
       </a>
@@ -34,8 +35,8 @@ function AnchorLink({
 }
 
 export default function SideLinks({
-  className = 'fixed ltr:left-0 rtl:right-0 top-0 sm:bottom-0 mt-[1.35rem] sm:my-auto ltr:ml-4 rtl:mr-4',
-  ulClassName = 'size-full center-elements sm:flex-col gap-4 sm:gap-10',
+  className = styles.nav,
+  ulClassName = styles.list,
   hideChangeLanguageButton,
 }: SideLinksProps) {
   const t = useTranslations('sideLinks');
@@ -48,13 +49,13 @@ export default function SideLinks({
           data-testid={GH_TEST_ID}
           aria-label={t('ghLinkAriaLabel')}
           url={URLs.gitHub}
-          icon={<GHIcon className="side-links-icons" />}
+          icon={<GHIcon className={styles.icon} />}
         />
         <AnchorLink
           data-testid={LI_TEST_ID}
           aria-label={t('liLinkAriaLabel')}
           url={URLs.linkedIn}
-          icon={<LIIcon className="side-links-icons" />}
+          icon={<LIIcon className={styles.icon} />}
         />
         <ChangeLanguage hide={hideChangeLanguageButton} />
         <DownloadButton />

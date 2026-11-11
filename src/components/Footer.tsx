@@ -4,6 +4,7 @@ import Shenanigans from "@components/Shenanigans";
 import Planet from "@components/shared/Planet";
 import ScrollToTopComponent from "@components/shared/ScrollToTopComponent";
 import useHandleScrollAnimationTimelinePolyfill from "@hooks/useHandleScrollAnimationTimelinePolyfill";
+import styles from "./Footer.module.css";
 
 export default function Footer() {
   /** In the future once Firefox and Safari fully support CSS' animation-timeline -
@@ -14,7 +15,7 @@ export default function Footer() {
   useHandleScrollAnimationTimelinePolyfill();
 
   return (
-    <footer className="mt-auto center-elements flex-col gap-2">
+    <footer className={styles.footer}>
       <Planet />
       <ScrollIconComponent />
       <ScrollToTopComponent />

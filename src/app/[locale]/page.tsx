@@ -6,12 +6,13 @@ import Loader from "@components/shared/Loader";
 import Dialog from "@components/shared/dialog/Dialog";
 import ModalContextComponent from "@components/shared/ModalContext";
 import Aside from "@components/shared/Aside";
+import styles from "./page.module.css";
 
 // TODO: Refactor Modal/Aside to be more global. Possibly with createportal.
 
 export default function Home() {
   return (
-    <main className="min-h-svh lg:min-h-dvh overflow-hidden">
+    <main className={styles.main}>
       <Loader />
       <ModalContextComponent>
         <About />

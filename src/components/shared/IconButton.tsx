@@ -1,4 +1,5 @@
 import { IconButtonProps } from "@constants/interfaces";
+import styles from "./IconButton.module.css";
 
 export default function IconButton({
   onClick,
@@ -17,7 +18,7 @@ export default function IconButton({
       onClick={onClick}
       disabled={disabled}
       type="button"
-      className={`group center-elements outline-hidden lg:cursor-pointer disabled:pointer-events-none disabled:select-none ${className}`}
+      className={`${styles.button} ${className}`}
       aria-label={ariaLabel}
       {...rest}
     >

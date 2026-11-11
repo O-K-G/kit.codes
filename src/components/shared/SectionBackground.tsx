@@ -1,6 +1,7 @@
 import { CurrentSection } from "@constants/interfaces";
 import { CACHE_VERSION } from "@root/postcss.config.mjs";
 import { TAILWIND_SIZES } from "@constants/imagesConfig";
+import styles from "./SectionBackground.module.css";
 
 /** This component is a fix to cases in mobile devices in which the user scrolls down in "extreme velocity",
  * and once the browser hits the bottom - the background flickers for a fraction of a second.
@@ -10,7 +11,7 @@ const SUFFIX = `.webp?cacheVersion=${CACHE_VERSION}`;
 
 export default function SectionBackground({
   currentSection,
-  minHeightClassName = "min-h-full",
+  minHeightClassName = styles.minHeightFull,
 }: CurrentSection) {
   if (!currentSection) {
     return null;
@@ -18,7 +19,7 @@ export default function SectionBackground({
 
   return (
     <div
-      className={`absolute top-0 left-0 h-screen w-screen clip-path-inset-0 ${minHeightClassName}`}
+      className={`${styles.container} ${minHeightClassName}`}
     >
       <picture>
         {TAILWIND_SIZES.map(({ twClassName, pxResolution }) => (
@@ -29,7 +30,7 @@ export default function SectionBackground({
           />
         ))}
         <img
-          className="object-cover animate-scroll animate-background-scale animate-scroll-polyfill object-left h-screen w-screen bottom-0 left-0 fixed opacity-60"
+          className={styles.image}
           alt=""
           aria-hidden
           src={`/images/${currentSection}-2xl${SUFFIX}`}

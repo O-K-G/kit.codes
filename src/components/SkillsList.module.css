@@ -1,0 +1,215 @@
+/* Each row slides from below the viewport to its own --top-var position, driven by the scroll position.
+ * Browsers without `animation-timeline` support get a paused animation whose delay is driven by the --scroll variable. */
+.row {
+  position: fixed;
+  top: 110vh;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
+  padding-inline: 1rem;
+
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      animation-fill-mode: forwards;
+      animation-timing-function: linear;
+      animation-timeline: view();
+      animation-range-start: 0;
+      animation-range-end: 200svh;
+      animation-name: skills;
+    }
+
+    @supports not (animation-timeline: view()) {
+      animation-duration: 1s;
+      animation-fill-mode: forwards;
+      animation-timing-function: linear;
+      animation-play-state: paused;
+      animation-name: skills;
+    }
+  }
+
+  @media screen and (min-width: 1024px) {
+    animation-range-end: 200dvh;
+  }
+}
+
+.mobileRow {
+  flex-wrap: wrap;
+
+  @media (width >= 40rem) {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .row1 {
+    --top-var: 32svh;
+
+    @media screen and (min-width: 640px) {
+      --top-var: 37svh;
+    }
+
+    @media screen and (min-width: 1024px) {
+      --top-var: 37dvh;
+    }
+
+    @supports not (animation-timeline: view()) {
+      animation-delay: calc(var(--scroll) * -3.5s);
+    }
+  }
+
+  .row2 {
+    --top-var: 40svh;
+
+    @media screen and (min-width: 640px) {
+      --top-var: 49svh;
+    }
+
+    @media screen and (min-width: 1024px) {
+      --top-var: 49dvh;
+    }
+
+    @supports not (animation-timeline: view()) {
+      animation-delay: calc(var(--scroll) * -3.25s);
+    }
+  }
+
+  .row3 {
+    --top-var: 48svh;
+
+    @media screen and (min-width: 640px) {
+      --top-var: 61svh;
+    }
+
+    @media screen and (min-width: 1024px) {
+      --top-var: 61dvh;
+    }
+
+    @supports not (animation-timeline: view()) {
+      animation-delay: calc(var(--scroll) * -3s);
+    }
+  }
+
+  .row4 {
+    --top-var: 56svh;
+
+    @media screen and (min-width: 640px) {
+      --top-var: 73svh;
+    }
+
+    @media screen and (min-width: 1024px) {
+      --top-var: 73dvh;
+    }
+
+    @supports not (animation-timeline: view()) {
+      animation-delay: calc(var(--scroll) * -2.75s);
+    }
+  }
+
+  .mobileRow {
+    --top-var: 64svh;
+
+    @media screen and (min-width: 640px) {
+      --top-var: 85svh;
+    }
+
+    @media screen and (min-width: 1024px) {
+      --top-var: 85dvh;
+    }
+
+    @supports not (animation-timeline: view()) {
+      animation-delay: calc(var(--scroll) * -2.5s);
+    }
+  }
+}
+
+.skill {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(100% / 3);
+  height: 2.5rem;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  background-image: linear-gradient(
+    90deg,
+    white 25%,
+    #fde071 37.5%,
+    #ef9671,
+    #996a6e 62.5%,
+    white 75%
+  );
+  background-position: right center;
+  background-size: 400% auto;
+  background-clip: text;
+  box-shadow: 0 1px 2px 0 #000;
+  overflow-wrap: break-word;
+  text-align: center;
+  font-family: var(--font-montserrat);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: #fff;
+  -webkit-text-fill-color: transparent;
+  transition: all 1000ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -10;
+    width: 100%;
+    height: 100%;
+    background-color: oklch(27.9% 0.041 260.031 / 70%);
+  }
+
+  /* The last skill is shown only on wider screens, or in the mobile row. */
+  &:last-child {
+    display: none;
+  }
+
+  &[data-visible-mobile="true"]:last-child {
+    display: flex;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      background-position: left center;
+      color: #ef9671;
+    }
+  }
+
+  @media (width >= 40rem) {
+    width: 25%;
+    height: 4rem;
+    font-size: 1rem;
+    line-height: 1.5rem;
+
+    &:last-child {
+      display: flex;
+    }
+  }
+
+  @media (width >= 48rem) {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+
+  @media (width >= 64rem) {
+    width: 10rem;
+    height: 5rem;
+  }
+}
+
+@keyframes skills {
+  from {
+    top: 120svh;
+  }
+
+  to {
+    top: var(--top-var);
+  }
+}

@@ -1,0 +1,193 @@
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+  width: 100%;
+  height: 100%;
+  background-color: #111111;
+  color: #fff;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  transition: all 1000ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  &[data-open="false"] {
+    opacity: 0%;
+  }
+
+  &[data-open="true"] {
+    opacity: 100%;
+  }
+}
+
+/* ---- Cogwheel ---- */
+
+.cogwheel {
+  position: relative;
+  animation: spin 1s linear infinite;
+}
+
+.cogwheelPart {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  border-radius: 0.375rem;
+}
+
+.cogwheelPartRotated {
+  rotate: 45deg;
+}
+
+.cogwheelCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 9999px;
+  background-color: #000;
+}
+
+.cogwheelCenterTop {
+  align-items: flex-start;
+}
+
+.size8 {
+  width: 2rem;
+  height: 2rem;
+}
+
+.size10 {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.size12 {
+  width: 3rem;
+  height: 3rem;
+}
+
+.size16 {
+  width: 4rem;
+  height: 4rem;
+}
+
+.size24 {
+  width: 6rem;
+  height: 6rem;
+}
+
+.blue {
+  background-color: oklch(80.9% 0.105 251.813);
+}
+
+.emerald {
+  background-color: oklch(95% 0.052 163.051);
+}
+
+.red {
+  background-color: oklch(88.5% 0.062 18.334);
+}
+
+.pink {
+  background-color: oklch(89.9% 0.061 343.231);
+}
+
+.zinc {
+  background-color: oklch(70.5% 0.015 286.067);
+}
+
+.raised {
+  margin-top: -0.75rem;
+}
+
+/* ---- Bolt ---- */
+
+.bolt {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(100% / 3);
+  height: calc(100% / 3);
+  border-radius: 9999px;
+  background-color: oklch(88.2% 0.059 254.128);
+}
+
+.boltRing {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 75%;
+  height: 75%;
+  padding: 0.25rem;
+  border-radius: 9999px;
+  background-color: #000;
+}
+
+.boltCenter {
+  width: 100%;
+  height: 100%;
+  border-radius: 9999px;
+  background-color: #fff;
+}
+
+.boltCenterLowered {
+  margin-top: 0.25rem;
+}
+
+/* ---- Text ---- */
+
+.textContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  padding-inline: 1rem;
+
+  @media (width >= 40rem) {
+    width: auto;
+    padding-inline: 0;
+  }
+}
+
+.text {
+  width: 100%;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  line-height: 1.5rem;
+  color: oklch(68.5% 0.169 237.323);
+  animation: flash-loader-text 1s linear infinite;
+
+  @media (width >= 40rem) {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+}
+
+.cogwheelsSeparator {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes flash-loader-text {
+  50% {
+    opacity: 0;
+  }
+}

@@ -1,5 +1,6 @@
 import React from "react";
 import { SCROLLABLE_ITEM_TEST_ID } from "@components/shared/scrollableSection/ScrollableSubsectionItem";
+import itemStyles from "@components/shared/scrollableSection/ScrollableSubsectionItem.module.css";
 import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { NextIntlClientProvider } from "next-intl";
@@ -158,8 +159,6 @@ describe("ScrollableSubsection", () => {
 
     expect(screen.getByText("Item 1")).toBeInTheDocument();
     const item = screen.getByTestId(SCROLLABLE_ITEM_TEST_ID);
-    expect(item).toHaveClass(
-      "relative h-full snap-center min-w-full flex justify-end gap-4 items-center flex-col"
-    );
+    expect(item).toHaveClass(itemStyles.item);
   });
 });

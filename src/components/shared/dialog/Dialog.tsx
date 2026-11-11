@@ -2,6 +2,7 @@
 
 import { useContext } from 'react';
 import { ModalContext as modalContext } from '@components/shared/ModalContext';
+import styles from './Dialog.module.css';
 
 export const DIALOG_TEST_ID = 'dialog-test-id';
 
@@ -17,9 +18,9 @@ export default function Dialog() {
       data-open={!!modalContent}
       data-testid={DIALOG_TEST_ID}
       ref={modalRef}
-      className='backdrop:hidden lg:cursor-pointer min-h-[100vh] min-w-[100vw] bg-black/50'
+      className={styles.dialog}
     >
-      <div className='size-fit absolute top-0 bottom-0 left-0 right-0 m-auto'>
+      <div className={styles.content}>
         {modalContent}
       </div>
     </dialog>

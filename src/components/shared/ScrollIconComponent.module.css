@@ -1,0 +1,41 @@
+.icon {
+  position: absolute;
+  top: 0.125rem;
+  right: 0;
+  left: 0;
+  height: 1.25rem;
+  margin-inline: auto;
+  fill: var(--color-title-purple);
+  animation: scroll-icon 2s linear 3 alternate;
+
+  @media screen and (max-width: 768px) {
+    --scroll-icon-top: -0.7rem;
+  }
+
+  @media screen and (min-width: 768px) and (max-width: 1024px) {
+    --scroll-icon-top: -0.95rem;
+  }
+
+  @media screen and (min-width: 1024px) {
+    --scroll-icon-top: -1.05rem;
+  }
+
+  @media (width >= 48rem) {
+    height: 1.75rem;
+  }
+
+  @media (width >= 64rem) {
+    height: 1.8rem;
+  }
+}
+
+@keyframes scroll-icon {
+  0%,
+  100% {
+    top: 0.125rem;
+  }
+
+  50% {
+    top: var(--scroll-icon-top);
+  }
+}

@@ -6,6 +6,7 @@ import { usePathname, useParams } from "next/navigation";
 import ContactGoBackButton from "@components/shared/ContactGoBackButton";
 import { useTranslations } from "next-intl";
 import getDirByLocale from "@utils/getDirByLocale";
+import styles from "./Aside.module.css";
 
 export default function Aside() {
   const t = useTranslations("contactGoBackButtonText");
@@ -89,7 +90,7 @@ export default function Aside() {
         }
         data-open={!!open}
         aria-hidden={!open}
-        className="data-[open=false]:aside-closed data-[open=true]:aside-open z-10 transition-all ease-in-out duration-700 lg:duration-1000 overflow-x-hidden fixed flex items-start justify-start h-screen top-0"
+        className={styles.aside}
       >
         <Contact open={openAtTransitionEnd} onClick={() => setOpen(false)} />
       </aside>

@@ -1,0 +1,76 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  height: 50%;
+  padding: 1rem;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  background-color: #000;
+  color: #fff;
+  font-size: 1rem;
+  line-height: 1.5rem;
+
+  @media (width >= 40rem) {
+    width: 50svw;
+    height: 50svw;
+  }
+
+  @media (width >= 48rem) {
+    width: 40dvw;
+    height: 40dvw;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+
+  @media (width >= 64rem) {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    cursor: default;
+  }
+}
+
+.message {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+  height: 50%;
+  padding-bottom: 1rem;
+  overflow: auto;
+  text-align: center;
+
+  &:lang(en) {
+    font-family: var(--font-montserrat);
+  }
+
+  &:lang(he) {
+    font-family: var(--font-varela-round-regular);
+  }
+
+  @media (width >= 64rem) {
+    align-items: center;
+  }
+}
+
+.details {
+  display: flex;
+  width: 100%;
+  height: 50%;
+  padding-top: 1rem;
+  overflow: auto;
+  border-top: 1px solid;
+  border-color: #fff;
+}
+
+.detailsFound {
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.detailsNotFound {
+  align-items: center;
+  justify-content: center;
+}

@@ -1,0 +1,143 @@
+.listItem {
+  width: 100%;
+}
+
+.languageButton {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  outline-style: none;
+
+  @media (forced-colors: active) {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+
+  &[data-current-locale="false"] {
+    color: #fff;
+  }
+
+  &[data-current-locale="true"] {
+    color: var(--color-title-purple);
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      background-color: rgb(255 255 255 / 30%);
+    }
+  }
+
+  &:focus {
+    background-color: rgb(255 255 255 / 30%);
+  }
+
+  &:active {
+    background-color: rgb(255 255 255 / 50%);
+  }
+}
+
+.languagesList {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100svw;
+  padding-bottom: 1rem;
+  background-color: rgb(0 0 0 / 70%);
+  color: #fff;
+
+  &:lang(en) {
+    font-family: var(--font-montserrat);
+  }
+
+  &:lang(he) {
+    font-family: var(--font-varela-round-regular);
+  }
+
+  @media (width >= 40rem) {
+    width: 50svw;
+  }
+
+  @media (width >= 48rem) {
+    width: 25svw;
+  }
+}
+
+.dialogTitle {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Same look as the side links (see SideLinks.module.css) */
+.iconButton {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 9999px;
+  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  @media (hover: hover) {
+    &:hover {
+      scale: 1.5;
+    }
+  }
+
+  &:focus,
+  &:active {
+    scale: 1.5;
+  }
+
+  @media (width >= 40rem) {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  @media (width >= 48rem) {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  @media (width >= 64rem) {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+
+  @media (width >= 80rem) {
+    width: 4rem;
+    height: 4rem;
+  }
+
+  @media (width >= 96rem) {
+    width: 4.5rem;
+    height: 4.5rem;
+  }
+}
+
+.icon {
+  width: 100%;
+  height: 100%;
+  fill: var(--color-title-purple);
+
+  @media (hover: hover) {
+    button:hover & {
+      fill: #fff;
+    }
+  }
+
+  button:focus & {
+    fill: var(--color-title-purple);
+  }
+
+  button:active & {
+    fill: var(--color-title-purple-dark);
+  }
+}

@@ -1,5 +1,6 @@
 import { MainTitleProps } from "@constants/interfaces";
 import Border from "@components/shared/title/Border";
+import styles from "./Title.module.css";
 
 export default function Title({
   children,
@@ -9,22 +10,20 @@ export default function Title({
   variant = "mainTitle",
   topLabel,
   bottomLabel,
-  animationClassName = "title-typing-animation",
-  subtitleFontClassName = "info-text-font-classNames",
+  isDelayedAnimation,
   isRightLabelBlink,
 }: MainTitleProps) {
-  const selectedVariantClassName = {
-    mainTitle: "text-transparent main-title-font-classNames purple-text-stroke",
-    subtitle: `text-white text-2xl sm:text-5xl xl:text-7xl ${subtitleFontClassName}`,
-  };
+  const animationClassName = isDelayedAnimation
+    ? styles.delayedTyping
+    : styles.typing;
 
   return (
-    <div className={`center-elements flex-col ${className}`}>
+    <div className={`${styles.wrapper} ${className}`}>
       {border && (
         <Border isTextBlink={isRightLabelBlink} rightLabel={topLabel} />
       )}
       <Component
-        className={`py-2 sm:py-4 px-2 uppercase drop-shadow-purple-glow sm:drop-shadow-purple-glow-sm text-center ${animationClassName} ${selectedVariantClassName[variant]}`}
+        className={`${styles.title} ${animationClassName} ${styles[variant]}`}
       >
         {children}
       </Component>

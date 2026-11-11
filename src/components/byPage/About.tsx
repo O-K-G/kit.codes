@@ -2,6 +2,7 @@ import Section from "@components/shared/Section";
 import ExpandableButton from "@components/shared/expandableButton/ExpandableButton";
 import Title from "@components/shared/title/Title";
 import { useTranslations } from "next-intl";
+import styles from "./About.module.css";
 
 const CURRENT_SECTION = "about";
 
@@ -10,10 +11,10 @@ export default function About() {
 
   return (
     <Section
-      className="relative h-svh lg:h-dvh gap-10 pt-20 md:pt-40"
+      className={styles.section}
       currentSection={CURRENT_SECTION}
     >
-      <header className="mt-8 sm:mt-0">
+      <header className={styles.header}>
         <Title
           component="h1"
           border
@@ -25,7 +26,7 @@ export default function About() {
         </Title>
       </header>
 
-      <Title animationClassName="delayed-subtitle-animation">
+      <Title isDelayedAnimation>
         {t("subtitle")}
       </Title>
 

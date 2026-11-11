@@ -1,4 +1,5 @@
 import "@locale/globals.css";
+import styles from "./layout.module.css";
 import { Metadata, Viewport } from "next";
 import { CACHE_VERSION } from "@root/postcss.config.mjs";
 import handleFontsByLocale from "@utils/handleFontsByLocale";
@@ -75,7 +76,7 @@ export default async function RootLayout({
     <html dir={dir} lang={selectedLocale}>
       <NextIntlClientProvider>
         <body
-          className={`has-[dialog[data-open=true]]:overflow-hidden has-[main_aside[data-open=true]]:overflow-hidden ${mainTitle} ${borderTitle} ${infoText} ${regularText} ${shenanigansText}`}
+          className={`${styles.body} ${mainTitle} ${borderTitle} ${infoText} ${regularText} ${shenanigansText}`}
         >
           {children}
         </body>

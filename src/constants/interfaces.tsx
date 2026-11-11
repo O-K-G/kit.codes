@@ -93,7 +93,6 @@ export interface InputComponentProps {
   isError?: boolean;
   bottomSlot?: ReactNode;
   isReset?: boolean;
-  placeholderFontClassName?: string;
   label: string;
 }
 
@@ -223,12 +222,12 @@ export interface MainTitleProps {
   children: ReactNode;
   component?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
   className?: string;
-  animationClassName?: string;
+  /** Starts the typing animation after a 5 seconds delay. */
+  isDelayedAnimation?: boolean;
   border?: boolean;
   variant?: "mainTitle" | "subtitle";
   topLabel?: string;
   bottomLabel?: string;
-  subtitleFontClassName?: string;
   isRightLabelBlink?: boolean;
 }
 

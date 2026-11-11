@@ -9,6 +9,7 @@ import { ModalContext as modalContext } from "@components/shared/ModalContext";
 import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import getDirByLocale from "@utils/getDirByLocale";
+import styles from "./ContactForm.module.css";
 import {
   type FormErrorNames,
   type Fields,
@@ -88,25 +89,21 @@ export default function ContactForm() {
     }
   };
 
-  const isLtr = dir === "ltr" ? "sm:pr-24" : "sm:pl-36";
-  const isRtl = dir === "rtl" ? "sm:pl-36" : "sm:pr-24";
+  const isLtr = dir === "ltr" ? styles.ltrPadding : styles.rtlPadding;
+  const isRtl = dir === "rtl" ? styles.rtlPadding : styles.ltrPadding;
 
   const ltrPaddingClassName = direction === "ltr" ? isLtr : "";
   const rtlPaddingClassName = direction === "rtl" ? isRtl : "";
-  const placeholderFontClassName = {
-    en: "placeholder:font-bebas-neue",
-    he: "placeholder:font-sans placeholder:font-bold",
-  }[locale];
 
   return (
     <form
       dir={dir}
-      className={`w-full center-elements flex-col z-10 mt-2 ${ltrPaddingClassName} ${rtlPaddingClassName}`}
+      className={`${styles.form} ${ltrPaddingClassName} ${rtlPaddingClassName}`}
       action={(formData) => {
         void handleValidation(formData);
       }}
     >
-      <div className="w-full md:w-8/12 flex flex-col justify-center items-start gap-2 sm:gap-10">
+      <div className={styles.fields}>
         {[
           {
             id: EMAIL_ID,
@@ -183,7 +180,6 @@ export default function ContactForm() {
               onChange={onChange}
               onClick={onClick}
               isError={isError}
-              placeholderFontClassName={placeholderFontClassName}
             />
           )
         )}

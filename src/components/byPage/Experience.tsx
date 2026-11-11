@@ -13,10 +13,7 @@ export default function Experience() {
   const t = useTranslations("experience");
 
   return (
-    <Section
-      className="relative h-svh lg:h-dvh pt-20 md:pt-40"
-      currentSection={CURRENT_SECTION}
-    >
+    <Section currentSection={CURRENT_SECTION}>
       <Title border>{t("mainTitle")}</Title>
       <ScrollableSubsection>
             <ScrollableSubsection.Item>

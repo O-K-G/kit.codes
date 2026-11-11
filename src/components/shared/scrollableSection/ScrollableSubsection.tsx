@@ -6,6 +6,7 @@ import { PropsWithId } from "@constants/interfaces";
 import { ScrollableSubsectionItem } from "@components/shared/scrollableSection/ScrollableSubsectionItem";
 import ArrowIconComponent from "@components/icons/ArrowIconComponent";
 import { useTranslations } from "next-intl";
+import styles from "./ScrollableSubsection.module.css";
 
 export const LEFT_BUTTON_TEST_ID = "left-button-test-id";
 export const RIGHT_BUTTON_TEST_ID = "right-button-test-id";
@@ -41,8 +42,8 @@ export default function ScrollableSubsection({
   };
 
   return (
-    <div className="flex justify-center items-end size-full gap-1 z-10">
-      <div className="relative h-full max-h-[80%] w-full">
+    <div className={styles.container}>
+      <div className={styles.buttonWrapper}>
         <IconButton
           data-testid={LEFT_BUTTON_TEST_ID}
           disabled={!selectedSubsection}
@@ -59,19 +60,19 @@ export default function ScrollableSubsection({
               handleScroll({ id, offsetWidth });
             }
           }}
-          className="scrollable-subsection-buttons left-0 ltr:rotate-180 rtl:rotate-0"
+          className={`${styles.navButton} ${styles.previousButton}`}
           aria-label={t("scrollLeft")}
           icon={<ArrowIconComponent />}
         />
       </div>
       <div
         ref={scrollableRef}
-        className="hide-scrollbars snap-x snap-mandatory min-w-[80%] size-full flex items-center justify-start overflow-y-hidden overflow-x-auto"
+        className={styles.scrollable}
       >
         {childrenWithNewProps}
       </div>
 
-      <div className="relative h-full max-h-[80%] w-full">
+      <div className={styles.buttonWrapper}>
         <IconButton
           data-testid={RIGHT_BUTTON_TEST_ID}
           disabled={selectedSubsection + 1 === childrenWithNewProps?.length}
@@ -88,7 +89,7 @@ export default function ScrollableSubsection({
               handleScroll({ id, offsetWidth });
             }
           }}
-          className="scrollable-subsection-buttons right-0 ltr:rotate-0 rtl:rotate-180"
+          className={`${styles.navButton} ${styles.nextButton}`}
           aria-label={t("scrollRight")}
           icon={<ArrowIconComponent />}
         />

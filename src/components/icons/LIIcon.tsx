@@ -1,4 +1,5 @@
 import { IconsProps } from '@constants/interfaces';
+import styles from './LIIcon.module.css';
 
 export default function LIIcon({ className = '' }: IconsProps) {
   return (
@@ -6,7 +7,7 @@ export default function LIIcon({ className = '' }: IconsProps) {
       viewBox="0 0 45 45"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={`shrink-0 ${className}`}
+      className={`${styles.icon} ${className}`}
     >
       <path
         fillRule="evenodd"

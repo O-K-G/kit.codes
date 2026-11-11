@@ -4,9 +4,10 @@ import { SectionProps } from "@constants/interfaces";
 import SectionBackground from "@components/shared/SectionBackground";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
+import styles from "./Section.module.css";
 
 export default function Section({
-  className = "relative min-h-screen h-svh lg:h-dvh pt-20 md:pt-40",
+  className = styles.defaultLayout,
   children,
   currentSection,
 }: SectionProps) {
@@ -32,11 +33,9 @@ export default function Section({
     <section
       data-nosnippet
       ref={sectionRef}
-      className={`bg-black min-h-screen flex flex-col items-center justify-start w-full overflow-hidden px-4 pb-4 ${
-        className ?? ""
-      }`}
+      className={`${styles.section} ${className ?? ""}`}
     >
-      <div className="absolute top-0 bottom-0 left-0 my-auto size-0 opacity-0 overflow-hidden" />
+      <div className={styles.hiddenAnchor} />
       <SectionBackground currentSection={currentSection} />
       {children}
     </section>

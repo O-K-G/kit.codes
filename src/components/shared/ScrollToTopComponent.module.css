@@ -1,0 +1,91 @@
+.position {
+  &:dir(ltr) {
+    left: 0;
+    margin-left: 1rem;
+  }
+
+  &:dir(rtl) {
+    right: 0;
+    margin-right: 1rem;
+  }
+}
+
+.button {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  width: 2.246rem;
+  height: 3rem;
+  padding: 0.125rem;
+  border: 0 solid var(--color-title-purple);
+  border-top-width: 4px;
+  border-radius: 1rem;
+
+  @media (hover: hover) {
+    &:hover {
+      border-color: #fff;
+    }
+  }
+
+  &:focus {
+    border-color: var(--color-title-purple);
+
+    /* Dark circle behind the arrow */
+    &::before {
+      content: "";
+      position: absolute;
+      top: -0.5rem;
+      z-index: -10;
+      width: 125%;
+      height: 125%;
+      border-radius: 9999px;
+      background-color: rgb(0 0 0 / 70%);
+    }
+  }
+
+  &:active {
+    border-color: var(--color-title-purple-dark);
+  }
+
+  @media (width >= 48rem) {
+    width: 2.808rem;
+    height: 3.5rem;
+    border-top-width: 0.3rem;
+    border-radius: 1.5rem;
+  }
+
+  @media (width >= 64rem) {
+    width: 3.369rem;
+    height: 4rem;
+    border-top-width: 0.438rem;
+    border-radius: 9999px;
+  }
+}
+
+.icon {
+  height: 1.25rem;
+  fill: var(--color-title-purple);
+
+  @media (hover: hover) {
+    button:hover & {
+      fill: #fff;
+    }
+  }
+
+  button:focus & {
+    fill: var(--color-title-purple);
+  }
+
+  button:active & {
+    fill: var(--color-title-purple-dark);
+  }
+
+  @media (width >= 48rem) {
+    height: 1.75rem;
+  }
+
+  @media (width >= 64rem) {
+    height: 1.8rem;
+  }
+}

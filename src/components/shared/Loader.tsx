@@ -7,30 +7,28 @@ import {
   LoaderProps,
   LoaderTextProps,
 } from "@constants/interfaces";
+import styles from "./Loader.module.css";
 
 export const LOADER_TEST_ID = "loader-test";
 
 function Cogwheel({
-  sizeClassName = "size-24",
+  sizeClassName = styles.size24,
   children,
-  childrenClassName = "center-elements",
-  bgClassName = "bg-blue-300",
+  childrenClassName = "",
+  bgClassName = styles.blue,
   className = "",
   "data-testid": dataTestId,
 }: CogwheelProps) {
-  const cogwheelClassName =
-    "absolute top-0 bottom-0 left-0 right-0 m-auto size-full rounded-md";
+  const cogwheelClassName = `${styles.cogwheelPart} ${bgClassName}`;
 
   return (
     <div
       data-testid={dataTestId}
-      className={`relative animate-spin ${sizeClassName} ${className}`}
+      className={`${styles.cogwheel} ${sizeClassName} ${className}`}
     >
-      <div className={`${cogwheelClassName} ${bgClassName}`} />
-      <div className={`${cogwheelClassName} ${bgClassName} rotate-45`}>
-        <div
-          className={`size-full bg-black rounded-full center-elements ${childrenClassName}`}
-        >
+      <div className={cogwheelClassName} />
+      <div className={`${cogwheelClassName} ${styles.cogwheelPartRotated}`}>
+        <div className={`${styles.cogwheelCenter} ${childrenClassName}`}>
           {children}
         </div>
       </div>
@@ -40,11 +38,9 @@ function Cogwheel({
 
 function Bolt({ centerPointClassName = "" }: BoltProps) {
   return (
-    <div className="rounded-full bg-blue-200 size-1/3 center-elements">
-      <div className="bg-black rounded-full size-3/4 center-elements p-1">
-        <div
-          className={`bg-white rounded-full size-full ${centerPointClassName}`}
-        />
+    <div className={styles.bolt}>
+      <div className={styles.boltRing}>
+        <div className={`${styles.boltCenter} ${centerPointClassName}`} />
       </div>
     </div>
   );
@@ -53,8 +49,8 @@ function Bolt({ centerPointClassName = "" }: BoltProps) {
 function LoaderText({ label, slot }: LoaderTextProps) {
   if (label ?? slot) {
     return (
-      <div className="flex justify-center items-start flex-col w-full sm:w-auto px-4 sm:px-0">
-        <div className="font-mono w-full text-center text-base sm:text-xl animate-flash-loader-text text-sky-500">
+      <div className={styles.textContainer}>
+        <div className={styles.text}>
           {label}
         </div>
         {slot}
@@ -65,7 +61,7 @@ function LoaderText({ label, slot }: LoaderTextProps) {
 
 function CogwheelsSeparator({ children }: { children: ReactNode }) {
   return (
-    <div className="flex flex-col items-start justify-center">{children}</div>
+    <div className={styles.cogwheelsSeparator}>{children}</div>
   );
 }
 
@@ -106,21 +102,21 @@ export default function Loader({
       data-nosnippet
       onTransitionEnd={() => setIsLoader(false)}
       data-open={!!(isLoderVisible || open)}
-      className="data-[open=false]:opacity-0 data-[open=true]:opacity-100 transition-1000 fixed text-white text-lg center-elements flex-col gap-10 z-50 top-0 left-0 size-full bg-[#111111]"
+      className={styles.loader}
     >
       <Cogwheel
         data-testid={LOADER_TEST_ID}
-        childrenClassName="flex items-start justify-center"
+        childrenClassName={styles.cogwheelCenterTop}
       >
         <CogwheelsSeparator>
           {[
             {
-              bgClassName: "bg-emerald-100",
-              sizeClassName: "size-12",
+              bgClassName: styles.emerald,
+              sizeClassName: styles.size12,
             },
             {
-              bgClassName: "bg-red-200",
-              sizeClassName: "size-10",
+              bgClassName: styles.red,
+              sizeClassName: styles.size10,
             },
           ].map((props: CogwheelProps) => (
             <Cogwheel key={`cog-1-${props.bgClassName}`} {...props}>
@@ -131,14 +127,14 @@ export default function Loader({
         <CogwheelsSeparator>
           {[
             {
-              bgClassName: "bg-pink-200",
-              sizeClassName: "size-16",
-              bolt: <Bolt centerPointClassName="mt-1" />,
+              bgClassName: styles.pink,
+              sizeClassName: styles.size16,
+              bolt: <Bolt centerPointClassName={styles.boltCenterLowered} />,
             },
             {
-              className: "-mt-3",
-              bgClassName: "bg-zinc-400",
-              sizeClassName: "size-8",
+              className: styles.raised,
+              bgClassName: styles.zinc,
+              sizeClassName: styles.size8,
               bolt: <Bolt />,
             },
           ].map(({ bolt, ...props }) => (

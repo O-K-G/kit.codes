@@ -3,6 +3,7 @@ import { useTranslations } from "next-intl";
 import SkillsList from "@components/SkillsList";
 import SideLinks from "@components/shared/SideLinks";
 import Title from "@components/shared/title/Title";
+import styles from "./Skills.module.css";
 
 const CURRENT_SECTION = "skills";
 
@@ -11,17 +12,17 @@ export default function Skills() {
 
   return (
     <Section
-      className="relative h-[200svh] lg:h-[200dvh] pt-20 md:pt-40"
+      className={styles.section}
       currentSection={CURRENT_SECTION}
     >
       <Title
-        className="animate-skills animate-skills-polyfill fixed top-[110vh] row-1 row-1-polyfill"
+        className={`${styles.title} ${styles.mainTitle}`}
         border
       >
         {t("mainTitle")}
       </Title>
       <Title
-        className="animate-skills animate-skills-polyfill fixed top-[110vh] row-2 row-2-polyfill"
+        className={`${styles.title} ${styles.subtitle}`}
         variant="subtitle"
       >
         {t("subtitle")}

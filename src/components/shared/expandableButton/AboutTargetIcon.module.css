@@ -1,0 +1,132 @@
+.icon {
+  position: absolute;
+  width: 1.9185rem;
+  height: 1.702rem;
+  overflow: hidden;
+
+  &[data-open="false"] {
+    filter: drop-shadow(0px 0px 0.313rem #b377ff);
+  }
+
+  &[data-open="true"] {
+    filter: drop-shadow(0px 0px 0.313rem #ffffff);
+  }
+
+  @media (width >= 48rem) {
+    width: 3.837rem;
+    height: 3.404rem;
+  }
+}
+
+.topCorner {
+  top: -1.25rem;
+
+  &:dir(ltr) {
+    left: -1.25rem;
+  }
+
+  &:dir(rtl) {
+    right: -1.25rem;
+    rotate: 90deg;
+  }
+}
+
+.bottomCorner {
+  bottom: -1.25rem;
+
+  &:dir(ltr) {
+    right: -1.25rem;
+    rotate: 180deg;
+  }
+
+  &:dir(rtl) {
+    left: -1.25rem;
+    rotate: 270deg;
+  }
+}
+
+/* The corner bracket: a double top/left border, with short bars extending its ends. */
+.bracket {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-style: double;
+  border-top-width: 6px;
+  border-left-width: 6px;
+  transition: all 1000ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    transition: all 1000ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  &::before {
+    top: -0.5rem;
+    right: 0;
+    width: 0.125rem;
+    height: 0.5rem;
+  }
+
+  &::after {
+    bottom: 0;
+    left: -0.5rem;
+    width: 0.5rem;
+    height: 0.125rem;
+  }
+
+  &[data-open="false"] {
+    border-color: #fff;
+
+    &::before,
+    &::after {
+      background-color: #fff;
+    }
+  }
+
+  &[data-open="true"] {
+    border-color: var(--color-title-purple);
+
+    &::before,
+    &::after {
+      background-color: var(--color-title-purple);
+    }
+  }
+
+  /* Highlighted while the expandable button (the icon's parent) is hovered or pressed */
+  &[data-open] {
+    @media (hover: hover) {
+      :is(.icon:hover, :hover > .icon) > & {
+        border-color: oklch(83.7% 0.128 66.29);
+
+        &::before,
+        &::after {
+          background-color: oklch(83.7% 0.128 66.29);
+        }
+      }
+    }
+
+    :is(.icon:active, :active > .icon) > & {
+      border-color: oklch(70.4% 0.191 22.216);
+
+      &::before,
+      &::after {
+        background-color: oklch(70.4% 0.191 22.216);
+      }
+    }
+  }
+
+  @media (width >= 48rem) {
+    border-top-width: 8px;
+    border-left-width: 8px;
+
+    &::before {
+      width: 0.25rem;
+    }
+
+    &::after {
+      height: 0.25rem;
+    }
+  }
+}

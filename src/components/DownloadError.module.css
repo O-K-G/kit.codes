@@ -1,0 +1,51 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  min-width: 100svw;
+  max-width: 100svw;
+  padding: 1rem;
+  background-color: #000;
+  color: #fff;
+
+  @media (width >= 40rem) {
+    min-width: 50svw;
+    max-width: 50svw;
+  }
+
+  @media (width >= 48rem) {
+    min-width: 20dvw;
+    min-height: 20dvw;
+  }
+
+  @media (width >= 64rem) {
+    min-width: 10dvw;
+    min-height: 10dvw;
+    cursor: default;
+  }
+}
+
+.dialogTitle {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+.text {
+  width: 100%;
+  height: 100%;
+  overflow-wrap: break-word;
+  font-family: var(--font-montserrat);
+  font-size: 1rem;
+  line-height: 1.5rem;
+
+  @media (width >= 40rem) {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+
+  @media (width >= 48rem) {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+}

@@ -1,7 +1,0 @@
-.side-links-clickable-elements-size {
-  @apply size-8 sm:size-10 md:size-12 lg:size-14 xl:size-16 2xl:h-[4.5rem] 2xl:w-[4.5rem];
-}
-
-.side-links-icons {
-  @apply fill-title-purple group-hover:fill-white group-active:fill-title-purple-dark group-focus:fill-title-purple size-full;
-}

@@ -1,0 +1,21 @@
+.dialog {
+  min-width: 100vw;
+  min-height: 100vh;
+  background-color: rgb(0 0 0 / 50%);
+
+  &::backdrop {
+    display: none;
+  }
+
+  @media (width >= 64rem) {
+    cursor: pointer;
+  }
+}
+
+.content {
+  position: absolute;
+  inset: 0;
+  width: fit-content;
+  height: fit-content;
+  margin: auto;
+}

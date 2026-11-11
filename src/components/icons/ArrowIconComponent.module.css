@@ -1,0 +1,70 @@
+.container {
+  position: relative;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* Enlarged, translucent copy of the arrow, shown behind it while the button is focused. */
+.focusShadow {
+  position: absolute;
+  inset: 0;
+  z-index: -10;
+  display: none;
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  scale: 1.5;
+  fill: rgb(0 0 0 / 30%);
+
+  button:focus & {
+    display: block;
+  }
+}
+
+.focusShadowFill {
+  fill: rgb(0 0 0 / 30%);
+}
+
+.focusShadowStroke {
+  stroke: rgb(0 0 0 / 30%);
+}
+
+.arrowFill {
+  fill: var(--color-title-purple);
+
+  @media (hover: hover) {
+    button:hover & {
+      fill: #fff;
+    }
+  }
+
+  button:focus & {
+    fill: var(--color-title-purple);
+  }
+
+  button:active & {
+    fill: var(--color-title-purple-dark);
+  }
+}
+
+.arrowStroke {
+  stroke: var(--color-title-purple);
+
+  @media (hover: hover) {
+    button:hover & {
+      stroke: #fff;
+    }
+  }
+
+  button:focus & {
+    stroke: var(--color-title-purple);
+  }
+
+  button:active & {
+    stroke: var(--color-title-purple-dark);
+  }
+}

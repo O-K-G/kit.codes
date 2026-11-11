@@ -1,0 +1,164 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.title {
+  padding: 0.5rem;
+  text-align: center;
+  text-transform: uppercase;
+  filter: drop-shadow(0px 0px 0.125rem #b377ff);
+
+  @media (width >= 40rem) {
+    padding-block: 1rem;
+    filter: drop-shadow(0px 0px 0.313rem #b377ff);
+  }
+}
+
+/* ---- Variants ---- */
+
+.mainTitle {
+  color: transparent;
+  -webkit-text-stroke: 0.125rem #ceb7ff;
+
+  @media screen and (max-width: 640px) {
+    -webkit-text-stroke: 0.07rem #ceb7ff;
+  }
+
+  &:lang(en) {
+    font-family: var(--font-just-in-the-firestorm);
+    font-size: 1rem;
+    line-height: 1.5rem;
+
+    @media (width >= 40rem) {
+      font-size: 1.5rem;
+      line-height: 2rem;
+    }
+
+    @media (width >= 48rem) {
+      font-size: 1.875rem;
+      line-height: 2.25rem;
+    }
+
+    @media (width >= 64rem) {
+      font-size: 2.25rem;
+      line-height: 2.5rem;
+    }
+  }
+
+  &:lang(he) {
+    font-family: var(--font-stop-motion);
+    font-size: 1.5rem;
+    line-height: 2rem;
+    letter-spacing: 0.05em;
+
+    @media (width >= 40rem) {
+      font-size: 1.875rem;
+      line-height: 2.25rem;
+    }
+
+    @media (width >= 48rem) {
+      font-size: 3rem;
+      line-height: 1;
+      letter-spacing: 0em;
+    }
+  }
+}
+
+.subtitle {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  color: #fff;
+
+  &:lang(en) {
+    font-family: var(--font-bebas-neue);
+  }
+
+  &:lang(he) {
+    font-family: var(--font-sans);
+    font-weight: 700;
+  }
+
+  @media (width >= 40rem) {
+    font-size: 3rem;
+    line-height: 1;
+  }
+
+  @media (width >= 80rem) {
+    font-size: 4.5rem;
+    line-height: 1;
+  }
+}
+
+/* ---- Typing animation: the text is revealed from start to end, followed by a blinking caret ---- */
+
+.typing,
+.delayedTyping {
+  margin-inline: 0;
+  margin-block: auto;
+  overflow: clip;
+  white-space: nowrap;
+  opacity: 0%;
+  animation: title-type 3.5s steps(40, end) forwards;
+
+  /* The caret */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 0.5rem;
+    height: 80%;
+    margin-block: auto;
+    animation: typing-caret 0.75s 5;
+
+    @media (width >= 40rem) {
+      width: 0.75rem;
+    }
+
+    @media (width >= 48rem) {
+      width: 1rem;
+    }
+  }
+
+  &:dir(ltr)::before {
+    right: 0;
+  }
+
+  &:dir(rtl)::before {
+    left: 0;
+  }
+}
+
+.delayedTyping {
+  width: 0;
+  animation-delay: 5s;
+
+  &::before {
+    animation-delay: 5s;
+  }
+}
+
+@keyframes title-type {
+  0% {
+    width: 0%;
+    opacity: 100%;
+  }
+
+  100% {
+    width: 100%;
+    opacity: 100%;
+  }
+}
+
+@keyframes typing-caret {
+  0% {
+    background: #ceb7ff;
+  }
+
+  100% {
+    background: transparent;
+  }
+}

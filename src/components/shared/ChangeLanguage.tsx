@@ -12,6 +12,7 @@ import {
   ChangeLanguageProps,
   SelectLanguageButtonProps,
 } from "@constants/interfaces";
+import styles from "./ChangeLanguage.module.css";
 
 function SelectLanguageButton({ label, value }: SelectLanguageButtonProps) {
   const { locale } = useParams() || {};
@@ -21,7 +22,7 @@ function SelectLanguageButton({ label, value }: SelectLanguageButtonProps) {
   const { onCloseModal } = useContext(modalContext);
 
   return (
-    <li className="w-full">
+    <li className={styles.listItem}>
       <button
         data-current-locale={isCurrentLocale}
         onClick={(e) => {
@@ -30,7 +31,7 @@ function SelectLanguageButton({ label, value }: SelectLanguageButtonProps) {
             router.push(pathname.replace(`/${locale as string}`, `/${value}`));
           }
         }}
-        className="data-[current-locale=false]:text-white data-[current-locale=true]:text-title-purple px-4 py-2 hover:bg-white/30 text-center active:bg-white/50 focus:bg-white/30 w-full text-base outline-hidden"
+        className={styles.languageButton}
         type="button"
         value={value}
       >
@@ -45,13 +46,13 @@ function LanguagesList() {
   const { onCloseModal } = useContext(modalContext);
 
   return (
-    <div className="bg-black/70 pb-4 text-white w-svw sm:w-[50svw] md:w-[25svw] center-elements flex-col regular-text-font-by-locale">
+    <div className={styles.languagesList}>
       <DialogTitle
-        className="text-xl"
+        className={styles.dialogTitle}
         label={t("changeLanguage")}
         onClick={onCloseModal}
       />
-      <ul className="center-elements flex-col w-full">
+      <ul className={styles.list}>
         {Object.keys(DIRECTION_BY_LANGUAGE).map((str: string) => (
           <SelectLanguageButton
             key={`${str}-language`}
@@ -71,9 +72,9 @@ export default function ChangeLanguage({ hide }: ChangeLanguageProps) {
   if (!hide) {
     return (
       <IconButton
-        className="rounded-full transition-300 hover:scale-150 active:scale-150 focus:scale-150 side-links-clickable-elements-size"
+        className={styles.iconButton}
         onClick={() => setModalContent(<LanguagesList />)}
-        icon={<LanguageIcon className="side-links-icons" />}
+        icon={<LanguageIcon className={styles.icon} />}
         aria-label={t("changeLanguage")}
       />
     );
