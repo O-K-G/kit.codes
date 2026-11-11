@@ -12,29 +12,18 @@
   }
 }
 
-/* The titles slide from below the viewport to their own --top-var position, driven by the scroll position.
- * Browsers without `animation-timeline` support get a paused animation whose delay is driven by the --scroll variable. */
+/* The titles slide from below the viewport to their own --top-var position, driven by the scroll position. */
 .title {
   position: fixed;
   top: 110vh;
 
   @media (prefers-reduced-motion: no-preference) {
-    @supports (animation-timeline: view()) {
-      animation-fill-mode: forwards;
-      animation-timing-function: linear;
-      animation-timeline: view();
-      animation-range-start: 0;
-      animation-range-end: 200svh;
-      animation-name: skills;
-    }
-
-    @supports not (animation-timeline: view()) {
-      animation-duration: 1s;
-      animation-fill-mode: forwards;
-      animation-timing-function: linear;
-      animation-play-state: paused;
-      animation-name: skills;
-    }
+    animation-fill-mode: forwards;
+    animation-timing-function: linear;
+    animation-timeline: view();
+    animation-range-start: 0;
+    animation-range-end: 200svh;
+    animation-name: skills;
   }
 
   @media screen and (min-width: 1024px) {
@@ -49,10 +38,6 @@
     @media screen and (min-width: 1024px) {
       --top-var: 12dvh;
     }
-
-    @supports not (animation-timeline: view()) {
-      animation-delay: calc(var(--scroll) * -4s);
-    }
   }
 
   .subtitle {
@@ -60,10 +45,6 @@
 
     @media screen and (min-width: 1024px) {
       --top-var: 25dvh;
-    }
-
-    @supports not (animation-timeline: view()) {
-      animation-delay: calc(var(--scroll) * -3.75s);
     }
   }
 }

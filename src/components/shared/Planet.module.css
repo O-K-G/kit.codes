@@ -17,8 +17,7 @@
   }
 }
 
-/* Rotates according to the page's scroll position.
- * Browsers without `animation-timeline` support get a paused animation whose delay is driven by the --scroll variable. */
+/* Rotates according to the page's scroll position. */
 .rotator {
   display: flex;
   align-items: center;
@@ -42,19 +41,8 @@
 
   @media (prefers-reduced-motion: no-preference) {
     animation-name: rotate;
-
-    @supports (animation-timeline: scroll()) {
-      animation-timing-function: linear;
-      animation-timeline: scroll();
-    }
-
-    @supports not (animation-timeline: scroll()) {
-      animation-fill-mode: forwards;
-      animation-timing-function: linear;
-      animation-duration: 1s;
-      animation-delay: calc(var(--scroll) * -1s);
-      animation-play-state: paused;
-    }
+    animation-timing-function: linear;
+    animation-timeline: scroll();
   }
 }
 

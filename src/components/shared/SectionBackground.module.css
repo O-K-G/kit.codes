@@ -11,8 +11,7 @@
   min-height: 100%;
 }
 
-/* Zooms in according to the page's scroll position.
- * Browsers without `animation-timeline` support get a paused animation whose delay is driven by the --scroll variable. */
+/* Zooms in according to the page's scroll position. */
 .image {
   position: fixed;
   bottom: 0;
@@ -26,19 +25,8 @@
   @media (prefers-reduced-motion: no-preference) {
     animation-name: background-scale;
     scale: 1;
-
-    @supports (animation-timeline: scroll()) {
-      animation-timing-function: linear;
-      animation-timeline: scroll();
-    }
-
-    @supports not (animation-timeline: scroll()) {
-      animation-fill-mode: forwards;
-      animation-timing-function: linear;
-      animation-duration: 1s;
-      animation-delay: calc(var(--scroll) * -1s);
-      animation-play-state: paused;
-    }
+    animation-timing-function: linear;
+    animation-timeline: scroll();
   }
 }
 

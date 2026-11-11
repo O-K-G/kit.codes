@@ -1,5 +1,4 @@
-/* Each row slides from below the viewport to its own --top-var position, driven by the scroll position.
- * Browsers without `animation-timeline` support get a paused animation whose delay is driven by the --scroll variable. */
+/* Each row slides from below the viewport to its own --top-var position, driven by the scroll position. */
 .row {
   position: fixed;
   top: 110vh;
@@ -12,22 +11,12 @@
   padding-inline: 1rem;
 
   @media (prefers-reduced-motion: no-preference) {
-    @supports (animation-timeline: view()) {
-      animation-fill-mode: forwards;
-      animation-timing-function: linear;
-      animation-timeline: view();
-      animation-range-start: 0;
-      animation-range-end: 200svh;
-      animation-name: skills;
-    }
-
-    @supports not (animation-timeline: view()) {
-      animation-duration: 1s;
-      animation-fill-mode: forwards;
-      animation-timing-function: linear;
-      animation-play-state: paused;
-      animation-name: skills;
-    }
+    animation-fill-mode: forwards;
+    animation-timing-function: linear;
+    animation-timeline: view();
+    animation-range-start: 0;
+    animation-range-end: 200svh;
+    animation-name: skills;
   }
 
   @media screen and (min-width: 1024px) {
@@ -54,10 +43,6 @@
     @media screen and (min-width: 1024px) {
       --top-var: 37dvh;
     }
-
-    @supports not (animation-timeline: view()) {
-      animation-delay: calc(var(--scroll) * -3.5s);
-    }
   }
 
   .row2 {
@@ -69,10 +54,6 @@
 
     @media screen and (min-width: 1024px) {
       --top-var: 49dvh;
-    }
-
-    @supports not (animation-timeline: view()) {
-      animation-delay: calc(var(--scroll) * -3.25s);
     }
   }
 
@@ -86,10 +67,6 @@
     @media screen and (min-width: 1024px) {
       --top-var: 61dvh;
     }
-
-    @supports not (animation-timeline: view()) {
-      animation-delay: calc(var(--scroll) * -3s);
-    }
   }
 
   .row4 {
@@ -102,10 +79,6 @@
     @media screen and (min-width: 1024px) {
       --top-var: 73dvh;
     }
-
-    @supports not (animation-timeline: view()) {
-      animation-delay: calc(var(--scroll) * -2.75s);
-    }
   }
 
   .mobileRow {
@@ -117,10 +90,6 @@
 
     @media screen and (min-width: 1024px) {
       --top-var: 85dvh;
-    }
-
-    @supports not (animation-timeline: view()) {
-      animation-delay: calc(var(--scroll) * -2.5s);
     }
   }
 }

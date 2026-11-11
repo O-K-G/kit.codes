@@ -9,23 +9,12 @@
   margin-bottom: 1rem;
   transition: all 1000ms cubic-bezier(0.4, 0, 0.2, 1);
 
-  /* Fades in/out according to the page's scroll position.
-   * Browsers without `animation-timeline` support get a paused animation whose delay is driven by the --scroll variable. */
+  /* Fades in/out according to the page's scroll position. */
   &[data-hide-on-scroll="true"],
   &[data-show-on-scroll="true"] {
     @media (prefers-reduced-motion: no-preference) {
-      @supports (animation-timeline: scroll()) {
-        animation-timing-function: linear;
-        animation-timeline: scroll();
-      }
-
-      @supports not (animation-timeline: scroll()) {
-        animation-fill-mode: forwards;
-        animation-timing-function: linear;
-        animation-duration: 1s;
-        animation-delay: calc(var(--scroll) * -1s);
-        animation-play-state: paused;
-      }
+      animation-timing-function: linear;
+      animation-timeline: scroll();
     }
   }
 
