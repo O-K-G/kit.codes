@@ -1,9 +1,9 @@
 'use client';
 
-import Loader from '@components/shared/Loader';
+import Loader from '@ui/loader/Loader';
 import { useEffect } from 'react';
-import ProgressIcon from '@components/contactForm/ProgressIcon';
-import IconButton from '@components/shared/IconButton';
+import ProgressIcon from '@ui/icons/ProgressIcon';
+import IconButton from '@ui/iconButton/IconButton';
 import { useTranslations } from 'next-intl';
 import styles from './error.module.css';
 
