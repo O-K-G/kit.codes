@@ -16,8 +16,8 @@ export default function SectionScrollAnchor({
 
   useEffect(() => {
     if (pathname.includes(currentSection)) {
+      // Smooth only when motion is allowed: follows the html's scroll-behavior (globals.css).
       anchorRef.current?.parentElement?.scrollIntoView({
-        behavior: "smooth",
         block: "start",
         inline: "start",
       });

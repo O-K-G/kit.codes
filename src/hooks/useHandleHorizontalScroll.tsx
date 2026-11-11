@@ -15,10 +15,10 @@ export default function useHandleHorizontalScroll() {
     const dir = getDirByLocale({ locale });
     const numByDir = dir === 'ltr' ? num : -num;
 
+    // Smooth only when motion is allowed: follows the container's scroll-behavior (CSS).
     scrollableRef.current?.scrollTo({
       top: 0,
       left: numByDir,
-      behavior: 'smooth',
     });
   };
 

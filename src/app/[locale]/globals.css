@@ -256,6 +256,22 @@
   }
 }
 
+/* Reduced motion: every animation and transition jumps to its end state instead of being removed,
+ * so content revealed by an animation (e.g. the typing titles) still shows up, and logic that waits
+ * for animationend/transitionend (the loader, the contact aside) still runs. Scroll-driven
+ * animations and smooth scrolling are opted in under (prefers-reduced-motion: no-preference) instead. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+  }
+}
+
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
