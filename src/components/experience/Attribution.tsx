@@ -1,3 +1,5 @@
+"use client";
+
 import { useContext } from "react";
 import { ModalContext as modalContext } from "@ui/modalContext/ModalContext";
 import { useTranslations } from "next-intl";

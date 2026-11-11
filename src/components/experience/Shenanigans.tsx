@@ -1,3 +1,5 @@
+"use client";
+
 import { useTranslations } from "next-intl";
 import { ModalContext as modalContext } from "@ui/modalContext/ModalContext";
 import DialogTitle from "@ui/dialog/DialogTitle";

@@ -209,11 +209,6 @@ export interface ContactGoBackButtonProps {
   className?: string;
 }
 
-export interface ContactProps {
-  onClick: () => void;
-  open: boolean;
-}
-
 export interface ExpandableButtonProps {
   alternativeLabel: string;
 }

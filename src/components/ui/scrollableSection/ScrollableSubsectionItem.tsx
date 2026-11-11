@@ -1,3 +1,5 @@
+'use client';
+
 import { useRef } from 'react';
 import useObserveScrollSubsection from '@hooks/useObserveScrollSubsection';
 import { ScrollableSubsectionItemProps } from '@constants/interfaces';

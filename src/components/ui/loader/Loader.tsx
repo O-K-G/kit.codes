@@ -1,6 +1,5 @@
-"use client";
-
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode } from "react";
+import LoaderVisibility from "@ui/loader/LoaderVisibility";
 import {
   BoltProps,
   CogwheelProps,
@@ -70,40 +69,8 @@ export default function Loader({
   label,
   loaderTextAdditionalSlot,
 }: LoaderProps) {
-  const [isLoderVisible, setIsLoderVisible] = useState(true);
-  const [isLoader, setIsLoader] = useState(true);
-
-  useEffect(() => {
-    const onLoad = () => {
-      if (isLoderVisible) {
-        setIsLoderVisible(false);
-      }
-    };
-
-    if (isLoader) {
-      if (document.readyState === "complete") {
-        onLoad();
-      } else {
-        window.addEventListener("load", onLoad);
-      }
-
-      return () => {
-        window.removeEventListener("load", onLoad);
-      };
-    }
-  }, [isLoader, isLoderVisible]);
-
-  if (!isLoader && !open) {
-    return null;
-  }
-
   return (
-    <div
-      data-nosnippet
-      onTransitionEnd={() => setIsLoader(false)}
-      data-open={!!(isLoderVisible || open)}
-      className={styles.loader}
-    >
+    <LoaderVisibility open={open} className={styles.loader}>
       <Cogwheel
         data-testid={LOADER_TEST_ID}
         childrenClassName={styles.cogwheelCenterTop}
@@ -145,6 +112,6 @@ export default function Loader({
         </CogwheelsSeparator>
       </Cogwheel>
       <LoaderText label={label} slot={loaderTextAdditionalSlot} />
-    </div>
+    </LoaderVisibility>
   );
 }

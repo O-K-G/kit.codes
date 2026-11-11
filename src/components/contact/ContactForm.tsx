@@ -1,3 +1,5 @@
+"use client";
+
 import InputComponent from "@components/contact/InputComponent";
 import { useState, useContext } from "react";
 import { handleSubmit } from "@utils/handleSubmit";

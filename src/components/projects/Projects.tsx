@@ -1,5 +1,3 @@
-"use client";
-
 import Section from "@ui/section/Section";
 import { useTranslations } from "next-intl";
 import ScrollableSubsection from "@ui/scrollableSection/ScrollableSubsection";

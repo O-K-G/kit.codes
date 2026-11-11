@@ -1,7 +1,6 @@
 import { useTranslations } from 'next-intl';
 import FixedBottomComponent from '@components/experience/FixedBottomComponent';
-import IconButton from '@ui/iconButton/IconButton';
-import ArrowUpIcon from '@components/experience/ArrowUpIcon';
+import ScrollToTopButton from '@components/experience/ScrollToTopButton';
 import styles from './ScrollToTopComponent.module.css';
 
 export default function ScrollToTopComponent() {
@@ -13,19 +12,7 @@ export default function ScrollToTopComponent() {
       className={styles.position}
       label={t('scrollToTop')}
     >
-      <IconButton
-        aria-label={t('scrollToTop')}
-        icon={
-          <ArrowUpIcon />
-        }
-        onClick={() => {
-          window.scrollTo({
-            top: 0,
-            left: 0,
-            behavior: 'smooth',
-          });
-        }}
-      />
+      <ScrollToTopButton label={t('scrollToTop')} />
     </FixedBottomComponent>
   );
 }

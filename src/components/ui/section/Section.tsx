@@ -1,41 +1,31 @@
-"use client";
-
 import { SectionProps } from "@constants/interfaces";
 import SectionBackground from "@ui/sectionBackground/SectionBackground";
-import { usePathname } from "next/navigation";
-import { useEffect, useRef } from "react";
+import SectionScrollAnchor from "@ui/section/SectionScrollAnchor";
 import styles from "./Section.module.css";
+
+const SCROLLABLE_SECTIONS = ["about", "skills", "experience", "projects"];
 
 export default function Section({
   className = styles.defaultLayout,
   children,
   currentSection,
 }: SectionProps) {
-  const pathname = usePathname();
-  const sectionRef = useRef(null);
-
-  useEffect(() => {
-    const isScroll =
-      ["about", "skills", "experience", "projects"].includes(
-        currentSection as string
-      ) && pathname.includes(currentSection as string);
-
-    if (isScroll) {
-      (sectionRef.current as unknown as HTMLElement).scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-        inline: "start",
-      });
-    }
-  }, [currentSection, pathname]);
+  const isScrollable =
+    !!currentSection && SCROLLABLE_SECTIONS.includes(currentSection);
 
   return (
     <section
       data-nosnippet
-      ref={sectionRef}
       className={`${styles.section} ${className ?? ""}`}
     >
-      <div className={styles.hiddenAnchor} />
+      {isScrollable ? (
+        <SectionScrollAnchor
+          currentSection={currentSection}
+          className={styles.hiddenAnchor}
+        />
+      ) : (
+        <div className={styles.hiddenAnchor} />
+      )}
       <SectionBackground currentSection={currentSection} />
       {children}
     </section>
