@@ -9,7 +9,7 @@ import styles from "./ExpandableContent.module.css";
 const IN_VIEW_THRESHOLD = 0.5;
 
 /**
- * A box that reveals its text by itself: once in view, a gauge fills clockwise (green to red), then the
+ * A box that reveals its text by itself: once in view, a gauge fills clockwise (purple to red), then the
  * box expands and shows the text. Not interactive.
  *
  * Accessibility: the text is in the DOM from the start (only visually hidden while the gauge runs), so
@@ -44,7 +44,13 @@ export default function ExpandableContent({ text }: ExpandableContentProps) {
       <div ref={boxRef} className={styles.box} data-open={open}>
         <AboutTargetIcon open={open} />
         <div aria-hidden className={styles.gauge}>
-          <div className={styles.gaugeTrack}>
+          <div className={`${styles.gaugeRing} ${styles.gaugeTrack}`} />
+          <div className={styles.gaugeGlow} data-running={inView}>
+            <div className={styles.gaugeRing}>
+              <div className={styles.gaugeFill} data-running={inView} />
+            </div>
+          </div>
+          <div className={styles.gaugeRing}>
             <div
               className={styles.gaugeFill}
               data-running={inView}

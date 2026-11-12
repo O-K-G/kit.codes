@@ -27,7 +27,7 @@ beforeEach(() => {
 
 function renderContent() {
   const { container } = render(<ExpandableContent text={TEXT} />);
-  const gaugeFill = container.querySelector(`.${styles.gaugeFill}`) as HTMLElement;
+  const gaugeFill = container.querySelector(`.${styles.gauge} > .${styles.gaugeRing} > .${styles.gaugeFill}`) as HTMLElement;
   const content = screen.getByText(TEXT).parentElement as HTMLElement;
   return { container, gaugeFill, content };
 }
