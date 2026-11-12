@@ -6,11 +6,12 @@ import AsideOpenContent from "@components/contact/AsideOpenContent";
 import ContactCloseButton from "@components/contact/ContactCloseButton";
 import Title from "@ui/title/Title";
 import SectionBackground from "@ui/sectionBackground/SectionBackground";
+import { ActiveSectionProps } from "@constants/interfaces";
 import styles from "./Contact.module.css";
 
 const CURRENT_SECTION = "contact";
 
-export default function Contact() {
+export default function Contact({ activeSection }: ActiveSectionProps) {
   const t = useTranslations("contact");
 
   return (
@@ -18,6 +19,7 @@ export default function Contact() {
       <SectionBackground
         minHeightClassName={styles.background}
         currentSection={CURRENT_SECTION}
+        priority={activeSection === CURRENT_SECTION}
       />
       <AsideOpenContent>
         <ContactCloseButton className={styles.goBackButton}>

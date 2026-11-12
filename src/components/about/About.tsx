@@ -1,3 +1,4 @@
+import { ActiveSectionProps } from "@constants/interfaces";
 import Section from "@ui/section/Section";
 import ExpandableButton from "@ui/expandableButton/ExpandableButton";
 import Title from "@ui/title/Title";
@@ -6,13 +7,14 @@ import styles from "./About.module.css";
 
 const CURRENT_SECTION = "about";
 
-export default function About() {
+export default function About({ activeSection }: ActiveSectionProps) {
   const t = useTranslations("about");
 
   return (
     <Section
       className={styles.section}
       currentSection={CURRENT_SECTION}
+      activeSection={activeSection}
     >
       <header>
         <Title

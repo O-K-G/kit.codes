@@ -1,3 +1,4 @@
+import { ActiveSectionProps } from "@constants/interfaces";
 import Section from "@ui/section/Section";
 import { useTranslations } from "next-intl";
 import ScrollableSubsection from "@ui/scrollableSection/ScrollableSubsection";
@@ -6,11 +7,11 @@ import Title from "@ui/title/Title";
 
 const CURRENT_SECTION = "projects";
 
-export default function Projects() {
+export default function Projects({ activeSection }: ActiveSectionProps) {
   const t = useTranslations("projects");
 
   return (
-    <Section currentSection={CURRENT_SECTION}>
+    <Section currentSection={CURRENT_SECTION} activeSection={activeSection}>
       <Title border>{t("mainTitle")}</Title>
       <ScrollableSubsection>
         <ScrollableSubsection.Item>

@@ -36,11 +36,24 @@ export interface DialogTitleProps {
   closeButtonIcon?: ReactNode;
 }
 
+export type SectionName = "about" | "projects" | "skills" | "experience" | "contact";
+
+/** The section the current route points at (e.g. /en/skills): its background is fetched first. */
+export interface ActiveSectionProps {
+  activeSection?: SectionName;
+}
+
 export interface CurrentSection {
-  currentSection?: "about" | "projects" | "skills" | "experience" | "contact";
+  currentSection?: SectionName;
   minHeightClassName?: string;
 }
-export interface SectionProps extends CurrentSection {
+
+export interface SectionBackgroundProps extends CurrentSection {
+  /** Fetched with high priority, and the loader waits for it. */
+  priority?: boolean;
+}
+
+export interface SectionProps extends CurrentSection, ActiveSectionProps {
   children: ReactNode;
   className?: string;
 }

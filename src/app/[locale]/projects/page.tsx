@@ -1,5 +1,5 @@
-import Home from '@locale/page';
+import Home from '@components/home/Home';
 
 export default function ProjectsPage() {
-  return <Home />;
+  return <Home activeSection="projects" />;
 }

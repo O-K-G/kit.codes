@@ -9,6 +9,7 @@ export default function Section({
   className = styles.defaultLayout,
   children,
   currentSection,
+  activeSection,
 }: SectionProps) {
   const isScrollable =
     !!currentSection && SCROLLABLE_SECTIONS.includes(currentSection);
@@ -26,7 +27,10 @@ export default function Section({
       ) : (
         <div className={styles.hiddenAnchor} />
       )}
-      <SectionBackground currentSection={currentSection} />
+      <SectionBackground
+        currentSection={currentSection}
+        priority={!!currentSection && currentSection === activeSection}
+      />
       {children}
     </section>
   );
