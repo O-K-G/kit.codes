@@ -15,7 +15,8 @@
   height: 100%;
   min-height: 0;
   max-height: 80%;
-  padding: 1.5rem;
+  /* Room for the corner brackets (see AboutTargetIcon), which sit outside the square */
+  padding: calc(1.5 * var(--fluid-rem));
   container-type: size;
 
   @media (width >= 40rem) {
@@ -119,28 +120,28 @@
 
         &:lang(en) {
           font-family: var(--font-just-in-the-firestorm);
-          font-size: clamp(0.875rem, min(0.25rem + 3.125vw, 1.3462rem + 0.3846vw), 2.1875rem);
-          line-height: max(1.25rem, 0.8333em);
+          font-size: max(0.875rem, min(0.25rem + 3.125vw, 1.3462rem + 0.3846vw), 1.5923 * var(--desktop-rem));
+          line-height: max(calc(1.25 * var(--fluid-rem)), 0.8333em);
         }
 
         &:lang(he) {
           font-family: var(--font-stop-motion);
-          font-size: clamp(1.125rem, min(0.375rem + 3.75vw, 1.6652rem + 0.5245vw), 2.8125rem);
-          line-height: max(1.75rem, 0.9333em);
+          font-size: max(1.125rem, min(0.375rem + 3.75vw, 1.6652rem + 0.5245vw), 2.0009 * var(--desktop-rem));
+          line-height: max(calc(1.75 * var(--fluid-rem)), 0.9333em);
           letter-spacing: 0.05em;
         }
 
         @media (width >= 40rem) {
           &:lang(en),
           &:lang(he) {
-            line-height: 3.5rem !important;
+            line-height: calc(3.5 * var(--fluid-rem)) !important;
           }
         }
 
         @media (width >= 48rem) {
           &:lang(en),
           &:lang(he) {
-            font-size: 2.25rem;
+            font-size: calc(2.25 * var(--fluid-rem));
           }
         }
       }
@@ -150,8 +151,8 @@
         padding: 0.5rem;
         overflow-y: auto;
         text-align: center;
-        font-size: clamp(1rem, min(0.75rem + 1.25vw, 0.9703rem + 0.6993vw), 2.5rem);
-        line-height: clamp(1.5rem, min(1.25rem + 1.25vw, 1.3024rem + 1.1189vw), 3.75rem);
+        font-size: max(1rem, min(0.75rem + 1.25vw, 0.9703rem + 0.6993vw), 1.4179 * var(--desktop-rem));
+        line-height: max(1.5rem, min(1.25rem + 1.25vw, 1.3024rem + 1.1189vw), 2.0185 * var(--desktop-rem));
         align-items: flex-start;
         border-color: #fff;
         overflow-wrap: break-word;

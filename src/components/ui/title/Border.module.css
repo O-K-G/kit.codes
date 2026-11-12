@@ -2,11 +2,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
+  gap: calc(0.75 * var(--fluid-rem));
   width: 100%;
-  height: clamp(0.75rem, 0.6997rem + 0.2516vw, 1.25rem);
-  padding-inline: 0.385rem;
-  font-size: clamp(0.875rem, min(0.5909rem + 1.4205vw, 1.2157rem + 0.4443vw), 2.1875rem);
+  height: max(0.75rem, 0.6997rem + 0.2516vw, 0.8607 * var(--desktop-rem));
+  padding-inline: calc(0.385 * var(--fluid-rem));
+  font-size: max(0.875rem, min(0.5909rem + 1.4205vw, 1.2157rem + 0.4443vw), 1.5 * var(--desktop-rem));
   line-height: 1;
   color: var(--color-title-purple);
   text-transform: uppercase;
@@ -20,12 +20,12 @@
     width: 100%;
     height: 100%;
     border: 1.5px solid var(--color-title-purple);
-    filter: drop-shadow(0px 0px 0.09rem #b377ff);
+    filter: drop-shadow(0px 0px calc(0.09 * var(--fluid-rem)) #b377ff);
   }
 
   > span {
     &:lang(en) {
-      padding-top: 0.1rem;
+      padding-top: calc(0.1 * var(--fluid-rem));
       font-family: var(--font-star-date-81316);
       font-size: 135%;
       line-height: 135%;
@@ -37,7 +37,7 @@
     }
 
     &:lang(he) {
-      padding-bottom: 0.125rem;
+      padding-bottom: calc(0.125 * var(--fluid-rem));
       font-family: var(--font-karantina-regular);
       font-size: 130%;
       line-height: 130%;

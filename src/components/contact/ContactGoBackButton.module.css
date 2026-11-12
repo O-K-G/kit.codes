@@ -2,8 +2,8 @@
   top: 0;
   z-index: 10;
   margin-top: 1rem;
-  font-size: clamp(1.5rem, 0.75rem + 3.75vw, 3.75rem);
-  line-height: clamp(1.5rem, 0.75rem + 3.75vw, 3.75rem);
+  font-size: max(1.5rem, 0.75rem + 3.75vw, 3.15 * var(--desktop-rem));
+  line-height: max(1.5rem, 0.75rem + 3.75vw, 3.15 * var(--desktop-rem));
   color: #fff;
   text-transform: uppercase;
   outline-style: none;
@@ -42,7 +42,7 @@
 
   /* Hebrew line heights - more specific, so they win at every breakpoint. */
   &:lang(he) {
-    line-height: clamp(1rem, min(0.2857rem + 3.5714vw, 1.8594rem + 0.2928vw), 2.5rem);
+    line-height: max(1rem, min(0.2857rem + 3.5714vw, 1.8594rem + 0.2928vw), 2.0468 * var(--desktop-rem));
   }
 }
 

@@ -41,8 +41,8 @@
 
   .subtitle {
     text-align: center;
-    font-size: 1.875rem;
-    line-height: 2.25rem;
+    font-size: calc(1.875 * var(--fluid-rem));
+    line-height: calc(2.25 * var(--fluid-rem));
 
     &:lang(en) {
       font-family: var(--font-bebas-neue);

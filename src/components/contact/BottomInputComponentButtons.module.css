@@ -27,8 +27,8 @@
       position: relative;
       height: 100%;
       padding: 0.5rem;
-      font-size: clamp(1.25rem, min(0.625rem + 3.125vw, 1.5953rem + 0.6993vw), 3.125rem);
-      line-height: clamp(1.75rem, min(1.25rem + 2.5vw, 1.7745rem + 1.1888vw), 4.375rem);
+      font-size: max(1.25rem, min(0.625rem + 3.125vw, 1.5953rem + 0.6993vw), 2.0429 * var(--desktop-rem));
+      line-height: max(1.75rem, min(1.25rem + 2.5vw, 1.7745rem + 1.1888vw), 2.5353 * var(--desktop-rem));
       text-transform: uppercase;
       outline-style: none;
 

@@ -25,13 +25,14 @@
 
     @media (width >= 48rem) {
       width: 25%;
-      max-width: 6rem;
+      max-width: calc(6 * var(--fluid-rem));
     }
 
     > label {
-      width: clamp(3rem, 2.6981rem + 1.5094vw, 6rem);
-      font-size: clamp(0.875rem, min(5vw - 0.125rem, 1.8051rem + 0.1748vw), 2.1875rem);
-      line-height: clamp(1.25rem, min(0.25rem + 5vw, 2.0542rem + 0.4895vw), 3.125rem);
+      /* A minimum, so a longer label (e.g. "CONTENT:") widens instead of running into its field */
+      min-width: max(3rem, 2.6981rem + 1.5094vw, 3.6641 * var(--desktop-rem));
+      font-size: max(0.875rem, min(5vw - 0.125rem, 1.8051rem + 0.1748vw), 1.917 * var(--desktop-rem));
+      line-height: max(1.25rem, min(0.25rem + 5vw, 2.0542rem + 0.4895vw), 2.3675 * var(--desktop-rem));
       text-transform: uppercase;
 
       &:lang(en) {
@@ -61,8 +62,8 @@
 
       .field {
         width: 100%;
-        font-size: clamp(0.875rem, min(0.5rem + 1.875vw, 1.0402rem + 0.5245vw), 2.1875rem);
-        line-height: clamp(1.25rem, min(0.75rem + 2.5vw, 1.4423rem + 0.7692vw), 3.125rem);
+        font-size: max(0.875rem, min(0.5rem + 1.875vw, 1.0402rem + 0.5245vw), 1.3759 * var(--desktop-rem));
+        line-height: max(1.25rem, min(0.75rem + 2.5vw, 1.4423rem + 0.7692vw), 1.9346 * var(--desktop-rem));
         outline-style: none;
 
         @media (forced-colors: active) {
@@ -144,8 +145,8 @@
 
       .counter {
         font-family: var(--font-bebas-neue);
-        font-size: 1rem;
-        line-height: 1.5rem;
+        font-size: var(--fluid-rem);
+        line-height: calc(1.5 * var(--fluid-rem));
       }
     }
   }

@@ -232,14 +232,14 @@
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
     "Liberation Mono", "Courier New", monospace;
 
-  /* Fluid sizes for the graphics (icons, buttons, decorations). The design is set at the start of the
-   * mobile (20rem) and desktop (64rem = 1024px) breakpoints; in between, sizes interpolate between the
-   * two, and from the desktop breakpoint on they keep the ratio they have at 1024px wide.
-   *  --desktop-rem: one rem of the 1024px-wide design, scaled with the viewport (1rem at 1024px). On
-   *    screens wider than 16:9 it follows the height instead, so the graphics still fit.
+  /* Fluid sizes (text, icons, buttons, decorations). The design is set at the start of the mobile
+   * (20rem) and desktop (64rem = 1024px) breakpoints; in between, sizes interpolate between the two, and
+   * from the desktop breakpoint on they keep the ratio to the viewport they have at 1024px wide.
+   *  --desktop-rem: one rem of the 1024px-wide design, scaled with the viewport (1rem at 1024px; 0 below
+   *    the desktop breakpoint). On screens wider than 16:9 it follows the height instead, so content fits.
    *  --fluid-rem: for sizes the design keeps fixed: 1rem up to the desktop breakpoint, then --desktop-rem.
    * Interpolated sizes become max(<mobile size>, <interpolation>, <size at 1024px> * var(--desktop-rem)). */
-  --desktop-rem: min(100vw / 64, 100svh / 36);
+  --desktop-rem: 0px;
   --fluid-rem: max(1rem, var(--desktop-rem));
 
   --color-title-purple: #ceb7ff;
@@ -248,6 +248,12 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+}
+
+@media (width >= 64rem) {
+  :root {
+    --desktop-rem: min(100vw / 64, 100svh / 36);
+  }
 }
 
 @media (prefers-color-scheme: dark) {
