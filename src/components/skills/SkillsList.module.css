@@ -77,7 +77,6 @@
     }
 
     @media (width >= 40rem) {
-      width: 25%;
 
       &:last-child {
         display: flex;

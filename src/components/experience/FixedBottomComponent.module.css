@@ -31,7 +31,6 @@
   }
 
   .label {
-    width: 100%;
     text-align: center;
     font-size: max(1rem, min(0.7727rem + 1.1364vw, 1.0864rem + 0.6462vw), 1.5 * var(--desktop-rem));
     line-height: max(1.5rem, min(1.2727rem + 1.1364vw, 1.2763rem + 1.1309vw), 2 * var(--desktop-rem));

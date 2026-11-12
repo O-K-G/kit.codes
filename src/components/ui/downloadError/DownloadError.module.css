@@ -32,7 +32,6 @@
 
   .text {
     width: 100%;
-    height: 100%;
     overflow-wrap: break-word;
     font-family: var(--font-montserrat);
     font-size: max(1rem, min(0.8214rem + 0.8929vw, 0.8986rem + 0.7321vw), 1.3671 * var(--desktop-rem));
