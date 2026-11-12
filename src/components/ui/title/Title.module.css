@@ -8,22 +8,24 @@
     padding: 0.5rem;
     text-align: center;
     text-transform: uppercase;
+    /* The neon glow. Like the stroke below, it grows with the text past the desktop breakpoint (see --fluid-rem). */
     filter: drop-shadow(0px 0px 0.125rem #b377ff);
 
     @media (width >= 40rem) {
       padding-block: 1rem;
-      filter: drop-shadow(0px 0px 0.313rem #b377ff);
+      filter: drop-shadow(0px 0px calc(0.313 * var(--fluid-rem)) #b377ff);
     }
   }
 
   /* ---- Variants ---- */
 
   .mainTitle {
+    /* Outlined letters: transparent fill, stroked contour */
     color: transparent;
-    -webkit-text-stroke: 0.125rem #ceb7ff;
+    -webkit-text-stroke: 0.07rem #ceb7ff;
 
-    @media screen and (max-width: 640px) {
-      -webkit-text-stroke: 0.07rem #ceb7ff;
+    @media (width >= 40rem) {
+      -webkit-text-stroke-width: calc(0.125 * var(--fluid-rem));
     }
 
     &:lang(en) {
