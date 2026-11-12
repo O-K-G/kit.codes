@@ -24,6 +24,11 @@
     opacity: 100%;
   }
 
+  /* The loader is hidden by JavaScript (LoaderVisibility): without it, it would cover the page forever */
+  @media (scripting: none) {
+    display: none;
+  }
+
   /* ---- Text ---- */
 
   .textContainer {

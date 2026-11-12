@@ -2,7 +2,7 @@ import { ActiveSectionProps } from "@constants/interfaces";
 import Section from "@ui/section/Section";
 import { useTranslations } from "next-intl";
 import ScrollableSubsection from "@ui/scrollableSection/ScrollableSubsection";
-import ExpandableButton from "@ui/expandableButton/ExpandableButton";
+import ExpandableContent from "@ui/expandableContent/ExpandableContent";
 import Title from "@ui/title/Title";
 
 const CURRENT_SECTION = "projects";
@@ -16,36 +16,36 @@ export default function Projects({ activeSection }: ActiveSectionProps) {
       <ScrollableSubsection>
         <ScrollableSubsection.Item>
           <Title variant="subtitle">{t("dragAndDropTitle")}</Title>
-          <ExpandableButton alternativeLabel={t("dragAndDropDescription")} />
+          <ExpandableContent text={t("dragAndDropDescription")} />
         </ScrollableSubsection.Item>
 
         <ScrollableSubsection.Item>
           <Title variant="subtitle">{t("thisLandingPageTitle")}</Title>
-          <ExpandableButton
-            alternativeLabel={t("thisLandingPageDescription")}
+          <ExpandableContent
+            text={t("thisLandingPageDescription")}
           />
         </ScrollableSubsection.Item>
 
         <ScrollableSubsection.Item>
           <Title variant="subtitle">{t("onboardingTitle")}</Title>
-          <ExpandableButton alternativeLabel={t("onboardingDescription")} />
+          <ExpandableContent text={t("onboardingDescription")} />
         </ScrollableSubsection.Item>
 
         <ScrollableSubsection.Item>
           <Title variant="subtitle">{t("sharedUITitle")}</Title>
-          <ExpandableButton alternativeLabel={t("sharedUIDescription")} />
+          <ExpandableContent text={t("sharedUIDescription")} />
         </ScrollableSubsection.Item>
 
         <ScrollableSubsection.Item>
           <Title variant="subtitle">{t("i18nCoordinatorTitle")}</Title>
-          <ExpandableButton
-            alternativeLabel={t("i18nCoordinatorDescription")}
+          <ExpandableContent
+            text={t("i18nCoordinatorDescription")}
           />
         </ScrollableSubsection.Item>
 
         <ScrollableSubsection.Item>
           <Title variant="subtitle">{t("scrumMaster")}</Title>
-          <ExpandableButton alternativeLabel={t("scrumMasterDescription")} />
+          <ExpandableContent text={t("scrumMasterDescription")} />
         </ScrollableSubsection.Item>
       </ScrollableSubsection>
     </Section>

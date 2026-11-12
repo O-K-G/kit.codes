@@ -222,8 +222,9 @@ export interface ContactGoBackButtonProps {
   className?: string;
 }
 
-export interface ExpandableButtonProps {
-  alternativeLabel: string;
+export interface ExpandableContentProps {
+  /** The text revealed once the gauge has filled */
+  text: string;
 }
 
 export interface MainTitleProps {

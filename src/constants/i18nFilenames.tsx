@@ -16,7 +16,6 @@ export const i18nFilenames = [
   'contactGoBackButtonText',
   'dialogComponentText',
   'errorDialog',
-  'expandableButtonText',
   'error',
   'cv',
 ];

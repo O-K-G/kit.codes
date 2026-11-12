@@ -2,7 +2,7 @@ import { ActiveSectionProps } from "@constants/interfaces";
 import Section from "@ui/section/Section";
 import { useTranslations } from "next-intl";
 import ScrollableSubsection from "@ui/scrollableSection/ScrollableSubsection";
-import ExpandableButton from "@ui/expandableButton/ExpandableButton";
+import ExpandableContent from "@ui/expandableContent/ExpandableContent";
 import Title from "@ui/title/Title";
 import Footer from "@components/experience/Footer";
 
@@ -17,21 +17,21 @@ export default function Experience({ activeSection }: ActiveSectionProps) {
       <ScrollableSubsection>
             <ScrollableSubsection.Item>
           <Title variant="subtitle">{t("volteraMainTitle")}</Title>
-          <ExpandableButton alternativeLabel={t("volteraDescription")} />
+          <ExpandableContent text={t("volteraDescription")} />
         </ScrollableSubsection.Item>
         <ScrollableSubsection.Item>
           <Title variant="subtitle">{t("faiMainTitle")}</Title>
-          <ExpandableButton alternativeLabel={t("faiDescription")} />
+          <ExpandableContent text={t("faiDescription")} />
         </ScrollableSubsection.Item>
 
         <ScrollableSubsection.Item>
           <Title variant="subtitle">{t("bankMainTitle")}</Title>
-          <ExpandableButton alternativeLabel={t("bankMainTitleDescription")} />
+          <ExpandableContent text={t("bankMainTitleDescription")} />
         </ScrollableSubsection.Item>
 
         <ScrollableSubsection.Item>
           <Title variant="subtitle">{t("faiMainTitle2")}</Title>
-          <ExpandableButton alternativeLabel={t("faiDescription2")} />
+          <ExpandableContent text={t("faiDescription2")} />
         </ScrollableSubsection.Item>
       </ScrollableSubsection>
       <Footer />

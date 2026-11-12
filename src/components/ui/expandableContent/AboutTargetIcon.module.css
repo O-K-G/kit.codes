@@ -12,33 +12,6 @@
     filter: drop-shadow(0px 0px calc(0.313 * var(--fluid-rem)) #ffffff);
   }
 
-  /* Highlights the bracket while the icon or its parent (the expandable button) is hovered or pressed */
-  @media (hover: hover) {
-    &:hover,
-    :hover > & {
-      > .bracket[data-open] {
-        border-color: oklch(83.7% 0.128 66.29);
-
-        &::before,
-        &::after {
-          background-color: oklch(83.7% 0.128 66.29);
-        }
-      }
-    }
-  }
-
-  &:active,
-  :active > & {
-    > .bracket[data-open] {
-      border-color: oklch(70.4% 0.191 22.216);
-
-      &::before,
-      &::after {
-        background-color: oklch(70.4% 0.191 22.216);
-      }
-    }
-  }
-
   /* The corner bracket: a double top/left border, with short bars extending its ends. */
   .bracket {
     position: relative;

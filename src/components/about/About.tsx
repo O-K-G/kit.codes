@@ -1,6 +1,6 @@
 import { ActiveSectionProps } from "@constants/interfaces";
 import Section from "@ui/section/Section";
-import ExpandableButton from "@ui/expandableButton/ExpandableButton";
+import ExpandableContent from "@ui/expandableContent/ExpandableContent";
 import Title from "@ui/title/Title";
 import { useTranslations } from "next-intl";
 import styles from "./About.module.css";
@@ -32,7 +32,7 @@ export default function About({ activeSection }: ActiveSectionProps) {
         {t("subtitle")}
       </Title>
 
-      <ExpandableButton alternativeLabel={t("alternativeLabel")} />
+      <ExpandableContent text={t("alternativeLabel")} />
     </Section>
   );
 }
