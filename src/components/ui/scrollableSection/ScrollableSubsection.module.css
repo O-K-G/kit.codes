@@ -25,7 +25,7 @@
       top: 0;
       bottom: 0;
       z-index: 10;
-      height: clamp(3.5rem, 3.2107rem + 1.4465vw, 6.375rem);
+      height: max(3.5rem, 3.2107rem + 1.4465vw, 4.1365 * var(--desktop-rem));
       margin-block: auto;
 
       &:disabled {

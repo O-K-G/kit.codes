@@ -6,7 +6,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1rem;
+  margin-bottom: var(--fluid-rem);
   transition: all 1000ms cubic-bezier(0.4, 0, 0.2, 1);
 
   /* Fades in/out according to the page's scroll position. */
@@ -54,15 +54,15 @@
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    width: clamp(2.246rem, 2.133rem + 0.565vw, 3.369rem);
-    height: clamp(3rem, 2.8994rem + 0.5031vw, 4rem);
-    padding: 0.125rem;
+    width: max(2.246rem, 2.133rem + 0.565vw, 2.4946 * var(--desktop-rem));
+    height: max(3rem, 2.8994rem + 0.5031vw, 3.2214 * var(--desktop-rem));
+    padding: calc(0.125 * var(--fluid-rem));
     border: solid var(--color-title-purple);
-    border-width: clamp(0.25rem, 0.2311rem + 0.0946vw, 0.438rem);
-    border-radius: 1rem;
+    border-width: max(0.25rem, 0.2311rem + 0.0946vw, 0.2916 * var(--desktop-rem));
+    border-radius: var(--fluid-rem);
 
     @media (width >= 48rem) {
-      border-radius: 1.5rem;
+      border-radius: calc(1.5 * var(--fluid-rem));
     }
 
     @media (width >= 64rem) {
@@ -74,12 +74,12 @@
 .defaultPosition {
   &:dir(ltr) {
     right: 0;
-    margin-right: 1rem;
+    margin-right: var(--fluid-rem);
   }
 
   &:dir(rtl) {
     left: 0;
-    margin-left: 1rem;
+    margin-left: var(--fluid-rem);
   }
 }
 

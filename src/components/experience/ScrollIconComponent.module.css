@@ -1,10 +1,10 @@
 .icon {
   position: absolute;
-  top: 0.125rem;
+  top: calc(0.125 * var(--fluid-rem));
   right: 0;
   left: 0;
-  --scroll-icon-top: clamp(-1.05rem, -0.6648rem - 0.1761vw, -0.7rem);
-  height: clamp(1.25rem, 1.1947rem + 0.2767vw, 1.8rem);
+  --scroll-icon-top: min(-0.7rem, -0.6648rem - 0.1761vw, -0.7775 * var(--desktop-rem));
+  height: max(1.25rem, 1.1947rem + 0.2767vw, 1.3718 * var(--desktop-rem));
   margin-inline: auto;
   fill: var(--color-title-purple);
   animation: scroll-icon 2s linear 3 alternate;
@@ -13,7 +13,7 @@
 @keyframes scroll-icon {
   0%,
   100% {
-    top: 0.125rem;
+    top: calc(0.125 * var(--fluid-rem));
   }
 
   50% {

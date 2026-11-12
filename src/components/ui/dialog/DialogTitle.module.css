@@ -19,8 +19,8 @@
     width: calc(100% / 3);
 
     > button {
-      height: 3.5rem;
-      border-radius: 0.5rem;
+      height: calc(3.5 * var(--fluid-rem));
+      border-radius: calc(0.5 * var(--fluid-rem));
 
       > svg {
         height: 100%;

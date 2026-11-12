@@ -114,8 +114,8 @@
       flex-shrink: 0;
       align-items: center;
       justify-content: center;
-      width: 2rem;
-      height: 2rem;
+      width: calc(2 * var(--fluid-rem));
+      height: calc(2 * var(--fluid-rem));
       border-radius: 9999px;
       outline-style: none;
 
