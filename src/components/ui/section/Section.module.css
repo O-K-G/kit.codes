@@ -4,11 +4,16 @@
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-  min-height: 100vh;
+  /* svh: fits the screen even while the mobile browser toolbar is shown (vh = the larger, toolbar-hidden one). */
+  min-height: 100svh;
   padding-inline: 1rem;
   padding-bottom: 1rem;
   overflow: hidden;
   background-color: #000;
+
+  @media (width >= 64rem) {
+    min-height: 100dvh;
+  }
 
   .hiddenAnchor {
     position: absolute;
@@ -28,11 +33,16 @@
   height: 100svh;
   padding-top: 5rem;
 
-  @media (width >= 48rem) {
+  @media (width >= 48rem) and (height >= 40rem) {
     padding-top: 10rem;
   }
 
   @media (width >= 64rem) {
     height: 100dvh;
+  }
+
+  /* Short screens (e.g. landscape phones) can't fit the content in one screen: grow, and let the page scroll. */
+  @media (height < 30rem) {
+    height: auto;
   }
 }

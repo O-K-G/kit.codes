@@ -4,12 +4,17 @@
   height: 100svh;
   padding-top: 5rem;
 
-  @media (width >= 48rem) {
+  @media (width >= 48rem) and (height >= 40rem) {
     padding-top: 10rem;
   }
 
   @media (width >= 64rem) {
     height: 100dvh;
+  }
+
+  /* Short screens (e.g. landscape phones) can't fit the content in one screen: grow, and let the page scroll. */
+  @media (height < 30rem) {
+    height: auto;
   }
 
   > header {
