@@ -102,7 +102,6 @@ export default function AsideDrawer({
         onTransitionEnd={
           handleTransitionEnd as unknown as TransitionEventHandler<HTMLElement>
         }
-        data-open={!!open}
         aria-hidden={!open}
         className={styles.aside}
       >
