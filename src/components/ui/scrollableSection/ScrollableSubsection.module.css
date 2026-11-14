@@ -28,6 +28,14 @@
       height: max(3.5rem, 3.2107rem + 1.4465vw, 4.1365 * var(--desktop-rem));
       margin-block: auto;
 
+      /* Active arrows pulse gently to invite a click, three times (4.8s, under WCAG 2.2.2's 5 seconds);
+       * an arrow that gets enabled again pulses again. `scale` is separate from the `rotate` that flips
+       * the arrows, so the two don't override each other. Starts and ends at full size, so with reduced
+       * motion (one near-instant iteration, see globals.css) the arrow simply stays still. */
+      &:not(:disabled) {
+        animation: nav-button-pulse 1.6s ease-in-out 3;
+      }
+
       &:disabled {
         opacity: 30%;
       }
@@ -73,5 +81,16 @@
     @media (prefers-reduced-motion: no-preference) {
       scroll-behavior: smooth;
     }
+  }
+}
+
+@keyframes nav-button-pulse {
+  0%,
+  100% {
+    scale: 1;
+  }
+
+  50% {
+    scale: 1.1;
   }
 }
