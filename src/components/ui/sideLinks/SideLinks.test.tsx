@@ -5,6 +5,7 @@ import { default as messages } from "@i18nEn/sideLinks.json";
 import { NextIntlClientProvider } from "next-intl";
 import { i18nFilenames } from "@constants/i18nFilenames";
 import SideLinks, {
+  CV_TEST_ID,
   GH_TEST_ID,
   LI_TEST_ID,
 } from "@ui/sideLinks/SideLinks";
@@ -19,7 +20,7 @@ jest.mock("next/navigation", () => ({
 }));
 
 describe("SideLinks Component", () => {
-  it("renders GitHub and LinkedIn links", async () => {
+  it("renders GitHub, LinkedIn and resume links", async () => {
     const jsonFiles = await Promise.all(
       i18nFilenames.map(
         async (str) =>
@@ -54,6 +55,15 @@ describe("SideLinks Component", () => {
     expect(liLink).toHaveAttribute(
       "aria-label",
       messages.sideLinks.liLinkAriaLabel
+    );
+
+    const cvLink = screen.getByTestId(CV_TEST_ID);
+    expect(cvLink).toBeInTheDocument();
+    expect(cvLink).toHaveAttribute("href", URLs.cv);
+    expect(cvLink).toHaveAttribute("rel", "noreferrer");
+    expect(cvLink).toHaveAttribute(
+      "aria-label",
+      messages.sideLinks.cvLinkAriaLabel
     );
   });
 

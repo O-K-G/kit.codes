@@ -268,11 +268,6 @@ export interface SkillBarsProps {
   className?: string;
 }
 
-export interface HandleDownloadProps {
-  url: string;
-  fileName?: string;
-}
-
 export interface GetDirByLocaleProps {
   locale: string | string[];
 }

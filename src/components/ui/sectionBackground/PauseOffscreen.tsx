@@ -1,6 +1,7 @@
 "use client";
 
 import { CSSProperties, ReactNode, useEffect, useRef } from "react";
+import useSectionOnScreen from "@hooks/useSectionOnScreen";
 
 /**
  * Pauses its children's animations while their section is off screen (they're only seen inside it): CSS
@@ -17,32 +18,16 @@ export default function PauseOffscreen({
   children: ReactNode;
 }) {
   const ref = useRef<HTMLDivElement>(null);
+  const onScreen = useSectionOnScreen(ref, true);
 
   useEffect(() => {
-    const element = ref.current;
-    const section = element?.closest("section");
-    if (!element || !section) {
-      return;
-    }
-
-    // 1px in from the screen's edges: a section that only touches the screen (the one just scrolled
-    // past) doesn't count as on it
-    const observer = new IntersectionObserver(
-      ([{ isIntersecting }]) => {
-        element.dataset.paused = String(!isIntersecting);
-        element.querySelectorAll("svg").forEach((svg) =>
-          isIntersecting ? svg.unpauseAnimations() : svg.pauseAnimations()
-        );
-      },
-      { rootMargin: "-1px" }
-    );
-    observer.observe(section);
-
-    return () => observer.disconnect();
-  }, []);
+    ref.current
+      ?.querySelectorAll("svg")
+      .forEach((svg) => (onScreen ? svg.unpauseAnimations() : svg.pauseAnimations()));
+  }, [onScreen]);
 
   return (
-    <div ref={ref} className={className} style={style}>
+    <div ref={ref} className={className} style={style} data-paused={!onScreen}>
       {children}
     </div>
   );

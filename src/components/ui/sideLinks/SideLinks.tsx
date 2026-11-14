@@ -4,11 +4,12 @@ import LIIcon from '@ui/icons/LIIcon';
 import { URLs } from '@constants/urls';
 import { useTranslations } from 'next-intl';
 import ChangeLanguage from '@ui/changeLanguage/ChangeLanguage';
-import DownloadButton from '@ui/downloadButton/DownloadButton';
+import CvIcon from '@ui/icons/Cv';
 import styles from './SideLinks.module.css';
 
 export const GH_TEST_ID = 'gh-test';
 export const LI_TEST_ID = 'li-test';
+export const CV_TEST_ID = 'cv-test';
 
 function AnchorLink({
   url,
@@ -59,9 +60,13 @@ export default function SideLinks({
             <ChangeLanguage />
           </li>
         )}
-        <li>
-          <DownloadButton />
-        </li>
+        <AnchorLink
+          isRounded
+          data-testid={CV_TEST_ID}
+          aria-label={t('cvLinkAriaLabel')}
+          url={URLs.cv}
+          icon={<CvIcon />}
+        />
       </ul>
     </nav>
   );

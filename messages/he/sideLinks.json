@@ -2,6 +2,7 @@
   "sideLinks": {
     "navAriaLabel": "קישורים חיצוניים",
     "ghLinkAriaLabel": "הריפו בגיטהאב של הדף הזה",
-    "liLinkAriaLabel": "הלינקדאין שלי"
+    "liLinkAriaLabel": "הלינקדאין שלי",
+    "cvLinkAriaLabel": "קורות החיים שלי, בגוגל דרייב"
   }
 }

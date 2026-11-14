@@ -17,5 +17,4 @@ export const i18nFilenames = [
   'dialogComponentText',
   'errorDialog',
   'error',
-  'cv',
 ];

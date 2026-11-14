@@ -33,6 +33,11 @@
   }
 }
 
+/* The stars' wrapper (see SkyStars) takes no part in the layout: the stars are placed in the frame */
+.stars {
+  display: contents;
+}
+
 /* A star's circle: centered --orbit to the left of the star, which sits on its right edge. Turning it
  * (only rotate, with fixed values, so the browser runs it off the main thread) circles the star */
 .orbit {
