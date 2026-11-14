@@ -45,11 +45,36 @@ import projectsMd from '@/assets/images/projects-md.webp';
 import projectsLg from '@/assets/images/projects-lg.webp';
 import projectsXl from '@/assets/images/projects-xl.webp';
 import projects2Xl from '@/assets/images/projects-2xl.webp';
-import skillsSm from '@/assets/images/skills-sm.webp';
-import skillsMd from '@/assets/images/skills-md.webp';
-import skillsLg from '@/assets/images/skills-lg.webp';
-import skillsXl from '@/assets/images/skills-xl.webp';
-import skills2Xl from '@/assets/images/skills-2xl.webp';
+import skillsSm from '@/assets/images/skills/sm-640w.webp';
+import skillsMd from '@/assets/images/skills/md-768w.webp';
+import skillsLg from '@/assets/images/skills/lg-1024w.webp';
+import skillsXl from '@/assets/images/skills/xl-1280w.webp';
+import skills2Xl from '@/assets/images/skills/2xl-1728w.webp';
+import skillsSm640 from '@/assets/images/skills/sm-640w.avif';
+import skillsSm960 from '@/assets/images/skills/sm-960w.avif';
+import skillsSm1280 from '@/assets/images/skills/sm-1280w.avif';
+import skillsSm1920 from '@/assets/images/skills/sm-1920w.avif';
+import skillsSm2560 from '@/assets/images/skills/sm-2560w.avif';
+import skillsMd768 from '@/assets/images/skills/md-768w.avif';
+import skillsMd1152 from '@/assets/images/skills/md-1152w.avif';
+import skillsMd1536 from '@/assets/images/skills/md-1536w.avif';
+import skillsMd2304 from '@/assets/images/skills/md-2304w.avif';
+import skillsMd3072 from '@/assets/images/skills/md-3072w.avif';
+import skillsLg1024 from '@/assets/images/skills/lg-1024w.avif';
+import skillsLg1536 from '@/assets/images/skills/lg-1536w.avif';
+import skillsLg2048 from '@/assets/images/skills/lg-2048w.avif';
+import skillsLg3072 from '@/assets/images/skills/lg-3072w.avif';
+import skillsLg4096 from '@/assets/images/skills/lg-4096w.avif';
+import skillsXl1280 from '@/assets/images/skills/xl-1280w.avif';
+import skillsXl1920 from '@/assets/images/skills/xl-1920w.avif';
+import skillsXl2560 from '@/assets/images/skills/xl-2560w.avif';
+import skillsXl3840 from '@/assets/images/skills/xl-3840w.avif';
+import skillsXl5120 from '@/assets/images/skills/xl-5120w.avif';
+import skills2Xl1728 from '@/assets/images/skills/2xl-1728w.avif';
+import skills2Xl2592 from '@/assets/images/skills/2xl-2592w.avif';
+import skills2Xl3456 from '@/assets/images/skills/2xl-3456w.avif';
+import skills2Xl5184 from '@/assets/images/skills/2xl-5184w.avif';
+import skills2Xl6912 from '@/assets/images/skills/2xl-6912w.avif';
 
 export const TAILWIND_SIZES = [
   { twClassName: 'sm', pxResolution: 640 },
@@ -88,8 +113,9 @@ const avif = ({ src }: StaticImageData, width: number, height: number): AvifVers
  * AVIF versions, for the sections that have them: browsers that support AVIF take these (a fraction of
  * the size), the others the WebP ones above. Same crops, each at 1, 1.5, 2, 3 and 4 times the WebP
  * one's size (narrowest first), so every screen gets the smallest that's sharp on it (see
- * SectionBackground). About's are from Group 31.png: the scene with its layer of stars, cropped at
- * the scene's bottom edge (so 1048px tall at 1x, where the WebP ones keep a transparent strip below it).
+ * SectionBackground). Each is cropped at its scene's bottom edge, where a transparent part would show
+ * as black: About's are from Group 31.png (the scene with its layer of stars; 1048px tall at 1x, where
+ * its WebP ones keep the strip), Skills' from Group 30.png (1042px tall at 1x, as are its WebP ones).
  * Their sizes are given here, as Next doesn't read AVIF files' sizes (it reports them as 100x100).
  */
 export const SECTION_BACKGROUNDS_AVIF: Partial<Record<SectionName, Record<Breakpoint, AvifVersion[]>>> = {
@@ -99,5 +125,12 @@ export const SECTION_BACKGROUNDS_AVIF: Partial<Record<SectionName, Record<Breakp
     lg: [avif(aboutLg1024, 1024, 1048), avif(aboutLg1536, 1536, 1572), avif(aboutLg2048, 2048, 2096), avif(aboutLg3072, 3072, 3144), avif(aboutLg4096, 4096, 4192)],
     xl: [avif(aboutXl1280, 1280, 1048), avif(aboutXl1920, 1920, 1572), avif(aboutXl2560, 2560, 2096), avif(aboutXl3840, 3840, 3144), avif(aboutXl5120, 5120, 4192)],
     '2xl': [avif(about2Xl1728, 1728, 1048), avif(about2Xl2592, 2592, 1572), avif(about2Xl3456, 3456, 2096), avif(about2Xl5184, 5184, 3144), avif(about2Xl6912, 6912, 4192)],
+  },
+  skills: {
+    sm: [avif(skillsSm640, 640, 1042), avif(skillsSm960, 960, 1563), avif(skillsSm1280, 1280, 2084), avif(skillsSm1920, 1920, 3126), avif(skillsSm2560, 2560, 4168)],
+    md: [avif(skillsMd768, 768, 1042), avif(skillsMd1152, 1152, 1563), avif(skillsMd1536, 1536, 2084), avif(skillsMd2304, 2304, 3126), avif(skillsMd3072, 3072, 4168)],
+    lg: [avif(skillsLg1024, 1024, 1042), avif(skillsLg1536, 1536, 1563), avif(skillsLg2048, 2048, 2084), avif(skillsLg3072, 3072, 3126), avif(skillsLg4096, 4096, 4168)],
+    xl: [avif(skillsXl1280, 1280, 1042), avif(skillsXl1920, 1920, 1563), avif(skillsXl2560, 2560, 2084), avif(skillsXl3840, 3840, 3126), avif(skillsXl5120, 5120, 4168)],
+    '2xl': [avif(skills2Xl1728, 1728, 1042), avif(skills2Xl2592, 2592, 1563), avif(skills2Xl3456, 3456, 2084), avif(skills2Xl5184, 5184, 3126), avif(skills2Xl6912, 6912, 4168)],
   },
 };
