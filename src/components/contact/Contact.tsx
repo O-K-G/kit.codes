@@ -26,11 +26,14 @@ export default function Contact({ activeSection }: ActiveSectionProps) {
           {t("goBack")}
         </ContactCloseButton>
         <Title border>{t("mainTitle")}</Title>
-        <ContactForm />
-        <SideLinks
-          hideChangeLanguageButton
-          className={styles.sideLinks}
-          ulClassName={styles.sideLinksList}
+        <ContactForm
+          footer={
+            <SideLinks
+              hideChangeLanguageButton
+              className={styles.sideLinks}
+              ulClassName={styles.sideLinksList}
+            />
+          }
         />
       </AsideOpenContent>
     </Section>

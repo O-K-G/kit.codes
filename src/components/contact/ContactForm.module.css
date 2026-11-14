@@ -5,7 +5,8 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  margin-top: 0.5rem;
+  /* Space below the section's title: 1.5rem on mobile, growing to the 2.5rem gap between the form's rows */
+  margin-top: max(1.5rem, 1.0455rem + 2.2727vw, 2.5 * var(--desktop-rem));
 
   > div {
     display: flex;

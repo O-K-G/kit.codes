@@ -40,6 +40,8 @@
       }
 
       &:lang(en) {
+        /* Bebas Neue's capitals sit 0.05em above the middle of the line: moved down to center them */
+        padding-block: calc(0.5rem + 0.05em) calc(0.5rem - 0.05em);
         font-family: var(--font-bebas-neue);
       }
 

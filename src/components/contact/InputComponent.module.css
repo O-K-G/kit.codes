@@ -6,6 +6,8 @@
   width: 100%;
   overflow: hidden;
   color: #fff;
+  /* The label's line height, which a text field beside it matches */
+  --label-height: max(1.25rem, min(0.25rem + 5vw, 2.0542rem + 0.4895vw), 2.3675 * var(--desktop-rem));
 
   @media (width >= 40rem) {
     flex-direction: row;
@@ -20,7 +22,6 @@
     @media (width >= 40rem) {
       justify-content: flex-end;
       width: calc(2 / 12 * 100%);
-      margin-top: 0.375rem;
     }
 
     @media (width >= 48rem) {
@@ -32,7 +33,7 @@
       /* A minimum, so a longer label (e.g. "CONTENT:") widens instead of running into its field */
       min-width: max(3rem, 2.6981rem + 1.5094vw, 3.6641 * var(--desktop-rem));
       font-size: max(0.875rem, min(5vw - 0.125rem, 1.8051rem + 0.1748vw), 1.917 * var(--desktop-rem));
-      line-height: max(1.25rem, min(0.25rem + 5vw, 2.0542rem + 0.4895vw), 2.3675 * var(--desktop-rem));
+      line-height: var(--label-height);
       text-transform: uppercase;
 
       &:lang(en) {
@@ -92,7 +93,9 @@
         height: 3.188rem;
         padding-inline: 0.5rem;
 
+        /* Beside its label: as tall as it, so the two line up */
         @media (width >= 40rem) {
+          height: var(--label-height);
           padding-inline: 1rem;
         }
       }

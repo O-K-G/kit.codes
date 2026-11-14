@@ -185,6 +185,11 @@ export interface IconButtonProps {
   disabled?: boolean;
 }
 
+export interface ContactFormProps {
+  /** Shown under the send button, centered with it (the side links) */
+  footer?: ReactNode;
+}
+
 export interface SideLinksProps {
   className?: string;
   ulClassName?: string;

@@ -39,8 +39,9 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 1.75rem;
-        height: 1.75rem;
+        /* At least 44px, a comfortable touch target (WCAG 2.5.5), growing to 48px at the desktop breakpoint */
+        width: max(2.75rem, 2.6364rem + 0.5682vw, 3 * var(--desktop-rem));
+        height: max(2.75rem, 2.6364rem + 0.5682vw, 3 * var(--desktop-rem));
         border-color: #b4b3b3;
         border-radius: 9999px;
         background-color: oklch(80.8% 0.114 19.571);
@@ -115,6 +116,9 @@
             justify-content: center;
             padding: 1rem;
             border: 1px solid #000;
+            /* The heading's fluid size */
+            font-size: max(1.125rem, min(1rem + 0.625vw, 0.9003rem + 0.8741vw), 1.4 * var(--desktop-rem));
+            line-height: max(1.75rem, 1.4858rem + 1.3208vw, 2.3311 * var(--desktop-rem));
             font-weight: 700;
             box-shadow: 0 1px 2px 0 #000;
 

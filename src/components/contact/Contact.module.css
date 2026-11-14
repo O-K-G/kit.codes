@@ -25,19 +25,12 @@
     }
   }
 
+  /* Rendered under the form's send button, centered with it (see ContactForm) */
   .sideLinks {
     z-index: 10;
     display: flex;
     align-items: center;
     justify-content: center;
-
-    @media (width >= 40rem) {
-      margin-left: 1rem;
-    }
-
-    @media (width >= 48rem) {
-      margin-left: 1.5rem;
-    }
 
     .sideLinksList {
       display: flex;

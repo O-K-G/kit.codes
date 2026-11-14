@@ -15,6 +15,7 @@ import styles from "./ContactForm.module.css";
 import {
   type FormErrorNames,
   type Fields,
+  type ContactFormProps,
   CONTACT_FORM_EMAIL_MAX_LENGTH,
   CONTACT_FORM_SUBJECT_MIN_LENGTH,
   CONTACT_FORM_SUBJECT_MAX_LENGTH,
@@ -27,7 +28,11 @@ const EMAIL_ID = "email";
 const SUBJECT_ID = "subject";
 const CONTENT_ID = "content";
 
-export default function ContactForm() {
+/**
+ * `footer` (the side links) goes under the send button, in the fields' column, so the two share a
+ * center whatever the labels' width. It keeps the page's direction when the form's is toggled.
+ */
+export default function ContactForm({ footer }: ContactFormProps) {
   const { locale }: { locale: string } = useParams() || {};
   const direction = getDirByLocale({ locale });
   const [dir, setDir] = useState<"ltr" | "rtl">(direction);
@@ -129,20 +134,23 @@ export default function ContactForm() {
             rows: 5,
             component: "textarea" as const,
             bottomSlot: (
-              <BottomInputComponentButtons
-                dir={dir}
-                isSubmitDisabled={!!errors.length}
-                onSubmit={() => setMessageSent(false)}
-                onClick={(val) => {
-                  if (dir === "ltr" && val === "rtl") {
-                    setDir("rtl");
-                  }
-                  if (dir === "rtl" && val === "ltr") {
-                    setDir("ltr");
-                  }
-                }}
-                leftSlot={<ProgressIndicators isMessageSent={isMessageSent} />}
-              />
+              <>
+                <BottomInputComponentButtons
+                  dir={dir}
+                  isSubmitDisabled={!!errors.length}
+                  onSubmit={() => setMessageSent(false)}
+                  onClick={(val) => {
+                    if (dir === "ltr" && val === "rtl") {
+                      setDir("rtl");
+                    }
+                    if (dir === "rtl" && val === "ltr") {
+                      setDir("ltr");
+                    }
+                  }}
+                  leftSlot={<ProgressIndicators isMessageSent={isMessageSent} />}
+                />
+                {footer && <div dir={direction}>{footer}</div>}
+              </>
             ),
             onChange: () => handleOnChange(CONTENT_ID),
             onClick: handleOnClick,
