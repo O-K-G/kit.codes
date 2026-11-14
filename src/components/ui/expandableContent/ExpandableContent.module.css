@@ -12,6 +12,20 @@
   initial-value: 0deg;
 }
 
+/* How much of the inner ring is drawn, clockwise from the top */
+@property --inner-progress {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+/* The percentage shown in the middle of the gauge */
+@property --gauge-count {
+  syntax: "<integer>";
+  inherits: false;
+  initial-value: 0;
+}
+
 .container {
   position: relative;
   z-index: 10;
@@ -133,6 +147,100 @@
       animation-play-state: running;
     }
   }
+
+  /* ---- The inner ring: split into 20 segments by thin black gaps, filling clockwise from the top 50%
+   * faster than the outer gauge (0.8s vs 1.2s), so it completes as the count hits 100%. Like the outer
+   * gauge, it's painted with a gradient around the ring (white to pale orange), and it glows red (a
+   * .gaugeGlow holding a red copy of the fill, see .innerGlow).
+   *  .innerShape: cuts a thinner ring out of a smaller disc;
+   *  .innerRing: the visible ring, whose black background shows in the gaps;
+   *  .innerSegments: cuts the 20 segments out of the ring;
+   *  .innerTrack: the faint segments the fill runs along;
+   *  .innerFill: the color, showing only its first --inner-progress degrees. ---- */
+  .innerShape {
+    position: absolute;
+    /* Outer edge at 80.5% of the gauge's radius, a small gap inside the outer ring (which starts at 86%) */
+    inset: 9.75%;
+    /* 12.8% of the gauge's radius thick */
+    mask-image: radial-gradient(
+      farthest-side,
+      transparent 84.1%,
+      #000 calc(84.1% + 0.5px) calc(100% - 0.5px),
+      transparent 100%
+    );
+  }
+
+  .innerRing {
+    background-color: #000;
+  }
+
+  /* The glow's copy of the fill is red, the color the outer gauge ends on */
+  .innerGlow .innerFill {
+    background: oklch(63.7% 0.237 25.331);
+  }
+
+  .innerSegments {
+    position: absolute;
+    inset: 0;
+    /* 20 segments of 18deg, each ending in a 2deg gap, with slightly rounded corners: each segment
+     * is drawn 2 units (of the ring's 100-unit radius) smaller than the ring, then stroked with
+     * round joins 4 units wide, which grows it back to full size with corners rounded by 2 units */
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpath d='M102.13 2.02A98 98 0 0 1 124.96 5.23L121.93 16.74A86.1 86.1 0 0 0 101.87 13.92ZM132.30 7.48A98 98 0 0 1 153.02 17.58L146.58 27.59A86.1 86.1 0 0 0 128.38 18.71ZM159.31 21.99A98 98 0 0 1 175.90 38.00L166.68 45.53A86.1 86.1 0 0 0 152.11 31.46ZM180.52 44.13A98 98 0 0 1 191.34 64.49L180.25 68.80A86.1 86.1 0 0 0 170.74 50.92ZM193.84 71.75A98 98 0 0 1 197.84 94.45L185.96 95.13A86.1 86.1 0 0 0 182.44 75.18ZM197.98 102.13A98 98 0 0 1 194.77 124.96L183.26 121.93A86.1 86.1 0 0 0 186.08 101.87ZM192.52 132.30A98 98 0 0 1 182.42 153.02L172.41 146.58A86.1 86.1 0 0 0 181.29 128.38ZM178.01 159.31A98 98 0 0 1 162.00 175.90L154.47 166.68A86.1 86.1 0 0 0 168.54 152.11ZM155.87 180.52A98 98 0 0 1 135.51 191.34L131.20 180.25A86.1 86.1 0 0 0 149.08 170.74ZM128.25 193.84A98 98 0 0 1 105.55 197.84L104.87 185.96A86.1 86.1 0 0 0 124.82 182.44ZM97.87 197.98A98 98 0 0 1 75.04 194.77L78.07 183.26A86.1 86.1 0 0 0 98.13 186.08ZM67.70 192.52A98 98 0 0 1 46.98 182.42L53.42 172.41A86.1 86.1 0 0 0 71.62 181.29ZM40.69 178.01A98 98 0 0 1 24.10 162.00L33.32 154.47A86.1 86.1 0 0 0 47.89 168.54ZM19.48 155.87A98 98 0 0 1 8.66 135.51L19.75 131.20A86.1 86.1 0 0 0 29.26 149.08ZM6.16 128.25A98 98 0 0 1 2.16 105.55L14.04 104.87A86.1 86.1 0 0 0 17.56 124.82ZM2.02 97.87A98 98 0 0 1 5.23 75.04L16.74 78.07A86.1 86.1 0 0 0 13.92 98.13ZM7.48 67.70A98 98 0 0 1 17.58 46.98L27.59 53.42A86.1 86.1 0 0 0 18.71 71.62ZM21.99 40.69A98 98 0 0 1 38.00 24.10L45.53 33.32A86.1 86.1 0 0 0 31.46 47.89ZM44.13 19.48A98 98 0 0 1 64.49 8.66L68.80 19.75A86.1 86.1 0 0 0 50.92 29.26ZM71.75 6.16A98 98 0 0 1 94.45 2.16L95.13 14.04A86.1 86.1 0 0 0 75.18 17.56Z' stroke='black' stroke-width='4' stroke-linejoin='round'/%3E%3C/svg%3E");
+
+    > * {
+      position: absolute;
+      inset: 0;
+    }
+  }
+
+  .innerTrack {
+    background-color: rgb(255 255 255 / 20%);
+  }
+
+  .innerFill {
+    background: conic-gradient(#fff, oklch(75% 0.183 55.934));
+    mask-image: conic-gradient(#000 var(--inner-progress), transparent 0);
+    animation: inner-fill 0.8s linear forwards paused;
+
+    &[data-running="true"] {
+      animation-play-state: running;
+    }
+  }
+
+  /* The percentage in the middle, counting with the inner ring (a CSS counter fed by an animated
+   * integer, so it pauses along with the rings). It turns from white to purple as it counts, with the
+   * subtitles' neon glow (see Title), then blinks (disappears) twice, after which the box opens (see
+   * ExpandableContent). Two blinks in 0.8s: under WCAG 2.3.1's 3 flashes per second. */
+  .gaugeCount {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    container-type: size;
+    counter-reset: gauge-count var(--gauge-count);
+    color: #fff;
+    animation: gauge-count 0.8s linear forwards paused;
+
+    &[data-running="true"] {
+      animation-play-state: running;
+    }
+  }
+
+  .gaugeCountText {
+    font-family: var(--font-montserrat);
+    font-size: 14cqw;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    filter: drop-shadow(0 0 calc(0.313 * var(--fluid-rem)) #b377ff);
+    animation: gauge-count-blink 0.4s step-end 0.8s 2 paused;
+
+    &[data-running="true"] {
+      animation-play-state: running;
+    }
+
+    &::after {
+      content: counter(gauge-count) "%";
+    }
+  }
 }
 
 /* ---- The text ---- */
@@ -208,6 +316,30 @@
   to {
     filter: blur(calc(0.75 * var(--fluid-rem))) brightness(2);
     scale: 1.04;
+  }
+}
+
+@keyframes inner-fill {
+  to {
+    --inner-progress: 360deg;
+  }
+}
+
+@keyframes gauge-count {
+  to {
+    --gauge-count: 100;
+    color: var(--color-title-purple);
+  }
+}
+
+/* Hidden for the first half of each blink, then shown again */
+@keyframes gauge-count-blink {
+  0% {
+    opacity: 0%;
+  }
+
+  50% {
+    opacity: 100%;
   }
 }
 

@@ -28,8 +28,9 @@ beforeEach(() => {
 function renderContent() {
   const { container } = render(<ExpandableContent text={TEXT} />);
   const gaugeFill = container.querySelector(`.${styles.gauge} > .${styles.gaugeRing} > .${styles.gaugeFill}`) as HTMLElement;
+  const gaugeCountText = container.querySelector(`.${styles.gaugeCountText}`) as HTMLElement;
   const content = screen.getByText(TEXT).parentElement as HTMLElement;
-  return { container, gaugeFill, content };
+  return { container, gaugeFill, gaugeCountText, content };
 }
 
 describe("ExpandableContent", () => {
@@ -54,11 +55,14 @@ describe("ExpandableContent", () => {
     expect(gaugeFill).toHaveAttribute("data-running", "false");
   });
 
-  it("expands once the gauge is full, and stops observing", () => {
-    const { gaugeFill, content } = renderContent();
+  it("expands once the count has blinked, and stops observing", () => {
+    const { gaugeFill, gaugeCountText, content } = renderContent();
     setVisible(true);
 
     fireEvent.animationEnd(gaugeFill);
+    expect(content).toHaveAttribute("data-open", "false");
+
+    fireEvent.animationEnd(gaugeCountText);
 
     expect(content).toHaveAttribute("data-open", "true");
     expect(content).toHaveAttribute("tabindex", "0");
