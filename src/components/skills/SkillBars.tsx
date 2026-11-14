@@ -4,6 +4,7 @@ import { CSSProperties, useEffect, useId, useRef, useState } from "react";
 import { SKILLS, SKILL_MAX_SEGMENTS } from "@constants/skills";
 import { SkillBarsProps } from "@constants/interfaces";
 import styles from "./SkillBars.module.css";
+import classNames from "@utils/classNames";
 
 /** How much of the list must be visible for the bars to fill */
 const IN_VIEW_THRESHOLD = 0.5;
@@ -18,7 +19,7 @@ const IN_VIEW_THRESHOLD = 0.5;
  * seconds (WCAG 2.2.2); with reduced motion it completes instantly (see globals.css). Without
  * JavaScript the bars are shown full (see the `scripting` media query in the CSS).
  */
-export default function SkillBars({ className = "" }: SkillBarsProps) {
+export default function SkillBars({ className }: SkillBarsProps) {
   const listRef = useRef<HTMLUListElement>(null);
   const [filling, setFilling] = useState(false);
   const id = useId();
@@ -43,7 +44,7 @@ export default function SkillBars({ className = "" }: SkillBarsProps) {
     <ul
       ref={listRef}
       dir="ltr"
-      className={`${styles.list} ${className}`}
+      className={classNames(styles.list, className)}
       style={
         {
           "--count": skills.length,

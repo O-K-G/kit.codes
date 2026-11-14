@@ -1,13 +1,14 @@
 import { IconsProps } from '@constants/interfaces';
 import styles from './LIIcon.module.css';
+import classNames from "@utils/classNames";
 
-export default function LIIcon({ className = '' }: IconsProps) {
+export default function LIIcon({ className }: IconsProps) {
   return (
     <svg
       viewBox="0 0 45 45"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={`${styles.icon} ${className}`}
+      className={classNames(styles.icon, className)}
     >
       <path
         fillRule="evenodd"

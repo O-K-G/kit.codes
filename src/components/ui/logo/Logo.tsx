@@ -1,6 +1,7 @@
 import { URLs } from "@constants/urls";
 import contactMeStyles from "@components/contact/ContactGoBackButton.module.css";
 import styles from "./Logo.module.css";
+import classNames from "@utils/classNames";
 
 /** The site's name, which the logo reads */
 export const LOGO_TEXT = "kit.codes";
@@ -17,7 +18,7 @@ export default function Logo() {
     <a
       href={URLs.siteURL}
       lang="en"
-      className={`${contactMeStyles.button} ${styles.logo}`}
+      className={classNames(contactMeStyles.button, styles.logo)}
     >
       {LOGO_TEXT}
     </a>

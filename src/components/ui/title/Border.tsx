@@ -2,7 +2,7 @@ import { BorderProps } from "@constants/interfaces";
 import styles from "./Border.module.css";
 
 export default function Border({
-  className = "",
+  className,
   leftLabel,
   rightLabel,
   isTextBlink,

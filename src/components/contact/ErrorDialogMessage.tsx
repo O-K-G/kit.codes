@@ -3,6 +3,7 @@ import { useContext } from 'react';
 import { ModalContext as modalContext } from '@ui/modalContext/ModalContext';
 import DialogTitle from '@ui/dialog/DialogTitle';
 import styles from './ErrorDialogMessage.module.css';
+import classNames from "@utils/classNames";
 
 const DATA_TEST_ID = 'error-details-test';
 
@@ -22,9 +23,7 @@ export default function ErrorDialogMeesage({ details }: { details: string }) {
 
       <p
         data-testid={DATA_TEST_ID}
-        className={`${styles.details} ${
-          details ? styles.detailsFound : styles.detailsNotFound
-        }`}
+        className={classNames(styles.details, details ? styles.detailsFound : styles.detailsNotFound)}
       >
         {t('errorDetails')}&nbsp;
         {details || t('noErrorDetailsFound')}

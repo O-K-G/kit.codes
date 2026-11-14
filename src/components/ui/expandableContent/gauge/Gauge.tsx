@@ -3,6 +3,7 @@
 import { AnimationEvent } from "react";
 import { GaugeProps } from "@constants/interfaces";
 import styles from "./Gauge.module.css";
+import classNames from "@utils/classNames";
 
 /**
  * A decorative gauge that fills by itself: an outer ring (purple to red), a segmented inner ring
@@ -13,7 +14,7 @@ import styles from "./Gauge.module.css";
  * Accessibility: hidden from screen readers. It lasts 1.6s, under 5 seconds (WCAG 2.2.2); with
  * reduced motion it completes instantly (see globals.css), still calling `onComplete`.
  */
-export default function Gauge({ running, onFull, onComplete, className = "" }: GaugeProps) {
+export default function Gauge({ running, onFull, onComplete, className }: GaugeProps) {
   /** The count's own animation ends at 100%; its text's (::after) blink ends the gauge */
   const handleCountEnd = ({ target, currentTarget, pseudoElement }: AnimationEvent<HTMLDivElement>) => {
     if (target !== currentTarget) return;
@@ -26,7 +27,7 @@ export default function Gauge({ running, onFull, onComplete, className = "" }: G
   };
 
   return (
-    <div aria-hidden data-running={running} className={`${styles.gauge} ${className}`}>
+    <div aria-hidden data-running={running} className={classNames(styles.gauge, className)}>
       <div className={styles.glow} />
       <div className={styles.inner} />
       <div className={styles.count} onAnimationEnd={handleCountEnd} />

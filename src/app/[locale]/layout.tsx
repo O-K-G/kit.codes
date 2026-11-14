@@ -12,6 +12,7 @@ import handleFontsByLocale from "@utils/handleFontsByLocale";
 import getDirByLocale from "@utils/getDirByLocale";
 import { PropsWithChildren, ReactNode } from "react";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
+import classNames from "@utils/classNames";
 
 interface RootLayoutProps extends PropsWithChildren {
   params: Promise<{ locale?: string; rest?: string[] }>;
@@ -67,7 +68,7 @@ export default async function RootLayout({
     <html dir={dir} lang={selectedLocale} data-scroll-behavior="smooth">
       <NextIntlClientProvider>
         <body
-          className={`${styles.body} ${mainTitle} ${borderTitle} ${infoText} ${regularText} ${shenanigansText}`}
+          className={classNames(styles.body, mainTitle, borderTitle, infoText, regularText, shenanigansText)}
         >
           {children}
         </body>

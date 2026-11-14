@@ -10,6 +10,7 @@ import {
   ReactNode,
   KeyboardEventHandler,
 } from "react";
+import classNames from "@utils/classNames";
 
 const COMPONENT_ID = "shenanigans-id";
 
@@ -62,7 +63,7 @@ function ShenanigansComponent() {
         />
         <div className={styles.windowBody}>
           <div>
-            <h2 className={`${styles.heading} ${styles.headingBold}`}>
+            <h2 className={classNames(styles.heading, styles.headingBold)}>
               {t("wow")}
             </h2>
             <h3 className={styles.heading}>

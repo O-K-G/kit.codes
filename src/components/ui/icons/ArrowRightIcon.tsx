@@ -1,17 +1,18 @@
 import { ArrowRightIconProps } from '@constants/interfaces';
 import styles from './ArrowRightIcon.module.css';
+import classNames from "@utils/classNames";
 
 export default function ArrowRightIcon({
-  className = '',
-  strokeClassName = '',
-  fillClassName = '',
+  className,
+  strokeClassName,
+  fillClassName,
 }: ArrowRightIconProps) {
   return (
     <svg
       viewBox="0 0 54 105"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={`${styles.icon} ${className}`}
+      className={classNames(styles.icon, className)}
     >
       <path
         className={strokeClassName}

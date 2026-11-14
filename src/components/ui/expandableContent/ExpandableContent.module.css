@@ -5,6 +5,13 @@
   initial-value: block;
 }
 
+/* How tall the soft fade at the bottom of the open text is (see .content) */
+@property --scroll-fade {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
 .container {
   position: relative;
   z-index: 10;
@@ -51,9 +58,15 @@
     height: min(25cqw, 100cqh);
   }
 
+  /* Open: the text's background darkens as the text appears. It's here rather than on the text box
+   * (which this box's size it shares) so the text's fade (see .content) leaves it whole. */
   &[data-open="true"] {
     width: 100%;
     height: min(100cqw, 100cqh);
+    background-color: rgb(0 0 0 / 50%);
+    transition:
+      all 1000ms cubic-bezier(0.4, 0, 0.2, 1),
+      background-color 500ms cubic-bezier(0.4, 0, 0.2, 1) 1s;
 
     @media (width >= 48rem) {
       width: 100cqh;
@@ -108,15 +121,43 @@
   }
 
   /* Open: the box draws its frame (expand-button), hiding the text until it's done (show-after-expand);
-   * the background darkens behind the text as it appears */
+   * the background darkens behind the text as it appears (on .box) */
   &[data-open="true"] {
     align-items: flex-start;
     padding: 0.5rem;
     overflow-y: auto;
     border-inline-color: #fff;
-    background-color: rgb(0 0 0 / 50%);
-    transition: background-color 500ms cubic-bezier(0.4, 0, 0.2, 1) 1s;
     animation: expand-button 1s linear forwards, show-after-expand 1s;
+
+    /* With a mouse, no scrollbar: WCAG doesn't require one. The text stays reachable: the wheel or
+     * trackpad scrolls it, and so does the keyboard, as the box is focusable (WCAG 2.1.1) */
+    @media (pointer: fine) {
+      scrollbar-width: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
+    /* A soft fade at the bottom of the text while there's more below: a cue that it scrolls. It's
+     * full until the last 3rem of scrolling, then shrinks away, so the last line ends up clear; text
+     * that fits can't scroll, which leaves the timeline inactive and the fade at 0. Without scroll
+     * timelines, no fade (a fixed one would cover the last line).
+     * Masks (bottom layer to top): everything, unclipped, so the focus rings outside the box stay;
+     * minus the padding box; plus the padding box, faded at its bottom edge, right down to the frame.
+     * So only the text fades, not the frame (the background is on .box). */
+    @supports (animation-timeline: scroll()) {
+      mask-image:
+        linear-gradient(#000 calc(100% - var(--scroll-fade)), transparent),
+        linear-gradient(#000, #000),
+        linear-gradient(#000, #000);
+      mask-clip: padding-box, padding-box, no-clip;
+      mask-origin: padding-box, padding-box, border-box;
+      mask-composite: add, exclude, add;
+      animation: expand-button 1s linear forwards, show-after-expand 1s, scroll-fade linear both;
+      animation-timeline: auto, auto, scroll(self);
+      animation-range: normal, normal, calc(100% - 3rem) 100%;
+    }
   }
 
   > p {
@@ -161,6 +202,16 @@
     border-top: calc(0.0625 * var(--fluid-rem)) solid white;
     border-bottom: calc(0.0625 * var(--fluid-rem)) solid white;
     height: 100%;
+  }
+}
+
+@keyframes scroll-fade {
+  from {
+    --scroll-fade: 2.5rem;
+  }
+
+  to {
+    --scroll-fade: 0px;
   }
 }
 

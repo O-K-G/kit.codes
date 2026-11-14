@@ -6,6 +6,7 @@ import {
   LOADER_DEFERRED_IMAGE_ATTRIBUTE,
 } from "@constants/loader";
 import styles from "./SectionBackground.module.css";
+import classNames from "@utils/classNames";
 
 /** This component is a fix to cases in mobile devices in which the user scrolls down in "extreme velocity",
  * and once the browser hits the bottom - the background flickers for a fraction of a second.
@@ -35,7 +36,7 @@ export default function SectionBackground({
 
   return (
     <div
-      className={`${styles.container} ${minHeightClassName}`}
+      className={classNames(styles.container, minHeightClassName)}
     >
       <picture>
         {TAILWIND_SIZES.map(({ twClassName, pxResolution }) => (

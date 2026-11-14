@@ -8,6 +8,7 @@ import { PropsWithId } from "@constants/interfaces";
 import ArrowIconComponent from "@ui/icons/ArrowIconComponent";
 import { useTranslations } from "next-intl";
 import styles from "./ScrollableSubsection.module.css";
+import classNames from "@utils/classNames";
 
 export const LEFT_BUTTON_TEST_ID = "left-button-test-id";
 export const RIGHT_BUTTON_TEST_ID = "right-button-test-id";
@@ -73,7 +74,7 @@ export default function ScrollableSubsectionContainer({
               handleScroll({ id, offsetWidth });
             }
           }}
-          className={`${styles.navButton} ${styles.previousButton}`}
+          className={classNames(styles.navButton, styles.previousButton)}
           aria-label={t("previous")}
           icon={<ArrowIconComponent />}
         />
@@ -103,7 +104,7 @@ export default function ScrollableSubsectionContainer({
               handleScroll({ id, offsetWidth });
             }
           }}
-          className={`${styles.navButton} ${styles.nextButton}`}
+          className={classNames(styles.navButton, styles.nextButton)}
           aria-label={t("next")}
           icon={<ArrowIconComponent />}
         />

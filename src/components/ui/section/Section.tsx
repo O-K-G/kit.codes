@@ -2,6 +2,7 @@ import { SectionProps } from "@constants/interfaces";
 import SectionBackground from "@ui/sectionBackground/SectionBackground";
 import SectionScrollAnchor from "@ui/section/SectionScrollAnchor";
 import styles from "./Section.module.css";
+import classNames from "@utils/classNames";
 
 const SCROLLABLE_SECTIONS = ["about", "skills", "experience", "projects"];
 
@@ -17,7 +18,7 @@ export default function Section({
   return (
     <section
       data-nosnippet
-      className={`${styles.section} ${className ?? ""}`}
+      className={classNames(styles.section, className)}
     >
       {isScrollable ? (
         <SectionScrollAnchor

@@ -1,5 +1,6 @@
 import { FixedBottomComponentProps } from '@constants/interfaces';
 import styles from './FixedBottomComponent.module.css';
+import classNames from "@utils/classNames";
 
 export default function FixedBottomComponent({
   label,
@@ -13,7 +14,7 @@ export default function FixedBottomComponent({
     <div
       data-hide-on-scroll={hideOnScroll}
       data-show-on-scroll={showOnScroll}
-      className={`${styles.container} ${className}`}
+      className={classNames(styles.container, className)}
     >
       <div className={styles.label}>
         {label}

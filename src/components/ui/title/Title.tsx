@@ -1,11 +1,12 @@
 import { MainTitleProps } from "@constants/interfaces";
 import Border from "@ui/title/Border";
 import styles from "./Title.module.css";
+import classNames from "@utils/classNames";
 
 export default function Title({
   children,
   component: Component = "h2",
-  className = "",
+  className,
   border,
   variant = "mainTitle",
   topLabel,
@@ -18,12 +19,12 @@ export default function Title({
     : styles.typing;
 
   return (
-    <div className={`${styles.wrapper} ${className}`}>
+    <div className={classNames(styles.wrapper, className)}>
       {border && (
         <Border isTextBlink={isRightLabelBlink} rightLabel={topLabel} />
       )}
       <Component
-        className={`${styles.title} ${animationClassName} ${styles[variant]}`}
+        className={classNames(styles.title, animationClassName, styles[variant])}
       >
         {children}
       </Component>

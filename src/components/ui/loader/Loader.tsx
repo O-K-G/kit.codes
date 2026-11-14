@@ -7,27 +7,28 @@ import {
   LoaderTextProps,
 } from "@constants/interfaces";
 import styles from "./Loader.module.css";
+import classNames from "@utils/classNames";
 
 export const LOADER_TEST_ID = "loader-test";
 
 function Cogwheel({
   sizeClassName = styles.size24,
   children,
-  childrenClassName = "",
+  childrenClassName,
   bgClassName = styles.blue,
-  className = "",
+  className,
   "data-testid": dataTestId,
 }: CogwheelProps) {
-  const cogwheelClassName = `${styles.cogwheelPart} ${bgClassName}`;
+  const cogwheelClassName = classNames(styles.cogwheelPart, bgClassName);
 
   return (
     <div
       data-testid={dataTestId}
-      className={`${styles.cogwheel} ${sizeClassName} ${className}`}
+      className={classNames(styles.cogwheel, sizeClassName, className)}
     >
       <div className={cogwheelClassName} />
-      <div className={`${cogwheelClassName} ${styles.cogwheelPartRotated}`}>
-        <div className={`${styles.cogwheelCenter} ${childrenClassName}`}>
+      <div className={classNames(cogwheelClassName, styles.cogwheelPartRotated)}>
+        <div className={classNames(styles.cogwheelCenter, childrenClassName)}>
           {children}
         </div>
       </div>
@@ -35,11 +36,11 @@ function Cogwheel({
   );
 }
 
-function Bolt({ centerPointClassName = "" }: BoltProps) {
+function Bolt({ centerPointClassName }: BoltProps) {
   return (
     <div className={styles.bolt}>
       <div>
-        <div className={`${styles.boltCenter} ${centerPointClassName}`} />
+        <div className={classNames(styles.boltCenter, centerPointClassName)} />
       </div>
     </div>
   );
