@@ -41,7 +41,11 @@
       animation-timeline: scroll();
     }
 
-    > img {
+    > picture {
+      display: contents;
+    }
+
+    img {
       max-height: 50svh;
       border-radius: 9999px;
 
