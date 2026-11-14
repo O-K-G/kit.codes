@@ -6,12 +6,6 @@
   line-height: max(1.5rem, 0.75rem + 3.75vw, 3.15 * var(--desktop-rem));
   color: #fff;
   text-transform: uppercase;
-  outline-style: none;
-
-  @media (forced-colors: active) {
-    outline: 2px solid transparent;
-    outline-offset: 2px;
-  }
 
   &:lang(en) {
     font-family: var(--font-bebas-neue);

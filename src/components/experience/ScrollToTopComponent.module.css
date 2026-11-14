@@ -20,12 +20,6 @@
     border: 0 solid var(--color-title-purple);
     border-top-width: max(0.25rem, 0.2311rem + 0.0946vw, 0.2916 * var(--desktop-rem));
     border-radius: var(--fluid-rem);
-    outline-style: none;
-
-    @media (forced-colors: active) {
-      outline: 2px solid transparent;
-      outline-offset: 2px;
-    }
 
     @media (hover: hover) {
       &:hover {

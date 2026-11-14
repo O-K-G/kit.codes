@@ -84,6 +84,10 @@ export interface TitleProps extends TitleLabels {
 export interface AboutTargetIconProps {
   open: boolean;
   bottom?: boolean;
+  /** Blinks red twice when it turns true */
+  blink?: boolean;
+  /** Whether the blink runs; it pauses where it is while false */
+  running?: boolean;
 }
 
 export interface BottomInputComponentButtonsProps {
@@ -219,6 +223,17 @@ export interface ScrollableSubsectionItemProps {
 export interface ContactGoBackButtonProps {
   children: ReactNode;
   onClick: () => void;
+  className?: string;
+}
+
+export interface GaugeProps {
+  /** Whether the gauge's animations run; it pauses where it is while false */
+  running: boolean;
+  /** Called as the count hits 100%, just before it blinks */
+  onFull?: () => void;
+  /** Called once the gauge has filled and its count has blinked */
+  onComplete?: () => void;
+  /** Sizes and places the gauge, which otherwise fills its parent */
   className?: string;
 }
 

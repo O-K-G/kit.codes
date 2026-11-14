@@ -1,7 +1,7 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import ExpandableContent from "@ui/expandableContent/ExpandableContent";
-import styles from "@ui/expandableContent/ExpandableContent.module.css";
+import gaugeStyles from "@ui/expandableContent/gauge/Gauge.module.css";
 
 const TEXT = "Results-driven web developer";
 
@@ -27,8 +27,8 @@ beforeEach(() => {
 
 function renderContent() {
   const { container } = render(<ExpandableContent text={TEXT} />);
-  const gaugeFill = container.querySelector(`.${styles.gauge} > .${styles.gaugeRing} > .${styles.gaugeFill}`) as HTMLElement;
-  const gaugeCountText = container.querySelector(`.${styles.gaugeCountText}`) as HTMLElement;
+  const gaugeFill = container.querySelector(`.${gaugeStyles.gauge} > .${gaugeStyles.ring} > .${gaugeStyles.fill}`) as HTMLElement;
+  const gaugeCountText = container.querySelector(`.${gaugeStyles.countText}`) as HTMLElement;
   const content = screen.getByText(TEXT).parentElement as HTMLElement;
   return { container, gaugeFill, gaugeCountText, content };
 }
@@ -41,7 +41,7 @@ describe("ExpandableContent", () => {
     expect(screen.getByText(TEXT)).toBeInTheDocument();
     expect(content).toHaveAttribute("data-open", "false");
     expect(content).not.toHaveAttribute("tabindex");
-    expect(container.querySelector(`.${styles.gauge}`)).toHaveAttribute("aria-hidden", "true");
+    expect(container.querySelector(`.${gaugeStyles.gauge}`)).toHaveAttribute("aria-hidden", "true");
   });
 
   it("runs the gauge only while in view", () => {
@@ -53,6 +53,18 @@ describe("ExpandableContent", () => {
 
     setVisible(false);
     expect(gaugeFill).toHaveAttribute("data-running", "false");
+  });
+
+  it("blinks the corner brackets once the count hits 100%", () => {
+    const { container } = renderContent();
+    setVisible(true);
+    const brackets = container.querySelectorAll(`[data-blink]`);
+
+    expect(brackets.length).toBeGreaterThan(0);
+    brackets.forEach((element) => expect(element).toHaveAttribute("data-blink", "false"));
+
+    fireEvent.animationEnd(container.querySelector(`.${gaugeStyles.count}`) as HTMLElement);
+    brackets.forEach((element) => expect(element).toHaveAttribute("data-blink", "true"));
   });
 
   it("expands once the count has blinked, and stops observing", () => {

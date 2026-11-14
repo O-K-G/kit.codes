@@ -64,12 +64,6 @@
         width: 100%;
         font-size: max(0.875rem, min(0.5rem + 1.875vw, 1.0402rem + 0.5245vw), 1.3759 * var(--desktop-rem));
         line-height: max(1.25rem, min(0.75rem + 2.5vw, 1.4423rem + 0.7692vw), 1.9346 * var(--desktop-rem));
-        outline-style: none;
-
-        @media (forced-colors: active) {
-          outline: 2px solid transparent;
-          outline-offset: 2px;
-        }
 
         &:lang(en) {
           font-family: var(--font-montserrat);

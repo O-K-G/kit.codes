@@ -288,6 +288,15 @@
   }
 }
 
+/* Keyboard focus: a dark purple ring against the element, then a 2px gap, then a white ring, so one of
+ * the two contrasts with whatever is behind (WCAG 2.4.7 / 2.4.13). Important, so components' own
+ * outlines and shadows can't hide it. In forced colors only the outline (white ring) remains. */
+:focus-visible {
+  box-shadow: 0 0 0 4px var(--color-title-purple-dark) !important;
+  outline: 4px solid #fff !important;
+  outline-offset: 6px !important;
+}
+
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(

@@ -28,12 +28,6 @@
       font-size: max(1.25rem, min(0.625rem + 3.125vw, 1.5953rem + 0.6993vw), 2.0429 * var(--desktop-rem));
       line-height: max(1.75rem, min(1.25rem + 2.5vw, 1.7745rem + 1.1888vw), 2.5353 * var(--desktop-rem));
       text-transform: uppercase;
-      outline-style: none;
-
-      @media (forced-colors: active) {
-        outline: 2px solid transparent;
-        outline-offset: 2px;
-      }
 
       /* Rounded highlight behind the label */
       &::before {
@@ -112,12 +106,6 @@
       justify-content: center;
       height: calc(2 * var(--fluid-rem));
       border-radius: 9999px;
-      outline-style: none;
-
-      @media (forced-colors: active) {
-        outline: 2px solid transparent;
-        outline-offset: 2px;
-      }
 
       @media (hover: hover) {
         &:hover {

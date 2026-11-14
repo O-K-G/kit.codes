@@ -48,12 +48,6 @@
 
     > a {
       color: var(--color-title-purple);
-      outline-style: none;
-
-      @media (forced-colors: active) {
-        outline: 2px solid transparent;
-        outline-offset: 2px;
-      }
 
       @media (hover: hover) {
         &:hover {
@@ -76,17 +70,16 @@
 
 .button {
   z-index: 10;
+  /* A dark outline around the letters, so they keep their contrast over any part of the background
+   * (WCAG 1.4.3 / 1.4.11). Painted behind the fill, so only its outer half shows and the letters
+   * keep their shape. */
+  -webkit-text-stroke: 0.12em #000;
+  paint-order: stroke fill;
   font-family: var(--font-bebas-neue);
   font-size: max(1.5rem, 0.75rem + 3.75vw, 3.15 * var(--desktop-rem));
   line-height: max(1.5rem, 0.75rem + 3.75vw, 3.15 * var(--desktop-rem));
   color: #fff;
   text-transform: uppercase;
-  outline-style: none;
-
-  @media (forced-colors: active) {
-    outline: 2px solid transparent;
-    outline-offset: 2px;
-  }
 
   @media (hover: hover) {
     &:hover {
