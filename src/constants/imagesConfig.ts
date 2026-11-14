@@ -40,11 +40,36 @@ import experienceMd from '@/assets/images/experience-md.webp';
 import experienceLg from '@/assets/images/experience-lg.webp';
 import experienceXl from '@/assets/images/experience-xl.webp';
 import experience2Xl from '@/assets/images/experience-2xl.webp';
-import projectsSm from '@/assets/images/projects-sm.webp';
-import projectsMd from '@/assets/images/projects-md.webp';
-import projectsLg from '@/assets/images/projects-lg.webp';
-import projectsXl from '@/assets/images/projects-xl.webp';
-import projects2Xl from '@/assets/images/projects-2xl.webp';
+import projectsSm from '@/assets/images/projects/sm-640w.webp';
+import projectsMd from '@/assets/images/projects/md-768w.webp';
+import projectsLg from '@/assets/images/projects/lg-1024w.webp';
+import projectsXl from '@/assets/images/projects/xl-1280w.webp';
+import projects2Xl from '@/assets/images/projects/2xl-1728w.webp';
+import projectsSm640 from '@/assets/images/projects/sm-640w.avif';
+import projectsSm960 from '@/assets/images/projects/sm-960w.avif';
+import projectsSm1280 from '@/assets/images/projects/sm-1280w.avif';
+import projectsSm1920 from '@/assets/images/projects/sm-1920w.avif';
+import projectsSm2560 from '@/assets/images/projects/sm-2560w.avif';
+import projectsMd768 from '@/assets/images/projects/md-768w.avif';
+import projectsMd1152 from '@/assets/images/projects/md-1152w.avif';
+import projectsMd1536 from '@/assets/images/projects/md-1536w.avif';
+import projectsMd2304 from '@/assets/images/projects/md-2304w.avif';
+import projectsMd3072 from '@/assets/images/projects/md-3072w.avif';
+import projectsLg1024 from '@/assets/images/projects/lg-1024w.avif';
+import projectsLg1536 from '@/assets/images/projects/lg-1536w.avif';
+import projectsLg2048 from '@/assets/images/projects/lg-2048w.avif';
+import projectsLg3072 from '@/assets/images/projects/lg-3072w.avif';
+import projectsLg4096 from '@/assets/images/projects/lg-4096w.avif';
+import projectsXl1280 from '@/assets/images/projects/xl-1280w.avif';
+import projectsXl1920 from '@/assets/images/projects/xl-1920w.avif';
+import projectsXl2560 from '@/assets/images/projects/xl-2560w.avif';
+import projectsXl3840 from '@/assets/images/projects/xl-3840w.avif';
+import projectsXl5120 from '@/assets/images/projects/xl-5120w.avif';
+import projects2Xl1728 from '@/assets/images/projects/2xl-1728w.avif';
+import projects2Xl2592 from '@/assets/images/projects/2xl-2592w.avif';
+import projects2Xl3456 from '@/assets/images/projects/2xl-3456w.avif';
+import projects2Xl5184 from '@/assets/images/projects/2xl-5184w.avif';
+import projects2Xl6912 from '@/assets/images/projects/2xl-6912w.avif';
 import skillsSm from '@/assets/images/skills/sm-640w.webp';
 import skillsMd from '@/assets/images/skills/md-768w.webp';
 import skillsLg from '@/assets/images/skills/lg-1024w.webp';
@@ -115,7 +140,8 @@ const avif = ({ src }: StaticImageData, width: number, height: number): AvifVers
  * one's size (narrowest first), so every screen gets the smallest that's sharp on it (see
  * SectionBackground). Each is cropped at its scene's bottom edge, where a transparent part would show
  * as black: About's are from Group 31.png (the scene with its layer of stars; 1048px tall at 1x, where
- * its WebP ones keep the strip), Skills' from Group 30.png (1042px tall at 1x, as are its WebP ones).
+ * its WebP ones keep the strip), Skills' from Group 30.png (1042px tall at 1x, as are its WebP ones),
+ * Projects' from Group 32.png (1062px tall at 1x, as are its WebP ones; its crops are centered).
  * Their sizes are given here, as Next doesn't read AVIF files' sizes (it reports them as 100x100).
  */
 export const SECTION_BACKGROUNDS_AVIF: Partial<Record<SectionName, Record<Breakpoint, AvifVersion[]>>> = {
@@ -132,5 +158,12 @@ export const SECTION_BACKGROUNDS_AVIF: Partial<Record<SectionName, Record<Breakp
     lg: [avif(skillsLg1024, 1024, 1042), avif(skillsLg1536, 1536, 1563), avif(skillsLg2048, 2048, 2084), avif(skillsLg3072, 3072, 3126), avif(skillsLg4096, 4096, 4168)],
     xl: [avif(skillsXl1280, 1280, 1042), avif(skillsXl1920, 1920, 1563), avif(skillsXl2560, 2560, 2084), avif(skillsXl3840, 3840, 3126), avif(skillsXl5120, 5120, 4168)],
     '2xl': [avif(skills2Xl1728, 1728, 1042), avif(skills2Xl2592, 2592, 1563), avif(skills2Xl3456, 3456, 2084), avif(skills2Xl5184, 5184, 3126), avif(skills2Xl6912, 6912, 4168)],
+  },
+  projects: {
+    sm: [avif(projectsSm640, 640, 1062), avif(projectsSm960, 960, 1593), avif(projectsSm1280, 1280, 2124), avif(projectsSm1920, 1920, 3186), avif(projectsSm2560, 2560, 4248)],
+    md: [avif(projectsMd768, 768, 1062), avif(projectsMd1152, 1152, 1593), avif(projectsMd1536, 1536, 2124), avif(projectsMd2304, 2304, 3186), avif(projectsMd3072, 3072, 4248)],
+    lg: [avif(projectsLg1024, 1024, 1062), avif(projectsLg1536, 1536, 1593), avif(projectsLg2048, 2048, 2124), avif(projectsLg3072, 3072, 3186), avif(projectsLg4096, 4096, 4248)],
+    xl: [avif(projectsXl1280, 1280, 1062), avif(projectsXl1920, 1920, 1593), avif(projectsXl2560, 2560, 2124), avif(projectsXl3840, 3840, 3186), avif(projectsXl5120, 5120, 4248)],
+    '2xl': [avif(projects2Xl1728, 1728, 1062), avif(projects2Xl2592, 2592, 1593), avif(projects2Xl3456, 3456, 2124), avif(projects2Xl5184, 5184, 3186), avif(projects2Xl6912, 6912, 4248)],
   },
 };
