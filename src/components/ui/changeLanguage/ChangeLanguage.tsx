@@ -18,6 +18,14 @@ function SelectLanguageButton({ label, value }: SelectLanguageButtonProps) {
   const router = useRouter();
   const { onClose } = useContext(DialogContext);
 
+  /** Closes the dialog, and switches to this language if it isn't the current one */
+  const handleSelect = () => {
+    onClose();
+    if (!isCurrentLocale) {
+      router.push(pathname.replace(`/${locale as string}`, `/${value}`));
+    }
+  };
+
   return (
     <li>
       {/* Each name is written in its own language (WCAG 3.1.2); the current one is marked for screen
@@ -26,12 +34,7 @@ function SelectLanguageButton({ label, value }: SelectLanguageButtonProps) {
         lang={value}
         aria-current={isCurrentLocale || undefined}
         data-current-locale={isCurrentLocale}
-        onClick={() => {
-          onClose();
-          if (!isCurrentLocale) {
-            router.push(pathname.replace(`/${locale as string}`, `/${value}`));
-          }
-        }}
+        onClick={handleSelect}
         type="button"
         value={value}
       >
@@ -64,15 +67,18 @@ export default function ChangeLanguage() {
   const [open, setOpen] = useState(false);
   const t = useTranslations("languageSelect");
 
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   return (
     <>
       <IconButton
         className={styles.iconButton}
-        onClick={() => setOpen(true)}
+        onClick={handleOpen}
         icon={<LanguageIcon />}
         aria-label={t("changeLanguage")}
       />
-      <Dialog open={open} onClose={() => setOpen(false)}>
+      <Dialog open={open} onClose={handleClose}>
         <LanguagesList />
       </Dialog>
     </>

@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useEffect, useId, useRef } from "react";
+import { MouseEvent, SyntheticEvent, createContext, useEffect, useId, useRef } from "react";
 import { DialogProps } from "@constants/interfaces";
 import classNames from "@utils/classNames";
 import styles from "./Dialog.module.css";
@@ -20,22 +20,37 @@ export const DialogContext = createContext({
  * a click on its backdrop, or its title's close button, see DialogTitle), so the owner's state follows.
  * Named by its DialogTitle, or by an `aria-label`. It stays mounted, so it can animate in and out.
  */
-export default function Dialog({ open, onClose, children, className, ...rest }: DialogProps) {
+export default function Dialog({
+  open,
+  onClose,
+  children,
+  className,
+  onClick,
+  ...rest
+}: DialogProps) {
   const ref = useRef<HTMLDialogElement>(null);
   const titleId = useId();
 
   useEffect(() => {
     const dialog = ref.current;
-    if (!dialog) return;
+    if (!dialog) {
+      return;
+    }
 
-    if (open && !dialog.open) dialog.showModal?.();
-    if (!open && dialog.open) dialog.close?.();
+    if (open && !dialog.open) {
+      dialog.showModal?.();
+    }
+    if (!open && dialog.open) {
+      dialog.close?.();
+    }
   }, [open]);
 
   /** The browser returns focus to what had it when the dialog opened. If that was nothing (the page),
    * focus goes to the dialog still open under this one, if any, rather than being lost (WCAG 2.4.3) */
   const restoreFocus = () => {
-    if (document.activeElement && document.activeElement !== document.body) return;
+    if (document.activeElement && document.activeElement !== document.body) {
+      return;
+    }
 
     const below = Array.from(document.querySelectorAll<HTMLDialogElement>("dialog[open]")).at(-1);
     below
@@ -43,25 +58,35 @@ export default function Dialog({ open, onClose, children, className, ...rest }: 
       ?.focus();
   };
 
+  /** Closed by the browser (Escape) too: the owner's state follows. Not when the owner closed it (it
+   * already knows), nor for a dialog nested inside (React passes its "close" up the tree) */
+  const handleClose = (event: SyntheticEvent<HTMLDialogElement>) => {
+    if (event.target !== event.currentTarget) {
+      return;
+    }
+    restoreFocus();
+    if (open) {
+      onClose();
+    }
+  };
+
+  /** A click on the backdrop lands on the dialog itself */
+  const handleClick = (event: MouseEvent<HTMLDialogElement>) => {
+    if (event.target === event.currentTarget) {
+      onClose();
+    }
+    onClick?.(event);
+  };
+
   return (
     <dialog
       ref={ref}
       data-testid={DIALOG_TEST_ID}
       aria-labelledby={rest["aria-label"] ? undefined : titleId}
-      {...rest}
-      // Closed by the browser (Escape) too: the owner's state follows. Not when the owner closed it
-      // (it already knows), nor for a dialog nested inside (React passes its "close" up the tree)
-      onClose={(event) => {
-        if (event.target !== event.currentTarget) return;
-        restoreFocus();
-        if (open) onClose();
-      }}
-      // A click on the backdrop lands on the dialog itself
-      onClick={(event) => {
-        if (event.target === event.currentTarget) onClose();
-        rest.onClick?.(event);
-      }}
+      onClose={handleClose}
+      onClick={handleClick}
       className={classNames(styles.dialog, className)}
+      {...rest}
     >
       <DialogContext.Provider value={{ titleId, onClose }}>
         {children}

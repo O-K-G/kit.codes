@@ -29,11 +29,15 @@ export default function SkillBars({ className }: SkillBarsProps) {
 
   useEffect(() => {
     const list = listRef.current;
-    if (!list || filling) return;
+    if (!list || filling) {
+      return;
+    }
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) setFilling(true);
+        if (entry.isIntersecting) {
+          setFilling(true);
+        }
       },
       { threshold: IN_VIEW_THRESHOLD }
     );
@@ -44,19 +48,24 @@ export default function SkillBars({ className }: SkillBarsProps) {
 
   useEffect(() => {
     const handleKeyDown = ({ key }: KeyboardEvent) => {
-      if (key === "Escape") setTooltipsHidden(true);
+      if (key === "Escape") {
+        setTooltipsHidden(true);
+      }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
+  /** Moving the pointer brings the tooltips back */
+  const handlePointerMove = () => setTooltipsHidden(false);
+
   return (
     <ul
       ref={listRef}
       dir="ltr"
       data-tooltips-hidden={tooltipsHidden}
-      onPointerMove={() => setTooltipsHidden(false)}
+      onPointerMove={handlePointerMove}
       className={classNames(styles.list, className)}
       style={
         {

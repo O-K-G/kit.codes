@@ -50,6 +50,27 @@ export default function ScrollableSubsectionContainer({
     });
   };
 
+  const handlePrevious = () => {
+    const isZero = selectedSubsection - 1 > 0 ? selectedSubsection - 1 : 0;
+    const id = (childrenWithNewProps?.[isZero]?.props as PropsWithId)?.id;
+
+    if (id || id === 0) {
+      const { offsetWidth } = (scrollableRef.current as unknown as HTMLDivElement) || 0;
+
+      handleScroll({ id, offsetWidth });
+    }
+  };
+
+  const handleNext = () => {
+    const id = (childrenWithNewProps?.[selectedSubsection + 1]?.props as PropsWithId)?.id;
+
+    if (id) {
+      const { offsetWidth } = (scrollableRef.current as unknown as HTMLDivElement) || 0;
+
+      handleScroll({ id, offsetWidth });
+    }
+  };
+
   return (
     <div
       role="region"
@@ -61,19 +82,7 @@ export default function ScrollableSubsectionContainer({
         <IconButton
           data-testid={LEFT_BUTTON_TEST_ID}
           disabled={!selectedSubsection}
-          onClick={() => {
-            const isZero =
-              selectedSubsection - 1 > 0 ? selectedSubsection - 1 : 0;
-            const id = (childrenWithNewProps?.[isZero]?.props as PropsWithId)
-              ?.id;
-
-            if (id || id === 0) {
-              const { offsetWidth } =
-                (scrollableRef.current as unknown as HTMLDivElement) || 0;
-
-              handleScroll({ id, offsetWidth });
-            }
-          }}
+          onClick={handlePrevious}
           className={classNames(styles.navButton, styles.previousButton)}
           aria-label={t("previous")}
           icon={<ArrowIconComponent />}
@@ -91,19 +100,7 @@ export default function ScrollableSubsectionContainer({
         <IconButton
           data-testid={RIGHT_BUTTON_TEST_ID}
           disabled={selectedSubsection + 1 === childrenWithNewProps?.length}
-          onClick={() => {
-            const id = (
-              childrenWithNewProps?.[selectedSubsection + 1]
-                ?.props as PropsWithId
-            )?.id;
-
-            if (id) {
-              const { offsetWidth } =
-                (scrollableRef.current as unknown as HTMLDivElement) || 0;
-
-              handleScroll({ id, offsetWidth });
-            }
-          }}
+          onClick={handleNext}
           className={classNames(styles.navButton, styles.nextButton)}
           aria-label={t("next")}
           icon={<ArrowIconComponent />}

@@ -17,7 +17,9 @@ import classNames from "@utils/classNames";
 export default function Gauge({ running, onFull, onComplete, className }: GaugeProps) {
   /** The count's own animation ends at 100%; its text's (::after) blink ends the gauge */
   const handleCountEnd = ({ target, currentTarget, pseudoElement }: AnimationEvent<HTMLDivElement>) => {
-    if (target !== currentTarget) return;
+    if (target !== currentTarget) {
+      return;
+    }
 
     if (pseudoElement === "::after") {
       onComplete?.();

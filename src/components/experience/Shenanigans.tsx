@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 import Dialog, { DialogContext } from "@ui/dialog/Dialog";
 import DialogTitle from "@ui/dialog/DialogTitle";
 import styles from "./Shenanigans.module.css";
-import { useContext, useState, MouseEventHandler, ReactNode } from "react";
+import { useContext, useState, MouseEvent, MouseEventHandler, ReactNode } from "react";
 import classNames from "@utils/classNames";
 
 function OldschoolButton({
@@ -30,11 +30,18 @@ function ShenanigansComponent() {
   const { onClose } = useContext(DialogContext);
   const t = useTranslations("shenanigansText");
 
+  /** A click on the backdrop itself (not on the window) */
+  const handleBackdropClick = (event: MouseEvent<HTMLDivElement>) => {
+    if (event.target === event.currentTarget) {
+      onClose();
+    }
+  };
+
   return (
     // Its own full-screen backdrop (the "desktop"): a click on it closes the dialog, like a click on a
     // dialog's backdrop (Escape closes it too, see Dialog)
     <div
-      onClick={(event) => event.target === event.currentTarget && onClose()}
+      onClick={handleBackdropClick}
       role="presentation"
       className={styles.backdrop}
     >
@@ -82,12 +89,15 @@ export default function Shenanigans() {
   const [open, setOpen] = useState(false);
   const t = useTranslations("shenanigansText");
 
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   return (
     <>
-      <button type="button" className={styles.button} onClick={() => setOpen(true)}>
+      <button type="button" className={styles.button} onClick={handleOpen}>
         {t("shenanigansButton")}
       </button>
-      <Dialog open={open} onClose={() => setOpen(false)}>
+      <Dialog open={open} onClose={handleClose}>
         <ShenanigansComponent />
       </Dialog>
     </>

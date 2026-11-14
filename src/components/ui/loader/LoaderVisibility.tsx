@@ -56,6 +56,9 @@ export default function LoaderVisibility({
     };
   }, []);
 
+  /** Once the loader has faded out, it's removed */
+  const handleTransitionEnd = () => setIsLoader(false);
+
   if (!isLoader && !open) {
     return null;
   }
@@ -63,7 +66,7 @@ export default function LoaderVisibility({
   return (
     <div
       data-nosnippet
-      onTransitionEnd={() => setIsLoader(false)}
+      onTransitionEnd={handleTransitionEnd}
       data-open={!!(!isFirstScreenReady || open)}
       className={className}
     >

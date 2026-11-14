@@ -12,8 +12,8 @@ export default function ContactGoBackButton({
     <button
       data-testid={CONTACT_ME_BUTTON_TEST_ID}
       type="button"
-      {...rest}
       className={classNames(styles.button, className)}
+      {...rest}
     />
   );
 }

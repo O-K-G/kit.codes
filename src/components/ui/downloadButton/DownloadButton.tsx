@@ -15,6 +15,12 @@ export default function DownloadButton({ hide }: CvProps) {
   const { handleDownload, hasError, clearError } = useHandleDownload();
   const { cvFileURL } = URLs;
 
+  const handleClick = () =>
+    handleDownload({
+      url: cvFileURL,
+      fileName: t('filename'),
+    });
+
   if (hide) {
     return null;
   }
@@ -25,12 +31,7 @@ export default function DownloadButton({ hide }: CvProps) {
         className={styles.iconButton}
         icon={<CvIcon />}
         aria-label={t('download')}
-        onClick={() =>
-          handleDownload({
-            url: cvFileURL,
-            fileName: t('filename'),
-          })
-        }
+        onClick={handleClick}
       />
       <Dialog open={hasError} onClose={clearError}>
         <DownloadError />

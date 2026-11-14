@@ -50,12 +50,15 @@ export default function Attribution() {
   const [open, setOpen] = useState(false);
   const t = useTranslations("attributionText");
 
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   return (
     <>
-      <button type="button" className={styles.button} onClick={() => setOpen(true)}>
+      <button type="button" className={styles.button} onClick={handleOpen}>
         {t("title")}
       </button>
-      <Dialog open={open} onClose={() => setOpen(false)}>
+      <Dialog open={open} onClose={handleClose}>
         <AttributionContent />
       </Dialog>
     </>

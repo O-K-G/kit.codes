@@ -26,7 +26,9 @@ export default function ExpandableContent({ text }: ExpandableContentProps) {
 
   useEffect(() => {
     const box = boxRef.current;
-    if (!box || open) return;
+    if (!box || open) {
+      return;
+    }
 
     const observer = new IntersectionObserver(
       ([entry]) => setInView(entry.isIntersecting),
@@ -37,6 +39,10 @@ export default function ExpandableContent({ text }: ExpandableContentProps) {
     return () => observer.disconnect();
   }, [open]);
 
+  /** The count hit 100%: the brackets blink with it. Then, once it has blinked, the box opens */
+  const handleGaugeFull = () => setFull(true);
+  const handleGaugeComplete = () => setOpen(true);
+
   return (
     <div className={styles.container}>
       <div ref={boxRef} className={styles.box} data-open={open}>
@@ -44,8 +50,8 @@ export default function ExpandableContent({ text }: ExpandableContentProps) {
         <Gauge
           className={styles.gauge}
           running={inView}
-          onFull={() => setFull(true)}
-          onComplete={() => setOpen(true)}
+          onFull={handleGaugeFull}
+          onComplete={handleGaugeComplete}
         />
         {/* Focusable once open, so keyboard users can scroll a long text (WCAG 2.1.1) */}
         <div

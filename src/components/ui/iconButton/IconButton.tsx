@@ -10,8 +10,8 @@ export default function IconButton({
   return (
     <button
       type="button"
-      {...rest}
       className={classNames(styles.button, className)}
+      {...rest}
     >
       {icon}
     </button>

@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  FocusEvent,
   ReactNode,
   TransitionEventHandler,
   createContext,
@@ -85,29 +86,35 @@ export default function AsideDrawer({
     }
   };
 
+  /** Its content is mounted right away, so it slides in with it */
+  const handleOpen = () => {
+    setOpenAtTransitionEnd(true);
+    setOpen(true);
+  };
+
+  const handleClose = () => setOpen(false);
+
+  /** Keeps the focused control's rings in view too (the scroll padding leaves room for them) */
+  const handleFocus = ({ target }: FocusEvent<HTMLDialogElement>) =>
+    target.scrollIntoView?.({ block: "nearest" });
+
   return (
     <>
-      <ContactGoBackButton
-        onClick={() => {
-          setOpenAtTransitionEnd(true);
-          setOpen(true);
-        }}
-      >
+      <ContactGoBackButton onClick={handleOpen}>
         {openButtonLabel}
       </ContactGoBackButton>
       <Dialog
         open={!!open}
-        onClose={() => setOpen(false)}
+        onClose={handleClose}
         aria-label={openButtonLabel}
-        // Keeps the focused control's rings in view too (the scroll padding leaves room for them)
-        onFocus={({ target }) => target.scrollIntoView?.({ block: "nearest" })}
+        onFocus={handleFocus}
         onTransitionEnd={
           handleTransitionEnd as unknown as TransitionEventHandler<HTMLDialogElement>
         }
         className={styles.aside}
       >
         <AsideContext.Provider
-          value={{ open: openAtTransitionEnd, onClose: () => setOpen(false) }}
+          value={{ open: openAtTransitionEnd, onClose: handleClose }}
         >
           {children}
         </AsideContext.Provider>

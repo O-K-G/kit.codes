@@ -19,11 +19,11 @@ function AnchorLink({
   return (
     <li data-rounded={isRounded} className={styles.listItem}>
       <a
-        {...rest}
         data-rounded={isRounded}
         href={url}
         rel="noreferrer"
         target="_blank"
+        {...rest}
       >
         {icon}
       </a>

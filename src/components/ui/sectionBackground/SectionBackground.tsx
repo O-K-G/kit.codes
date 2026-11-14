@@ -47,13 +47,13 @@ export default function SectionBackground({
           />
         ))}
         <img
-          {...imgProps}
           aria-hidden
           {...{
             [priority
               ? LOADER_CRITICAL_IMAGE_ATTRIBUTE
               : LOADER_DEFERRED_IMAGE_ATTRIBUTE]: true,
           }}
+          {...imgProps}
         />
       </picture>
     </div>

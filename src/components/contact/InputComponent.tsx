@@ -1,7 +1,7 @@
 import { handleA11y1000FirstNumbers } from '@utils/handleA11y1000FirstNumbers';
 import { InputComponentProps } from '@constants/interfaces';
 import { useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import DOMPurify from "isomorphic-dompurify";
 import styles from './InputComponent.module.css';
 
@@ -41,6 +41,14 @@ export default function InputComponent({
   const errorId = `${id}-error`;
   const counterId = `${id}-counter`;
 
+  /** Keeps the sanitized text, and tells the form the field changed */
+  const handleChange = ({
+    target: { value: newValue },
+  }: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setValue(DOMPurify.sanitize(newValue));
+    onChange?.();
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.labelWrapper}>
@@ -54,11 +62,7 @@ export default function InputComponent({
         <div className={styles.fieldWrapper}>
           <Component
             type="text"
-            {...rest}
-            onChange={({ target: { value } }) => {
-              setValue(DOMPurify.sanitize(value));
-              onChange?.();
-            }}
+            onChange={handleChange}
             value={value}
             maxLength={maxLength}
             aria-invalid={isError}
@@ -67,6 +71,7 @@ export default function InputComponent({
             id={id}
             name={id}
             className={styles.field}
+            {...rest}
           />
           {/* Named by its <label>; the error and the characters left describe it. The error is shown
            * in text, not only by the field's color (WCAG 1.4.1, 3.3.1), and announced when it appears */}

@@ -95,6 +95,14 @@ export default function ContactForm({ footer }: ContactFormProps) {
     }
   };
 
+  /** A new send clears the last one's "sent" message */
+  const handleSendClick = () => setMessageSent(false);
+
+  /** The align button switches the form's text direction */
+  const handleAlign = (newDir: "ltr" | "rtl") => setDir(newDir);
+
+  const handleCloseSendError = () => setSendError(null);
+
   return (
     <>
       <form
@@ -141,15 +149,8 @@ export default function ContactForm({ footer }: ContactFormProps) {
                   <BottomInputComponentButtons
                     dir={dir}
                     isSubmitDisabled={!!errors.length}
-                    onSubmit={() => setMessageSent(false)}
-                    onClick={(val) => {
-                      if (dir === "ltr" && val === "rtl") {
-                        setDir("rtl");
-                      }
-                      if (dir === "rtl" && val === "ltr") {
-                        setDir("ltr");
-                      }
-                    }}
+                    onSubmit={handleSendClick}
+                    onClick={handleAlign}
                     leftSlot={<ProgressIndicators isMessageSent={isMessageSent} />}
                   />
                   {footer && <div dir={direction}>{footer}</div>}
@@ -168,7 +169,7 @@ export default function ContactForm({ footer }: ContactFormProps) {
           ))}
         </div>
       </form>
-      <Dialog open={sendError !== null} onClose={() => setSendError(null)}>
+      <Dialog open={sendError !== null} onClose={handleCloseSendError}>
         <ErrorDialogMeesage details={sendError ?? ""} />
       </Dialog>
     </>
