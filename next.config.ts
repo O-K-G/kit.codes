@@ -10,6 +10,14 @@ const PREVIEW_SOURCES = isPreview
   : "";
 
 /**
+ * Trusted Types: the browser refuses plain strings where they would run as code (innerHTML, eval,
+ * script URLs...), and no policy may be created to turn strings into such code ('none'): neither the
+ * site, React nor Next needs one. Not in development, whose tools run code with eval, nor on previews,
+ * whose Vercel toolbar injects scripts.
+ */
+const enforceTrustedTypes = !isDev && !isPreview;
+
+/**
  * The Content-Security-Policy, the same on every response, so the pages can be prerendered and
  * cached (a per-request nonce would render each page on every request). Scripts and styles come
  * from this site only; 'unsafe-inline' is needed by Next's inline scripts (each page's data) and by
@@ -28,6 +36,8 @@ const CSP = [
   "base-uri 'self'",
   "form-action 'self'",
   "frame-ancestors 'none'",
+  enforceTrustedTypes && "require-trusted-types-for 'script'",
+  enforceTrustedTypes && "trusted-types 'none'",
   !isDev && "upgrade-insecure-requests",
 ]
   .filter(Boolean)
