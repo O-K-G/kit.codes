@@ -1,0 +1,95 @@
+/* A grid of two columns (names, bars) shared by every row through subgrid, so the bars line up.
+ * It needs a definite size (it's a size container: the rows scale with its height). Each row is
+ * --row-height tall at most, and at most 80% of the height shared between the rows; the rest goes
+ * into the gaps (space-evenly). */
+.list {
+  --row-height: max(2rem, 1.6591rem + 1.7045vw, 2.75 * var(--desktop-rem));
+
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  grid-template-rows: repeat(var(--count), min(var(--row-height), 80% / var(--count)));
+  align-content: space-evenly;
+  column-gap: var(--fluid-rem);
+  container-type: size;
+}
+
+.skill {
+  /* The row's height (as in the list's grid-template-rows), which the name and the bar scale with */
+  --row: min(var(--row-height), 80cqh / var(--count));
+
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+  align-items: center;
+  height: var(--row);
+}
+
+.name {
+  text-align: end;
+  font-family: var(--font-montserrat);
+  font-size: min(
+    max(0.875rem, min(0.6071rem + 1.3393vw, 0.9865rem + 0.549vw), 1.3379 * var(--desktop-rem)),
+    0.8 * var(--row)
+  );
+  line-height: 1;
+  color: #fff;
+  /* A dark outline around the letters, so they keep their contrast over any part of the background
+   * (WCAG 1.4.3). Painted behind the fill, so only its outer half shows. */
+  -webkit-text-stroke: 0.12em #000;
+  paint-order: stroke fill;
+}
+
+/* ---- The bar: a purple pill holding the segments ---- */
+.bar {
+  height: 100%;
+  padding: calc(0.15 * var(--row)) calc(0.4 * var(--row));
+  border: 2px solid var(--color-title-purple);
+  border-radius: 9999px;
+  background-color: oklch(27.9% 0.041 260.031 / 70%);
+}
+
+/* --segments slots (70% bar, 30% gap each); the empty ones show faintly */
+.segments {
+  position: relative;
+  height: 100%;
+  background-color: rgb(255 255 255 / 15%);
+  mask-image: repeating-linear-gradient(
+    90deg,
+    #000 0 calc(70% / var(--segments)),
+    transparent 0 calc(100% / var(--segments))
+  );
+}
+
+/* The color along the full scale, revealed from the left up to the skill's --level, segment by segment */
+.fill {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+    90deg,
+    oklch(63.7% 0.237 25.331),
+    var(--color-title-purple),
+    #fff
+  );
+  clip-path: inset(0 100% 0 0);
+
+  &[data-filling="true"] {
+    animation-name: skill-fill;
+    animation-duration: 1.2s;
+    animation-timing-function: steps(var(--level), end);
+    animation-delay: calc(var(--index) * 80ms);
+    animation-fill-mode: forwards;
+  }
+}
+
+/* Without JavaScript nothing would start the fill: show the bars full right away */
+@media (scripting: none) {
+  .fill {
+    clip-path: inset(0 calc(100% * (1 - var(--level) / var(--segments))) 0 0);
+  }
+}
+
+@keyframes skill-fill {
+  to {
+    clip-path: inset(0 calc(100% * (1 - var(--level) / var(--segments))) 0 0);
+  }
+}

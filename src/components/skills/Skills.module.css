@@ -11,8 +11,9 @@
     height: 200dvh;
   }
 
-  /* The titles slide from below the viewport to their own --top-var position, driven by the scroll position. */
-  .title {
+  /* The titles and the skills slide from below the viewport to their own --top-var position, driven
+   * by the scroll position. */
+  .slideIn {
     position: fixed;
     top: 110vh;
 
@@ -47,6 +48,32 @@
       @media screen and (min-width: 1024px) {
         --top-var: 25dvh;
       }
+    }
+  }
+
+  /* Under the subtitle, down to above the planet at the bottom of the background, centered; on wider
+   * screens it leaves room for the side links on the left (and the same on the right, to stay
+   * centered) */
+  .skillBars {
+    --top-var: 34svh;
+
+    right: 0;
+    left: 0;
+    width: min(100% - 2 * var(--fluid-rem), 40 * var(--fluid-rem));
+    height: calc(72svh - var(--top-var));
+    margin-inline: auto;
+
+    @media (width >= 40rem) {
+      --top-var: 37svh;
+
+      width: min(100% - 10 * var(--fluid-rem), 48 * var(--fluid-rem));
+      height: calc(82svh - var(--top-var));
+    }
+
+    @media (width >= 64rem) {
+      --top-var: 37dvh;
+
+      height: calc(82dvh - var(--top-var));
     }
   }
 }

@@ -301,13 +301,9 @@ export interface CvProps {
   hide?: boolean;
 }
 
-export interface SkillsListRowProps {
-  children: ReactNode;
-  className: string;
-}
-
-export interface SkillBlockProps {
-  str: string;
+export interface SkillBarsProps {
+  /** Sizes and places the list */
+  className?: string;
 }
 
 export interface handleDownloadProps {
