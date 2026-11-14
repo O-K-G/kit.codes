@@ -4,18 +4,15 @@ import styles from "./ContactGoBackButton.module.css";
 export const CONTACT_ME_BUTTON_TEST_ID = "contact-me-button-test";
 
 export default function ContactGoBackButton({
-  children,
-  onClick,
   className = styles.defaultPosition,
+  ...rest
 }: ContactGoBackButtonProps) {
   return (
     <button
       data-testid={CONTACT_ME_BUTTON_TEST_ID}
-      onClick={onClick}
       type="button"
+      {...rest}
       className={`${styles.button} ${className}`}
-    >
-      {children}
-    </button>
+    />
   );
 }

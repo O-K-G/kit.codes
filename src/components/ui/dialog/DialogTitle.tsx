@@ -6,11 +6,11 @@ import styles from './DialogTitle.module.css';
 
 export default function DialogTitle({
   label,
-  onClick,
   className = '',
   closeButtonIcon = (
     <CloseIcon />
   ),
+  ...rest
 }: DialogTitleProps) {
   const t = useTranslations('dialogComponentText');
 
@@ -20,8 +20,8 @@ export default function DialogTitle({
       <div>
         <IconButton
           aria-label={t('close')}
-          onClick={onClick}
           icon={closeButtonIcon}
+          {...rest}
         />
       </div>
     </div>

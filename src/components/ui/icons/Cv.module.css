@@ -1,3 +1,4 @@
 .icon {
+  composes: edge from "./IconEdge.module.css";
   flex-shrink: 0;
 }

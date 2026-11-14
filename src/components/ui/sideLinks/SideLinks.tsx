@@ -14,16 +14,14 @@ function AnchorLink({
   url,
   icon,
   isRounded,
-  'aria-label': ariaLabel,
-  'data-testid': dataTestId,
+  ...rest
 }: AnchorLinkProps) {
   return (
     <li data-rounded={isRounded} className={styles.listItem}>
       <a
-        data-testid={dataTestId}
+        {...rest}
         data-rounded={isRounded}
         href={url}
-        aria-label={ariaLabel}
         rel="noreferrer"
         target="_blank"
       >

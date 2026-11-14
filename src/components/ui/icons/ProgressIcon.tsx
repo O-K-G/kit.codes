@@ -3,13 +3,13 @@ import styles from './ProgressIcon.module.css';
 
 export default function ProgressIcon({
   className = '',
-  'data-loading': dataLoading,
+  ...rest
 }: IconsProps & {
   'data-loading'?: boolean;
 }) {
   return (
     <svg
-      data-loading={dataLoading}
+      {...rest}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 -960 960 960"
       className={`${styles.icon} ${className}`}

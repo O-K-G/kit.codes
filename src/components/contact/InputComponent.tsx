@@ -8,16 +8,13 @@ import styles from './InputComponent.module.css';
 export default function InputComponent({
   component: Component = 'input',
   id,
-  placeholder,
-  minLength,
   maxLength,
-  rows,
   onChange,
   isError,
   bottomSlot,
   isReset,
-  onClick,
   label,
+  ...rest
 }: InputComponentProps) {
   const [value, setValue] = useState('');
   const t = useTranslations('inputComponentText');
@@ -61,21 +58,18 @@ export default function InputComponent({
         <div className={styles.fieldWrapper}>
           <Component
             type="text"
+            {...rest}
             onChange={({ target: { value } }) => {
               setValue(DOMPurify.sanitize(value));
               onChange?.();
             }}
-            onClick={onClick}
             value={value}
-            minLength={minLength}
             maxLength={maxLength}
             aria-label={ariaLabel}
             aria-invalid={isError}
             id={id}
             name={id}
             className={styles.field}
-            placeholder={placeholder}
-            rows={rows}
           />
           <div aria-live="assertive" className={styles.srOnly}>
             {isError ? ariaLabel : ''}

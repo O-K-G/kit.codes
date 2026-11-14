@@ -9,18 +9,15 @@ export const SCROLLABLE_ITEM_TEST_ID = 'scrollable-item-test-id';
 
 export function ScrollableSubsectionItem({
   children,
-  onSubsectionSelectChange,
-  id,
   ref,
+  ...rest
 }: ScrollableSubsectionItemProps) {
-  const scrollableRef = ref;
   const scrollableItemRef = useRef(null);
 
   useObserveScrollSubsection({
-    id,
-    onSubsectionSelectChange,
+    ...rest,
     scrollableItemRef,
-    scrollableRef,
+    scrollableRef: ref,
   });
 
   return (

@@ -1,0 +1,13 @@
+/* A thin dark edge along an icon's outline, half inside its shapes and half outside (a stroke centered
+ * on them), so it stands out from any background. The stroke keeps the same width whatever the icon's
+ * viewBox, and isn't clipped where the shapes touch the icon's box. */
+.edge {
+  overflow: visible;
+  stroke: rgb(0 0 0 / 75%);
+  stroke-width: max(1.5px, 0.09375 * var(--fluid-rem));
+  stroke-linejoin: round;
+
+  & * {
+    vector-effect: non-scaling-stroke;
+  }
+}

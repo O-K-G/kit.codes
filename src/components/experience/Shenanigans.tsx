@@ -15,15 +15,15 @@ const COMPONENT_ID = "shenanigans-id";
 
 function OldschoolButton({
   children,
-  onClick,
+  ...rest
 }: {
   children: ReactNode;
   onClick: MouseEventHandler<HTMLButtonElement>;
 }) {
   return (
     <button
-      onClick={onClick}
       type="button"
+      {...rest}
     >
       <span className={styles.oldschoolButtonLabel}>
         {children}
