@@ -6,7 +6,7 @@
   height: 100vh;
   clip-path: inset(0);
 
-  /* The image, and what's drawn over it (see OVERLAYS), cover the screen in the same box. Both zoom in
+  /* The image, and what's drawn over it (see SectionSky), cover the screen in the same box. Both zoom in
    * according to the page's scroll position, alike, so they stay together. */
   img,
   .overlay {

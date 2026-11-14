@@ -1,4 +1,4 @@
-import { Fragment, ReactNode } from "react";
+import { Fragment } from "react";
 import { getImageProps } from "next/image";
 import { SectionBackgroundProps } from "@constants/interfaces";
 import {
@@ -11,8 +11,9 @@ import {
   LOADER_CRITICAL_IMAGE_ATTRIBUTE,
   LOADER_DEFERRED_IMAGE_ATTRIBUTE,
 } from "@constants/loader";
-import { SectionName } from "@constants/interfaces";
-import AboutSky from "@ui/sectionBackground/AboutSky";
+import { SKIES } from "@constants/sky";
+import SectionSky from "@ui/sectionBackground/SectionSky";
+import AboutComet from "@ui/sectionBackground/AboutComet";
 import styles from "./SectionBackground.module.css";
 import classNames from "@utils/classNames";
 
@@ -29,11 +30,6 @@ const toSrcSet = (versions: AvifVersion[]) =>
 const toSizes = ({ width, height }: AvifVersion) =>
   `(max-aspect-ratio: ${width}/${height}) calc(100vh * ${width} / ${height}), 100vw`;
 
-/** Animated parts drawn over a section's image, which move and zoom with it */
-const OVERLAYS: Partial<Record<SectionName, ReactNode>> = {
-  about: <AboutSky />,
-};
-
 /** This component is a fix to cases in mobile devices in which the user scrolls down in "extreme velocity",
  * and once the browser hits the bottom - the background flickers for a fraction of a second.
  */
@@ -49,7 +45,6 @@ export default function SectionBackground({
 
   const images = SECTION_BACKGROUNDS[currentSection];
   const avifImages = SECTION_BACKGROUNDS_AVIF[currentSection];
-  const overlay = OVERLAYS[currentSection];
 
   /** `unoptimized`: the files are served as they are (no re-encoding); the <picture> below does the art direction.
    * The route's own background is fetched right away, with high priority, and the loader waits for it.
@@ -101,9 +96,12 @@ export default function SectionBackground({
           {...imgProps}
         />
       </picture>
-      {overlay && (
+      {/* Animated parts drawn over the image, which move and zoom with it: the stars, and About's comet */}
+      {SKIES[currentSection] && (
         <div aria-hidden className={styles.overlay}>
-          {overlay}
+          <SectionSky section={currentSection}>
+            {currentSection === "about" && <AboutComet />}
+          </SectionSky>
         </div>
       )}
     </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useEffect, useRef } from "react";
+import { CSSProperties, ReactNode, useEffect, useRef } from "react";
 
 /**
  * Pauses its children's animations while their section is off screen (they're only seen inside it): CSS
@@ -9,9 +9,11 @@ import { ReactNode, useEffect, useRef } from "react";
  */
 export default function PauseOffscreen({
   className,
+  style,
   children,
 }: {
   className?: string;
+  style?: CSSProperties;
   children: ReactNode;
 }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -40,7 +42,7 @@ export default function PauseOffscreen({
   }, []);
 
   return (
-    <div ref={ref} className={className}>
+    <div ref={ref} className={className} style={style}>
       {children}
     </div>
   );

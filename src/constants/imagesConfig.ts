@@ -190,11 +190,13 @@ const avif = ({ src }: StaticImageData, width: number, height: number): AvifVers
  * one's size (narrowest first), so every screen gets the smallest that's sharp on it (see
  * SectionBackground). Each is cropped at its scene's bottom edge, where a transparent part would show
  * as black: About's are from About.png (1048px tall at 1x, as are its WebP ones; its comet and stars
- * are drawn and animated over it, see AboutSky), Skills' from Group 30.png (1042px tall at 1x, as are its WebP ones),
- * Projects' from Group 32.png (1062px tall at 1x, as are its WebP ones; its crops are centered),
- * Experience's from Group 33.png (1050px tall at 1x, as are its WebP ones), Contact's from Group 5.png
+ * are drawn and animated over it, see SectionSky), Skills' from Skills.png (1042px tall at 1x, as are its WebP ones),
+ * Projects' from Projects.png (1062px tall at 1x, as are its WebP ones; its crops are centered),
+ * Experience's from Experience.png (1050px tall at 1x, as are its WebP ones), Contact's from Group 5.png
  * (no transparent edge; 1116px tall at 1x, as are its WebP ones; its crops are centered).
- * Their sizes are given here, as Next doesn't read AVIF files' sizes (it reports them as 100x100).
+ * The stars of About, Skills, Projects and Experience are drawn and animated over them too (see
+ * SectionSky). Their sizes are given here, as Next doesn't read AVIF files' sizes (it reports them as
+ * 100x100).
  */
 export const SECTION_BACKGROUNDS_AVIF: Record<SectionName, Record<Breakpoint, AvifVersion[]>> = {
   about: {

@@ -1,0 +1,44 @@
+/* The comet image's place, in the image's pixels at 1x (see SectionSky: --px, --crop-x) */
+.comet {
+  position: absolute;
+  top: calc(var(--y) * var(--px));
+  left: calc((var(--x) - var(--crop-x)) * var(--px));
+  width: calc(var(--width) * var(--px));
+  height: calc(var(--height) * var(--px));
+  overflow: visible;
+}
+
+.puff {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* With reduced motion, it stays as illustrated */
+@media (prefers-reduced-motion: no-preference) {
+  .smoke {
+    filter: url(#about-comet-smoke);
+  }
+
+  .puff {
+    animation: puff 9.6s ease-out infinite;
+    animation-delay: var(--delay);
+  }
+}
+
+/* A wisp leaves the tail: it appears, drifts on along the tail's direction while spreading, and fades */
+@keyframes puff {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.6);
+  }
+
+  25% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(240px, -150px) scale(1.8);
+  }
+}
