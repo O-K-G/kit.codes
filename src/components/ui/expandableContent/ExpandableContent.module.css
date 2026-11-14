@@ -1,10 +1,3 @@
-/* Inherited by the text: hides it while the expand animation runs. */
-@property --expandable-content-display {
-  syntax: "block | none";
-  inherits: true;
-  initial-value: block;
-}
-
 /* How tall the soft fade at the bottom of the open text is (see .content) */
 @property --scroll-fade {
   syntax: "<length>";
@@ -25,6 +18,17 @@
   /* Room for the corner brackets (see AboutTargetIcon), which sit outside the square */
   padding: calc(1.5 * var(--fluid-rem));
   container-type: size;
+  /* The open box's width (see .box[data-open="true"]), in the container's units: never wider than the
+   * container, which squeezes it to fit */
+  --open-width: 100cqw;
+
+  @media (width >= 48rem) {
+    --open-width: min(100cqh, 100cqw);
+  }
+
+  @media (width >= 64rem) {
+    --open-width: 75cqw;
+  }
 
   @media (width >= 40rem) {
     width: 75%;
@@ -120,14 +124,16 @@
     opacity: 0%;
   }
 
-  /* Open: the box draws its frame (expand-button), hiding the text until it's done (show-after-expand);
-   * the background darkens behind the text as it appears (on .box) */
+  /* Open: the box draws its frame (expand-button), revealing the text, already at its final size, as it
+   * grows (reveal-while-expanding); the background darkens behind the text (on .box). The text is shown
+   * as soon as the box opens, rather than once it's done, which also keeps it from being the page's
+   * late Largest Contentful Paint */
   &[data-open="true"] {
     align-items: flex-start;
     padding: 0.5rem;
     overflow-y: auto;
     border-inline-color: #fff;
-    animation: expand-button 1s linear forwards, show-after-expand 1s;
+    animation: expand-button 1s linear forwards, reveal-while-expanding 1s;
 
     /* With a mouse, no scrollbar: WCAG doesn't require one. The text stays reachable: the wheel or
      * trackpad scrolls it, and so does the keyboard, as the box is focusable (WCAG 2.1.1) */
@@ -154,14 +160,20 @@
       mask-clip: padding-box, padding-box, no-clip;
       mask-origin: padding-box, padding-box, border-box;
       mask-composite: add, exclude, add;
-      animation: expand-button 1s linear forwards, show-after-expand 1s, scroll-fade linear both;
+      animation: expand-button 1s linear forwards, reveal-while-expanding 1s, scroll-fade linear both;
       animation-timeline: auto, auto, scroll(self);
       animation-range: normal, normal, calc(100% - 3rem) 100%;
     }
   }
 
+  /* While the box expands, --expandable-text-width (see reveal-while-expanding) is the width the text
+   * will have once open, so it's laid out once, at its final size (not shrunk to the growing box), and
+   * revealed by the growing frame rather than reflowing as it grows. Left unregistered on purpose: its
+   * container units then resolve here, against the container, rather than where it's animated.
+   * Otherwise the text fits its box as usual */
   > p {
-    display: var(--expandable-content-display);
+    flex-shrink: var(--expandable-text-shrink, 1);
+    width: var(--expandable-text-width, auto);
     margin-block: auto;
   }
 }
@@ -215,10 +227,14 @@
   }
 }
 
-@keyframes show-after-expand {
+/* While the box expands: the text is clipped by the frame (not scrolled), at the open box's inner
+ * width (less its padding and borders), and the frame's sides are drawn once it's done */
+@keyframes reveal-while-expanding {
   from,
   to {
-    --expandable-content-display: none;
+    --expandable-text-width: calc(var(--open-width) - 1rem - 2px);
+    --expandable-text-shrink: 0;
+    overflow: hidden;
     border-inline-color: transparent;
   }
 }

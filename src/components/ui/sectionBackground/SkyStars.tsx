@@ -1,6 +1,6 @@
 "use client";
 
-import { CSSProperties, useRef } from "react";
+import { CSSProperties, useEffect, useRef, useState } from "react";
 import { STARS } from "@constants/sky";
 import useSectionOnScreen from "@hooks/useSectionOnScreen";
 import classNames from "@utils/classNames";
@@ -47,23 +47,43 @@ interface SkyStarsProps {
   height: number;
 }
 
+/** How many stars are added per frame as their section comes on screen */
+const STARS_PER_FRAME = 40;
+
 /**
  * A section's stars (see SectionSky), drawn in the browser from the shared star data rather than written
  * into the page, and only while their section is on screen: a few hundred elements per section would
  * otherwise make up most of the page's HTML (twice, with React's data for it), and of its elements.
+ * They're added STARS_PER_FRAME at a time, so their animations start over a few frames rather than all
+ * in one, which would hold up scrolling into the section.
  */
 export default function SkyStars(props: SkyStarsProps) {
   const ref = useRef<HTMLSpanElement>(null);
   const onScreen = useSectionOnScreen(ref, false);
   // Recomputed only when the props change: the React Compiler memoizes it
   const stars = placeStars(props);
+  /** How many of the stars have been added since the section came on screen */
+  const [added, setAdded] = useState(0);
+
+  useEffect(() => {
+    let frame = 0;
+    const add = (count: number) => {
+      setAdded(count);
+      if (onScreen && count < stars.length) {
+        frame = requestAnimationFrame(() => add(count + STARS_PER_FRAME));
+      }
+    };
+    frame = requestAnimationFrame(() => add(onScreen ? STARS_PER_FRAME : 0));
+
+    return () => cancelAnimationFrame(frame);
+  }, [onScreen, stars.length]);
 
   return (
     <span ref={ref} className={styles.stars}>
       {/* Each star turns with its circle (its orbit), whose right edge it sits on: still, the star is
        * exactly at its place in the image; turning, it circles beside it */}
       {onScreen &&
-        stars.map(({ x, y, radius, orbit, duration, delay, reversed }) => (
+        stars.slice(0, added).map(({ x, y, radius, orbit, duration, delay, reversed }) => (
           <span
             key={`${x}-${y}`}
             className={classNames(styles.orbit, reversed && styles.reversed)}

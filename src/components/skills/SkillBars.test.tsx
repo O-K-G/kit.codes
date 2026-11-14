@@ -7,7 +7,15 @@ import styles from "@components/skills/SkillBars.module.css";
 /** jsdom has no IntersectionObserver: a mock whose visibility the test drives. */
 let setVisible: (visible: boolean) => void = () => undefined;
 
+/** jsdom has no matchMedia either: a mock answering whether reduced motion is asked for */
+const mockReducedMotion = (reduce: boolean) => {
+  window.matchMedia = jest.fn(
+    (query: string) => ({ matches: reduce && query.includes("reduce") }) as MediaQueryList
+  );
+};
+
 beforeEach(() => {
+  mockReducedMotion(false);
   window.IntersectionObserver = jest.fn(
     (callback: IntersectionObserverCallback) => {
       setVisible = (visible) =>
@@ -37,16 +45,34 @@ describe("SkillBars", () => {
     });
   });
 
-  it("fills the bars once in view, and keeps them filled", () => {
+  it("fills the bars once in view, one row after another, and keeps them filled", () => {
+    jest.useFakeTimers();
     const { container } = render(<SkillBars />);
-    const fills = container.querySelectorAll(`.${styles.segments}`);
+    const fills = Array.from(container.querySelectorAll(`.${styles.segments}`));
 
     fills.forEach((fill) => expect(fill).toHaveAttribute("data-filling", "false"));
 
     setVisible(true);
+    expect(fills[0]).toHaveAttribute("data-filling", "true");
+    expect(fills[1]).toHaveAttribute("data-filling", "false");
+
+    act(() => jest.advanceTimersByTime(80));
+    expect(fills[1]).toHaveAttribute("data-filling", "true");
+
+    act(() => jest.advanceTimersByTime(80 * fills.length));
     fills.forEach((fill) => expect(fill).toHaveAttribute("data-filling", "true"));
 
     setVisible(false);
+    fills.forEach((fill) => expect(fill).toHaveAttribute("data-filling", "true"));
+    jest.useRealTimers();
+  });
+
+  it("fills every row at once with reduced motion", () => {
+    mockReducedMotion(true);
+    const { container } = render(<SkillBars />);
+    const fills = container.querySelectorAll(`.${styles.segments}`);
+
+    setVisible(true);
     fills.forEach((fill) => expect(fill).toHaveAttribute("data-filling", "true"));
   });
 

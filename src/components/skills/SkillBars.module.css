@@ -50,7 +50,7 @@
   /* Once its fill reaches its last segment (see .segments), the bar glows orange once, fading in and out
    * in 0.7s: a single blink, well within WCAG 2.3.1 (3 flashes a second) and 2.2.2 (5 seconds) */
   &:has([data-filling="true"]) {
-    animation: skill-bar-glow 0.7s ease-in-out calc(var(--index) * 80ms + 1.2s);
+    animation: skill-bar-glow 0.7s ease-in-out 1.2s;
   }
 }
 
@@ -127,11 +127,11 @@
     }
   }
 
-  /* Once in view, the skill's segments light up one by one from the left (the whole bar in 1.2s, the
-   * rows 80ms apart), the last one as the bar glows (see .bar) */
+  /* Once its row starts filling (the rows 80ms apart, see SkillBars), the skill's segments light up one
+   * by one from the left (the whole bar in 1.2s), the last one as the bar glows (see .bar) */
   &[data-filling="true"] > span[data-on="true"] {
     animation: skill-segment-on 1ms both;
-    animation-delay: calc(var(--index) * 80ms + (var(--segment) + 1) * 1.2s / var(--level));
+    animation-delay: calc((var(--segment) + 1) * 1.2s / var(--level));
   }
 }
 
