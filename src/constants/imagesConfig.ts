@@ -30,11 +30,36 @@ import about2Xl2592 from '@/assets/images/about/2xl-2592w.avif';
 import about2Xl3456 from '@/assets/images/about/2xl-3456w.avif';
 import about2Xl5184 from '@/assets/images/about/2xl-5184w.avif';
 import about2Xl6912 from '@/assets/images/about/2xl-6912w.avif';
-import contactSm from '@/assets/images/contact-sm.webp';
-import contactMd from '@/assets/images/contact-md.webp';
-import contactLg from '@/assets/images/contact-lg.webp';
-import contactXl from '@/assets/images/contact-xl.webp';
-import contact2Xl from '@/assets/images/contact-2xl.webp';
+import contactSm from '@/assets/images/contact/sm-640w.webp';
+import contactMd from '@/assets/images/contact/md-768w.webp';
+import contactLg from '@/assets/images/contact/lg-1024w.webp';
+import contactXl from '@/assets/images/contact/xl-1280w.webp';
+import contact2Xl from '@/assets/images/contact/2xl-1728w.webp';
+import contactSm640 from '@/assets/images/contact/sm-640w.avif';
+import contactSm960 from '@/assets/images/contact/sm-960w.avif';
+import contactSm1280 from '@/assets/images/contact/sm-1280w.avif';
+import contactSm1920 from '@/assets/images/contact/sm-1920w.avif';
+import contactSm2560 from '@/assets/images/contact/sm-2560w.avif';
+import contactMd768 from '@/assets/images/contact/md-768w.avif';
+import contactMd1152 from '@/assets/images/contact/md-1152w.avif';
+import contactMd1536 from '@/assets/images/contact/md-1536w.avif';
+import contactMd2304 from '@/assets/images/contact/md-2304w.avif';
+import contactMd3072 from '@/assets/images/contact/md-3072w.avif';
+import contactLg1024 from '@/assets/images/contact/lg-1024w.avif';
+import contactLg1536 from '@/assets/images/contact/lg-1536w.avif';
+import contactLg2048 from '@/assets/images/contact/lg-2048w.avif';
+import contactLg3072 from '@/assets/images/contact/lg-3072w.avif';
+import contactLg4096 from '@/assets/images/contact/lg-4096w.avif';
+import contactXl1280 from '@/assets/images/contact/xl-1280w.avif';
+import contactXl1920 from '@/assets/images/contact/xl-1920w.avif';
+import contactXl2560 from '@/assets/images/contact/xl-2560w.avif';
+import contactXl3840 from '@/assets/images/contact/xl-3840w.avif';
+import contactXl5120 from '@/assets/images/contact/xl-5120w.avif';
+import contact2Xl1728 from '@/assets/images/contact/2xl-1728w.avif';
+import contact2Xl2592 from '@/assets/images/contact/2xl-2592w.avif';
+import contact2Xl3456 from '@/assets/images/contact/2xl-3456w.avif';
+import contact2Xl5184 from '@/assets/images/contact/2xl-5184w.avif';
+import contact2Xl6912 from '@/assets/images/contact/2xl-6912w.avif';
 import experienceSm from '@/assets/images/experience/sm-640w.webp';
 import experienceMd from '@/assets/images/experience/md-768w.webp';
 import experienceLg from '@/assets/images/experience/lg-1024w.webp';
@@ -160,17 +185,18 @@ const avif = ({ src }: StaticImageData, width: number, height: number): AvifVers
 });
 
 /**
- * AVIF versions, for the sections that have them: browsers that support AVIF take these (a fraction of
- * the size), the others the WebP ones above. Same crops, each at 1, 1.5, 2, 3 and 4 times the WebP
+ * AVIF versions of the backgrounds: browsers that support AVIF take these (a fraction of the size), the
+ * others the WebP ones above. Same crops, each at 1, 1.5, 2, 3 and 4 times the WebP
  * one's size (narrowest first), so every screen gets the smallest that's sharp on it (see
  * SectionBackground). Each is cropped at its scene's bottom edge, where a transparent part would show
  * as black: About's are from Group 31.png (the scene with its layer of stars; 1048px tall at 1x, where
  * its WebP ones keep the strip), Skills' from Group 30.png (1042px tall at 1x, as are its WebP ones),
  * Projects' from Group 32.png (1062px tall at 1x, as are its WebP ones; its crops are centered),
- * Experience's from Group 33.png (1050px tall at 1x, as are its WebP ones).
+ * Experience's from Group 33.png (1050px tall at 1x, as are its WebP ones), Contact's from Group 5.png
+ * (no transparent edge; 1116px tall at 1x, as are its WebP ones; its crops are centered).
  * Their sizes are given here, as Next doesn't read AVIF files' sizes (it reports them as 100x100).
  */
-export const SECTION_BACKGROUNDS_AVIF: Partial<Record<SectionName, Record<Breakpoint, AvifVersion[]>>> = {
+export const SECTION_BACKGROUNDS_AVIF: Record<SectionName, Record<Breakpoint, AvifVersion[]>> = {
   about: {
     sm: [avif(aboutSm640, 640, 1048), avif(aboutSm960, 960, 1572), avif(aboutSm1280, 1280, 2096), avif(aboutSm1920, 1920, 3144), avif(aboutSm2560, 2560, 4192)],
     md: [avif(aboutMd768, 768, 1048), avif(aboutMd1152, 1152, 1572), avif(aboutMd1536, 1536, 2096), avif(aboutMd2304, 2304, 3144), avif(aboutMd3072, 3072, 4192)],
@@ -198,5 +224,12 @@ export const SECTION_BACKGROUNDS_AVIF: Partial<Record<SectionName, Record<Breakp
     lg: [avif(experienceLg1024, 1024, 1050), avif(experienceLg1536, 1536, 1575), avif(experienceLg2048, 2048, 2100), avif(experienceLg3072, 3072, 3150), avif(experienceLg4096, 4096, 4200)],
     xl: [avif(experienceXl1280, 1280, 1050), avif(experienceXl1920, 1920, 1575), avif(experienceXl2560, 2560, 2100), avif(experienceXl3840, 3840, 3150), avif(experienceXl5120, 5120, 4200)],
     '2xl': [avif(experience2Xl1728, 1728, 1050), avif(experience2Xl2592, 2592, 1575), avif(experience2Xl3456, 3456, 2100), avif(experience2Xl5184, 5184, 3150), avif(experience2Xl6912, 6912, 4200)],
+  },
+  contact: {
+    sm: [avif(contactSm640, 640, 1116), avif(contactSm960, 960, 1674), avif(contactSm1280, 1280, 2232), avif(contactSm1920, 1920, 3348), avif(contactSm2560, 2560, 4464)],
+    md: [avif(contactMd768, 768, 1116), avif(contactMd1152, 1152, 1674), avif(contactMd1536, 1536, 2232), avif(contactMd2304, 2304, 3348), avif(contactMd3072, 3072, 4464)],
+    lg: [avif(contactLg1024, 1024, 1116), avif(contactLg1536, 1536, 1674), avif(contactLg2048, 2048, 2232), avif(contactLg3072, 3072, 3348), avif(contactLg4096, 4096, 4464)],
+    xl: [avif(contactXl1280, 1280, 1116), avif(contactXl1920, 1920, 1674), avif(contactXl2560, 2560, 2232), avif(contactXl3840, 3840, 3348), avif(contactXl5120, 5120, 4464)],
+    '2xl': [avif(contact2Xl1728, 1728, 1116), avif(contact2Xl2592, 2592, 1674), avif(contact2Xl3456, 3456, 2232), avif(contact2Xl5184, 5184, 3348), avif(contact2Xl6912, 6912, 4464)],
   },
 };

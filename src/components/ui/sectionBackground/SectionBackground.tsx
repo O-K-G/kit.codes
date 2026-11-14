@@ -64,14 +64,12 @@ export default function SectionBackground({
       <picture>
         {TAILWIND_SIZES.map(({ twClassName, pxResolution }) => (
           <Fragment key={`tw-class-${twClassName}`}>
-            {avifImages && (
-              <source
-                type="image/avif"
-                srcSet={toSrcSet(avifImages[twClassName])}
-                sizes={toSizes(avifImages[twClassName][0])}
-                media={`(max-width: ${pxResolution}px)`}
-              />
-            )}
+            <source
+              type="image/avif"
+              srcSet={toSrcSet(avifImages[twClassName])}
+              sizes={toSizes(avifImages[twClassName][0])}
+              media={`(max-width: ${pxResolution}px)`}
+            />
             <source
               type="image/webp"
               srcSet={images[twClassName].src}
@@ -79,13 +77,11 @@ export default function SectionBackground({
             />
           </Fragment>
         ))}
-        {avifImages && (
-          <source
-            type="image/avif"
-            srcSet={toSrcSet(avifImages["2xl"])}
-            sizes={toSizes(avifImages["2xl"][0])}
-          />
-        )}
+        <source
+          type="image/avif"
+          srcSet={toSrcSet(avifImages["2xl"])}
+          sizes={toSizes(avifImages["2xl"][0])}
+        />
         <img
           alt={alt}
           aria-hidden
