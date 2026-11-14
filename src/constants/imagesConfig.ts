@@ -35,11 +35,36 @@ import contactMd from '@/assets/images/contact-md.webp';
 import contactLg from '@/assets/images/contact-lg.webp';
 import contactXl from '@/assets/images/contact-xl.webp';
 import contact2Xl from '@/assets/images/contact-2xl.webp';
-import experienceSm from '@/assets/images/experience-sm.webp';
-import experienceMd from '@/assets/images/experience-md.webp';
-import experienceLg from '@/assets/images/experience-lg.webp';
-import experienceXl from '@/assets/images/experience-xl.webp';
-import experience2Xl from '@/assets/images/experience-2xl.webp';
+import experienceSm from '@/assets/images/experience/sm-640w.webp';
+import experienceMd from '@/assets/images/experience/md-768w.webp';
+import experienceLg from '@/assets/images/experience/lg-1024w.webp';
+import experienceXl from '@/assets/images/experience/xl-1280w.webp';
+import experience2Xl from '@/assets/images/experience/2xl-1728w.webp';
+import experienceSm640 from '@/assets/images/experience/sm-640w.avif';
+import experienceSm960 from '@/assets/images/experience/sm-960w.avif';
+import experienceSm1280 from '@/assets/images/experience/sm-1280w.avif';
+import experienceSm1920 from '@/assets/images/experience/sm-1920w.avif';
+import experienceSm2560 from '@/assets/images/experience/sm-2560w.avif';
+import experienceMd768 from '@/assets/images/experience/md-768w.avif';
+import experienceMd1152 from '@/assets/images/experience/md-1152w.avif';
+import experienceMd1536 from '@/assets/images/experience/md-1536w.avif';
+import experienceMd2304 from '@/assets/images/experience/md-2304w.avif';
+import experienceMd3072 from '@/assets/images/experience/md-3072w.avif';
+import experienceLg1024 from '@/assets/images/experience/lg-1024w.avif';
+import experienceLg1536 from '@/assets/images/experience/lg-1536w.avif';
+import experienceLg2048 from '@/assets/images/experience/lg-2048w.avif';
+import experienceLg3072 from '@/assets/images/experience/lg-3072w.avif';
+import experienceLg4096 from '@/assets/images/experience/lg-4096w.avif';
+import experienceXl1280 from '@/assets/images/experience/xl-1280w.avif';
+import experienceXl1920 from '@/assets/images/experience/xl-1920w.avif';
+import experienceXl2560 from '@/assets/images/experience/xl-2560w.avif';
+import experienceXl3840 from '@/assets/images/experience/xl-3840w.avif';
+import experienceXl5120 from '@/assets/images/experience/xl-5120w.avif';
+import experience2Xl1728 from '@/assets/images/experience/2xl-1728w.avif';
+import experience2Xl2592 from '@/assets/images/experience/2xl-2592w.avif';
+import experience2Xl3456 from '@/assets/images/experience/2xl-3456w.avif';
+import experience2Xl5184 from '@/assets/images/experience/2xl-5184w.avif';
+import experience2Xl6912 from '@/assets/images/experience/2xl-6912w.avif';
 import projectsSm from '@/assets/images/projects/sm-640w.webp';
 import projectsMd from '@/assets/images/projects/md-768w.webp';
 import projectsLg from '@/assets/images/projects/lg-1024w.webp';
@@ -141,7 +166,8 @@ const avif = ({ src }: StaticImageData, width: number, height: number): AvifVers
  * SectionBackground). Each is cropped at its scene's bottom edge, where a transparent part would show
  * as black: About's are from Group 31.png (the scene with its layer of stars; 1048px tall at 1x, where
  * its WebP ones keep the strip), Skills' from Group 30.png (1042px tall at 1x, as are its WebP ones),
- * Projects' from Group 32.png (1062px tall at 1x, as are its WebP ones; its crops are centered).
+ * Projects' from Group 32.png (1062px tall at 1x, as are its WebP ones; its crops are centered),
+ * Experience's from Group 33.png (1050px tall at 1x, as are its WebP ones).
  * Their sizes are given here, as Next doesn't read AVIF files' sizes (it reports them as 100x100).
  */
 export const SECTION_BACKGROUNDS_AVIF: Partial<Record<SectionName, Record<Breakpoint, AvifVersion[]>>> = {
@@ -165,5 +191,12 @@ export const SECTION_BACKGROUNDS_AVIF: Partial<Record<SectionName, Record<Breakp
     lg: [avif(projectsLg1024, 1024, 1062), avif(projectsLg1536, 1536, 1593), avif(projectsLg2048, 2048, 2124), avif(projectsLg3072, 3072, 3186), avif(projectsLg4096, 4096, 4248)],
     xl: [avif(projectsXl1280, 1280, 1062), avif(projectsXl1920, 1920, 1593), avif(projectsXl2560, 2560, 2124), avif(projectsXl3840, 3840, 3186), avif(projectsXl5120, 5120, 4248)],
     '2xl': [avif(projects2Xl1728, 1728, 1062), avif(projects2Xl2592, 2592, 1593), avif(projects2Xl3456, 3456, 2124), avif(projects2Xl5184, 5184, 3186), avif(projects2Xl6912, 6912, 4248)],
+  },
+  experience: {
+    sm: [avif(experienceSm640, 640, 1050), avif(experienceSm960, 960, 1575), avif(experienceSm1280, 1280, 2100), avif(experienceSm1920, 1920, 3150), avif(experienceSm2560, 2560, 4200)],
+    md: [avif(experienceMd768, 768, 1050), avif(experienceMd1152, 1152, 1575), avif(experienceMd1536, 1536, 2100), avif(experienceMd2304, 2304, 3150), avif(experienceMd3072, 3072, 4200)],
+    lg: [avif(experienceLg1024, 1024, 1050), avif(experienceLg1536, 1536, 1575), avif(experienceLg2048, 2048, 2100), avif(experienceLg3072, 3072, 3150), avif(experienceLg4096, 4096, 4200)],
+    xl: [avif(experienceXl1280, 1280, 1050), avif(experienceXl1920, 1920, 1575), avif(experienceXl2560, 2560, 2100), avif(experienceXl3840, 3840, 3150), avif(experienceXl5120, 5120, 4200)],
+    '2xl': [avif(experience2Xl1728, 1728, 1050), avif(experience2Xl2592, 2592, 1575), avif(experience2Xl3456, 3456, 2100), avif(experience2Xl5184, 5184, 3150), avif(experience2Xl6912, 6912, 4200)],
   },
 };
