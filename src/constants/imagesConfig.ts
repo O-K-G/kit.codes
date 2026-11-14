@@ -189,8 +189,8 @@ const avif = ({ src }: StaticImageData, width: number, height: number): AvifVers
  * others the WebP ones above. Same crops, each at 1, 1.5, 2, 3 and 4 times the WebP
  * one's size (narrowest first), so every screen gets the smallest that's sharp on it (see
  * SectionBackground). Each is cropped at its scene's bottom edge, where a transparent part would show
- * as black: About's are from Group 31.png (the scene with its layer of stars; 1048px tall at 1x, where
- * its WebP ones keep the strip), Skills' from Group 30.png (1042px tall at 1x, as are its WebP ones),
+ * as black: About's are from About.png (1048px tall at 1x, as are its WebP ones; its comet and stars
+ * are drawn and animated over it, see AboutSky), Skills' from Group 30.png (1042px tall at 1x, as are its WebP ones),
  * Projects' from Group 32.png (1062px tall at 1x, as are its WebP ones; its crops are centered),
  * Experience's from Group 33.png (1050px tall at 1x, as are its WebP ones), Contact's from Group 5.png
  * (no transparent edge; 1116px tall at 1x, as are its WebP ones; its crops are centered).

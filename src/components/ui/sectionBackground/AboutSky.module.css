@@ -1,0 +1,119 @@
+/* The About background's image, as drawn: it covers the screen (object-fit: cover) from its left edge,
+ * centered vertically (see SectionBackground). Everything here is placed in the image's own pixels
+ * (its 1x crop: --cw by --h), times --px, the size one of them is drawn at. */
+.frame {
+  /* The crop shown at this width (as the <picture>'s sources pick it); 1048px tall */
+  --cw: 1728;
+  --h: 1048;
+  --px: max(calc(100vw / var(--cw)), calc(100vh / var(--h)));
+
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: calc(var(--cw) * var(--px));
+  height: calc(var(--h) * var(--px));
+  overflow: hidden;
+  translate: 0 -50%;
+
+  @media (max-width: 1280px) {
+    --cw: 1280;
+  }
+
+  @media (max-width: 1024px) {
+    --cw: 1024;
+  }
+
+  @media (max-width: 768px) {
+    --cw: 768;
+  }
+
+  @media (max-width: 640px) {
+    --cw: 640;
+  }
+}
+
+.comet {
+  position: absolute;
+  top: calc(var(--y) * var(--px));
+  left: calc(var(--x) * var(--px));
+  width: calc(var(--width) * var(--px));
+  height: calc(var(--height) * var(--px));
+  overflow: visible;
+}
+
+/* A star's circle: centered --orbit to the left of the star, which sits on its right edge. Turning it
+ * (only rotate, with fixed values, so the browser runs it off the main thread) circles the star */
+.orbit {
+  position: absolute;
+  top: calc((var(--y) - var(--orbit)) * var(--px));
+  left: calc((var(--x) - 2 * var(--orbit)) * var(--px));
+  width: calc(2 * var(--orbit) * var(--px));
+  height: calc(2 * var(--orbit) * var(--px));
+}
+
+/* A star: a dot, looking as it did in the image: white at half opacity (the stars' layer in the
+ * illustration), seen through the image's 60% (see SectionBackground) */
+.star {
+  position: absolute;
+  top: calc((var(--orbit) - var(--r)) * var(--px));
+  left: calc((2 * var(--orbit) - var(--r)) * var(--px));
+  width: calc(2 * var(--r) * var(--px));
+  height: calc(2 * var(--r) * var(--px));
+  border-radius: 50%;
+  background-color: rgb(153 153 153 / 50%);
+}
+
+.puff {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* Nothing moves with reduced motion: the comet and the stars stay as illustrated */
+@media (prefers-reduced-motion: no-preference) {
+  .smoke {
+    filter: url(#about-comet-smoke);
+  }
+
+  .puff {
+    animation: puff 9.6s ease-out infinite;
+    animation-delay: var(--delay);
+  }
+
+  .orbit {
+    animation: star-orbit var(--duration) linear infinite;
+    animation-delay: var(--delay);
+  }
+
+  .reversed {
+    animation-direction: reverse;
+  }
+
+  /* Off screen (see PauseOffscreen) */
+  .frame[data-paused="true"] * {
+    animation-play-state: paused;
+  }
+}
+
+/* A wisp leaves the tail: it appears, drifts on along the tail's direction while spreading, and fades */
+@keyframes puff {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.6);
+  }
+
+  25% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(240px, -150px) scale(1.8);
+  }
+}
+
+@keyframes star-orbit {
+  to {
+    rotate: 1turn;
+  }
+}
