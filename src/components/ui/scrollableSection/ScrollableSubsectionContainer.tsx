@@ -1,10 +1,18 @@
 "use client";
 
 import IconButton from "@ui/iconButton/IconButton";
-import { useState, useRef, ReactNode } from "react";
+import {
+  Children,
+  ReactNode,
+  RefObject,
+  cloneElement,
+  createContext,
+  isValidElement,
+  useRef,
+  useState,
+} from "react";
 import useHandleHorizontalScroll from "@hooks/useHandleHorizontalScroll";
-import useHandleChildrenWithNewProps from "@hooks/useHandleChildrenWithNewProps";
-import { PropsWithId } from "@constants/interfaces";
+import { ScrollableSubsectionItemProps } from "@constants/interfaces";
 import ArrowIconComponent from "@ui/icons/ArrowIconComponent";
 import { useTranslations } from "next-intl";
 import styles from "./ScrollableSubsection.module.css";
@@ -12,6 +20,19 @@ import classNames from "@utils/classNames";
 
 export const LEFT_BUTTON_TEST_ID = "left-button-test-id";
 export const RIGHT_BUTTON_TEST_ID = "right-button-test-id";
+
+/**
+ * What the slides need from their carousel: its scrolling area (the root they're observed in) and
+ * how to tell it which slide is in view. Shared through context, as refs can't be handed to the
+ * slides while rendering.
+ */
+export const CarouselContext = createContext<{
+  scrollableRef: RefObject<HTMLDivElement | null> | null;
+  onSubsectionSelectChange: (id: number) => void;
+}>({
+  scrollableRef: null,
+  onSubsectionSelectChange: () => {},
+});
 
 /**
  * A carousel (WAI-ARIA APG carousel pattern): a region named by `aria-label` and described as a
@@ -25,16 +46,18 @@ export default function ScrollableSubsectionContainer({
   children: ReactNode;
   "aria-label": string;
 }) {
-  const scrollableRef = useRef(null);
+  const scrollableRef = useRef<HTMLDivElement>(null);
   const t = useTranslations("scrollableSectionText");
   const { handleHorizontalScroll } = useHandleHorizontalScroll();
   const [selectedSubsection, setSelectedSubsection] = useState(0);
-  const { handleChildrenWithNewProps } = useHandleChildrenWithNewProps();
-  const childrenWithNewProps = handleChildrenWithNewProps({
-    children,
-    scrollableRef,
-    onSubsectionSelectChange: setSelectedSubsection,
-  });
+  const total = Children.count(children);
+  /** Each slide, told its position: its id (index) and how many slides there are. (Anything that
+   * isn't an element is left out.) */
+  const childrenWithNewProps = Children.map(children, (child, index) =>
+    isValidElement<ScrollableSubsectionItemProps>(child)
+      ? cloneElement(child, { id: index, total })
+      : null
+  );
 
   const handleScroll = ({
     id,
@@ -52,20 +75,20 @@ export default function ScrollableSubsectionContainer({
 
   const handlePrevious = () => {
     const isZero = selectedSubsection - 1 > 0 ? selectedSubsection - 1 : 0;
-    const id = (childrenWithNewProps?.[isZero]?.props as PropsWithId)?.id;
+    const id = childrenWithNewProps?.[isZero]?.props.id;
 
     if (id || id === 0) {
-      const { offsetWidth } = (scrollableRef.current as unknown as HTMLDivElement) || 0;
+      const offsetWidth = scrollableRef.current?.offsetWidth ?? 0;
 
       handleScroll({ id, offsetWidth });
     }
   };
 
   const handleNext = () => {
-    const id = (childrenWithNewProps?.[selectedSubsection + 1]?.props as PropsWithId)?.id;
+    const id = childrenWithNewProps?.[selectedSubsection + 1]?.props.id;
 
     if (id) {
-      const { offsetWidth } = (scrollableRef.current as unknown as HTMLDivElement) || 0;
+      const offsetWidth = scrollableRef.current?.offsetWidth ?? 0;
 
       handleScroll({ id, offsetWidth });
     }
@@ -93,7 +116,11 @@ export default function ScrollableSubsectionContainer({
         tabIndex={0}
         className={styles.scrollable}
       >
-        {childrenWithNewProps}
+        <CarouselContext.Provider
+          value={{ scrollableRef, onSubsectionSelectChange: setSelectedSubsection }}
+        >
+          {childrenWithNewProps}
+        </CarouselContext.Provider>
       </div>
 
       <div className={styles.buttonWrapper}>

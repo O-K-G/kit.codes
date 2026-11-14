@@ -38,6 +38,8 @@ const STYLE = {
     width: '100%',
     textAlign: 'left',
     margin: '0',
+    // Keeps the message's line breaks and paragraphs
+    whiteSpace: 'pre-wrap',
   },
 } as const;
 
@@ -60,6 +62,8 @@ export default async function mailHTMLTemplate({ dir, email, subject, content }:
 
   const html = renderToStaticMarkup(
     <html lang="en">
+      {/* An email's own document, not a Next page, so next/head doesn't apply */}
+      {/* eslint-disable-next-line @next/next/no-head-element */}
       <head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />

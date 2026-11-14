@@ -26,7 +26,7 @@ export default function SectionBackground({
   /** `unoptimized`: the files are served as they are (no re-encoding); the <picture> below does the art direction.
    * The route's own background is fetched right away, with high priority, and the loader waits for it.
    * The rest start lazy, so they don't compete with it; the loader then fetches them (see LoaderVisibility). */
-  const { props: imgProps } = getImageProps({
+  const { props: { alt, ...imgProps } } = getImageProps({
     src: images["2xl"],
     alt: "",
     unoptimized: true,
@@ -47,6 +47,7 @@ export default function SectionBackground({
           />
         ))}
         <img
+          alt={alt}
           aria-hidden
           {...{
             [priority

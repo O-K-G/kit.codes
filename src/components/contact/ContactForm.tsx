@@ -1,7 +1,7 @@
 "use client";
 
 import InputComponent from "@components/contact/InputComponent";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { sendMessage } from "@components/contact/sendMessage";
 import formValidation from "@utils/formValidation";
 import ProgressIndicators from "@components/contact/ProgressIndicators";
@@ -21,6 +21,8 @@ import {
   CONTACT_FORM_SUBJECT_MAX_LENGTH,
   CONTACT_FORM_CONTENT_MIN_LENGTH,
   CONTACT_FORM_CONTENT_MAX_LENGTH,
+  CONTACT_FORM_HONEYPOT_NAME,
+  CONTACT_FORM_STARTED_AT_NAME,
 } from "@constants/interfaces";
 
 const EMAIL_ID = "email";
@@ -39,7 +41,16 @@ export default function ContactForm({ footer }: ContactFormProps) {
   const [isMessageSent, setMessageSent] = useState(false);
   /** The details of a failed send, shown in an error dialog */
   const [sendError, setSendError] = useState<string | null>(null);
+  /** Whether the send failed for too many messages lately (the dialog then says so) */
+  const [isRateLimited, setRateLimited] = useState(false);
+  /** When the form was shown, for the server to tell people from bots, which send it at once */
+  const startedAt = useRef(0);
   const t = useTranslations("contact");
+
+  // Set after hydration: a time rendered on the server wouldn't match the browser's
+  useEffect(() => {
+    startedAt.current = Date.now();
+  }, []);
 
   /**
    * The form's action: checks the fields here first (and shows what's wrong), then sends the message
@@ -48,6 +59,7 @@ export default function ContactForm({ footer }: ContactFormProps) {
    */
   const handleSend = async (formData: FormData) => {
     formData.append("dir", dir);
+    formData.append(CONTACT_FORM_STARTED_AT_NAME, String(startedAt.current));
 
     const { invalidFields } = formValidation({
       email: formData.get(EMAIL_ID) as string,
@@ -65,14 +77,17 @@ export default function ContactForm({ footer }: ContactFormProps) {
 
       if (result.ok) {
         setMessageSent(true);
+        startedAt.current = Date.now();
       } else if (result.error === "invalid") {
         setErrors(result.fieldErrors);
       } else {
         setMessageSent(false);
+        setRateLimited(result.error === "rate-limited");
         setSendError(result.error);
       }
     } catch (networkError) {
       setMessageSent(false);
+      setRateLimited(false);
       setSendError(String(networkError));
     }
   };
@@ -107,6 +122,16 @@ export default function ContactForm({ footer }: ContactFormProps) {
         className={styles.form}
         action={handleSend}
       >
+        {/* A bot trap: hidden from people and assistive tech, so only bots fill it in */}
+        <input
+          type="text"
+          name={CONTACT_FORM_HONEYPOT_NAME}
+          className={styles.honeypot}
+          tabIndex={-1}
+          autoComplete="off"
+          aria-hidden="true"
+          defaultValue=""
+        />
         <div>
           {[
             {
@@ -165,7 +190,7 @@ export default function ContactForm({ footer }: ContactFormProps) {
         </div>
       </form>
       <Dialog open={sendError !== null} onClose={handleCloseSendError}>
-        <ErrorDialogMeesage details={sendError ?? ""} />
+        <ErrorDialogMeesage details={sendError ?? ""} isRateLimited={isRateLimited} />
       </Dialog>
     </>
   );

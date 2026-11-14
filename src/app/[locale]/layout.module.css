@@ -1,6 +1,0 @@
-.body {
-  /* Lock the page scroll while a dialog (the contact drawer is one too) is open. */
-  &:has(dialog[open]) {
-    overflow: hidden;
-  }
-}

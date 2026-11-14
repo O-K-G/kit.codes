@@ -5,7 +5,14 @@ import classNames from "@utils/classNames";
 
 const DATA_TEST_ID = 'error-details-test';
 
-export default function ErrorDialogMeesage({ details }: { details: string }) {
+/** `isRateLimited`: the send was turned down for too many messages lately, so the dialog says that */
+export default function ErrorDialogMeesage({
+  details,
+  isRateLimited = false,
+}: {
+  details: string;
+  isRateLimited?: boolean;
+}) {
   const t = useTranslations('errorDialog');
 
   return (
@@ -15,7 +22,7 @@ export default function ErrorDialogMeesage({ details }: { details: string }) {
         role='alert'
         className={styles.message}
       >
-        {t('errorMessage')}
+        {t(isRateLimited ? 'rateLimitedMessage' : 'errorMessage')}
       </p>
 
       <p

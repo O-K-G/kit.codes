@@ -4,13 +4,12 @@ import IconButton from '@ui/iconButton/IconButton';
 import { useTranslations } from 'next-intl';
 import useHandleDownload from '@hooks/useHandleDownload';
 import CvIcon from '@ui/icons/Cv';
-import { CvProps } from '@constants/interfaces';
 import { DownloadError } from '@ui/downloadError/DownloadError';
 import Dialog from '@ui/dialog/Dialog';
 import { URLs } from '@constants/urls';
 import styles from './DownloadButton.module.css';
 
-export default function DownloadButton({ hide }: CvProps) {
+export default function DownloadButton() {
   const t = useTranslations('cv');
   const { handleDownload, hasError, clearError } = useHandleDownload();
   const { cvFileURL } = URLs;
@@ -20,10 +19,6 @@ export default function DownloadButton({ hide }: CvProps) {
       url: cvFileURL,
       fileName: t('filename'),
     });
-
-  if (hide) {
-    return null;
-  }
 
   return (
     <>

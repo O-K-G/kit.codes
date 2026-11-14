@@ -97,7 +97,6 @@ export default async function OpenGraphImage() {
               "radial-gradient(circle, rgba(179, 119, 255, 0.45), rgba(179, 119, 255, 0) 65%)",
           }}
         />
-        {/* eslint-disable-next-line @next/next/no-img-element -- ImageResponse renders plain <img> */}
         <img
           src={iconSrc}
           alt=""

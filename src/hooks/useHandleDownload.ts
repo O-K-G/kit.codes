@@ -1,26 +1,15 @@
 import { useState } from 'react';
-import { handleDownloadProps } from '@constants/interfaces';
+import { HandleDownloadProps } from '@constants/interfaces';
 
 /** Downloads a PDF served as base64; `hasError` is set when it fails, for the caller to report it. */
 export default function useHandleDownload() {
   const [hasError, setHasError] = useState(false);
 
-  const handleDownload = ({
-    url,
-    fileName = 'file',
-    method = 'GET',
-    headers = {
-      'Content-Type': 'application/json',
-    },
-  }: handleDownloadProps) => {
+  const handleDownload = ({ url, fileName = 'file' }: HandleDownloadProps) => {
     void (async () => {
       try {
-        const data = await fetch(url, {
-          method,
-          headers,
-        });
-
-        const { base64PDFfile } = (await data.json()) || {};
+        const response = await fetch(url);
+        const { base64PDFfile } = (await response.json()) || {};
 
         if (!base64PDFfile) {
           setHasError(true);

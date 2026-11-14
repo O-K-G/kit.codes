@@ -2,7 +2,6 @@ import { BorderProps } from "@constants/interfaces";
 import styles from "./Border.module.css";
 
 export default function Border({
-  className,
   leftLabel,
   rightLabel,
   isTextBlink,
@@ -12,9 +11,7 @@ export default function Border({
       data-reverse={!!leftLabel}
       className={styles.border}
     >
-      <div
-        className={className}
-      />
+      <div />
       {(rightLabel ?? leftLabel) && (
         <span
           data-blink={isTextBlink}

@@ -1,5 +1,5 @@
 import { UseObserveScrollSubsectionProps } from '@constants/interfaces';
-import { RefObject, useEffect } from 'react';
+import { useEffect } from 'react';
 
 export default function useObserveScrollSubsection({
   id,
@@ -9,7 +9,7 @@ export default function useObserveScrollSubsection({
 }: UseObserveScrollSubsectionProps) {
   useEffect(() => {
     const options = {
-      root: (scrollableRef as RefObject<HTMLDivElement>)?.current,
+      root: scrollableRef?.current,
       rootMargin: '0px',
       threshold: 0.5,
     };
@@ -18,14 +18,14 @@ export default function useObserveScrollSubsection({
       const { isIntersecting } = e[0];
 
       if (isIntersecting) {
-        onSubsectionSelectChange?.(Number(id));
+        onSubsectionSelectChange(Number(id));
       }
     };
 
     const observer = new IntersectionObserver(handleObserve, options);
-    observer.observe(
-      (scrollableItemRef as unknown as RefObject<HTMLDivElement>)?.current
-    );
+    if (scrollableItemRef.current) {
+      observer.observe(scrollableItemRef.current);
+    }
 
     return () => observer.disconnect();
   }, [id, onSubsectionSelectChange, scrollableItemRef, scrollableRef]);

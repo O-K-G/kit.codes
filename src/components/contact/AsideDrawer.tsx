@@ -3,9 +3,9 @@
 import {
   FocusEvent,
   ReactNode,
-  TransitionEventHandler,
+  TouchEvent,
   createContext,
-  useEffect,
+  useRef,
   useState,
 } from "react";
 import { usePathname, useParams } from "next/navigation";
@@ -13,6 +13,9 @@ import ContactGoBackButton from "@components/contact/ContactGoBackButton";
 import Dialog from "@ui/dialog/Dialog";
 import getDirByLocale from "@utils/getDirByLocale";
 import styles from "./Aside.module.css";
+
+/** How far (px) a swipe towards the drawer's start edge must go to close it */
+const SWIPE_CLOSE_DISTANCE = 50;
 
 export const AsideContext = createContext({
   open: false,
@@ -37,52 +40,40 @@ export default function AsideDrawer({
   const pathname = usePathname();
   const [openAtTransitionEnd, setOpenAtTransitionEnd] = useState(false);
   const { locale }: { locale: string } = useParams() || {};
+  /** Where the current touch started (its x), while the drawer is open */
+  const touchStartX = useRef<number | null>(null);
 
-  /** Opened right away on the contact route */
-  useEffect(() => {
-    if (open === null && pathname?.includes(`${locale as string}/contact`)) {
-      setOpenAtTransitionEnd(true);
-      setOpen(true);
-    }
-  }, [locale, open, pathname]);
+  // Opened right away on the contact route, unless it's been opened or closed already. Set while
+  // rendering rather than in an effect, which would render twice; the Dialog still opens (and
+  // slides in) after mounting, from its own effect.
+  if (open === null && pathname?.includes(`${locale as string}/contact`)) {
+    setOpenAtTransitionEnd(true);
+    setOpen(true);
+  }
 
-  const handleTransitionEnd = ({
-    target,
-  }: {
-    target: TransitionEventHandler<HTMLElement>;
-  }) => {
-    let touchX = 0;
-    const el = target as unknown as HTMLElement;
-
-    const handleTouchMove = (e: Event) => {
-      const dir = getDirByLocale({ locale });
-      const isLTR = dir === "ltr";
-      const slideDifference = isLTR
-        ? touchX - (e as TouchEvent).touches[0].clientX
-        : (e as TouchEvent).touches[0].clientX - touchX;
-
-      const sensitivityFactor = slideDifference > 50;
-
-      const touchEnd = isLTR
-        ? touchX > (e as TouchEvent).touches[0].clientX
-        : touchX < (e as TouchEvent).touches[0].clientX;
-
-      if (touchEnd && sensitivityFactor) {
-        el?.removeEventListener("touchmove", handleTouchMove);
-        setOpen(false);
-      }
-    };
-
-    const handleTouchStart = (e: Event) => {
-      touchX = (e as TouchEvent).touches[0].clientX;
-      el?.removeEventListener("touchstart", handleTouchStart);
-      el?.addEventListener("touchmove", handleTouchMove);
-    };
-
+  /** Once it has slid out, its content is unmounted */
+  const handleTransitionEnd = () => {
     if (!open) {
       setOpenAtTransitionEnd(false);
-    } else {
-      el?.addEventListener("touchstart", handleTouchStart);
+    }
+  };
+
+  const handleTouchStart = ({ touches }: TouchEvent<HTMLDialogElement>) => {
+    touchStartX.current = open ? touches[0].clientX : null;
+  };
+
+  /** A swipe towards its start edge (left, or right in right-to-left languages) closes it */
+  const handleTouchMove = ({ touches }: TouchEvent<HTMLDialogElement>) => {
+    if (touchStartX.current === null) {
+      return;
+    }
+
+    const moved = touches[0].clientX - touchStartX.current;
+    const towardsStart = getDirByLocale({ locale }) === "rtl" ? moved : -moved;
+
+    if (towardsStart > SWIPE_CLOSE_DISTANCE) {
+      touchStartX.current = null;
+      setOpen(false);
     }
   };
 
@@ -108,9 +99,9 @@ export default function AsideDrawer({
         onClose={handleClose}
         aria-label={openButtonLabel}
         onFocus={handleFocus}
-        onTransitionEnd={
-          handleTransitionEnd as unknown as TransitionEventHandler<HTMLDialogElement>
-        }
+        onTransitionEnd={handleTransitionEnd}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
         className={styles.aside}
       >
         <AsideContext.Provider

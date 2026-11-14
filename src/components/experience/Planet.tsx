@@ -9,7 +9,7 @@ export default function Planet() {
 
   /** Peeks from the bottom of the first screen on every route, so the loader waits for it.
    * `unoptimized`: it's already displayed at (or above) its own resolution, so it's served as it is. */
-  const { props } = getImageProps({
+  const { props: { alt, ...props } } = getImageProps({
     src: planet,
     alt: t("alt"),
     unoptimized: true,
@@ -20,7 +20,7 @@ export default function Planet() {
   return (
     <div className={styles.container}>
       <div>
-        <img {...props} {...{ [LOADER_CRITICAL_IMAGE_ATTRIBUTE]: true }} />
+        <img alt={alt} {...props} {...{ [LOADER_CRITICAL_IMAGE_ATTRIBUTE]: true }} />
       </div>
     </div>
   );

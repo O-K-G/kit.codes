@@ -37,3 +37,15 @@
     }
   }
 }
+
+/* The bot trap: clipped away rather than display: none, which some bots know to skip. (Not moved
+ * off screen: far to the left would scroll the page sideways in right-to-left languages.) */
+.honeypot {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  opacity: 0;
+  pointer-events: none;
+}

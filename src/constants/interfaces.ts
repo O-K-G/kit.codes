@@ -1,17 +1,15 @@
-/* eslint-disable no-unused-vars */
 import { DIRECTION_BY_LANGUAGE } from "@constants/LocaleDirection";
 import { z } from "zod";
 import {
   ComponentPropsWithoutRef,
-  Dispatch,
   MouseEventHandler,
-  PropsWithChildren,
   ReactNode,
-  Ref,
   RefObject,
-  SetStateAction,
-  MouseEvent,
 } from "react";
+
+/** Zod doesn't try compiling its validators with `Function` (eval): the CSP forbids it (see proxy.ts),
+ * so the attempt only fails and is reported as a violation */
+z.config({ jitless: true });
 
 export const CONTACT_FORM_EMAIL_MAX_LENGTH = 100;
 export const CONTACT_FORM_SUBJECT_MIN_LENGTH = 1;
@@ -40,42 +38,17 @@ export interface ActiveSectionProps {
   activeSection?: SectionName;
 }
 
-export interface CurrentSection {
+export interface SectionBackgroundProps {
   currentSection?: SectionName;
   minHeightClassName?: string;
-}
-
-export interface SectionBackgroundProps extends CurrentSection {
   /** Fetched with high priority, and the loader waits for it. */
   priority?: boolean;
 }
 
-export interface SectionProps extends CurrentSection, ActiveSectionProps {
+export interface SectionProps extends ActiveSectionProps {
+  currentSection?: SectionName;
   children: ReactNode;
   className?: string;
-}
-
-interface TitleLabels {
-  topLabel?: string;
-  bottomLabel?: string;
-}
-
-export interface TitleProps extends TitleLabels {
-  id?: number;
-  component?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
-  label?: string;
-  /** Must be in the following format: ' ... before:content-['some_string'] ',
-   * as JIT mode can't handle template literals.
-   */
-  labelGlowText?: string;
-  className?: string;
-  border?: boolean;
-  beforeBlurClassName?: string;
-  fontClassName?: string;
-  textSizeClassName?: string;
-  textColorClassName?: string;
-  beforeTextStrokeClassName?: string;
-  textStrokeClassName?: string;
 }
 
 export interface AboutTargetIconProps {
@@ -117,15 +90,21 @@ export interface IconsProps {
   className?: string;
 }
 
-/** The contact form's fields, validated alike in the browser and on the server */
+/**
+ * The contact form's fields, validated alike in the browser and on the server. Each is trimmed
+ * first, so text made only of spaces doesn't count. (The email is trimmed before the format check:
+ * `z.email().trim()` would check it first.)
+ */
 export const FormDataSchema = z.object({
-  email: z.email().max(CONTACT_FORM_EMAIL_MAX_LENGTH),
+  email: z.string().trim().pipe(z.email().max(CONTACT_FORM_EMAIL_MAX_LENGTH)),
   subject: z
     .string()
+    .trim()
     .max(CONTACT_FORM_SUBJECT_MAX_LENGTH)
     .min(CONTACT_FORM_SUBJECT_MIN_LENGTH),
   content: z
     .string()
+    .trim()
     .max(CONTACT_FORM_CONTENT_MAX_LENGTH)
     .min(CONTACT_FORM_CONTENT_MIN_LENGTH),
 });
@@ -143,10 +122,18 @@ export const ContactMessageSchema = FormDataSchema.extend({
 
 export type ContactMessage = z.infer<typeof ContactMessageSchema>;
 
-/** What sending a message comes to: sent, its fields invalid (which ones), or the sending failed */
+/** The contact form's hidden bot traps: a field only bots fill in, and when the form was shown */
+export const CONTACT_FORM_HONEYPOT_NAME = "website";
+export const CONTACT_FORM_STARTED_AT_NAME = "startedAt";
+
+/**
+ * What sending a message comes to: sent, its fields invalid (which ones), too many messages sent
+ * lately, or the sending failed
+ */
 export type SendMessageResult =
   | { ok: true }
   | { ok: false; error: "invalid"; fieldErrors: FormErrorNames }
+  | { ok: false; error: "rate-limited" }
   | { ok: false; error: "send-failed" };
 
 export interface AnchorLinkProps {
@@ -180,7 +167,6 @@ export interface IconButtonProps {
   onClick: MouseEventHandler<HTMLButtonElement>;
   "aria-label": string;
   "data-testid"?: string;
-  "data-pointer-events"?: boolean;
   icon: ReactNode;
   className?: string;
   disabled?: boolean;
@@ -197,43 +183,23 @@ export interface SideLinksProps {
   hideChangeLanguageButton?: boolean;
 }
 
-export interface HandleChildrenWithNewPropsProps {
-  children: ReactNode;
-  scrollableRef: Ref<null>;
-  onSubsectionSelectChange: Dispatch<SetStateAction<number>>;
-}
-
-export interface ChildWithNewProps {
-  id: number;
-  /** How many slides there are, for each slide's "n of total" label */
-  total: number;
-  ref: Ref<null>;
-  onSubsectionSelectChange: Dispatch<SetStateAction<number>>;
-}
-
-export interface PropsWithId extends PropsWithChildren {
-  id: number;
-}
-
 export interface UseObserveScrollSubsectionProps {
-  scrollableRef?: RefObject<HTMLDivElement>;
+  scrollableRef: RefObject<HTMLDivElement | null> | null;
   id?: number;
-  onSubsectionSelectChange?: Dispatch<SetStateAction<number>>;
-  scrollableItemRef: Ref<null>;
+  onSubsectionSelectChange: (id: number) => void;
+  scrollableItemRef: RefObject<HTMLDivElement | null>;
 }
 
+/** A carousel slide's props; `id` (its index) and `total` are set by the carousel */
 export interface ScrollableSubsectionItemProps {
   children: ReactNode;
-  onSubsectionSelectChange?: Dispatch<SetStateAction<number>>;
   id?: number;
   total?: number;
-  ref?: RefObject<HTMLDivElement>;
 }
 export interface ContactGoBackButtonProps {
   children: ReactNode;
   onClick: () => void;
   className?: string;
-  ref?: Ref<HTMLButtonElement>;
 }
 
 export interface GaugeProps {
@@ -267,7 +233,6 @@ export interface MainTitleProps {
 }
 
 export interface BorderProps {
-  className?: string;
   leftLabel?: string;
   rightLabel?: string;
   isTextBlink?: boolean;
@@ -289,7 +254,6 @@ export interface FixedBottomComponentProps {
   slot?: ReactNode;
   className?: string;
   children?: ReactNode;
-  isTransparent?: boolean;
   hideOnScroll?: boolean;
   showOnScroll?: boolean;
 }
@@ -299,21 +263,14 @@ export interface SelectLanguageButtonProps {
   value: keyof typeof DIRECTION_BY_LANGUAGE;
 }
 
-export interface CvProps {
-  hide?: boolean;
-}
-
 export interface SkillBarsProps {
   /** Sizes and places the list */
   className?: string;
 }
 
-export interface handleDownloadProps {
-  url: string | URL | Request;
-  init?: RequestInit | undefined;
+export interface HandleDownloadProps {
+  url: string;
   fileName?: string;
-  method?: "GET" | "POST" | "PUT" | "DELETE";
-  headers?: Record<string, string>;
 }
 
 export interface GetDirByLocaleProps {

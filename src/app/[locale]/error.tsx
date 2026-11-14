@@ -7,7 +7,7 @@ import IconButton from '@ui/iconButton/IconButton';
 import { useTranslations } from 'next-intl';
 import styles from './error.module.css';
 
-export default function Error({
+export default function ErrorPage({
   error,
   reset,
 }: {

@@ -6,6 +6,8 @@
   min-width: 100svw;
   max-width: 100svw;
   padding: 1rem;
+  border: 2px solid var(--color-title-purple);
+  border-radius: 10px;
   background-color: #000;
   color: #fff;
 

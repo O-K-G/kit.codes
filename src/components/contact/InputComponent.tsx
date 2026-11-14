@@ -1,7 +1,6 @@
-import { handleA11y1000FirstNumbers } from '@utils/handleA11y1000FirstNumbers';
 import { InputComponentProps } from '@constants/interfaces';
 import { useTranslations } from 'next-intl';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import styles from './InputComponent.module.css';
 
 export default function InputComponent({
@@ -16,13 +15,17 @@ export default function InputComponent({
   ...rest
 }: InputComponentProps) {
   const [value, setValue] = useState('');
+  const [wasReset, setWasReset] = useState(isReset);
   const t = useTranslations('inputComponentText');
 
-  useEffect(() => {
+  // Clears the text when `isReset` turns on (the message was sent). Done while rendering, as React
+  // recommends for state that follows a prop, rather than in an effect, which would render twice.
+  if (isReset !== wasReset) {
+    setWasReset(isReset);
     if (isReset) {
       setValue('');
     }
-  }, [isReset]);
+  }
 
   const ariaLabelErrorValueById = {
     email: t('emailAriaLabelError'),
@@ -31,7 +34,7 @@ export default function InputComponent({
   };
 
   const remaining = maxLength - value.length;
-  const counterText = `${handleA11y1000FirstNumbers(remaining)} ${t(
+  const counterText = `${remaining} ${t(
     remaining !== 1 ? 'charactersAriaLabelError' : 'characterAriaLabelError'
   )} ${t('remain')}`;
   const errorText = `${t('error')} - ${

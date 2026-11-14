@@ -1,13 +1,16 @@
+/* Sized by its text: as tall as the title, the message and the details need. (A text taller than the
+ * screen scrolls the whole dialog, see Dialog.) */
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-  height: 50%;
   padding: 1rem;
-  overflow: hidden;
-  overflow-wrap: break-word;
+  /* Long words (an error's details) wrap anywhere rather than widen the box */
+  overflow-wrap: anywhere;
+  border: 2px solid var(--color-title-purple);
+  border-radius: 10px;
   background-color: #000;
   color: #fff;
   font-size: max(1rem, min(0.7727rem + 1.1364vw, 1.0864rem + 0.6462vw), 1.5 * var(--desktop-rem));
@@ -15,12 +18,10 @@
 
   @media (width >= 40rem) {
     width: 50svw;
-    height: 50svw;
   }
 
   @media (width >= 48rem) {
     width: 40dvw;
-    height: 40dvw;
   }
 
   @media (width >= 64rem) {
@@ -28,13 +29,8 @@
   }
 
   .message {
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
     width: 100%;
-    height: 50%;
     padding-bottom: 1rem;
-    overflow: auto;
     text-align: center;
 
     &:lang(en) {
@@ -44,18 +40,12 @@
     &:lang(he) {
       font-family: var(--font-varela-round-regular);
     }
-
-    @media (width >= 64rem) {
-      align-items: center;
-    }
   }
 
   .details {
     display: flex;
     width: 100%;
-    height: 50%;
     padding-top: 1rem;
-    overflow: auto;
     border-top: 1px solid;
     border-color: #fff;
   }

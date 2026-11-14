@@ -2,6 +2,7 @@
 
 import { MouseEvent, SyntheticEvent, createContext, useEffect, useId, useRef } from "react";
 import { DialogProps } from "@constants/interfaces";
+import usePreventPageScroll from "@hooks/usePreventPageScroll";
 import classNames from "@utils/classNames";
 import styles from "./Dialog.module.css";
 
@@ -16,7 +17,8 @@ export const DialogContext = createContext({
 /**
  * A modal dialog (WAI-ARIA APG dialog pattern), as the native <dialog> opened with showModal(): the
  * browser moves focus into it and keeps it there, makes the rest of the page inert, closes it on
- * Escape and returns focus to what opened it. `onClose` is called whenever it asks to close (Escape,
+ * Escape and returns focus to what opened it. While it's open, the page behind it doesn't scroll (see
+ * usePreventPageScroll). `onClose` is called whenever it asks to close (Escape,
  * a click on its backdrop, or its title's close button, see DialogTitle), so the owner's state follows.
  * Named by its DialogTitle, or by an `aria-label`. It stays mounted, so it can animate in and out.
  */
@@ -30,6 +32,7 @@ export default function Dialog({
 }: DialogProps) {
   const ref = useRef<HTMLDialogElement>(null);
   const titleId = useId();
+  usePreventPageScroll(ref, open);
 
   useEffect(() => {
     const dialog = ref.current;

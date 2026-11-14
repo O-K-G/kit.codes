@@ -1,4 +1,3 @@
-import React from "react";
 import { SCROLLABLE_ITEM_TEST_ID } from "@ui/scrollableSection/ScrollableSubsectionItem";
 import itemStyles from "@ui/scrollableSection/ScrollableSubsectionItem.module.css";
 import { render, screen, fireEvent } from "@testing-library/react";
