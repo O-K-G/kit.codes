@@ -22,6 +22,8 @@ const IN_VIEW_THRESHOLD = 0.5;
 export default function SkillBars({ className }: SkillBarsProps) {
   const listRef = useRef<HTMLUListElement>(null);
   const [filling, setFilling] = useState(false);
+  /** Escape hides the segments' tooltips until the pointer moves (WCAG 1.4.13) */
+  const [tooltipsHidden, setTooltipsHidden] = useState(false);
   const id = useId();
   const skills = Object.entries(SKILLS);
 
@@ -40,10 +42,21 @@ export default function SkillBars({ className }: SkillBarsProps) {
     return () => observer.disconnect();
   }, [filling]);
 
+  useEffect(() => {
+    const handleKeyDown = ({ key }: KeyboardEvent) => {
+      if (key === "Escape") setTooltipsHidden(true);
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   return (
     <ul
       ref={listRef}
       dir="ltr"
+      data-tooltips-hidden={tooltipsHidden}
+      onPointerMove={() => setTooltipsHidden(false)}
       className={classNames(styles.list, className)}
       style={
         {
@@ -78,6 +91,7 @@ export default function SkillBars({ className }: SkillBarsProps) {
                   <span
                     key={segment}
                     data-on={segment < level}
+                    data-percent={Math.round(((segment + 1) / SKILL_MAX_SEGMENTS) * 100)}
                     style={{ "--segment": segment } as CSSProperties}
                   />
                 ))}
