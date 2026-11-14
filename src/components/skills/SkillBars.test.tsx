@@ -39,7 +39,7 @@ describe("SkillBars", () => {
 
   it("fills the bars once in view, and keeps them filled", () => {
     const { container } = render(<SkillBars />);
-    const fills = container.querySelectorAll(`.${styles.fill}`);
+    const fills = container.querySelectorAll(`.${styles.segments}`);
 
     fills.forEach((fill) => expect(fill).toHaveAttribute("data-filling", "false"));
 
@@ -48,5 +48,16 @@ describe("SkillBars", () => {
 
     setVisible(false);
     fills.forEach((fill) => expect(fill).toHaveAttribute("data-filling", "true"));
+  });
+
+  it("draws each bar as its segments, lit up to the skill's value", () => {
+    const { container } = render(<SkillBars />);
+    const [name, level] = Object.entries(SKILLS)[0];
+    const bar = screen.getByRole("meter", { name });
+    const segments = bar.querySelectorAll("span");
+
+    expect(container.querySelector(`.${styles.segments}`)).toBeInTheDocument();
+    expect(segments).toHaveLength(SKILL_MAX_SEGMENTS);
+    expect(bar.querySelectorAll('span[data-on="true"]')).toHaveLength(level);
   });
 });

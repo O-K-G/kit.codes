@@ -73,8 +73,14 @@ export default function SkillBars({ className }: SkillBarsProps) {
               aria-valuetext={`${Math.round((level / SKILL_MAX_SEGMENTS) * 100)}%`}
               className={styles.bar}
             >
-              <div className={styles.segments}>
-                <div className={styles.fill} data-filling={filling} />
+              <div className={styles.segments} data-filling={filling}>
+                {Array.from({ length: SKILL_MAX_SEGMENTS }, (_, segment) => (
+                  <span
+                    key={segment}
+                    data-on={segment < level}
+                    style={{ "--segment": segment } as CSSProperties}
+                  />
+                ))}
               </div>
             </div>
           </li>
