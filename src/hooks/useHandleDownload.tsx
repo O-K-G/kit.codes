@@ -1,9 +1,9 @@
+import { useState } from 'react';
 import { handleDownloadProps } from '@constants/interfaces';
-import { ModalContext as modalContext } from '@ui/modalContext/ModalContext';
-import { useContext } from 'react';
 
+/** Downloads a PDF served as base64; `hasError` is set when it fails, for the caller to report it. */
 export default function useHandleDownload() {
-  const { onModalContentChange: setModalContent } = useContext(modalContext);
+  const [hasError, setHasError] = useState(false);
 
   const handleDownload = ({
     url,
@@ -12,7 +12,6 @@ export default function useHandleDownload() {
     headers = {
       'Content-Type': 'application/json',
     },
-    errorModalContent,
   }: handleDownloadProps) => {
     void (async () => {
       try {
@@ -24,20 +23,19 @@ export default function useHandleDownload() {
         const { base64PDFfile } = (await data.json()) || {};
 
         if (!base64PDFfile) {
-          return setModalContent(errorModalContent);
+          setHasError(true);
+          return;
         }
 
         const el = document.createElement('a');
         el.href = `data:application/pdf;base64,${base64PDFfile}`;
         el.download = `${fileName}.pdf`;
         el.click();
-      } catch (err) {
-        if (err) {
-          setModalContent(errorModalContent);
-        }
+      } catch {
+        setHasError(true);
       }
     })();
   };
 
-  return { handleDownload };
+  return { handleDownload, hasError, clearError: () => setHasError(false) };
 }

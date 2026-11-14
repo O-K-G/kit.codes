@@ -5,9 +5,9 @@ import LanguageIcon from "@ui/icons/LanguageIcon";
 import { usePathname, useRouter, useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { DIRECTION_BY_LANGUAGE } from "@constants/LocaleDirection";
-import { ModalContext as modalContext } from "@ui/modalContext/ModalContext";
+import Dialog, { DialogContext } from "@ui/dialog/Dialog";
 import DialogTitle from "@ui/dialog/DialogTitle";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { SelectLanguageButtonProps } from "@constants/interfaces";
 import styles from "./ChangeLanguage.module.css";
 
@@ -16,7 +16,7 @@ function SelectLanguageButton({ label, value }: SelectLanguageButtonProps) {
   const pathname = usePathname();
   const isCurrentLocale = locale === value;
   const router = useRouter();
-  const { onCloseModal } = useContext(modalContext);
+  const { onClose } = useContext(DialogContext);
 
   return (
     <li>
@@ -26,8 +26,8 @@ function SelectLanguageButton({ label, value }: SelectLanguageButtonProps) {
         lang={value}
         aria-current={isCurrentLocale || undefined}
         data-current-locale={isCurrentLocale}
-        onClick={(e) => {
-          onCloseModal(e);
+        onClick={() => {
+          onClose();
           if (!isCurrentLocale) {
             router.push(pathname.replace(`/${locale as string}`, `/${value}`));
           }
@@ -43,14 +43,10 @@ function SelectLanguageButton({ label, value }: SelectLanguageButtonProps) {
 
 function LanguagesList() {
   const t = useTranslations("languageSelect");
-  const { onCloseModal } = useContext(modalContext);
 
   return (
     <div className={styles.languagesList}>
-      <DialogTitle
-        label={t("changeLanguage")}
-        onClick={onCloseModal}
-      />
+      <DialogTitle label={t("changeLanguage")} />
       <ul>
         {Object.keys(DIRECTION_BY_LANGUAGE).map((str: string) => (
           <SelectLanguageButton
@@ -65,15 +61,20 @@ function LanguagesList() {
 }
 
 export default function ChangeLanguage() {
-  const { onModalContentChange: setModalContent } = useContext(modalContext);
+  const [open, setOpen] = useState(false);
   const t = useTranslations("languageSelect");
 
   return (
-    <IconButton
-      className={styles.iconButton}
-      onClick={() => setModalContent(<LanguagesList />)}
-      icon={<LanguageIcon />}
-      aria-label={t("changeLanguage")}
-    />
+    <>
+      <IconButton
+        className={styles.iconButton}
+        onClick={() => setOpen(true)}
+        icon={<LanguageIcon />}
+        aria-label={t("changeLanguage")}
+      />
+      <Dialog open={open} onClose={() => setOpen(false)}>
+        <LanguagesList />
+      </Dialog>
+    </>
   );
 }

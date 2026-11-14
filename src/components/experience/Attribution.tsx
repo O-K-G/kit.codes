@@ -1,14 +1,13 @@
 "use client";
 
-import { useContext } from "react";
-import { ModalContext as modalContext } from "@ui/modalContext/ModalContext";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
+import Dialog from "@ui/dialog/Dialog";
 import DialogTitle from "@ui/dialog/DialogTitle";
 import { URLs } from "@constants/urls";
 import styles from "./Attribution.module.css";
 
 function AttributionContent() {
-  const { onCloseModal } = useContext(modalContext);
   const t = useTranslations("attributionText");
   const { figmaAttribution, ccbyLicense } = URLs;
 
@@ -17,10 +16,7 @@ function AttributionContent() {
       dir="ltr"
       className={styles.content}
     >
-      <DialogTitle
-        label={t("title")}
-        onClick={onCloseModal}
-      />
+      <DialogTitle label={t("title")} />
       <p>
         <span className={styles.inlineBlock}>{t("designBasedOn")}</span>
         <br />
@@ -51,16 +47,17 @@ function AttributionContent() {
 }
 
 export default function Attribution() {
-  const { onModalContentChange: setModalContent } = useContext(modalContext);
+  const [open, setOpen] = useState(false);
   const t = useTranslations("attributionText");
 
   return (
-    <button
-      type="button"
-      className={styles.button}
-      onClick={() => setModalContent(<AttributionContent />)}
-    >
-      {t("title")}
-    </button>
+    <>
+      <button type="button" className={styles.button} onClick={() => setOpen(true)}>
+        {t("title")}
+      </button>
+      <Dialog open={open} onClose={() => setOpen(false)}>
+        <AttributionContent />
+      </Dialog>
+    </>
   );
 }

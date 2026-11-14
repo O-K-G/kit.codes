@@ -5,11 +5,11 @@ import {
   TransitionEventHandler,
   createContext,
   useEffect,
-  useRef,
   useState,
 } from "react";
 import { usePathname, useParams } from "next/navigation";
 import ContactGoBackButton from "@components/contact/ContactGoBackButton";
+import Dialog from "@ui/dialog/Dialog";
 import getDirByLocale from "@utils/getDirByLocale";
 import styles from "./Aside.module.css";
 
@@ -19,10 +19,11 @@ export const AsideContext = createContext({
 });
 
 /**
- * The contact drawer, a modal dialog (WAI-ARIA APG dialog pattern): named by its open button's label.
- * While it's open the rest of the page is inert (out of reach of the keyboard, the pointer and
- * screen readers), focus moves into it once it's in place, Escape closes it, and closing it returns
- * focus to its open button.
+ * The contact drawer: a modal dialog (see Dialog) styled as a side panel that slides in, named by its
+ * open button's label. The browser makes it modal: focus moves into it and stays there, the rest of
+ * the page is inert, Escape closes it, and closing returns focus to its open button. Its content is
+ * mounted while it's open (and until it has slid out). On touch screens, a swipe towards its start
+ * edge closes it.
  */
 export default function AsideDrawer({
   openButtonLabel,
@@ -35,63 +36,13 @@ export default function AsideDrawer({
   const pathname = usePathname();
   const [openAtTransitionEnd, setOpenAtTransitionEnd] = useState(false);
   const { locale }: { locale: string } = useParams() || {};
-  const asideRef = useRef<HTMLDivElement>(null);
-  const openButtonRef = useRef<HTMLButtonElement>(null);
-  const wasOpen = useRef(false);
 
-  /** The rest of the page is inert while the drawer is open. Dialogs (e.g. the form's error dialog)
-   * stay reachable: they're opened as native modals above it. */
+  /** Opened right away on the contact route */
   useEffect(() => {
-    const aside = asideRef.current;
-    if (!open || !aside) return;
-
-    const outside = [
-      ...Array.from(aside.parentElement?.children ?? []),
-      ...Array.from(document.querySelectorAll("body > header")),
-    ].filter(
-      (element): element is HTMLElement =>
-        element instanceof HTMLElement && element !== aside && element.tagName !== "DIALOG"
-    );
-    outside.forEach((element) => (element.inert = true));
-
-    return () => outside.forEach((element) => (element.inert = false));
-  }, [open]);
-
-  /** Focus: into the drawer once its content is in place, back to the open button when it closes */
-  useEffect(() => {
-    if (openAtTransitionEnd) {
-      asideRef.current
-        ?.querySelector<HTMLElement>("button, a[href], input, textarea, [tabindex]")
-        ?.focus();
-    }
-  }, [openAtTransitionEnd]);
-
-  useEffect(() => {
-    if (open) {
-      wasOpen.current = true;
-    } else if (open === false && wasOpen.current) {
-      wasOpen.current = false;
-      openButtonRef.current?.focus();
-    }
-  }, [open]);
-
-  useEffect(() => {
-    const handleClose = ({ key }: KeyboardEvent) => {
-      if (key === "Escape") {
-        setOpen(false);
-      }
-    };
-
     if (open === null && pathname?.includes(`${locale as string}/contact`)) {
       setOpenAtTransitionEnd(true);
       setOpen(true);
     }
-
-    if (open) {
-      window.addEventListener("keydown", handleClose);
-    }
-
-    return () => window.removeEventListener("keydown", handleClose);
   }, [locale, open, pathname]);
 
   const handleTransitionEnd = ({
@@ -137,7 +88,6 @@ export default function AsideDrawer({
   return (
     <>
       <ContactGoBackButton
-        ref={openButtonRef}
         onClick={() => {
           setOpenAtTransitionEnd(true);
           setOpen(true);
@@ -145,19 +95,15 @@ export default function AsideDrawer({
       >
         {openButtonLabel}
       </ContactGoBackButton>
-      <div
-        ref={asideRef}
-        data-drawer
-        role="dialog"
-        aria-modal={!!open}
+      <Dialog
+        open={!!open}
+        onClose={() => setOpen(false)}
         aria-label={openButtonLabel}
-        inert={!open}
         // Keeps the focused control's rings in view too (the scroll padding leaves room for them)
         onFocus={({ target }) => target.scrollIntoView?.({ block: "nearest" })}
         onTransitionEnd={
-          handleTransitionEnd as unknown as TransitionEventHandler<HTMLElement>
+          handleTransitionEnd as unknown as TransitionEventHandler<HTMLDialogElement>
         }
-        aria-hidden={!open}
         className={styles.aside}
       >
         <AsideContext.Provider
@@ -165,7 +111,7 @@ export default function AsideDrawer({
         >
           {children}
         </AsideContext.Provider>
-      </div>
+      </Dialog>
     </>
   );
 }

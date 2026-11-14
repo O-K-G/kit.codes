@@ -2,6 +2,7 @@
 import { DIRECTION_BY_LANGUAGE } from "@constants/LocaleDirection";
 import { z } from "zod";
 import {
+  ComponentPropsWithoutRef,
   Dispatch,
   MouseEventHandler,
   PropsWithChildren,
@@ -18,20 +19,16 @@ export const CONTACT_FORM_SUBJECT_MAX_LENGTH = 100;
 export const CONTACT_FORM_CONTENT_MIN_LENGTH = 1;
 export const CONTACT_FORM_CONTENT_MAX_LENGTH = 1000;
 
-export interface ModalContextComponentProps {
+export interface DialogProps extends Omit<ComponentPropsWithoutRef<"dialog">, "open" | "onClose"> {
+  /** Shown as a modal while true */
+  open: boolean;
+  /** Called when the dialog asks to close (its close button, Escape, a click on its backdrop) */
+  onClose: () => void;
   children: ReactNode;
-}
-
-export interface ModalContextProps {
-  onModalContentChange: Dispatch<SetStateAction<ReactNode>>;
-  modalRef: Ref<HTMLDialogElement | null>;
-  modalContent: ReactNode;
-  onCloseModal: (e: Event | MouseEvent<HTMLElement>) => void;
 }
 
 export interface DialogTitleProps {
   label: string;
-  onClick: MouseEventHandler<HTMLButtonElement>;
   className?: string;
   closeButtonIcon?: ReactNode;
 }
@@ -316,7 +313,6 @@ export interface handleDownloadProps {
   fileName?: string;
   method?: "GET" | "POST" | "PUT" | "DELETE";
   headers?: Record<string, string>;
-  errorModalContent: ReactNode;
 }
 
 export interface GetDirByLocaleProps {

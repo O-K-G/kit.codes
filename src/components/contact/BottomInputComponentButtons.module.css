@@ -60,7 +60,7 @@
       }
     }
 
-    .submitButton:enabled {
+    .submitButton:not([aria-disabled="true"]) {
       @media (hover: hover) {
         &:hover {
           color: var(--color-title-purple);
@@ -81,7 +81,7 @@
       }
     }
 
-    .submitButton:disabled {
+    .submitButton[aria-disabled="true"] {
       color: #fff;
       opacity: 50%;
       cursor: not-allowed;

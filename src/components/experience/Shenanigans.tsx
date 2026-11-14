@@ -1,18 +1,11 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { ModalContext as modalContext } from "@ui/modalContext/ModalContext";
+import Dialog, { DialogContext } from "@ui/dialog/Dialog";
 import DialogTitle from "@ui/dialog/DialogTitle";
 import styles from "./Shenanigans.module.css";
-import {
-  useContext,
-  MouseEventHandler,
-  ReactNode,
-  KeyboardEventHandler,
-} from "react";
+import { useContext, useState, MouseEventHandler, ReactNode } from "react";
 import classNames from "@utils/classNames";
-
-const COMPONENT_ID = "shenanigans-id";
 
 function OldschoolButton({
   children,
@@ -34,21 +27,14 @@ function OldschoolButton({
 }
 
 function ShenanigansComponent() {
-  const { onCloseModal } = useContext(modalContext);
+  const { onClose } = useContext(DialogContext);
   const t = useTranslations("shenanigansText");
 
-  const handleClick = (e: Event) => {
-    const { id } = (e.target as HTMLDivElement) || {};
-    if (id === COMPONENT_ID) {
-      onCloseModal(e);
-    }
-  };
-
   return (
+    // Its own full-screen backdrop (the "desktop"): a click on it closes the dialog, like a click on a
+    // dialog's backdrop (Escape closes it too, see Dialog)
     <div
-      onClick={handleClick as unknown as MouseEventHandler<HTMLDivElement>}
-      onKeyDown={handleClick as unknown as KeyboardEventHandler<HTMLDivElement>}
-      id={COMPONENT_ID}
+      onClick={(event) => event.target === event.currentTarget && onClose()}
       role="presentation"
       className={styles.backdrop}
     >
@@ -56,7 +42,6 @@ function ShenanigansComponent() {
         <DialogTitle
           className={styles.dialogTitle}
           label={t("mainTitle")}
-          onClick={onCloseModal}
           closeButtonIcon={
             <div className={styles.closeButtonIcon} />
           }
@@ -82,7 +67,7 @@ function ShenanigansComponent() {
               {t("quit")}
             </p>
             <div className={styles.quitButtonWrapper}>
-              <OldschoolButton onClick={onCloseModal}>
+              <OldschoolButton onClick={onClose}>
                 {t("quitShenanigans")}
               </OldschoolButton>
             </div>
@@ -94,16 +79,17 @@ function ShenanigansComponent() {
 }
 
 export default function Shenanigans() {
-  const { onModalContentChange: setModalContent } = useContext(modalContext);
+  const [open, setOpen] = useState(false);
   const t = useTranslations("shenanigansText");
 
   return (
-    <button
-      type="button"
-      className={styles.button}
-      onClick={() => setModalContent(<ShenanigansComponent />)}
-    >
-      {t("shenanigansButton")}
-    </button>
+    <>
+      <button type="button" className={styles.button} onClick={() => setOpen(true)}>
+        {t("shenanigansButton")}
+      </button>
+      <Dialog open={open} onClose={() => setOpen(false)}>
+        <ShenanigansComponent />
+      </Dialog>
+    </>
   );
 }

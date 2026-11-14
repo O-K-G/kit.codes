@@ -22,10 +22,18 @@ export default function BottomInputComponentButtons({
         {leftSlot}
       </div>
       <div className={styles.center}>
+        {/* aria-disabled rather than disabled while sending: a disabled button would drop the focus
+         * (WCAG 2.4.3), so it couldn't come back to it, e.g. from the error dialog */}
         <button
-          disabled={isBusy}
+          aria-disabled={isBusy || undefined}
           type="submit"
-          onClick={onSubmit}
+          onClick={(event) => {
+            if (isBusy) {
+              event.preventDefault();
+              return;
+            }
+            onSubmit();
+          }}
           className={styles.submitButton}
         >
           {t("send")}

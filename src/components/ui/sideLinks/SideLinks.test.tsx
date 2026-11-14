@@ -12,6 +12,13 @@ import SideLinks, {
 
 const DEFAULT_LOCALE = "en";
 
+/** The language switcher's list (in its closed dialog) uses the app router */
+jest.mock("next/navigation", () => ({
+  useRouter: () => ({ push: jest.fn() }),
+  usePathname: () => "/en",
+  useParams: () => ({ locale: "en" }),
+}));
+
 describe("SideLinks Component", () => {
   it("renders GitHub and LinkedIn links", async () => {
     const jsonFiles = await Promise.all(
