@@ -16,12 +16,30 @@ export const LOCALE_ALTERNATES = {
   "x-default": getLocalePath(routing.defaultLocale),
 } as Record<Locale | "x-default", string>;
 
+const SITE_TITLE = "kit.codes";
+const SITE_DESCRIPTION =
+  "This is my landing page to showcase some of my web development skills.";
+
+/** Open Graph locales (language_TERRITORY) of the page's locales. The link preview image comes from
+ * app/[locale]/opengraph-image.tsx and twitter-image.tsx. */
+export const OG_LOCALES: Record<Locale, string> = { en: "en_US", he: "he_IL" };
+
 export const siteMetadata: Metadata = {
   metadataBase: new URL(URLs.siteURL),
-  title: "Dev Space Center",
-  description:
-    "This is my landing page to showcase some of my web development skills. ",
-  applicationName: "devspacecenter",
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
+  openGraph: {
+    type: "website",
+    siteName: SITE_TITLE,
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+  },
+  applicationName: "kit.codes",
   manifest: "/manifest.webmanifest",
   icons: {
     icon: `/images/icon.png?cacheVersion=${CACHE_VERSION}`,

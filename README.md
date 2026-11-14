@@ -1,4 +1,4 @@
-The repo for my landing page at [http://devspace.center](http://devspace.center).
+The repo for my landing page at [https://www.kit.codes](https://www.kit.codes).
 
 You can run it either by:
 

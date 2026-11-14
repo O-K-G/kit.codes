@@ -1,7 +1,12 @@
 import "@locale/globals.css";
 import styles from "./layout.module.css";
 import { Metadata, Viewport } from "next";
-import { siteMetadata, LOCALE_ALTERNATES, getLocalePath } from "@constants/siteMetadata";
+import {
+  siteMetadata,
+  LOCALE_ALTERNATES,
+  OG_LOCALES,
+  getLocalePath,
+} from "@constants/siteMetadata";
 import { routing } from "@i18n/routing";
 import handleFontsByLocale from "@utils/handleFontsByLocale";
 import getDirByLocale from "@utils/getDirByLocale";
@@ -28,6 +33,15 @@ export async function generateMetadata({
       /** Every section route (/en/about, /en/skills, ...) renders this same page, scrolled to a section. */
       canonical: getLocalePath(selectedLocale),
       languages: LOCALE_ALTERNATES,
+    },
+    /** The link preview, in the page's language, pointing at its locale root like the canonical URL */
+    openGraph: {
+      ...siteMetadata.openGraph,
+      url: getLocalePath(selectedLocale),
+      locale: OG_LOCALES[selectedLocale],
+      alternateLocale: routing.locales
+        .filter((other) => other !== selectedLocale)
+        .map((other) => OG_LOCALES[other]),
     },
   };
 }
