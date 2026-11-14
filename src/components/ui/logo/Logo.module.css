@@ -1,0 +1,12 @@
+/* Across from the "Contact me" button: at the start of the line (left, or right in Hebrew). Unlike
+ * it, it isn't fixed: it sits at the top of the page, over the first section, and scrolls away. */
+.logo {
+  position: absolute;
+  inset-inline-start: 0;
+  margin-inline-start: 1rem;
+  /* A dark outline around the letters, so they keep their contrast over any part of the background
+   * (WCAG 1.4.3). Painted behind the fill, so only its outer half shows and the letters keep their
+   * shape. */
+  -webkit-text-stroke: 0.12em #000;
+  paint-order: stroke fill;
+}

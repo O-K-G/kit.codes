@@ -1,6 +1,7 @@
 .nav {
   position: fixed;
   top: 0;
+  z-index: 10;
   margin-top: calc(1.35 * var(--fluid-rem));
 
   &:dir(ltr) {
