@@ -50,4 +50,22 @@ describe("SideLinks Component", () => {
       messages.sideLinks.liLinkAriaLabel
     );
   });
+
+  it("holds only list items in its list", async () => {
+    const jsonFiles = await Promise.all(
+      i18nFilenames.map(
+        async (str) =>
+          (await import(`../../../../messages/${DEFAULT_LOCALE}/${str}.json`)).default
+      )
+    );
+
+    render(
+      <NextIntlClientProvider locale={DEFAULT_LOCALE} messages={Object.assign({}, ...jsonFiles)}>
+        <SideLinks />
+      </NextIntlClientProvider>
+    );
+
+    const list = screen.getByRole("list");
+    Array.from(list.children).forEach((child) => expect(child.tagName).toBe("LI"));
+  });
 });

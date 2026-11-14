@@ -110,6 +110,9 @@ export default function ContactForm({ footer }: ContactFormProps) {
             id: EMAIL_ID,
             label: t("emailLabel"),
             placeholder: t("emailPlaceholder"),
+            /* Lets browsers fill in the user's address (WCAG 1.3.5), with an email keyboard */
+            autoComplete: "email",
+            inputMode: "email" as const,
             maxLength: CONTACT_FORM_EMAIL_MAX_LENGTH,
             onChange: () => handleOnChange(EMAIL_ID),
             onClick: handleOnClick,
@@ -156,37 +159,13 @@ export default function ContactForm({ footer }: ContactFormProps) {
             onClick: handleOnClick,
             isError: fieldError(CONTENT_ID),
           },
-        ].map(
-          ({
-            id,
-            label,
-            placeholder,
-            minLength,
-            maxLength,
-            rows,
-            component,
-            bottomSlot,
-            onChange,
-            onClick,
-            isError,
-          }) => (
-            <InputComponent
-              key={`input-component-${id}`}
-              id={id}
-              label={label}
-              isReset={isMessageSent}
-              placeholder={placeholder}
-              minLength={minLength}
-              maxLength={maxLength}
-              rows={rows}
-              component={component}
-              bottomSlot={bottomSlot}
-              onChange={onChange}
-              onClick={onClick}
-              isError={isError}
-            />
-          )
-        )}
+        ].map((props) => (
+          <InputComponent
+            key={`input-component-${props.id}`}
+            isReset={isMessageSent}
+            {...props}
+          />
+        ))}
       </div>
     </form>
   );

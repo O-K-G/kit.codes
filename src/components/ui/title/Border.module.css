@@ -24,6 +24,12 @@
   }
 
   > span {
+    /* A dark outline around the letters, so they keep their contrast over any part of the background
+     * (WCAG 1.4.3). Painted behind the fill, so only its outer half shows and the letters keep their
+     * shape. */
+    -webkit-text-stroke: 0.12em #000;
+    paint-order: stroke fill;
+
     &:lang(en) {
       padding-top: calc(0.1 * var(--fluid-rem));
       font-family: var(--font-star-date-81316);
@@ -48,8 +54,9 @@
       }
     }
 
+    /* 6 blinks (4.5s): blinking that starts by itself must stop within 5 seconds (WCAG 2.2.2) */
     &[data-blink="true"] {
-      animation: border-subtitle-blink 0.75s 12;
+      animation: border-subtitle-blink 0.75s 6;
     }
   }
 }

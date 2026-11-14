@@ -37,6 +37,11 @@
     color: var(--color-title-purple);
     text-transform: uppercase;
     white-space: nowrap;
+    /* A dark outline around the letters, so they keep their contrast over any part of the background
+     * (WCAG 1.4.3). Painted behind the fill, so only its outer half shows and the letters keep their
+     * shape. */
+    -webkit-text-stroke: 0.12em #000;
+    paint-order: stroke fill;
 
     &:lang(en) {
       font-family: var(--font-bebas-neue);

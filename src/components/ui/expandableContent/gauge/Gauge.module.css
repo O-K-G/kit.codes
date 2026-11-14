@@ -39,6 +39,11 @@
   height: 100%;
 }
 
+/* Decorative: never in the way of what's under it (it stays, faded out, over the opened text) */
+.gauge {
+  pointer-events: none;
+}
+
 .gauge {
   --red: oklch(63.7% 0.237 25.331);
   /* The outer ring: 14% of the gauge's radius thick */

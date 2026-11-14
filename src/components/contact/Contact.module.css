@@ -2,6 +2,8 @@
 .section {
   position: relative;
   padding-top: 5rem;
+  /* Room for the focus rings of the last links, grown on focus (WCAG 2.4.7) */
+  padding-bottom: calc(2 * var(--fluid-rem));
 
   @media (width >= 48rem) {
     padding-top: 2.5rem;

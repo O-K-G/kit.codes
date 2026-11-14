@@ -46,8 +46,11 @@
       margin-top: 0.5rem;
     }
 
+    /* Underlined, so they're told apart from the text by more than their color (WCAG 1.4.1) */
     > a {
       color: var(--color-title-purple);
+      text-decoration: underline;
+      text-underline-offset: 0.15em;
 
       @media (hover: hover) {
         &:hover {

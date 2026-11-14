@@ -4,9 +4,9 @@
   position: absolute;
   inset-inline-start: 0;
   margin-inline-start: 1rem;
-  /* A dark outline around the letters, so they keep their contrast over any part of the background
-   * (WCAG 1.4.3). Painted behind the fill, so only its outer half shows and the letters keep their
-   * shape. */
-  -webkit-text-stroke: 0.12em #000;
-  paint-order: stroke fill;
+
+  /* On phones the side links are a row at the top-start corner (see SideLinks): just below it */
+  @media (width < 40rem) {
+    margin-top: 3.875rem;
+  }
 }

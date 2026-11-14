@@ -1,6 +1,9 @@
 {
   "scrollableSectionText": {
-    "scrollLeft": "גלילה שמאלה",
-    "scrollRight": "גלילה ימינה"
+    "previous": "השקופית הקודמת",
+    "next": "השקופית הבאה",
+    "carousel": "קרוסלה",
+    "slide": "שקופית",
+    "slideLabel": "{index} מתוך {total}"
   }
 }

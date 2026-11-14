@@ -54,8 +54,14 @@ export default function SideLinks({
           url={URLs.linkedIn}
           icon={<LIIcon />}
         />
-        <ChangeLanguage hide={hideChangeLanguageButton} />
-        <DownloadButton />
+        {!hideChangeLanguageButton && (
+          <li>
+            <ChangeLanguage />
+          </li>
+        )}
+        <li>
+          <DownloadButton />
+        </li>
       </ul>
     </nav>
   );

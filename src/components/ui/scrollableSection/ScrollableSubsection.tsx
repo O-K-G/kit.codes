@@ -7,14 +7,12 @@ export {
   RIGHT_BUTTON_TEST_ID,
 } from "@ui/scrollableSection/ScrollableSubsectionContainer";
 
-export default function ScrollableSubsection({
-  children,
-}: {
+export default function ScrollableSubsection(props: {
   children: ReactNode;
+  /** Names the carousel (e.g. its section's title) */
+  "aria-label": string;
 }) {
-  return (
-    <ScrollableSubsectionContainer>{children}</ScrollableSubsectionContainer>
-  );
+  return <ScrollableSubsectionContainer {...props} />;
 }
 
 ScrollableSubsection.Item = ScrollableSubsectionItem;

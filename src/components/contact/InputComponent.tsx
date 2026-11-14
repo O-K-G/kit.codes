@@ -31,19 +31,15 @@ export default function InputComponent({
     content: t('contentAriaLabelError'),
   };
 
-  const ariaLabel = !isError
-    ? `${
-        !value
-          ? handleA11y1000FirstNumbers(maxLength)
-          : handleA11y1000FirstNumbers(maxLength - value.length)
-      } ${t(
-        maxLength - value.length !== 1
-          ? 'charactersAriaLabelError'
-          : 'characterAriaLabelError'
-      )} ${t('remain')}`
-    : `${t('error')} - ${
-        ariaLabelErrorValueById[id as keyof typeof ariaLabelErrorValueById]
-      }`;
+  const remaining = maxLength - value.length;
+  const counterText = `${handleA11y1000FirstNumbers(remaining)} ${t(
+    remaining !== 1 ? 'charactersAriaLabelError' : 'characterAriaLabelError'
+  )} ${t('remain')}`;
+  const errorText = `${t('error')} - ${
+    ariaLabelErrorValueById[id as keyof typeof ariaLabelErrorValueById]
+  }`;
+  const errorId = `${id}-error`;
+  const counterId = `${id}-counter`;
 
   return (
     <div className={styles.container}>
@@ -65,17 +61,25 @@ export default function InputComponent({
             }}
             value={value}
             maxLength={maxLength}
-            aria-label={ariaLabel}
             aria-invalid={isError}
+            aria-required
+            aria-describedby={isError ? `${errorId} ${counterId}` : counterId}
             id={id}
             name={id}
             className={styles.field}
           />
-          <div aria-live="assertive" className={styles.srOnly}>
-            {isError ? ariaLabel : ''}
-          </div>
-          <div aria-hidden className={styles.counter}>
-            {!value ? maxLength : maxLength - value.length}
+          {/* Named by its <label>; the error and the characters left describe it. The error is shown
+           * in text, not only by the field's color (WCAG 1.4.1, 3.3.1), and announced when it appears */}
+          <div className={styles.meta}>
+            <p id={errorId} aria-live="assertive" className={styles.error}>
+              {isError ? errorText : ''}
+            </p>
+            <p className={styles.counter}>
+              <span aria-hidden>{remaining}</span>
+              <span id={counterId} className={styles.srOnly}>
+                {counterText}
+              </span>
+            </p>
           </div>
         </div>
         {bottomSlot}

@@ -4,7 +4,6 @@
   justify-content: flex-end;
   width: 100%;
   margin-top: 0.5rem;
-  overflow: hidden;
 
   .leftSlot {
     position: relative;
@@ -20,7 +19,6 @@
     align-items: center;
     justify-content: center;
     width: calc(100% / 3);
-    overflow: hidden;
 
     .submitButton {
       position: relative;
@@ -99,7 +97,6 @@
     align-items: center;
     justify-content: flex-end;
     width: calc(100% / 3);
-    overflow: hidden;
 
     > button {
       display: flex;

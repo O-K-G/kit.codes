@@ -1,8 +1,13 @@
 .nav {
   position: fixed;
   top: 0;
-  z-index: 10;
   margin-top: calc(1.35 * var(--fluid-rem));
+
+  /* Fixed for the whole page, so other sections can cover the links: the focused one is brought to
+   * the front (WCAG 2.4.11) */
+  &:focus-within {
+    z-index: 20;
+  }
 
   &:dir(ltr) {
     left: 0;

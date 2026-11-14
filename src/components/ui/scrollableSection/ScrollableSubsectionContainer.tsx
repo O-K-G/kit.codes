@@ -12,10 +12,17 @@ import styles from "./ScrollableSubsection.module.css";
 export const LEFT_BUTTON_TEST_ID = "left-button-test-id";
 export const RIGHT_BUTTON_TEST_ID = "right-button-test-id";
 
+/**
+ * A carousel (WAI-ARIA APG carousel pattern): a region named by `aria-label` and described as a
+ * carousel, with previous / next buttons and the slides (see ScrollableSubsectionItem) in a scrolling
+ * area, which can be focused to scroll it with the keyboard.
+ */
 export default function ScrollableSubsectionContainer({
   children,
+  "aria-label": ariaLabel,
 }: {
   children: ReactNode;
+  "aria-label": string;
 }) {
   const scrollableRef = useRef(null);
   const t = useTranslations("scrollableSectionText");
@@ -43,7 +50,12 @@ export default function ScrollableSubsectionContainer({
   };
 
   return (
-    <div className={styles.container}>
+    <div
+      role="region"
+      aria-roledescription={t("carousel")}
+      aria-label={ariaLabel}
+      className={styles.container}
+    >
       <div className={styles.buttonWrapper}>
         <IconButton
           data-testid={LEFT_BUTTON_TEST_ID}
@@ -62,12 +74,13 @@ export default function ScrollableSubsectionContainer({
             }
           }}
           className={`${styles.navButton} ${styles.previousButton}`}
-          aria-label={t("scrollLeft")}
+          aria-label={t("previous")}
           icon={<ArrowIconComponent />}
         />
       </div>
       <div
         ref={scrollableRef}
+        tabIndex={0}
         className={styles.scrollable}
       >
         {childrenWithNewProps}
@@ -91,7 +104,7 @@ export default function ScrollableSubsectionContainer({
             }
           }}
           className={`${styles.navButton} ${styles.nextButton}`}
-          aria-label={t("scrollRight")}
+          aria-label={t("next")}
           icon={<ArrowIconComponent />}
         />
       </div>

@@ -41,13 +41,21 @@ export default function useHandleModal({
     const modalEl = modalRef.current as unknown as HTMLDialogElement;
     const { open } = modalEl || {};
 
+    /** Closed by the browser too (Escape): clears the content, so the dialog's state follows */
+    const handleClose = () => setModalContent(null);
+
     if (modalContent && !open) {
       modalEl?.showModal();
       modalEl?.addEventListener('click', handleCloseModal);
     }
 
-    return () => modalEl?.removeEventListener('click', handleCloseModal);
-  }, [handleCloseModal, modalContent, modalRef]);
+    modalEl?.addEventListener('close', handleClose);
+
+    return () => {
+      modalEl?.removeEventListener('click', handleCloseModal);
+      modalEl?.removeEventListener('close', handleClose);
+    };
+  }, [handleCloseModal, modalContent, modalRef, setModalContent]);
 
   return { handleCloseModal };
 }

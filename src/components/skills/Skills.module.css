@@ -17,6 +17,12 @@
     position: fixed;
     top: 110vh;
 
+    /* Without the motion: in the section's flow, so they're shown (and only over their own section) */
+    @media (prefers-reduced-motion: reduce) {
+      position: relative;
+      top: auto;
+    }
+
     @media (prefers-reduced-motion: no-preference) {
       animation-fill-mode: forwards;
       animation-timing-function: linear;
@@ -32,22 +38,18 @@
   }
 
   .mainTitle {
-    @media (prefers-reduced-motion: no-preference) {
-      --top-var: 12svh;
+    --top-var: 12svh;
 
-      @media screen and (min-width: 1024px) {
-        --top-var: 12dvh;
-      }
+    @media screen and (min-width: 1024px) {
+      --top-var: 12dvh;
     }
   }
 
   .subtitle {
-    @media (prefers-reduced-motion: no-preference) {
-      --top-var: 25svh;
+    --top-var: 25svh;
 
-      @media screen and (min-width: 1024px) {
-        --top-var: 25dvh;
-      }
+    @media screen and (min-width: 1024px) {
+      --top-var: 25dvh;
     }
   }
 

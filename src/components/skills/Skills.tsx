@@ -26,6 +26,7 @@ export default function Skills({ activeSection }: ActiveSectionProps) {
       <Title
         className={`${styles.slideIn} ${styles.subtitle}`}
         variant="subtitle"
+        component="p"
       >
         {t("subtitle")}
       </Title>

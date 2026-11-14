@@ -50,8 +50,11 @@
           color: #fff;
         }
 
+        /* Underlined as well as colored, so it isn't told apart by its color alone (WCAG 1.4.1) */
         &[data-current-locale="true"] {
           color: var(--color-title-purple);
+          text-decoration: underline;
+          text-underline-offset: 0.2em;
         }
 
         @media (hover: hover) {

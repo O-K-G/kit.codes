@@ -101,6 +101,9 @@ export interface BottomInputComponentButtonsProps {
 export interface InputComponentProps {
   component?: "input" | "textarea";
   id: string;
+  /** The kind of data the field takes, so browsers can fill it in (WCAG 1.3.5) */
+  autoComplete?: string;
+  inputMode?: "email" | "text";
   placeholder: string;
   minLength?: number;
   maxLength: number;
@@ -204,6 +207,8 @@ export interface HandleChildrenWithNewPropsProps {
 
 export interface ChildWithNewProps {
   id: number;
+  /** How many slides there are, for each slide's "n of total" label */
+  total: number;
   ref: Ref<null>;
   onSubsectionSelectChange: Dispatch<SetStateAction<number>>;
 }
@@ -223,12 +228,14 @@ export interface ScrollableSubsectionItemProps {
   children: ReactNode;
   onSubsectionSelectChange?: Dispatch<SetStateAction<number>>;
   id?: number;
+  total?: number;
   ref?: RefObject<HTMLDivElement>;
 }
 export interface ContactGoBackButtonProps {
   children: ReactNode;
   onClick: () => void;
   className?: string;
+  ref?: Ref<HTMLButtonElement>;
 }
 
 export interface GaugeProps {
@@ -249,7 +256,8 @@ export interface ExpandableContentProps {
 
 export interface MainTitleProps {
   children: ReactNode;
-  component?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+  /** A heading of the outline's level, or "p" for a title-styled sentence that isn't a heading */
+  component?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p";
   className?: string;
   /** Starts the typing animation after a 5 seconds delay. */
   isDelayedAnimation?: boolean;
@@ -291,10 +299,6 @@ export interface FixedBottomComponentProps {
 export interface SelectLanguageButtonProps {
   label: string;
   value: keyof typeof DIRECTION_BY_LANGUAGE;
-}
-
-export interface ChangeLanguageProps {
-  hide?: boolean;
 }
 
 export interface CvProps {

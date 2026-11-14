@@ -14,6 +14,7 @@ export default function useHandleChildrenWithNewProps() {
       if (isValidElement(child)) {
         return cloneElement(child, {
           id: index,
+          total: Children.count(children),
           ref: scrollableRef,
           onSubsectionSelectChange,
         } as ChildWithNewProps);

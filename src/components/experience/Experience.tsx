@@ -14,23 +14,23 @@ export default function Experience({ activeSection }: ActiveSectionProps) {
   return (
     <Section currentSection={CURRENT_SECTION} activeSection={activeSection}>
       <Title border>{t("mainTitle")}</Title>
-      <ScrollableSubsection>
+      <ScrollableSubsection aria-label={t("mainTitle")}>
             <ScrollableSubsection.Item>
-          <Title variant="subtitle">{t("volteraMainTitle")}</Title>
+          <Title variant="subtitle" component="h3">{t("volteraMainTitle")}</Title>
           <ExpandableContent text={t("volteraDescription")} />
         </ScrollableSubsection.Item>
         <ScrollableSubsection.Item>
-          <Title variant="subtitle">{t("faiMainTitle")}</Title>
+          <Title variant="subtitle" component="h3">{t("faiMainTitle")}</Title>
           <ExpandableContent text={t("faiDescription")} />
         </ScrollableSubsection.Item>
 
         <ScrollableSubsection.Item>
-          <Title variant="subtitle">{t("bankMainTitle")}</Title>
+          <Title variant="subtitle" component="h3">{t("bankMainTitle")}</Title>
           <ExpandableContent text={t("bankMainTitleDescription")} />
         </ScrollableSubsection.Item>
 
         <ScrollableSubsection.Item>
-          <Title variant="subtitle">{t("faiMainTitle2")}</Title>
+          <Title variant="subtitle" component="h3">{t("faiMainTitle2")}</Title>
           <ExpandableContent text={t("faiDescription2")} />
         </ScrollableSubsection.Item>
       </ScrollableSubsection>

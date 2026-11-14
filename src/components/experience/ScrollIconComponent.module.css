@@ -7,7 +7,8 @@
   height: max(1.25rem, 1.1947rem + 0.2767vw, 1.3718 * var(--desktop-rem));
   margin-inline: auto;
   fill: var(--color-title-purple);
-  animation: scroll-icon 2s linear 3 alternate;
+  /* Twice (4s): movement that starts by itself must stop within 5 seconds (WCAG 2.2.2) */
+  animation: scroll-icon 2s linear 2 alternate;
 }
 
 @keyframes scroll-icon {

@@ -8,10 +8,7 @@ import { DIRECTION_BY_LANGUAGE } from "@constants/LocaleDirection";
 import { ModalContext as modalContext } from "@ui/modalContext/ModalContext";
 import DialogTitle from "@ui/dialog/DialogTitle";
 import { useContext } from "react";
-import {
-  ChangeLanguageProps,
-  SelectLanguageButtonProps,
-} from "@constants/interfaces";
+import { SelectLanguageButtonProps } from "@constants/interfaces";
 import styles from "./ChangeLanguage.module.css";
 
 function SelectLanguageButton({ label, value }: SelectLanguageButtonProps) {
@@ -23,7 +20,11 @@ function SelectLanguageButton({ label, value }: SelectLanguageButtonProps) {
 
   return (
     <li>
+      {/* Each name is written in its own language (WCAG 3.1.2); the current one is marked for screen
+       * readers too, not only by its color (WCAG 1.4.1) */}
       <button
+        lang={value}
+        aria-current={isCurrentLocale || undefined}
         data-current-locale={isCurrentLocale}
         onClick={(e) => {
           onCloseModal(e);
@@ -63,18 +64,16 @@ function LanguagesList() {
   );
 }
 
-export default function ChangeLanguage({ hide }: ChangeLanguageProps) {
+export default function ChangeLanguage() {
   const { onModalContentChange: setModalContent } = useContext(modalContext);
   const t = useTranslations("languageSelect");
 
-  if (!hide) {
-    return (
-      <IconButton
-        className={styles.iconButton}
-        onClick={() => setModalContent(<LanguagesList />)}
-        icon={<LanguageIcon />}
-        aria-label={t("changeLanguage")}
-      />
-    );
-  }
+  return (
+    <IconButton
+      className={styles.iconButton}
+      onClick={() => setModalContent(<LanguagesList />)}
+      icon={<LanguageIcon />}
+      aria-label={t("changeLanguage")}
+    />
+  );
 }

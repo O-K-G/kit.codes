@@ -13,38 +13,38 @@ export default function Projects({ activeSection }: ActiveSectionProps) {
   return (
     <Section currentSection={CURRENT_SECTION} activeSection={activeSection}>
       <Title border>{t("mainTitle")}</Title>
-      <ScrollableSubsection>
+      <ScrollableSubsection aria-label={t("mainTitle")}>
         <ScrollableSubsection.Item>
-          <Title variant="subtitle">{t("dragAndDropTitle")}</Title>
+          <Title variant="subtitle" component="h3">{t("dragAndDropTitle")}</Title>
           <ExpandableContent text={t("dragAndDropDescription")} />
         </ScrollableSubsection.Item>
 
         <ScrollableSubsection.Item>
-          <Title variant="subtitle">{t("thisLandingPageTitle")}</Title>
+          <Title variant="subtitle" component="h3">{t("thisLandingPageTitle")}</Title>
           <ExpandableContent
             text={t("thisLandingPageDescription")}
           />
         </ScrollableSubsection.Item>
 
         <ScrollableSubsection.Item>
-          <Title variant="subtitle">{t("onboardingTitle")}</Title>
+          <Title variant="subtitle" component="h3">{t("onboardingTitle")}</Title>
           <ExpandableContent text={t("onboardingDescription")} />
         </ScrollableSubsection.Item>
 
         <ScrollableSubsection.Item>
-          <Title variant="subtitle">{t("sharedUITitle")}</Title>
+          <Title variant="subtitle" component="h3">{t("sharedUITitle")}</Title>
           <ExpandableContent text={t("sharedUIDescription")} />
         </ScrollableSubsection.Item>
 
         <ScrollableSubsection.Item>
-          <Title variant="subtitle">{t("i18nCoordinatorTitle")}</Title>
+          <Title variant="subtitle" component="h3">{t("i18nCoordinatorTitle")}</Title>
           <ExpandableContent
             text={t("i18nCoordinatorDescription")}
           />
         </ScrollableSubsection.Item>
 
         <ScrollableSubsection.Item>
-          <Title variant="subtitle">{t("scrumMaster")}</Title>
+          <Title variant="subtitle" component="h3">{t("scrumMaster")}</Title>
           <ExpandableContent text={t("scrumMasterDescription")} />
         </ScrollableSubsection.Item>
       </ScrollableSubsection>

@@ -44,7 +44,7 @@ describe("ScrollableSubsection", () => {
 
     render(
       <NextIntlClientProvider locale={DEFAULT_LOCALE} messages={messagesObject}>
-        <ScrollableSubsection>
+        <ScrollableSubsection aria-label="Projects">
           <ScrollableSubsection.Item>
             <div>Item 1</div>
           </ScrollableSubsection.Item>
@@ -69,7 +69,7 @@ describe("ScrollableSubsection", () => {
 
     render(
       <NextIntlClientProvider locale={DEFAULT_LOCALE} messages={messagesObject}>
-        <ScrollableSubsection>
+        <ScrollableSubsection aria-label="Projects">
           <ScrollableSubsection.Item>
             <div>Item 1</div>
           </ScrollableSubsection.Item>
@@ -96,7 +96,7 @@ describe("ScrollableSubsection", () => {
 
     render(
       <NextIntlClientProvider locale={DEFAULT_LOCALE} messages={messagesObject}>
-        <ScrollableSubsection>
+        <ScrollableSubsection aria-label="Projects">
           <ScrollableSubsection.Item>
             <div>Item 1</div>
           </ScrollableSubsection.Item>
@@ -122,7 +122,7 @@ describe("ScrollableSubsection", () => {
 
     render(
       <NextIntlClientProvider locale={DEFAULT_LOCALE} messages={messagesObject}>
-        <ScrollableSubsection>
+        <ScrollableSubsection aria-label="Projects">
           <ScrollableSubsection.Item>
             <div>Item 1</div>
           </ScrollableSubsection.Item>
@@ -151,7 +151,7 @@ describe("ScrollableSubsection", () => {
 
     render(
       <NextIntlClientProvider locale={DEFAULT_LOCALE} messages={messagesObject}>
-        <ScrollableSubsection>
+        <ScrollableSubsection aria-label="Projects">
           <ScrollableSubsection.Item>Item 1</ScrollableSubsection.Item>
         </ScrollableSubsection>
       </NextIntlClientProvider>
@@ -160,5 +160,29 @@ describe("ScrollableSubsection", () => {
     expect(screen.getByText("Item 1")).toBeInTheDocument();
     const item = screen.getByTestId(SCROLLABLE_ITEM_TEST_ID);
     expect(item).toHaveClass(itemStyles.item);
+  });
+
+  test("is a named carousel region of slides labeled by their position, with previous / next buttons", async () => {
+    const messages = await jsonFiles();
+    const messagesObject = Object.assign({}, ...messages);
+
+    render(
+      <NextIntlClientProvider locale={DEFAULT_LOCALE} messages={messagesObject}>
+        <ScrollableSubsection aria-label="Projects">
+          <ScrollableSubsection.Item>Item 1</ScrollableSubsection.Item>
+          <ScrollableSubsection.Item>Item 2</ScrollableSubsection.Item>
+        </ScrollableSubsection>
+      </NextIntlClientProvider>
+    );
+
+    const carousel = screen.getByRole("region", { name: "Projects" });
+    expect(carousel).toHaveAttribute("aria-roledescription", "carousel");
+
+    const slides = screen.getAllByRole("group");
+    expect(slides.map((slide) => slide.getAttribute("aria-label"))).toEqual(["1 of 2", "2 of 2"]);
+    slides.forEach((slide) => expect(slide).toHaveAttribute("aria-roledescription", "slide"));
+
+    expect(screen.getByRole("button", { name: "Previous slide" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Next slide" })).toBeInTheDocument();
   });
 });
