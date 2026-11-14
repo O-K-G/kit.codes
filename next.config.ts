@@ -64,6 +64,9 @@ const SECURITY_HEADERS = [
 const nextConfig: NextConfig = {
   // Doesn't advertise the framework (X-Powered-By: Next.js)
   poweredByHeader: false,
+  /* The React Compiler memoizes components and hooks at build time (babel-plugin-react-compiler), so
+   * the code needs no useMemo, useCallback or memo of its own */
+  reactCompiler: true,
   turbopack: {
     rules: {
       /* AVIF images imported with "?url" are emitted as they are (with a content hash) and imported as

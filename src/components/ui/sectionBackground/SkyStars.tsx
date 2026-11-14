@@ -1,6 +1,6 @@
 "use client";
 
-import { CSSProperties, useMemo, useRef } from "react";
+import { CSSProperties, useRef } from "react";
 import { STARS } from "@constants/sky";
 import useSectionOnScreen from "@hooks/useSectionOnScreen";
 import classNames from "@utils/classNames";
@@ -55,8 +55,8 @@ interface SkyStarsProps {
 export default function SkyStars(props: SkyStarsProps) {
   const ref = useRef<HTMLSpanElement>(null);
   const onScreen = useSectionOnScreen(ref, false);
-  const { seed, starsTop, height } = props;
-  const stars = useMemo(() => placeStars({ seed, starsTop, height }), [seed, starsTop, height]);
+  // Recomputed only when the props change: the React Compiler memoizes it
+  const stars = placeStars(props);
 
   return (
     <span ref={ref} className={styles.stars}>

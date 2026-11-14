@@ -13,7 +13,7 @@ import styles from './DialogTitle.module.css';
 export default function DialogTitle({
   label,
   className,
-  closeButtonIcon = <CloseIcon />,
+  closeButtonIcon,
 }: DialogTitleProps) {
   const t = useTranslations('dialogComponentText');
   const { titleId, onClose } = useContext(DialogContext);
@@ -22,7 +22,7 @@ export default function DialogTitle({
     <div className={classNames(styles.container, className)}>
       <h2 id={titleId}>{label}</h2>
       <div>
-        <IconButton aria-label={t('close')} icon={closeButtonIcon} onClick={onClose} />
+        <IconButton aria-label={t('close')} icon={closeButtonIcon ?? <CloseIcon />} onClick={onClose} />
       </div>
     </div>
   );
