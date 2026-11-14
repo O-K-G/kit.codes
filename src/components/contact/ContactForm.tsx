@@ -2,7 +2,7 @@
 
 import InputComponent from "@components/contact/InputComponent";
 import { useState } from "react";
-import { handleSubmit } from "@utils/handleSubmit";
+import { sendMessage } from "@components/contact/sendMessage";
 import formValidation from "@utils/formValidation";
 import ProgressIndicators from "@components/contact/ProgressIndicators";
 import BottomInputComponentButtons from "@components/contact/BottomInputComponentButtons";
@@ -21,7 +21,6 @@ import {
   CONTACT_FORM_SUBJECT_MAX_LENGTH,
   CONTACT_FORM_CONTENT_MIN_LENGTH,
   CONTACT_FORM_CONTENT_MAX_LENGTH,
-  BASE_STATUS_CODES,
 } from "@constants/interfaces";
 
 const EMAIL_ID = "email";
@@ -42,41 +41,39 @@ export default function ContactForm({ footer }: ContactFormProps) {
   const [sendError, setSendError] = useState<string | null>(null);
   const t = useTranslations("contact");
 
-  const handleValidation = async (formData: FormData) => {
+  /**
+   * The form's action: checks the fields here first (and shows what's wrong), then sends the message
+   * on the server. Passed to <form action> as is, so the form stays pending (see useFormStatus: the
+   * progress indicator, the busy send button) until the server has answered.
+   */
+  const handleSend = async (formData: FormData) => {
     formData.append("dir", dir);
 
-    const { isValidated, error } = formValidation({
+    const { invalidFields } = formValidation({
       email: formData.get(EMAIL_ID) as string,
       subject: formData.get(SUBJECT_ID) as string,
-      content: formData.get("content") as string,
+      content: formData.get(CONTENT_ID) as string,
     });
 
-    if (error) {
-      setErrors(Object.keys(error) as FormErrorNames);
-    } else if (isValidated) {
-      try {
-        const reqData = await handleSubmit(formData);
-        const { status } = reqData ?? { status: "" };
-        if (status) {
-          const ok =
-            BASE_STATUS_CODES[
-              status as unknown as keyof typeof BASE_STATUS_CODES
-            ];
+    if (invalidFields.length) {
+      setErrors(invalidFields);
+      return;
+    }
 
-          if (ok && status === "201") {
-            setMessageSent(true);
-          }
+    try {
+      const result = await sendMessage(formData);
 
-          if (!ok) {
-            if (isMessageSent) {
-              setMessageSent(false);
-            }
-            setSendError(status);
-          }
-        }
-      } catch (clientError) {
-        setSendError((clientError as string)?.toString());
+      if (result.ok) {
+        setMessageSent(true);
+      } else if (result.error === "invalid") {
+        setErrors(result.fieldErrors);
+      } else {
+        setMessageSent(false);
+        setSendError(result.error);
       }
+    } catch (networkError) {
+      setMessageSent(false);
+      setSendError(String(networkError));
     }
   };
 
@@ -108,9 +105,7 @@ export default function ContactForm({ footer }: ContactFormProps) {
       <form
         dir={dir}
         className={styles.form}
-        action={(formData) => {
-          void handleValidation(formData);
-        }}
+        action={handleSend}
       >
         <div>
           {[

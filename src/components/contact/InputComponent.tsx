@@ -2,7 +2,6 @@ import { handleA11y1000FirstNumbers } from '@utils/handleA11y1000FirstNumbers';
 import { InputComponentProps } from '@constants/interfaces';
 import { useTranslations } from 'next-intl';
 import { ChangeEvent, useEffect, useState } from 'react';
-import DOMPurify from "isomorphic-dompurify";
 import styles from './InputComponent.module.css';
 
 export default function InputComponent({
@@ -41,11 +40,12 @@ export default function InputComponent({
   const errorId = `${id}-error`;
   const counterId = `${id}-counter`;
 
-  /** Keeps the sanitized text, and tells the form the field changed */
+  /** Keeps the text, and tells the form the field changed. (It's plain text: React escapes it
+   * wherever it's shown, the email included, so it isn't sanitized here.) */
   const handleChange = ({
     target: { value: newValue },
   }: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setValue(DOMPurify.sanitize(newValue));
+    setValue(newValue);
     onChange?.();
   };
 

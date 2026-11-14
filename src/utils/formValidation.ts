@@ -1,16 +1,12 @@
-import { FormValidationProps } from '@constants/interfaces';
-import { FormDataSchema } from '@constants/interfaces';
+import { z } from 'zod';
+import { FormDataSchema, FormErrorNames, FormValidationProps } from '@constants/interfaces';
 
-export default function formValidation({
-  email,
-  subject,
-  content,
-}: FormValidationProps) {
-  const { success, error } = FormDataSchema.safeParse({
-    email,
-    subject,
-    content,
-  });
+/** Validates the contact form's fields; `invalidFields` lists the ones that aren't valid */
+export default function formValidation(fields: Partial<FormValidationProps>) {
+  const { success, error } = FormDataSchema.safeParse(fields);
+  const invalidFields = error
+    ? (Object.keys(z.flattenError(error).fieldErrors) as FormErrorNames)
+    : [];
 
-  return { isValidated: success, error: error?.flatten().fieldErrors };
+  return { isValidated: success, invalidFields };
 }

@@ -117,8 +117,9 @@ export interface IconsProps {
   className?: string;
 }
 
+/** The contact form's fields, validated alike in the browser and on the server */
 export const FormDataSchema = z.object({
-  email: z.string().email().max(CONTACT_FORM_EMAIL_MAX_LENGTH),
+  email: z.email().max(CONTACT_FORM_EMAIL_MAX_LENGTH),
   subject: z
     .string()
     .max(CONTACT_FORM_SUBJECT_MAX_LENGTH)
@@ -135,18 +136,18 @@ export type Fields = "email" | "subject" | "content";
 
 export type FormErrorNames = Fields[];
 
-export interface MailHTMLTemplateProps {
-  dir: string;
-  email: string;
-  subject: string;
-  content: string;
-}
+/** A message as the server receives it: the fields, and the direction the text was written in */
+export const ContactMessageSchema = FormDataSchema.extend({
+  dir: z.enum(["ltr", "rtl"]).catch("ltr"),
+});
 
-export const BASE_STATUS_CODES = {
-  400: false,
-  201: true,
-  401: false,
-} as const;
+export type ContactMessage = z.infer<typeof ContactMessageSchema>;
+
+/** What sending a message comes to: sent, its fields invalid (which ones), or the sending failed */
+export type SendMessageResult =
+  | { ok: true }
+  | { ok: false; error: "invalid"; fieldErrors: FormErrorNames }
+  | { ok: false; error: "send-failed" };
 
 export interface AnchorLinkProps {
   url: string;

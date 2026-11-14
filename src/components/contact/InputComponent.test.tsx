@@ -4,12 +4,6 @@ import { NextIntlClientProvider } from "next-intl";
 import InputComponent from "@components/contact/InputComponent";
 import { default as messages } from "@i18nEn/inputComponentText.json";
 
-/** Sanitizing isn't tested here (and its library needs TextDecoder, which jsdom lacks) */
-jest.mock("isomorphic-dompurify", () => ({
-  __esModule: true,
-  default: { sanitize: (value: string) => value },
-}));
-
 function renderField(isError = false) {
   render(
     <NextIntlClientProvider locale="en" messages={messages}>
