@@ -2,6 +2,7 @@ import { act, fireEvent, render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import ExpandableContent from "@ui/expandableContent/ExpandableContent";
 import gaugeStyles from "@ui/expandableContent/gauge/Gauge.module.css";
+import { fireAfterAnimationEnd } from "@ui/expandableContent/gauge/fireAfterAnimationEnd";
 
 const TEXT = "Results-driven web developer";
 
@@ -27,10 +28,10 @@ beforeEach(() => {
 
 function renderContent() {
   const { container } = render(<ExpandableContent text={TEXT} />);
-  const gaugeFill = container.querySelector(`.${gaugeStyles.gauge} > .${gaugeStyles.ring} > .${gaugeStyles.fill}`) as HTMLElement;
-  const gaugeCountText = container.querySelector(`.${gaugeStyles.countText}`) as HTMLElement;
+  const gauge = container.querySelector(`.${gaugeStyles.gauge}`) as HTMLElement;
+  const gaugeCount = container.querySelector(`.${gaugeStyles.count}`) as HTMLElement;
   const content = screen.getByText(TEXT).parentElement as HTMLElement;
-  return { container, gaugeFill, gaugeCountText, content };
+  return { container, gauge, gaugeCount, content };
 }
 
 describe("ExpandableContent", () => {
@@ -45,14 +46,14 @@ describe("ExpandableContent", () => {
   });
 
   it("runs the gauge only while in view", () => {
-    const { gaugeFill } = renderContent();
-    expect(gaugeFill).toHaveAttribute("data-running", "false");
+    const { gauge } = renderContent();
+    expect(gauge).toHaveAttribute("data-running", "false");
 
     setVisible(true);
-    expect(gaugeFill).toHaveAttribute("data-running", "true");
+    expect(gauge).toHaveAttribute("data-running", "true");
 
     setVisible(false);
-    expect(gaugeFill).toHaveAttribute("data-running", "false");
+    expect(gauge).toHaveAttribute("data-running", "false");
   });
 
   it("blinks the corner brackets once the count hits 100%", () => {
@@ -68,13 +69,14 @@ describe("ExpandableContent", () => {
   });
 
   it("expands once the count has blinked, and stops observing", () => {
-    const { gaugeFill, gaugeCountText, content } = renderContent();
+    const { gauge, gaugeCount, content } = renderContent();
     setVisible(true);
 
-    fireEvent.animationEnd(gaugeFill);
+    fireAfterAnimationEnd(gauge);
     expect(content).toHaveAttribute("data-open", "false");
 
-    fireEvent.animationEnd(gaugeCountText);
+    // The end of the count's text's (::after) blinks
+    fireAfterAnimationEnd(gaugeCount);
 
     expect(content).toHaveAttribute("data-open", "true");
     expect(content).toHaveAttribute("tabindex", "0");
