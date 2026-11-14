@@ -1,17 +1,16 @@
-import { StaticImageData } from "next/image";
 import { useTranslations } from "next-intl";
-import planet1565 from "@/assets/images/planet/1565w.avif";
-import planet2348 from "@/assets/images/planet/2348w.avif";
-import planet3130 from "@/assets/images/planet/3130w.avif";
-import planet4695 from "@/assets/images/planet/4695w.avif";
-import planet6260 from "@/assets/images/planet/6260w.avif";
+import planet1565 from "@/assets/images/planet/1565w.avif?url";
+import planet2348 from "@/assets/images/planet/2348w.avif?url";
+import planet3130 from "@/assets/images/planet/3130w.avif?url";
+import planet4695 from "@/assets/images/planet/4695w.avif?url";
+import planet6260 from "@/assets/images/planet/6260w.avif?url";
 import { LOADER_CRITICAL_IMAGE_ATTRIBUTE } from "@constants/loader";
 import styles from "./Planet.module.css";
 
 /**
  * The planet in AVIF (from Frame 1.png), at 1, 1.5, 2, 3 and 4 times its size (1565 by 1566), each with
- * its width: browsers take the smallest that's sharp on their screen. (The widths are given here, as
- * Next doesn't read AVIF files' sizes.)
+ * its width: browsers take the smallest that's sharp on their screen. (The widths are given here: they're
+ * imported as URLs, see next.config.ts.)
  */
 const AVIF_SRC_SET = (
   [
@@ -20,9 +19,9 @@ const AVIF_SRC_SET = (
     [planet3130, 3130],
     [planet4695, 4695],
     [planet6260, 6260],
-  ] as [StaticImageData, number][]
+  ] as [string, number][]
 )
-  .map(([{ src }, width]) => `${src} ${width}w`)
+  .map(([src, width]) => `${src} ${width}w`)
   .join(", ");
 
 /**
@@ -41,7 +40,7 @@ export default function Planet() {
          * the loader waits for it. The files are served as they are (no re-encoding) */}
         <img
           alt={t("alt")}
-          src={planet1565.src}
+          src={planet1565}
           srcSet={AVIF_SRC_SET}
           sizes={SIZES}
           width={1565}

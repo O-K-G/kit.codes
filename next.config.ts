@@ -64,6 +64,14 @@ const SECURITY_HEADERS = [
 const nextConfig: NextConfig = {
   // Doesn't advertise the framework (X-Powered-By: Next.js)
   poweredByHeader: false,
+  turbopack: {
+    rules: {
+      /* AVIF images imported with "?url" are emitted as they are (with a content hash) and imported as
+       * their URL. Imported as images instead, Turbopack warns on each one that it can't process AVIF,
+       * on every build and compile, though it serves them as they are anyway (see src/types/avif.d.ts) */
+      "*.avif": [{ condition: { query: "?url" }, type: "asset" }],
+    },
+  },
   async headers() {
     return [{ source: "/:path*", headers: SECURITY_HEADERS }];
   },
