@@ -1,10 +1,5 @@
 import { StaticImageData } from 'next/image';
 import { SectionName } from '@constants/interfaces';
-import aboutSm from '@/assets/images/about/sm-640w.webp';
-import aboutMd from '@/assets/images/about/md-768w.webp';
-import aboutLg from '@/assets/images/about/lg-1024w.webp';
-import aboutXl from '@/assets/images/about/xl-1280w.webp';
-import about2Xl from '@/assets/images/about/2xl-1728w.webp';
 import aboutSm640 from '@/assets/images/about/sm-640w.avif';
 import aboutSm960 from '@/assets/images/about/sm-960w.avif';
 import aboutSm1280 from '@/assets/images/about/sm-1280w.avif';
@@ -30,11 +25,6 @@ import about2Xl2592 from '@/assets/images/about/2xl-2592w.avif';
 import about2Xl3456 from '@/assets/images/about/2xl-3456w.avif';
 import about2Xl5184 from '@/assets/images/about/2xl-5184w.avif';
 import about2Xl6912 from '@/assets/images/about/2xl-6912w.avif';
-import contactSm from '@/assets/images/contact/sm-640w.webp';
-import contactMd from '@/assets/images/contact/md-768w.webp';
-import contactLg from '@/assets/images/contact/lg-1024w.webp';
-import contactXl from '@/assets/images/contact/xl-1280w.webp';
-import contact2Xl from '@/assets/images/contact/2xl-1728w.webp';
 import contactSm640 from '@/assets/images/contact/sm-640w.avif';
 import contactSm960 from '@/assets/images/contact/sm-960w.avif';
 import contactSm1280 from '@/assets/images/contact/sm-1280w.avif';
@@ -60,11 +50,6 @@ import contact2Xl2592 from '@/assets/images/contact/2xl-2592w.avif';
 import contact2Xl3456 from '@/assets/images/contact/2xl-3456w.avif';
 import contact2Xl5184 from '@/assets/images/contact/2xl-5184w.avif';
 import contact2Xl6912 from '@/assets/images/contact/2xl-6912w.avif';
-import experienceSm from '@/assets/images/experience/sm-640w.webp';
-import experienceMd from '@/assets/images/experience/md-768w.webp';
-import experienceLg from '@/assets/images/experience/lg-1024w.webp';
-import experienceXl from '@/assets/images/experience/xl-1280w.webp';
-import experience2Xl from '@/assets/images/experience/2xl-1728w.webp';
 import experienceSm640 from '@/assets/images/experience/sm-640w.avif';
 import experienceSm960 from '@/assets/images/experience/sm-960w.avif';
 import experienceSm1280 from '@/assets/images/experience/sm-1280w.avif';
@@ -90,11 +75,6 @@ import experience2Xl2592 from '@/assets/images/experience/2xl-2592w.avif';
 import experience2Xl3456 from '@/assets/images/experience/2xl-3456w.avif';
 import experience2Xl5184 from '@/assets/images/experience/2xl-5184w.avif';
 import experience2Xl6912 from '@/assets/images/experience/2xl-6912w.avif';
-import projectsSm from '@/assets/images/projects/sm-640w.webp';
-import projectsMd from '@/assets/images/projects/md-768w.webp';
-import projectsLg from '@/assets/images/projects/lg-1024w.webp';
-import projectsXl from '@/assets/images/projects/xl-1280w.webp';
-import projects2Xl from '@/assets/images/projects/2xl-1728w.webp';
 import projectsSm640 from '@/assets/images/projects/sm-640w.avif';
 import projectsSm960 from '@/assets/images/projects/sm-960w.avif';
 import projectsSm1280 from '@/assets/images/projects/sm-1280w.avif';
@@ -120,11 +100,6 @@ import projects2Xl2592 from '@/assets/images/projects/2xl-2592w.avif';
 import projects2Xl3456 from '@/assets/images/projects/2xl-3456w.avif';
 import projects2Xl5184 from '@/assets/images/projects/2xl-5184w.avif';
 import projects2Xl6912 from '@/assets/images/projects/2xl-6912w.avif';
-import skillsSm from '@/assets/images/skills/sm-640w.webp';
-import skillsMd from '@/assets/images/skills/md-768w.webp';
-import skillsLg from '@/assets/images/skills/lg-1024w.webp';
-import skillsXl from '@/assets/images/skills/xl-1280w.webp';
-import skills2Xl from '@/assets/images/skills/2xl-1728w.webp';
 import skillsSm640 from '@/assets/images/skills/sm-640w.avif';
 import skillsSm960 from '@/assets/images/skills/sm-960w.avif';
 import skillsSm1280 from '@/assets/images/skills/sm-1280w.avif';
@@ -161,16 +136,6 @@ export const TAILWIND_SIZES = [
 
 type Breakpoint = (typeof TAILWIND_SIZES)[number]['twClassName'];
 
-/** Statically imported, so each file gets a content-hashed /_next/static/media URL that is cached immutably.
- * The smaller variants are crops of the 2xl one (same resolution), picked per breakpoint by SectionBackground. */
-export const SECTION_BACKGROUNDS: Record<SectionName, Record<Breakpoint, StaticImageData>> = {
-  about: { sm: aboutSm, md: aboutMd, lg: aboutLg, xl: aboutXl, '2xl': about2Xl },
-  contact: { sm: contactSm, md: contactMd, lg: contactLg, xl: contactXl, '2xl': contact2Xl },
-  experience: { sm: experienceSm, md: experienceMd, lg: experienceLg, xl: experienceXl, '2xl': experience2Xl },
-  projects: { sm: projectsSm, md: projectsMd, lg: projectsLg, xl: projectsXl, '2xl': projects2Xl },
-  skills: { sm: skillsSm, md: skillsMd, lg: skillsLg, xl: skillsXl, '2xl': skills2Xl },
-};
-
 /** An AVIF version of a crop, and its size in pixels */
 export interface AvifVersion {
   src: string;
@@ -185,15 +150,15 @@ const avif = ({ src }: StaticImageData, width: number, height: number): AvifVers
 });
 
 /**
- * AVIF versions of the backgrounds: browsers that support AVIF take these (a fraction of the size), the
- * others the WebP ones above. Same crops, each at 1, 1.5, 2, 3 and 4 times the WebP
- * one's size (narrowest first), so every screen gets the smallest that's sharp on it (see
- * SectionBackground). Each is cropped at its scene's bottom edge, where a transparent part would show
- * as black: About's are from About.png (1048px tall at 1x, as are its WebP ones; its comet and stars
- * are drawn and animated over it, see SectionSky), Skills' from Skills.png (1042px tall at 1x, as are its WebP ones),
- * Projects' from Projects.png (1062px tall at 1x, as are its WebP ones; its crops are centered),
- * Experience's from Experience.png (1050px tall at 1x, as are its WebP ones), Contact's from Group 5.png
- * (no transparent edge; 1116px tall at 1x, as are its WebP ones; its crops are centered).
+ * The backgrounds, in AVIF: for each breakpoint, a crop of the section's 1728px-wide image (640, 768,
+ * 1024, 1280 or all 1728px of its width), each at 1, 1.5, 2, 3 and 4 times that size (narrowest first),
+ * so every screen gets the smallest that's sharp on it (see SectionBackground). Statically imported, so
+ * each file gets a content-hashed /_next/static/media URL that is cached immutably. Each is cropped at its scene's bottom edge, where a transparent part would show
+ * as black: About's are from About.png (1048px tall at 1x; its comet and stars
+ * are drawn and animated over it, see SectionSky), Skills' from Skills.png (1042px tall at 1x),
+ * Projects' from Projects.png (1062px tall at 1x; its crops are centered),
+ * Experience's from Experience.png (1050px tall at 1x), Contact's from Group 5.png
+ * (no transparent edge; 1116px tall at 1x; its crops are centered).
  * The stars of About, Skills, Projects and Experience are drawn and animated over them too (see
  * SectionSky). Their sizes are given here, as Next doesn't read AVIF files' sizes (it reports them as
  * 100x100).

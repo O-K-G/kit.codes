@@ -1,9 +1,6 @@
-import { Fragment } from "react";
-import { getImageProps } from "next/image";
 import { SectionBackgroundProps } from "@constants/interfaces";
 import {
   AvifVersion,
-  SECTION_BACKGROUNDS,
   SECTION_BACKGROUNDS_AVIF,
   TAILWIND_SIZES,
 } from "@constants/imagesConfig";
@@ -43,57 +40,45 @@ export default function SectionBackground({
     return null;
   }
 
-  const images = SECTION_BACKGROUNDS[currentSection];
   const avifImages = SECTION_BACKGROUNDS_AVIF[currentSection];
-
-  /** `unoptimized`: the files are served as they are (no re-encoding); the <picture> below does the art direction.
-   * The route's own background is fetched right away, with high priority, and the loader waits for it.
-   * The rest start lazy, so they don't compete with it; the loader then fetches them (see LoaderVisibility). */
-  const { props: { alt, ...imgProps } } = getImageProps({
-    src: images["2xl"],
-    alt: "",
-    unoptimized: true,
-    loading: priority ? "eager" : "lazy",
-    fetchPriority: priority ? "high" : "low",
-  });
+  const widest = avifImages["2xl"];
 
   return (
     <div
       className={classNames(styles.container, minHeightClassName)}
     >
-      {/* The browser takes the first source it can show whose media matches: per width, the AVIF crop
-       * if it supports AVIF (in the version its screen needs), else the WebP one. Wider than every
-       * breakpoint, the 2xl AVIF, else the <img> (the 2xl WebP) */}
+      {/* Per breakpoint, the crop for that width, in the version the screen needs; wider than every
+       * breakpoint, the <img>'s own: the whole width. The files are served as they are (no re-encoding).
+       * The route's own background is fetched right away, with high priority, and the loader waits for
+       * it; the rest start lazy, so they don't compete with it, and the loader then fetches them (see
+       * LoaderVisibility) */}
       <picture>
-        {TAILWIND_SIZES.map(({ twClassName, pxResolution }) => (
-          <Fragment key={`tw-class-${twClassName}`}>
+        {TAILWIND_SIZES.filter(({ twClassName }) => twClassName !== "2xl").map(
+          ({ twClassName, pxResolution }) => (
             <source
-              type="image/avif"
+              key={`tw-class-${twClassName}`}
               srcSet={toSrcSet(avifImages[twClassName])}
               sizes={toSizes(avifImages[twClassName][0])}
               media={`(max-width: ${pxResolution}px)`}
             />
-            <source
-              type="image/webp"
-              srcSet={images[twClassName].src}
-              media={`(max-width: ${pxResolution}px)`}
-            />
-          </Fragment>
-        ))}
-        <source
-          type="image/avif"
-          srcSet={toSrcSet(avifImages["2xl"])}
-          sizes={toSizes(avifImages["2xl"][0])}
-        />
+          )
+        )}
         <img
-          alt={alt}
+          alt=""
           aria-hidden
+          src={widest[0].src}
+          srcSet={toSrcSet(widest)}
+          sizes={toSizes(widest[0])}
+          width={widest[0].width}
+          height={widest[0].height}
+          loading={priority ? "eager" : "lazy"}
+          fetchPriority={priority ? "high" : "low"}
+          decoding="async"
           {...{
             [priority
               ? LOADER_CRITICAL_IMAGE_ATTRIBUTE
               : LOADER_DEFERRED_IMAGE_ATTRIBUTE]: true,
           }}
-          {...imgProps}
         />
       </picture>
       {/* Animated parts drawn over the image, which move and zoom with it: the stars, and About's comet */}
