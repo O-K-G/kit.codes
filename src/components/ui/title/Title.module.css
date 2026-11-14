@@ -35,7 +35,7 @@
     }
 
     &:lang(he) {
-      font-family: var(--font-stop-motion);
+      font-family: var(--font-motion-display-web);
       font-size: max(1.5rem, min(0.4286rem + 5.3571vw, 2.7892rem + 0.4392vw), 3.0703 * var(--desktop-rem));
       line-height: max(2rem, min(1.2857rem + 3.5714vw, 2.4378rem + 1.1713vw), 3.1874 * var(--desktop-rem));
       letter-spacing: 0.05em;

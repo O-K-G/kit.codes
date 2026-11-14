@@ -15,7 +15,7 @@
   }
 
   &:lang(he) {
-    font-family: var(--font-varela-round-regular);
+    font-family: var(--font-round-sans-web);
   }
 
   @media (width >= 40rem) {

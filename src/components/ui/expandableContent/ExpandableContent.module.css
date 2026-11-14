@@ -112,7 +112,7 @@
   }
 
   &:lang(he) {
-    font-family: var(--font-varela-round-regular);
+    font-family: var(--font-round-sans-web);
   }
 
   /* While the gauge runs, the text is hidden visually only: screen readers still read it in place */
