@@ -29,9 +29,6 @@
   align-items: center;
   gap: 1rem;
   width: 100%;
-  /* The view timelines of its circle (see .node) and its part of the axis (see .axisPart), for its
-   * lines' layers to light up along */
-  timeline-scope: --timeline-node, --timeline-axis;
 
   /* From 48rem on the branches alternate: on the start side (circle toward the axis, the text before
    * it), then on the end side */
@@ -142,13 +139,6 @@
     border-end-end-radius: calc(var(--axis-w) / 2);
   }
 
-  /* Its view timeline runs while it crosses the middle of the screen (the inset leaves just that line
-   * of the screen) */
-  .unlit & {
-    view-timeline: --timeline-axis block;
-    view-timeline-inset: 50%;
-  }
-
   /* In the middle */
   @media (width >= 48rem) {
     .branch:nth-child(odd) & {
@@ -206,9 +196,6 @@
     0 0 1.5rem var(--glow),
     inset 0 0 0.75rem var(--glow);
   cursor: help;
-  /* Its view timeline runs while it crosses the middle of the screen (see .axisPart) */
-  view-timeline: --timeline-node block;
-  view-timeline-inset: 50%;
 
   &:is(:hover, :focus) {
     z-index: 8;
@@ -264,26 +251,36 @@
 
 /* ---- Scrolling lights the timeline up: the axis down to the middle of the screen, and each circle
  * (with its line to the axis) as the light reaches its center. Without scroll-driven animations, or
- * with reduced motion, it's all lit ---- */
+ * with reduced motion, it's all lit.
+ *
+ * Each animated element follows its own view timeline, inset to the middle of the screen
+ * (view(block 50%) leaves just that line of it): the timeline runs while the element crosses it. Not a
+ * timeline shared between elements (timeline-scope), which browsers without it can't find, leaving the
+ * element as it is: lit ---- */
 
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
+    /* As the middle of the screen goes down it */
     :is(.glow, .light) .axisPart {
       animation: timeline-axis-light linear both;
-      animation-timeline: --timeline-axis;
+      animation-timeline: view(block 50%);
     }
 
+    /* From when its top third crosses the middle of the screen, fully lit by its center */
     .node {
       animation: timeline-node-light linear both;
-      animation-timeline: --timeline-node;
-      /* From when its top third crosses the middle of the screen, fully lit by its center */
+      animation-timeline: view(block 50%);
       animation-range: cover 30% cover 50%;
     }
 
+    /* Along with its circle: the line is centered on the circle, so it's offset from its own timeline
+     * (which starts as the middle of the screen reaches its top) by the circle's 20% above its center */
     :is(.glow, .light) .branchPart {
       animation: timeline-branch-light linear both;
-      animation-timeline: --timeline-node;
-      animation-range: cover 30% cover 50%;
+      animation-timeline: view(block 50%);
+      animation-range:
+        cover calc(var(--branch-h) / 2 - 0.2 * var(--node-size))
+        cover calc(var(--branch-h) / 2);
     }
   }
 }
