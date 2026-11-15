@@ -1,3 +1,10 @@
+/* How much of a part of the axis is lit, from its top (see timeline-axis-light) */
+@property --axis-lit {
+  syntax: "<percentage>";
+  inherits: true;
+  initial-value: 100%;
+}
+
 /* The site's neon purple (see the titles). The unlit color is opaque, so where lines overlap it doesn't
  * show */
 .timeline {
@@ -105,7 +112,7 @@
   --axis-z: 6;
 }
 
-/* Painted as a background image, which the light grows from the top (see timeline-axis-light) */
+/* Painted as a background image (the axis' light and glow aside, see .axisPart::before) */
 .axisPart,
 .branchPart {
   position: absolute;
@@ -149,6 +156,32 @@
       inset-inline-start: calc(var(--axis-w) / -2);
     }
   }
+}
+
+/* The light and its glow: drawn as far down the part as it's lit (rather than the part's background),
+ * ending round, like the axis' ends. Once the part is all lit it ends flat, joining the next part (the
+ * clamp() switches it, as --axis-lit nears 100%); but the last part keeps its round end */
+:is(.glow, .light) .axisPart {
+  background-image: none;
+}
+
+/* (Not nested: a nested rule can't match a pseudo-element) */
+:is(.glow, .light) .axisPart::before {
+  --front-radius: clamp(0px, (100% - var(--axis-lit)) * 1000, var(--axis-w) / 2);
+
+  content: "";
+  position: absolute;
+  top: 0;
+  inset-inline: 0;
+  height: var(--axis-lit);
+  border-radius: inherit;
+  border-end-start-radius: var(--front-radius);
+  border-end-end-radius: var(--front-radius);
+  background-color: var(--line-color);
+}
+
+.branch:last-child :is(.glow, .light) .axisPart::before {
+  --front-radius: calc(var(--axis-w) / 2);
 }
 
 /* With round ends. It starts under the circle and runs into the axis, up to its middle, so neither
@@ -285,11 +318,15 @@
   }
 }
 
-/* Revealed from the top by growing its background, which is painted on the screen's pixels: scaling
- * or clipping the part isn't, and shows a hairline where two parts meet */
+/* Revealed from the top by growing its light (see .axisPart::before), which is painted on the screen's
+ * pixels: scaling or clipping the part isn't, and shows a hairline where two parts meet */
 @keyframes timeline-axis-light {
   from {
-    background-size: 100% 0%;
+    --axis-lit: 0%;
+  }
+
+  to {
+    --axis-lit: 100%;
   }
 }
 
