@@ -193,8 +193,10 @@ export interface TimelineItem {
   /** Shown big, with the title under it */
   year: string;
   title: string;
-  /** Shown in the tooltip of the branch's "+" circle */
+  /** Shown in the tooltip of the branch's circle */
   text: string;
+  /** Shown in the branch's circle (an icon from ui/icons); a "+" when left out */
+  icon?: ReactNode;
 }
 
 export interface TimelineProps {

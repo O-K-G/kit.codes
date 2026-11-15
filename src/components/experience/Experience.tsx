@@ -16,10 +16,11 @@ export default function Experience({ activeSection }: ActiveSectionProps) {
       <Title border>{t("mainTitle")}</Title>
       <Timeline
         aria-label={t("mainTitle")}
-        items={EXPERIENCE_TIMELINE.map(({ year, titleKey, textKey }) => ({
+        items={EXPERIENCE_TIMELINE.map(({ year, titleKey, textKey, Icon }) => ({
           year,
           title: t(titleKey),
           text: t(textKey),
+          icon: <Icon />,
         }))}
       />
     </Section>

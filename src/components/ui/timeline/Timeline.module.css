@@ -220,22 +220,15 @@
     z-index: 8;
   }
 
-  /* Its light, over it unlit: the ring, its glow and the "+", which fade in as the scroll reaches it
-   * (see timeline-node-light; fading, rather than changing its colors, so the browser does it along
-   * with the scroll by itself, smoothly) */
+  /* Its light, over it unlit: the ring and its glow, which fade in as the scroll reaches it (see
+   * timeline-node-light; fading, rather than changing its colors, so the browser does it along with the
+   * scroll by itself, smoothly) */
   &::before {
-    content: "+";
+    content: "";
     position: absolute;
     inset: -0.1875rem;
-    display: grid;
-    place-items: center;
     border: 0.1875rem solid var(--lit);
     border-radius: 50%;
-    font-family: var(--font-sans);
-    font-size: calc(var(--node-size) * 0.55);
-    font-weight: 300;
-    line-height: 1;
-    color: var(--lit);
     box-shadow:
       0 0 0.75rem var(--glow),
       0 0 1.5rem var(--glow),
@@ -262,11 +255,27 @@
     opacity: 100%;
   }
 
-  .plus {
+  /* Its icon (in its own colors, see ui/icons), or a "+", glowing in its color; dim until the circle
+   * lights (see timeline-icon-light) */
+  .icon {
+    --icon-size: calc(0.5 * var(--node-size));
+
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: var(--icon-size);
+    height: var(--icon-size);
     font-family: var(--font-sans);
     font-size: calc(var(--node-size) * 0.55);
     font-weight: 300;
     line-height: 1;
+    color: var(--lit);
+
+    > svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 0 0.3rem currentColor);
+    }
   }
 }
 
@@ -316,6 +325,16 @@
       animation: timeline-node-light linear both;
       animation-timeline: view(block 50%);
       animation-range: cover 30% cover 50%;
+    }
+
+    /* Along with its circle: the icon is centered in it, so it's offset from its own timeline (as the
+     * branch's line, below) */
+    .node .icon {
+      animation: timeline-icon-light linear both;
+      animation-timeline: view(block 50%);
+      animation-range:
+        cover calc(var(--icon-size) / 2 - 0.2 * var(--node-size))
+        cover calc(var(--icon-size) / 2);
     }
 
     /* Along with its circle: the line is centered on the circle, so it's offset from its own timeline
@@ -398,6 +417,12 @@
   will-change: opacity;
 }
 
+.timeline[data-smooth] .node .icon {
+  animation: none;
+  opacity: calc(0.35 + 0.65 * var(--node-progress, 1));
+  will-change: opacity;
+}
+
 /* From above its part (where it's clipped away; a little further, or the edge of the part could show a
  * sliver of it) to its place (see .axisPart::before) */
 @keyframes timeline-axis-light {
@@ -413,6 +438,12 @@
 @keyframes timeline-node-light {
   from {
     opacity: 0%;
+  }
+}
+
+@keyframes timeline-icon-light {
+  from {
+    opacity: 35%;
   }
 }
 

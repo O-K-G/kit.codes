@@ -12,8 +12,8 @@ export const TIMELINE_BRANCH_TEST_ID = "timeline-branch-test-id";
 
 /**
  * A vertical timeline: a center axis with branches alternating to either side (on narrow screens they
- * all go to one side). Each branch ends in a "+" circle, with its year and title beside it; the circle
- * glows on hover or focus and shows the branch's text in a tooltip.
+ * all go to one side). Each branch ends in a circle with its icon (a "+" without one), with its year and
+ * title beside it; the circle glows on hover or focus and shows the branch's text in a tooltip.
  *
  * The axis runs from the first branch's line to the last one's, each branch drawing its part (see
  * Lines). As the page scrolls, it lights up down to the middle of the screen, and each branch's circle
@@ -35,7 +35,7 @@ export default function Timeline({ items, "aria-label": ariaLabel }: TimelinePro
 
   return (
     <ol ref={listRef} aria-label={ariaLabel} className={styles.timeline}>
-      {items.map(({ year, title, text }) => (
+      {items.map(({ year, title, text, icon }) => (
         <li key={title} data-testid={TIMELINE_BRANCH_TEST_ID} className={styles.branch}>
           <Lines className={styles.unlit} />
           <Lines className={styles.glow} />
@@ -52,8 +52,8 @@ export default function Timeline({ items, "aria-label": ariaLabel }: TimelinePro
             tooltipClassName={styles.tooltip}
             boxClassName={styles.tooltipBox}
           >
-            <span className={styles.plus} aria-hidden>
-              +
+            <span className={styles.icon} aria-hidden>
+              {icon ?? "+"}
             </span>
           </Tooltip>
 
