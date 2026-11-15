@@ -73,7 +73,10 @@ export default function SectionBackground({
           height={widest[0].height}
           loading={priority ? "eager" : "lazy"}
           fetchPriority={priority ? "high" : "low"}
-          decoding="async"
+          // Decoded before the frame that shows it is drawn: as the window is resized, the browser swaps
+          // in the version the new size needs, and asynchronously the frame would be drawn without it
+          // meanwhile, flashing black
+          decoding="sync"
           {...{
             [priority
               ? LOADER_CRITICAL_IMAGE_ATTRIBUTE
