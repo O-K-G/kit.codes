@@ -354,6 +354,39 @@
   transform: translateY(var(--light-shift, 0));
 }
 
+/* The light's tip, blurry: a soft white glow over its round end, at its front (--tip-y and
+ * --tip-opacity, see useEasedScrollLight). One for the whole axis (over its parts' light, under the
+ * circles), so it doesn't show where two parts meet */
+.timeline[data-smooth]::after {
+  --tip-width: calc(5 * var(--axis-width));
+  --tip-height: calc(7 * var(--axis-width));
+
+  content: "";
+  position: absolute;
+  z-index: 6;
+  top: calc(var(--tip-height) / -2);
+  inset-inline-start: calc(var(--node-size) / 2);
+  width: var(--tip-width);
+  height: var(--tip-height);
+  margin-inline-start: calc(var(--tip-width) / -2);
+  /* A bright core, spreading out softly */
+  background-image: radial-gradient(
+    closest-side,
+    #fff 18%,
+    rgb(255 255 255 / 60%) 38%,
+    rgb(255 255 255 / 22%) 65%,
+    transparent
+  );
+  opacity: var(--tip-opacity, 0);
+  transform: translateY(var(--tip-y, 0));
+  pointer-events: none;
+  will-change: transform, opacity;
+
+  @media (width >= 48rem) {
+    inset-inline-start: 50%;
+  }
+}
+
 .timeline[data-smooth] .glow .axisPart::before {
   transform: translateY(var(--glow-shift, 0));
 }

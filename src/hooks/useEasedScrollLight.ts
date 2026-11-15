@@ -58,7 +58,9 @@ const unit = (value: number) => Math.min(Math.max(value, 0), 1).toFixed(4);
  * and the light would jump with each. A virtual middle of the screen eases toward the real one on each
  * frame while they differ: the light's front. From it, each branch (the list's children) gets
  * --light-shift and --glow-shift (how far its part of the axis' light and glow are moved up, see
- * shift()) and --node-progress (how lit its circle and line are, from 0 to 1).
+ * shift()) and --node-progress (how lit its circle and line are, from 0 to 1); and the list gets
+ * --tip-y and --tip-opacity (where the light's blurry white tip is, from the list's top, and how much
+ * it shows: fading in and out at the axis' ends).
  *
  * The branches are measured once, and again when the list's size changes, not while scrolling: each
  * frame only sets those two properties, which the CSS turns into transforms and opacity. The list gets
@@ -75,6 +77,11 @@ export default function useEasedScrollLight(
     }
 
     let branches: Branch[] = [];
+    /** In page coordinates: the list's top, and where the axis' light runs */
+    let listTop = 0;
+    let axisStart = 0;
+    let axisEnd = 0;
+    let axisWidth = 1;
     const measure = () => {
       const inPage = (element: Element | null) => {
         if (!element) {
@@ -106,17 +113,30 @@ export default function useEasedScrollLight(
           nodeEnd: circle.top + NODE_LIGHT_END * circleHeight,
         };
       });
+
+      listTop = list.getBoundingClientRect().top + window.scrollY;
+      if (branches.length) {
+        axisStart = branches[0].light.top;
+        axisEnd = branches[branches.length - 1].light.bottom;
+        axisWidth = branches[0].light.width || 1;
+      }
     };
 
     const middle = () => window.scrollY + window.innerHeight / 2;
     let eased = middle();
 
-    const apply = () =>
+    const apply = () => {
       branches.forEach(({ element, light: lightPart, glow: glowPart, nodeStart, nodeEnd }) => {
         element.style.setProperty("--light-shift", shift(lightPart, eased));
         element.style.setProperty("--glow-shift", shift(glowPart, eased));
         element.style.setProperty("--node-progress", unit((eased - nodeStart) / (nodeEnd - nodeStart)));
       });
+      list.style.setProperty("--tip-y", `${(eased - listTop).toFixed(2)}px`);
+      list.style.setProperty(
+        "--tip-opacity",
+        unit(Math.min((eased - axisStart) / axisWidth, (axisEnd - eased) / axisWidth))
+      );
+    };
 
     let frame = 0;
     let lastTime = 0;
@@ -163,6 +183,7 @@ export default function useEasedScrollLight(
       window.removeEventListener("resize", remeasure);
       resizeObserver?.disconnect();
       delete list.dataset.smooth;
+      ["--tip-y", "--tip-opacity"].forEach((name) => list.style.removeProperty(name));
       branches.forEach(({ element }) => {
         ["--light-shift", "--glow-shift", "--node-progress"].forEach((name) => element.style.removeProperty(name));
       });
