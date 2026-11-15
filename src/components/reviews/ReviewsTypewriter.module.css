@@ -1,0 +1,100 @@
+/* The box the quotes are typed in: the quote being typed in its vertical middle, the ones before it
+ * fading out at its top */
+.box {
+  position: relative;
+  width: 100%;
+  /* On narrow screens, short enough to stay above the footer's planet */
+  height: clamp(10rem, 28svh, 16rem);
+  overflow: clip;
+  mask-image: linear-gradient(transparent, #000 40%);
+
+  @media (width >= 48rem) {
+    height: clamp(16rem, 50svh, 30rem);
+  }
+
+  /* With reduced motion: all the quotes, as tall as they are */
+  &[data-static] {
+    height: auto;
+    mask-image: none;
+  }
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* A quote, in Handjet, glowing like a screen's text */
+.quote {
+  font-family: var(--font-handjet), var(--font-mono);
+  font-size: max(1.375rem, 1.2rem + 0.6vw, 1.75 * var(--desktop-rem));
+  line-height: 1.3;
+  letter-spacing: 0.02em;
+  color: #fff;
+  /* A dark edge first, so it reads over the bright parts of the background */
+  text-shadow:
+    0 0 0.15em #000,
+    0 0 0.5em #b377ff;
+  transition: opacity 600ms;
+
+  blockquote,
+  p {
+    margin: 0;
+  }
+
+  /* The ones already typed dim as the next one is typed */
+  &[data-state="typed"] {
+    opacity: 70%;
+  }
+
+  [data-static] & {
+    opacity: 100%;
+  }
+}
+
+/* The rest of the quote, yet to be typed: invisible, keeping its place */
+.rest {
+  visibility: hidden;
+}
+
+/* The cursor typing it, like the titles' (see Title.module.css): a block after the last letter typed.
+ * It takes no room, so the text doesn't move as it goes. Steady while typing, blinking while it waits */
+.cursor {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0.1em;
+    left: 0.05em;
+    width: 0.45em;
+    height: 1.1em;
+    background: #ceb7ff;
+    box-shadow: 0 0 0.4em #b377ff;
+  }
+}
+
+.blinking::before {
+  animation: typewriter-cursor 0.75s step-end infinite;
+}
+
+/* The quote whole, for screen readers only (the typed copy is hidden from them) */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@keyframes typewriter-cursor {
+  50% {
+    opacity: 0%;
+  }
+}

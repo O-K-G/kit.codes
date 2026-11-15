@@ -1,0 +1,60 @@
+/* The dish's parts, from lightest to darkest, in the site's purples (see --color-title-purple) */
+.light {
+  fill: #ceb7ff;
+}
+
+.mid {
+  fill: #a58fdb;
+}
+
+.shade {
+  fill: #75629f;
+}
+
+/* The inside of the dish and the base: the titles' neon purple */
+.accent {
+  fill: #b377ff;
+}
+
+/* The radio waves: glowing, each lighting up in turn from the dish outward (a 0.2s step between
+ * them), then fading, the cascade repeating every 1.6s. Soft fades rather than flashes. With reduced
+ * motion they stay lit */
+.waves {
+  fill: #ceb7ff;
+  filter: drop-shadow(0 0 4px #b377ff);
+
+  > path {
+    @media (prefers-reduced-motion: no-preference) {
+      opacity: 20%;
+      animation: dish-wave 1.6s ease-in-out infinite;
+
+      &:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+
+      &:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+
+      &:nth-child(4) {
+        animation-delay: 0.6s;
+      }
+
+      &:nth-child(5) {
+        animation-delay: 0.8s;
+      }
+    }
+  }
+}
+
+@keyframes dish-wave {
+  0%,
+  60%,
+  100% {
+    opacity: 20%;
+  }
+
+  20% {
+    opacity: 100%;
+  }
+}

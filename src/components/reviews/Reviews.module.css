@@ -1,4 +1,4 @@
-/* As tall as the quotes need (at least a screen). `section.` outweighs Section's own .section */
+/* At least a screen tall. `section.` outweighs Section's own .section */
 section.section {
   position: relative;
   padding-top: 5rem;
@@ -8,51 +8,37 @@ section.section {
   }
 }
 
-/* The quotes: one column, two from medium screens, three from wide ones */
-.quotes {
+/* The dish on the left half, the quotes on the right one; on narrow screens, the dish above them */
+.content {
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  grid-template-columns: 1fr;
+  align-items: center;
   gap: 1rem;
   width: 100%;
   max-width: 72rem;
-  margin-block: 2rem 4rem;
-  padding: 0;
-  list-style: none;
+  margin-block: 1rem 4rem;
 
   @media (width >= 48rem) {
-    gap: 1.5rem;
+    margin-block: 2rem 4rem;
+  }
+
+  @media (width >= 48rem) {
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
   }
 }
 
-/* A quote, in a box in the site's neon purple, a big quotation mark at its top */
-.quote {
-  position: relative;
-  display: flex;
-  align-items: center;
-  padding: 2rem 1.25rem 1.25rem;
-  border: 1px solid var(--color-title-purple-dark);
-  border-radius: 0.75rem;
-  font-family: var(--font-montserrat), var(--font-sans);
-  font-size: 1rem;
-  line-height: 1.6;
-  color: #fff;
-  background-color: color-mix(in oklab, #000 75%, transparent);
-  box-shadow: 0 0 1rem color-mix(in oklab, #b377ff 25%, transparent);
+/* At the top, beside the box the quotes are typed in (as tall): with reduced motion the quotes are all
+ * shown, much taller */
+.dish {
+  align-self: start;
+  justify-self: center;
+  width: auto;
+  height: clamp(6rem, 18svh, 10rem);
 
-  &::before {
-    content: "“";
-    position: absolute;
-    top: 0.25rem;
-    left: 1rem;
-    font-family: Georgia, serif;
-    font-size: 3.5rem;
-    line-height: 1;
-    color: var(--color-title-purple);
-  }
-
-  blockquote {
-    margin: 0;
+  @media (width >= 48rem) {
+    height: clamp(14rem, 50svh, 28rem);
   }
 }
