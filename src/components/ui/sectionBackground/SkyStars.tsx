@@ -1,8 +1,8 @@
 "use client";
 
-import { CSSProperties, useEffect, useRef, useState } from "react";
+import { CSSProperties, useContext, useEffect, useState } from "react";
 import { STARS } from "@constants/sky";
-import useSectionOnScreen from "@hooks/useSectionOnScreen";
+import { SectionOnScreenContext } from "@ui/sectionBackground/PauseOffscreen";
 import classNames from "@utils/classNames";
 import styles from "./SectionSky.module.css";
 
@@ -58,8 +58,8 @@ const STARS_PER_FRAME = 40;
  * in one, which would hold up scrolling into the section.
  */
 export default function SkyStars(props: SkyStarsProps) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const onScreen = useSectionOnScreen(ref, false);
+  // From the sky around it (see PauseOffscreen): shown once known to be on screen
+  const onScreen = useContext(SectionOnScreenContext) === true;
   // Recomputed only when the props change: the React Compiler memoizes it
   const stars = placeStars(props);
   /** How many of the stars have been added since the section came on screen */
@@ -79,7 +79,7 @@ export default function SkyStars(props: SkyStarsProps) {
   }, [onScreen, stars.length]);
 
   return (
-    <span ref={ref} className={styles.stars}>
+    <span className={styles.stars}>
       {/* Each star turns with its circle (its orbit), whose right edge it sits on: still, the star is
        * exactly at its place in the image; turning, it circles beside it */}
       {onScreen &&

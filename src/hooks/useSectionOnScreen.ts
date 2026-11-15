@@ -1,12 +1,12 @@
 import { RefObject, useEffect, useState } from "react";
 
 /**
- * Whether the section holding `ref`'s element is on screen, kept up to date as the page scrolls.
- * `initial` is what it is until it's known (just after mounting). A section that only touches the
- * screen's edge (the one just scrolled past) doesn't count as on it.
+ * Whether the section holding `ref`'s element is on screen, kept up to date as the page scrolls: null
+ * until it's known (just after mounting). A section that only touches the screen's edge (the one just
+ * scrolled past) doesn't count as on it.
  */
-export default function useSectionOnScreen(ref: RefObject<HTMLElement | null>, initial: boolean) {
-  const [onScreen, setOnScreen] = useState(initial);
+export default function useSectionOnScreen(ref: RefObject<HTMLElement | null>) {
+  const [onScreen, setOnScreen] = useState<boolean | null>(null);
 
   useEffect(() => {
     const section = ref.current?.closest("section");

@@ -1,48 +1,6 @@
+/* Looks like the logo, across from it at the top of the screen (see Logo) */
 .button {
-  top: 0;
-  z-index: 10;
-  margin-top: 1rem;
-  font-size: max(1.5rem, 0.75rem + 3.75vw, 3.15 * var(--desktop-rem));
-  line-height: max(1.5rem, 0.75rem + 3.75vw, 3.15 * var(--desktop-rem));
-  color: #fff;
-  text-transform: uppercase;
-  /* A dark outline around the letters, so they keep their contrast over any part of the background
-   * (WCAG 1.4.3). Painted behind the fill, so only its outer half shows and the letters keep their
-   * shape. */
-  -webkit-text-stroke: 0.12em #000;
-  paint-order: stroke fill;
-
-  &:lang(en) {
-    font-family: var(--font-bebas-neue);
-  }
-
-  &:lang(he) {
-    font-family: var(--font-sans);
-    font-weight: 700;
-  }
-
-  @media (hover: hover) {
-    &:hover {
-      color: var(--color-title-purple);
-    }
-  }
-
-  &:focus {
-    color: var(--color-title-purple);
-  }
-
-  &:active {
-    color: var(--color-title-purple-dark);
-  }
-
-  @media (width >= 64rem) {
-    cursor: pointer;
-  }
-
-  /* Hebrew line heights - more specific, so they win at every breakpoint. */
-  &:lang(he) {
-    line-height: max(1rem, min(0.2857rem + 3.5714vw, 1.8594rem + 0.2928vw), 2.0468 * var(--desktop-rem));
-  }
+  composes: text from "../ui/logo/Logo.module.css";
 }
 
 .defaultPosition {

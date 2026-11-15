@@ -26,8 +26,6 @@ interface SkillBarProps {
   name: string;
   /** How many segments are lit */
   level: number;
-  /** Its row, from the top */
-  index: number;
   /** Whether its fill has started */
   filling: boolean;
   /** The id its name goes by, naming the meter */
@@ -39,7 +37,7 @@ interface SkillBarProps {
  * segment, so resizing the window doesn't have every segment laid out again. With a mouse, hovering a
  * lit segment lifts it and shows its place on the scale: one highlight, put where the pointer is.
  */
-function SkillBar({ name, level, index, filling, labelId }: SkillBarProps) {
+function SkillBar({ name, level, filling, labelId }: SkillBarProps) {
   /** The lit segment last hovered, and whether the pointer is still on it */
   const [hovered, setHovered] = useState<{ segment: number; active: boolean } | null>(null);
 
@@ -70,7 +68,7 @@ function SkillBar({ name, level, index, filling, labelId }: SkillBarProps) {
   };
 
   return (
-    <li className={styles.skill} style={{ "--level": level, "--index": index } as CSSProperties}>
+    <li className={styles.skill} style={{ "--level": level } as CSSProperties}>
       <span id={labelId} className={styles.name}>
         {name}
       </span>
@@ -200,7 +198,6 @@ export default function SkillBars({ className }: SkillBarsProps) {
           key={name}
           name={name}
           level={level}
-          index={index}
           filling={index < filledRows}
           labelId={`${id}-skill-${index}`}
         />

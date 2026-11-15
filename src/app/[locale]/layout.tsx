@@ -11,6 +11,8 @@ import handleFontsByLocale from "@utils/handleFontsByLocale";
 import getDirByLocale from "@utils/getDirByLocale";
 import { PropsWithChildren } from "react";
 import { NextIntlClientProvider } from "next-intl";
+import { getMessages } from "next-intl/server";
+import { CLIENT_NAMESPACES } from "@constants/i18nFilenames";
 import { getPageLocale, setPageLocale } from "@i18n/pageLocale";
 import classNames from "@utils/classNames";
 import PauseWhileResizing from "@ui/pauseWhileResizing/PauseWhileResizing";
@@ -65,13 +67,18 @@ export default async function RootLayout({
 }: RootLayoutProps) {
   const selectedLocale = await setPageLocale(params);
   const dir = getDirByLocale({ locale: selectedLocale });
+  const messages = await getMessages();
+  /** Only what client components need goes to the browser (see CLIENT_NAMESPACES) */
+  const clientMessages = Object.fromEntries(
+    CLIENT_NAMESPACES.map((namespace) => [namespace, messages[namespace]])
+  );
 
   const { mainTitle, borderTitle, infoText, regularText, shenanigansText } =
     fontsByLocale[selectedLocale];
 
   return (
     <html dir={dir} lang={selectedLocale} data-scroll-behavior="smooth">
-      <NextIntlClientProvider>
+      <NextIntlClientProvider messages={clientMessages}>
         <body
           className={classNames(mainTitle, borderTitle, infoText, regularText, shenanigansText)}
         >

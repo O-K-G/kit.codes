@@ -1,7 +1,9 @@
 import { Metadata } from "next";
-import { CACHE_VERSION } from "@root/postcss.config.mjs";
 import { URLs } from "@constants/urls";
 import { routing } from "@i18n/routing";
+
+/** Added to the icons' URLs: raise it after changing an icon, so browsers fetch the new one */
+export const CACHE_VERSION = 1;
 
 type Locale = (typeof routing.locales)[number];
 

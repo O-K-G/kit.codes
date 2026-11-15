@@ -1,7 +1,13 @@
 "use client";
 
-import { CSSProperties, ReactNode, useEffect, useRef } from "react";
+import { CSSProperties, ReactNode, createContext, useEffect, useRef } from "react";
 import useSectionOnScreen from "@hooks/useSectionOnScreen";
+
+/**
+ * Whether the section is on screen (null until it's known), for the children that depend on it too (see
+ * SkyStars): they share this one observer rather than each watching the section
+ */
+export const SectionOnScreenContext = createContext<boolean | null>(null);
 
 /**
  * Pauses its children's animations while their section is off screen (they're only seen inside it): CSS
@@ -18,17 +24,19 @@ export default function PauseOffscreen({
   children: ReactNode;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const onScreen = useSectionOnScreen(ref, true);
+  const onScreen = useSectionOnScreen(ref);
+  /** Running until it's known to be off screen */
+  const paused = onScreen === false;
 
   useEffect(() => {
     ref.current
       ?.querySelectorAll("svg")
-      .forEach((svg) => (onScreen ? svg.unpauseAnimations() : svg.pauseAnimations()));
-  }, [onScreen]);
+      .forEach((svg) => (paused ? svg.pauseAnimations() : svg.unpauseAnimations()));
+  }, [paused]);
 
   return (
-    <div ref={ref} className={className} style={style} data-paused={!onScreen}>
-      {children}
+    <div ref={ref} className={className} style={style} data-paused={paused}>
+      <SectionOnScreenContext.Provider value={onScreen}>{children}</SectionOnScreenContext.Provider>
     </div>
   );
 }

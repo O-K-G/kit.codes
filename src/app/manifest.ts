@@ -1,5 +1,5 @@
 import { MetadataRoute } from "next";
-import { CACHE_VERSION } from "@root/postcss.config.mjs";
+import { CACHE_VERSION } from "@constants/siteMetadata";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {

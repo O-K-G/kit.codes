@@ -4,7 +4,6 @@ import {
   ComponentPropsWithoutRef,
   MouseEventHandler,
   ReactNode,
-  RefObject,
 } from "react";
 
 /** Zod doesn't try compiling its validators with `Function` (eval): the CSP forbids it (see proxy.ts),
@@ -181,13 +180,6 @@ export interface SideLinksProps {
   className?: string;
   ulClassName?: string;
   hideChangeLanguageButton?: boolean;
-}
-
-export interface UseObserveScrollSubsectionProps {
-  scrollableRef: RefObject<HTMLDivElement | null> | null;
-  id?: number;
-  onSubsectionSelectChange: (id: number) => void;
-  scrollableItemRef: RefObject<HTMLDivElement | null>;
 }
 
 /** A carousel slide's props; `id` (its index) and `total` are set by the carousel */
