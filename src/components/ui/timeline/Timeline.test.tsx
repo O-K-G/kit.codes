@@ -13,7 +13,7 @@ const ITEMS = [
 const renderTimeline = () =>
   render(
     <NextIntlClientProvider locale="en" messages={timelineText}>
-      <Timeline items={ITEMS} aria-label="Projects" />
+      <Timeline items={ITEMS} aria-label="Experience" />
     </NextIntlClientProvider>
   );
 
@@ -21,7 +21,7 @@ describe("Timeline", () => {
   test("is a named list of branches, each with its year and title", () => {
     renderTimeline();
 
-    expect(screen.getByRole("list", { name: "Projects" })).toBeInTheDocument();
+    expect(screen.getByRole("list", { name: "Experience" })).toBeInTheDocument();
     expect(screen.getAllByTestId(TIMELINE_BRANCH_TEST_ID)).toHaveLength(3);
     expect(screen.getByRole("heading", { name: "Second" })).toBeInTheDocument();
     expect(screen.getAllByText("2021")).toHaveLength(1);

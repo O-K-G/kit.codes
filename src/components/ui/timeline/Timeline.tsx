@@ -35,8 +35,9 @@ export default function Timeline({ items, "aria-label": ariaLabel }: TimelinePro
 
   return (
     <ol ref={listRef} aria-label={ariaLabel} className={styles.timeline}>
-      {items.map(({ year, title, text, icon }) => (
-        <li key={title} data-testid={TIMELINE_BRANCH_TEST_ID} className={styles.branch}>
+      {/* Keyed by place: titles can repeat (several are the same in Hebrew) */}
+      {items.map(({ year, title, text, icon }, index) => (
+        <li key={index} data-testid={TIMELINE_BRANCH_TEST_ID} className={styles.branch}>
           <Lines className={styles.unlit} />
           <Lines className={styles.glow} />
           <Lines className={styles.light} />

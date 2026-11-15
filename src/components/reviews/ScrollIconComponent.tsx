@@ -1,6 +1,6 @@
 import { useTranslations } from 'next-intl';
-import FixedBottomComponent from '@components/projects/FixedBottomComponent';
-import DoubleArrowIcon from '@components/projects/DoubleArrowIcon';
+import FixedBottomComponent from '@components/reviews/FixedBottomComponent';
+import DoubleArrowIcon from '@components/reviews/DoubleArrowIcon';
 import styles from './ScrollIconComponent.module.css';
 
 export default function ScrollIconComponent() {

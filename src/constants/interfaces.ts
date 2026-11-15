@@ -30,7 +30,7 @@ export interface DialogTitleProps {
   closeButtonIcon?: ReactNode;
 }
 
-export type SectionName = "about" | "skills" | "experience" | "projects" | "contact";
+export type SectionName = "about" | "skills" | "experience" | "reviews" | "contact";
 
 /** The section the current route points at (e.g. /en/skills): its background is fetched first. */
 export interface ActiveSectionProps {
@@ -182,12 +182,6 @@ export interface SideLinksProps {
   hideChangeLanguageButton?: boolean;
 }
 
-/** A carousel slide's props; `id` (its index) and `total` are set by the carousel */
-export interface ScrollableSubsectionItemProps {
-  children: ReactNode;
-  id?: number;
-  total?: number;
-}
 /** A timeline branch's data */
 export interface TimelineItem {
   /** Shown big, with the title under it */

@@ -10,7 +10,7 @@ each with its own route (`/en/about`, `/en/skills`, ...):
 - **About**: an introduction.
 - **Skills**: skill bars that fill as they come into view.
 - **Experience**: a timeline of past work, lit up as the page scrolls.
-- **Projects**: a carousel of past work.
+- **Reviews**: quotes from reviews of my work.
 - **Contact**: a slide-in drawer with a contact form that sends the message by email.
 
 Links to GitHub, LinkedIn and the resume sit on the side. The site is built with
@@ -96,7 +96,7 @@ docker run --rm -p 3000:3000 --env-file .env kit.codes
 │   ├── assets/
 │   │   ├── fonts/        The fonts (WOFF2), each with its license
 │   │   └── images/       Section backgrounds (AVIF, per breakpoint and screen density) and the planet
-│   ├── components/       One folder per section (about, skills, projects, experience, contact, home)
+│   ├── components/       One folder per section (about, skills, experience, reviews, contact, home)
 │   │   └── ui/           Generic, reusable components (dialog, title, loader, icons, ...)
 │   ├── constants/        Shared constants and types (interfaces.ts)
 │   ├── hooks/            Shared React hooks

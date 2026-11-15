@@ -74,31 +74,31 @@ import experience2Xl2592 from '@/assets/images/experience/2xl-2592w.avif?url';
 import experience2Xl3456 from '@/assets/images/experience/2xl-3456w.avif?url';
 import experience2Xl5184 from '@/assets/images/experience/2xl-5184w.avif?url';
 import experience2Xl6912 from '@/assets/images/experience/2xl-6912w.avif?url';
-import projectsSm640 from '@/assets/images/projects/sm-640w.avif?url';
-import projectsSm960 from '@/assets/images/projects/sm-960w.avif?url';
-import projectsSm1280 from '@/assets/images/projects/sm-1280w.avif?url';
-import projectsSm1920 from '@/assets/images/projects/sm-1920w.avif?url';
-import projectsSm2560 from '@/assets/images/projects/sm-2560w.avif?url';
-import projectsMd768 from '@/assets/images/projects/md-768w.avif?url';
-import projectsMd1152 from '@/assets/images/projects/md-1152w.avif?url';
-import projectsMd1536 from '@/assets/images/projects/md-1536w.avif?url';
-import projectsMd2304 from '@/assets/images/projects/md-2304w.avif?url';
-import projectsMd3072 from '@/assets/images/projects/md-3072w.avif?url';
-import projectsLg1024 from '@/assets/images/projects/lg-1024w.avif?url';
-import projectsLg1536 from '@/assets/images/projects/lg-1536w.avif?url';
-import projectsLg2048 from '@/assets/images/projects/lg-2048w.avif?url';
-import projectsLg3072 from '@/assets/images/projects/lg-3072w.avif?url';
-import projectsLg4096 from '@/assets/images/projects/lg-4096w.avif?url';
-import projectsXl1280 from '@/assets/images/projects/xl-1280w.avif?url';
-import projectsXl1920 from '@/assets/images/projects/xl-1920w.avif?url';
-import projectsXl2560 from '@/assets/images/projects/xl-2560w.avif?url';
-import projectsXl3840 from '@/assets/images/projects/xl-3840w.avif?url';
-import projectsXl5120 from '@/assets/images/projects/xl-5120w.avif?url';
-import projects2Xl1728 from '@/assets/images/projects/2xl-1728w.avif?url';
-import projects2Xl2592 from '@/assets/images/projects/2xl-2592w.avif?url';
-import projects2Xl3456 from '@/assets/images/projects/2xl-3456w.avif?url';
-import projects2Xl5184 from '@/assets/images/projects/2xl-5184w.avif?url';
-import projects2Xl6912 from '@/assets/images/projects/2xl-6912w.avif?url';
+import reviewsSm640 from '@/assets/images/reviews/sm-640w.avif?url';
+import reviewsSm960 from '@/assets/images/reviews/sm-960w.avif?url';
+import reviewsSm1280 from '@/assets/images/reviews/sm-1280w.avif?url';
+import reviewsSm1920 from '@/assets/images/reviews/sm-1920w.avif?url';
+import reviewsSm2560 from '@/assets/images/reviews/sm-2560w.avif?url';
+import reviewsMd768 from '@/assets/images/reviews/md-768w.avif?url';
+import reviewsMd1152 from '@/assets/images/reviews/md-1152w.avif?url';
+import reviewsMd1536 from '@/assets/images/reviews/md-1536w.avif?url';
+import reviewsMd2304 from '@/assets/images/reviews/md-2304w.avif?url';
+import reviewsMd3072 from '@/assets/images/reviews/md-3072w.avif?url';
+import reviewsLg1024 from '@/assets/images/reviews/lg-1024w.avif?url';
+import reviewsLg1536 from '@/assets/images/reviews/lg-1536w.avif?url';
+import reviewsLg2048 from '@/assets/images/reviews/lg-2048w.avif?url';
+import reviewsLg3072 from '@/assets/images/reviews/lg-3072w.avif?url';
+import reviewsLg4096 from '@/assets/images/reviews/lg-4096w.avif?url';
+import reviewsXl1280 from '@/assets/images/reviews/xl-1280w.avif?url';
+import reviewsXl1920 from '@/assets/images/reviews/xl-1920w.avif?url';
+import reviewsXl2560 from '@/assets/images/reviews/xl-2560w.avif?url';
+import reviewsXl3840 from '@/assets/images/reviews/xl-3840w.avif?url';
+import reviewsXl5120 from '@/assets/images/reviews/xl-5120w.avif?url';
+import reviews2Xl1728 from '@/assets/images/reviews/2xl-1728w.avif?url';
+import reviews2Xl2592 from '@/assets/images/reviews/2xl-2592w.avif?url';
+import reviews2Xl3456 from '@/assets/images/reviews/2xl-3456w.avif?url';
+import reviews2Xl5184 from '@/assets/images/reviews/2xl-5184w.avif?url';
+import reviews2Xl6912 from '@/assets/images/reviews/2xl-6912w.avif?url';
 import skillsSm640 from '@/assets/images/skills/sm-640w.avif?url';
 import skillsSm960 from '@/assets/images/skills/sm-960w.avif?url';
 import skillsSm1280 from '@/assets/images/skills/sm-1280w.avif?url';
@@ -156,9 +156,9 @@ const avif = (src: string, width: number, height: number): AvifVersion => ({
  * as black: About's are from About.png (1048px tall at 1x; its comet and stars
  * are drawn and animated over it, see SectionSky), Skills' from Skills.png (1042px tall at 1x),
  * Experience's from Projects.png (1062px tall at 1x; its crops are centered),
- * Projects' from Experience.png (1050px tall at 1x), Contact's from Group 5.png
+ * Reviews' from Experience.png (1050px tall at 1x), Contact's from Group 5.png
  * (no transparent edge; 1116px tall at 1x; its crops are centered).
- * The stars of About, Skills, Experience and Projects are drawn and animated over them too (see
+ * The stars of About, Skills, Experience and Reviews are drawn and animated over them too (see
  * SectionSky). Their sizes are given here: they're imported as URLs (see next.config.ts).
  */
 export const SECTION_BACKGROUNDS_AVIF: Record<SectionName, Record<Breakpoint, AvifVersion[]>> = {
@@ -176,12 +176,12 @@ export const SECTION_BACKGROUNDS_AVIF: Record<SectionName, Record<Breakpoint, Av
     xl: [avif(skillsXl1280, 1280, 1042), avif(skillsXl1920, 1920, 1563), avif(skillsXl2560, 2560, 2084), avif(skillsXl3840, 3840, 3126), avif(skillsXl5120, 5120, 4168)],
     '2xl': [avif(skills2Xl1728, 1728, 1042), avif(skills2Xl2592, 2592, 1563), avif(skills2Xl3456, 3456, 2084), avif(skills2Xl5184, 5184, 3126), avif(skills2Xl6912, 6912, 4168)],
   },
-  projects: {
-    sm: [avif(projectsSm640, 640, 1050), avif(projectsSm960, 960, 1575), avif(projectsSm1280, 1280, 2100), avif(projectsSm1920, 1920, 3150), avif(projectsSm2560, 2560, 4200)],
-    md: [avif(projectsMd768, 768, 1050), avif(projectsMd1152, 1152, 1575), avif(projectsMd1536, 1536, 2100), avif(projectsMd2304, 2304, 3150), avif(projectsMd3072, 3072, 4200)],
-    lg: [avif(projectsLg1024, 1024, 1050), avif(projectsLg1536, 1536, 1575), avif(projectsLg2048, 2048, 2100), avif(projectsLg3072, 3072, 3150), avif(projectsLg4096, 4096, 4200)],
-    xl: [avif(projectsXl1280, 1280, 1050), avif(projectsXl1920, 1920, 1575), avif(projectsXl2560, 2560, 2100), avif(projectsXl3840, 3840, 3150), avif(projectsXl5120, 5120, 4200)],
-    '2xl': [avif(projects2Xl1728, 1728, 1050), avif(projects2Xl2592, 2592, 1575), avif(projects2Xl3456, 3456, 2100), avif(projects2Xl5184, 5184, 3150), avif(projects2Xl6912, 6912, 4200)],
+  reviews: {
+    sm: [avif(reviewsSm640, 640, 1050), avif(reviewsSm960, 960, 1575), avif(reviewsSm1280, 1280, 2100), avif(reviewsSm1920, 1920, 3150), avif(reviewsSm2560, 2560, 4200)],
+    md: [avif(reviewsMd768, 768, 1050), avif(reviewsMd1152, 1152, 1575), avif(reviewsMd1536, 1536, 2100), avif(reviewsMd2304, 2304, 3150), avif(reviewsMd3072, 3072, 4200)],
+    lg: [avif(reviewsLg1024, 1024, 1050), avif(reviewsLg1536, 1536, 1575), avif(reviewsLg2048, 2048, 2100), avif(reviewsLg3072, 3072, 3150), avif(reviewsLg4096, 4096, 4200)],
+    xl: [avif(reviewsXl1280, 1280, 1050), avif(reviewsXl1920, 1920, 1575), avif(reviewsXl2560, 2560, 2100), avif(reviewsXl3840, 3840, 3150), avif(reviewsXl5120, 5120, 4200)],
+    '2xl': [avif(reviews2Xl1728, 1728, 1050), avif(reviews2Xl2592, 2592, 1575), avif(reviews2Xl3456, 3456, 2100), avif(reviews2Xl5184, 5184, 3150), avif(reviews2Xl6912, 6912, 4200)],
   },
   experience: {
     sm: [avif(experienceSm640, 640, 1062), avif(experienceSm960, 960, 1593), avif(experienceSm1280, 1280, 2124), avif(experienceSm1920, 1920, 3186), avif(experienceSm2560, 2560, 4248)],

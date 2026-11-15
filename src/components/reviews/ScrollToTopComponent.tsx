@@ -1,6 +1,6 @@
 import { useTranslations } from 'next-intl';
-import FixedBottomComponent from '@components/projects/FixedBottomComponent';
-import ArrowUpIcon from '@components/projects/ArrowUpIcon';
+import FixedBottomComponent from '@components/reviews/FixedBottomComponent';
+import ArrowUpIcon from '@components/reviews/ArrowUpIcon';
 import styles from './ScrollToTopComponent.module.css';
 
 export default function ScrollToTopComponent() {

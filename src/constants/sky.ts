@@ -282,5 +282,5 @@ export const SKIES: Partial<Record<SectionName, Sky>> = {
   about: { height: 1048, centered: false, starsTop: 652, starOpacity: 0.49, seed: 31 },
   skills: { height: 1042, centered: false, starsTop: 652, starOpacity: 0.69, seed: 30 },
   experience: { height: 1062, centered: true, starsTop: 621, starOpacity: 0.47, seed: 32 },
-  projects: { height: 1050, centered: false, starsTop: 652, starOpacity: 0.56, seed: 33 },
+  reviews: { height: 1050, centered: false, starsTop: 652, starOpacity: 0.56, seed: 33 },
 };

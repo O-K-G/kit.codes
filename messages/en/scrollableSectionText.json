@@ -1,9 +1,0 @@
-{
-  "scrollableSectionText": {
-    "previous": "Previous slide",
-    "next": "Next slide",
-    "carousel": "carousel",
-    "slide": "slide",
-    "slideLabel": "{index} of {total}"
-  }
-}

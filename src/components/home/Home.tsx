@@ -1,5 +1,5 @@
 import About from "@components/about/About";
-import Projects from "@components/projects/Projects";
+import Reviews from "@components/reviews/Reviews";
 import Skills from "@components/skills/Skills";
 import Experience from "@components/experience/Experience";
 import Loader from "@ui/loader/Loader";
@@ -19,7 +19,7 @@ export default function Home({ activeSection = "about" }: ActiveSectionProps) {
         <About activeSection={activeSection} />
         <Skills activeSection={activeSection} />
         <Experience activeSection={activeSection} />
-        <Projects activeSection={activeSection} />
+        <Reviews activeSection={activeSection} />
         <Aside activeSection={activeSection} />
       </main>
     </>

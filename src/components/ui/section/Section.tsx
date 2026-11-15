@@ -4,7 +4,7 @@ import SectionScrollAnchor from "@ui/section/SectionScrollAnchor";
 import styles from "./Section.module.css";
 import classNames from "@utils/classNames";
 
-const SCROLLABLE_SECTIONS = ["about", "skills", "experience", "projects"];
+const SCROLLABLE_SECTIONS = ["about", "skills", "experience", "reviews"];
 
 export default function Section({
   className = styles.defaultLayout,
