@@ -1,10 +1,12 @@
-/* The comet image's place, in the image's pixels at 1x (see SectionSky: --px, --crop-x) */
+/* The comet image's place, given in the image's pixels at 1x (see SectionSky: --crop-x), placed in
+ * percent of the frame (the crop, --cw by --h): like the stars, a value that doesn't depend on the
+ * window's size, so resizing it doesn't restyle the comet */
 .comet {
   position: absolute;
-  top: calc(var(--y) * var(--px));
-  left: calc((var(--x) - var(--crop-x)) * var(--px));
-  width: calc(var(--width) * var(--px));
-  height: calc(var(--height) * var(--px));
+  top: calc(var(--y) / var(--h) * 100%);
+  left: calc((var(--x) - var(--crop-x)) / var(--cw) * 100%);
+  width: calc(var(--width) / var(--cw) * 100%);
+  height: calc(var(--height) / var(--h) * 100%);
   overflow: visible;
 }
 

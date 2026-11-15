@@ -39,23 +39,28 @@
 }
 
 /* A star's circle: centered --orbit to the left of the star, which sits on its right edge. Turning it
- * (only rotate, with fixed values, so the browser runs it off the main thread) circles the star */
+ * (only rotate, with fixed values, so the browser runs it off the main thread) circles the star.
+ *
+ * The stars are placed in percent of the frame (which is the crop, --cw by --h, drawn at --px) rather
+ * than with --px: the same place, but a value that doesn't depend on the window's size, so resizing it
+ * doesn't have the browser restyle every star (a few hundred), only lay them out. */
 .orbit {
   position: absolute;
-  top: calc((var(--y) - var(--orbit)) * var(--px));
-  left: calc((var(--x) - var(--crop-x) - 2 * var(--orbit)) * var(--px));
-  width: calc(2 * var(--orbit) * var(--px));
-  height: calc(2 * var(--orbit) * var(--px));
+  top: calc((var(--y) - var(--orbit)) / var(--h) * 100%);
+  left: calc((var(--x) - var(--crop-x) - 2 * var(--orbit)) / var(--cw) * 100%);
+  width: calc(2 * var(--orbit) / var(--cw) * 100%);
+  height: calc(2 * var(--orbit) / var(--h) * 100%);
 }
 
 /* A star: a dot, looking as it did in the illustration: white at the stars' layer's opacity there, seen
  * through the image's 60% (see SectionBackground) */
 .star {
+  /* In percent of its circle (2 * --orbit across), for the same reason */
   position: absolute;
-  top: calc((var(--orbit) - var(--r)) * var(--px));
-  left: calc((2 * var(--orbit) - var(--r)) * var(--px));
-  width: calc(2 * var(--r) * var(--px));
-  height: calc(2 * var(--r) * var(--px));
+  top: calc((var(--orbit) - var(--r)) / (2 * var(--orbit)) * 100%);
+  left: calc((2 * var(--orbit) - var(--r)) / (2 * var(--orbit)) * 100%);
+  width: calc(var(--r) / var(--orbit) * 100%);
+  height: calc(var(--r) / var(--orbit) * 100%);
   border-radius: 50%;
   background-color: rgb(153 153 153 / var(--star-opacity));
 }
