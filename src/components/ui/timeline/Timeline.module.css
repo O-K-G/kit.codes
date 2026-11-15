@@ -174,21 +174,23 @@
   }
 }
 
-/* Its tooltip (see Tooltip), below it: toward the axis' side of the screen */
+/* Its tooltip (see Tooltip), below it (or above, with more room there), toward the axis' side of the
+ * screen */
 .tooltip {
   width: min(22rem, 100vw - 2rem);
 
   @media (width >= 48rem) {
     .branch:nth-child(odd) & {
+      --tooltip-area-inline: span-inline-start;
+
       inset-inline: auto 0;
     }
   }
 }
 
 .tooltipBox {
-  max-height: 50svh;
+  max-height: 60svh;
   padding: 0.75rem 1rem;
-  overflow-y: auto;
   font-size: max(0.875rem, 0.95 * var(--desktop-rem));
   line-height: 1.5;
 }

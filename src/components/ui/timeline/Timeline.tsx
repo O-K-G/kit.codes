@@ -33,6 +33,7 @@ export default function Timeline({ items, "aria-label": ariaLabel }: TimelinePro
             content={text}
             placement="bottom"
             align="start"
+            keepInViewport
             className={styles.node}
             tooltipClassName={styles.tooltip}
             boxClassName={styles.tooltipBox}

@@ -212,6 +212,9 @@ export interface TooltipProps extends Omit<ComponentPropsWithoutRef<"span">, "co
   placement?: "top" | "bottom";
   /** Lined up with the element's start, center or end */
   align?: "start" | "center" | "end";
+  /** Keeps it in the viewport: above or below, where there's more room, its text scrolling if it
+   * doesn't fit. Not for an element in a transformed or filtered one (see the CSS) */
+  keepInViewport?: boolean;
   /** Places and sizes the tooltip */
   tooltipClassName?: string;
   /** Styles the tooltip's box */

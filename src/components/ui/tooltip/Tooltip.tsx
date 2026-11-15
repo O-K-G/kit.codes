@@ -13,6 +13,8 @@ import classNames from "@utils/classNames";
  * true. It's placed above or below the element, aligned with its start, center or end; pages size and
  * style it with `tooltipClassName` (its place) and `boxClassName` (its box), and --tooltip-gap (the
  * space between them). Page styles always win over the tooltip's own (a cascade layer, see the CSS).
+ * Given `keepInViewport`, it stays in the viewport: on the element's side with the most room, its
+ * text scrolling (with a fade at the bottom while there's more) when it doesn't fit.
  *
  * Accessibility (WCAG 1.4.13): the tooltip is part of the element, so it can be hovered without
  * closing, and Escape closes a shown tooltip until the pointer or the focus leaves (or, given `open`,
@@ -24,6 +26,7 @@ export default function Tooltip({
   open,
   placement = "top",
   align = "center",
+  keepInViewport,
   className,
   tooltipClassName,
   boxClassName,
@@ -64,6 +67,7 @@ export default function Tooltip({
       aria-describedby={id}
       data-open={open}
       data-dismissed={dismissed || undefined}
+      data-keep-in-viewport={keepInViewport || undefined}
       className={classNames(styles.trigger, className)}
       onPointerLeave={reset}
       onBlur={reset}
