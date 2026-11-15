@@ -255,8 +255,8 @@
     opacity: 100%;
   }
 
-  /* Its icon (in its own colors, see ui/icons), or a "+", glowing in its color; dim until the circle
-   * lights (see timeline-icon-light) */
+  /* Its icon (in its own colors, see ui/icons), or a "+": dim, and over it lit, glowing in its color,
+   * which fades in as the circle lights (see timeline-icon-light). So it glows only once lit */
   .icon {
     --icon-size: calc(0.5 * var(--node-size));
 
@@ -271,10 +271,28 @@
     line-height: 1;
     color: var(--lit);
 
-    > svg {
+    > span {
+      display: grid;
+      grid-area: 1 / 1;
+      place-items: center;
       width: 100%;
       height: 100%;
-      filter: drop-shadow(0 0 0.3rem currentColor);
+
+      > svg {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .iconUnlit {
+      opacity: 35%;
+    }
+
+    /* Glowing in its color, a tight glow and a wide one */
+    .iconLit > svg {
+      filter:
+        drop-shadow(0 0 calc(0.06 * var(--node-size)) currentColor)
+        drop-shadow(0 0 calc(0.18 * var(--node-size)) currentColor);
     }
   }
 }
@@ -329,7 +347,7 @@
 
     /* Along with its circle: the icon is centered in it, so it's offset from its own timeline (as the
      * branch's line, below) */
-    .node .icon {
+    .node .iconLit {
       animation: timeline-icon-light linear both;
       animation-timeline: view(block 50%);
       animation-range:
@@ -417,9 +435,9 @@
   will-change: opacity;
 }
 
-.timeline[data-smooth] .node .icon {
+.timeline[data-smooth] .node .iconLit {
   animation: none;
-  opacity: calc(0.35 + 0.65 * var(--node-progress, 1));
+  opacity: var(--node-progress, 1);
   will-change: opacity;
 }
 
@@ -443,7 +461,7 @@
 
 @keyframes timeline-icon-light {
   from {
-    opacity: 35%;
+    opacity: 0%;
   }
 }
 

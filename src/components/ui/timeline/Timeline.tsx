@@ -52,8 +52,10 @@ export default function Timeline({ items, "aria-label": ariaLabel }: TimelinePro
             tooltipClassName={styles.tooltip}
             boxClassName={styles.tooltipBox}
           >
+            {/* Twice: dim, and over it lit and glowing, fading in as the circle lights */}
             <span className={styles.icon} aria-hidden>
-              {icon ?? "+"}
+              <span className={styles.iconUnlit}>{icon ?? "+"}</span>
+              <span className={styles.iconLit}>{icon ?? "+"}</span>
             </span>
           </Tooltip>
 
