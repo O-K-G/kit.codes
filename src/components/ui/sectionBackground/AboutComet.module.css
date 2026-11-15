@@ -8,6 +8,12 @@
   width: calc(var(--width) / var(--cw) * 100%);
   height: calc(var(--height) / var(--h) * 100%);
   overflow: visible;
+
+  /* Hidden while the window is being resized (see PauseWhileResizing): its smoke filter makes it one of
+   * the costliest things to redraw at each step. It's back once the size settles */
+  :global(html[data-resizing]) & {
+    visibility: hidden;
+  }
 }
 
 .puff {
