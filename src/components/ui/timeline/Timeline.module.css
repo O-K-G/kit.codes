@@ -71,6 +71,8 @@
   --branch-h: var(--branch-width);
   /* Where a branch's line ends, from the axis' middle (see .branchPart) */
   --branch-end: 0px;
+  /* How far a part of the axis reaches into the one above (see .axisPart) */
+  --axis-overlap: 2px;
 
   position: absolute;
   inset: 0;
@@ -89,6 +91,7 @@
   --axis-w: calc(1.75 * var(--axis-width));
   --branch-h: calc(3 * var(--branch-width));
   --branch-end: calc(var(--axis-w) / 2);
+  --axis-overlap: 0px;
   --branch-z: 1;
   --axis-z: 2;
 
@@ -115,9 +118,13 @@
   background-size: 100% 100%;
 }
 
+/* Each branch's part is placed from its own branch, so two parts that meet can be rounded to the
+ * screen's pixels apart, leaving a gap; so each reaches a little into the one above (in the same opaque
+ * color, it doesn't show; the light grows from its top, so it doesn't lead either). Not the glows,
+ * which would add up there */
 .axisPart {
   z-index: var(--axis-z);
-  top: calc(var(--gap) / -2);
+  top: calc(var(--gap) / -2 - var(--axis-overlap));
   bottom: calc(var(--gap) / -2);
   inset-inline-start: calc(var(--node-size) / 2 - var(--axis-w) / 2);
   width: var(--axis-w);
