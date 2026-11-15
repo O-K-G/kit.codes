@@ -288,12 +288,15 @@
   }
 }
 
-/* While the window is being resized (see PauseWhileResizing), every animation holds still, so the
- * browser only has the new layout to draw. Transitions keep running: logic waits for them to end. */
+/* While the window is being resized (see PauseWhileResizing), every animation holds still, and the
+ * glows and blurs (filters) are off, back once the size settles: the screen is redrawn at every step of
+ * the resize, and they're a good part of drawing it. Transitions keep running: logic waits for them to
+ * end. */
 html[data-resizing] *,
 html[data-resizing] ::before,
 html[data-resizing] ::after {
   animation-play-state: paused !important;
+  filter: none !important;
 }
 
 /* Keyboard focus: a dark purple ring against the element, then a 2px gap, then a white ring, so one of

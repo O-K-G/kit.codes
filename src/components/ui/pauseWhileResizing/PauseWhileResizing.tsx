@@ -21,8 +21,9 @@ function setSvgAnimationsPaused(paused: boolean) {
 
 /**
  * While the window is being resized, pauses every animation on the page (CSS ones through
- * RESIZING_ATTRIBUTE, see globals.css, and SVG ones), so the browser only has the new layout to draw;
- * they resume once the size has settled. Transitions keep running: turning them off too measured no
+ * RESIZING_ATTRIBUTE, see globals.css, and SVG ones) and switches off the glows and blurs (see
+ * globals.css), so the browser has less to draw at each step; it all comes back once the size has
+ * settled. Transitions keep running: turning them off too measured no
  * faster, and the loader and the contact drawer wait for theirs to end.
  *
  * On touch screens, only width changes count (rotating, resizing a split screen): the height also
