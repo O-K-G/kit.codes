@@ -13,6 +13,7 @@ import { PropsWithChildren } from "react";
 import { NextIntlClientProvider } from "next-intl";
 import { getPageLocale, setPageLocale } from "@i18n/pageLocale";
 import classNames from "@utils/classNames";
+import PauseWhileResizing from "@ui/pauseWhileResizing/PauseWhileResizing";
 
 interface RootLayoutProps extends PropsWithChildren {
   /** `rest`: the catch-all route (app/[...rest]) reuses this layout, with no locale */
@@ -75,6 +76,7 @@ export default async function RootLayout({
           className={classNames(mainTitle, borderTitle, infoText, regularText, shenanigansText)}
         >
           {children}
+          <PauseWhileResizing />
         </body>
       </NextIntlClientProvider>
     </html>

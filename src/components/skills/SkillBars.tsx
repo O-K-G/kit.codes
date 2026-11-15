@@ -1,6 +1,6 @@
 "use client";
 
-import { CSSProperties, useEffect, useId, useRef, useState } from "react";
+import { CSSProperties, PointerEvent, useEffect, useId, useRef, useState } from "react";
 import { SKILLS, SKILL_MAX_SEGMENTS } from "@constants/skills";
 import { SkillBarsProps } from "@constants/interfaces";
 import styles from "./SkillBars.module.css";
@@ -12,14 +12,108 @@ const IN_VIEW_THRESHOLD = 0.5;
 /** The rows start filling one after another, this far apart */
 const ROW_DELAY_MS = 80;
 
+/* A bar's segments, as fractions of its width (as in the CSS, see .segments): SKILL_MAX_SEGMENTS
+ * segments, each followed by a gap of 30% of the width shared out between them (but the last) */
+const SEGMENT_GAP = 0.3 / SKILL_MAX_SEGMENTS;
+const SEGMENT_WIDTH = (1 - (SKILL_MAX_SEGMENTS - 1) * SEGMENT_GAP) / SKILL_MAX_SEGMENTS;
+const SEGMENT_PITCH = SEGMENT_WIDTH + SEGMENT_GAP;
+
+/** Where a segment sits on the full scale, in percent (shown in its tooltip) */
+const segmentPercent = (segment: number) =>
+  Math.round(((segment + 1) / SKILL_MAX_SEGMENTS) * 100);
+
+interface SkillBarProps {
+  name: string;
+  /** How many segments are lit */
+  level: number;
+  /** Its row, from the top */
+  index: number;
+  /** Whether its fill has started */
+  filling: boolean;
+  /** The id its name goes by, naming the meter */
+  labelId: string;
+}
+
 /**
- * The skills, one per row: a name and a pill-shaped bar of SKILL_MAX_SEGMENTS segments, painted red
- * to purple to white along the full scale. Once in view, each bar fills segment by segment up to the
+ * One skill: its name and its bar. The bar is drawn as a single element (see .segments), not one per
+ * segment, so resizing the window doesn't have every segment laid out again. With a mouse, hovering a
+ * lit segment lifts it and shows its place on the scale: one highlight, put where the pointer is.
+ */
+function SkillBar({ name, level, index, filling, labelId }: SkillBarProps) {
+  /** The lit segment last hovered, and whether the pointer is still on it */
+  const [hovered, setHovered] = useState<{ segment: number; active: boolean } | null>(null);
+
+  const deactivate = () =>
+    setHovered((current) => (current?.active ? { ...current, active: false } : current));
+
+  const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType === "touch") {
+      return;
+    }
+    // On the lifted segment or its tooltip (which can be hovered, WCAG 1.4.13): it stays
+    if ((event.target as Element).closest(`.${styles.highlight}`)) {
+      return;
+    }
+
+    const { left, width } = event.currentTarget.getBoundingClientRect();
+    const x = (event.clientX - left) / width;
+    const segment = Math.floor(x / SEGMENT_PITCH);
+    const onSegment = segment >= 0 && segment < level && x - segment * SEGMENT_PITCH <= SEGMENT_WIDTH;
+
+    if (onSegment) {
+      setHovered((current) =>
+        current?.active && current.segment === segment ? current : { segment, active: true }
+      );
+    } else {
+      deactivate();
+    }
+  };
+
+  return (
+    <li className={styles.skill} style={{ "--level": level, "--index": index } as CSSProperties}>
+      <span id={labelId} className={styles.name}>
+        {name}
+      </span>
+      <div
+        role="meter"
+        aria-labelledby={labelId}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={Math.round((level / SKILL_MAX_SEGMENTS) * 100)}
+        aria-valuetext={`${Math.round((level / SKILL_MAX_SEGMENTS) * 100)}%`}
+        className={styles.bar}
+      >
+        <div
+          className={styles.segments}
+          data-filling={filling}
+          onPointerMove={handlePointerMove}
+          onPointerLeave={deactivate}
+        >
+          {hovered && (
+            <span
+              // A new segment is a new highlight, so it lifts from its place rather than sliding there
+              key={hovered.segment}
+              aria-hidden
+              data-active={hovered.active}
+              data-percent={segmentPercent(hovered.segment)}
+              className={styles.highlight}
+              style={{ "--segment": hovered.segment } as CSSProperties}
+            />
+          )}
+        </div>
+      </div>
+    </li>
+  );
+}
+
+/**
+ * The skills, one per row (see SkillBar): a name and a pill-shaped bar of SKILL_MAX_SEGMENTS segments,
+ * painted red to purple to white along the full scale. Once in view, each bar fills segment by segment up to the
  * skill's value, the rows one after the other. The rows share the list's height: what's left goes
  * into the gaps between them.
  *
- * Each row's animations start at its turn (rather than all at once, with delays), so the browser starts
- * a few dozen at a time instead of several hundred as the list comes into view.
+ * Each row's fill starts at its turn (rather than all at once, with delays), so the browser doesn't
+ * start every row's animation as the list comes into view.
  *
  * Accessibility: each bar is a meter named by its skill, valued in percent. The fill lasts under 5
  * seconds (WCAG 2.2.2); with reduced motion it completes instantly, every row at once (see globals.css).
@@ -101,41 +195,16 @@ export default function SkillBars({ className }: SkillBarsProps) {
         } as CSSProperties
       }
     >
-      {skills.map(([name, level], index) => {
-        const labelId = `${id}-skill-${index}`;
-
-        return (
-          <li
-            key={name}
-            className={styles.skill}
-            style={{ "--level": level, "--index": index } as CSSProperties}
-          >
-            <span id={labelId} className={styles.name}>
-              {name}
-            </span>
-            <div
-              role="meter"
-              aria-labelledby={labelId}
-              aria-valuemin={0}
-              aria-valuemax={100}
-              aria-valuenow={Math.round((level / SKILL_MAX_SEGMENTS) * 100)}
-              aria-valuetext={`${Math.round((level / SKILL_MAX_SEGMENTS) * 100)}%`}
-              className={styles.bar}
-            >
-              <div className={styles.segments} data-filling={index < filledRows}>
-                {Array.from({ length: SKILL_MAX_SEGMENTS }, (_, segment) => (
-                  <span
-                    key={segment}
-                    data-on={segment < level}
-                    data-percent={Math.round(((segment + 1) / SKILL_MAX_SEGMENTS) * 100)}
-                    style={{ "--segment": segment } as CSSProperties}
-                  />
-                ))}
-              </div>
-            </div>
-          </li>
-        );
-      })}
+      {skills.map(([name, level], index) => (
+        <SkillBar
+          key={name}
+          name={name}
+          level={level}
+          index={index}
+          filling={index < filledRows}
+          labelId={`${id}-skill-${index}`}
+        />
+      ))}
     </ul>
   );
 }

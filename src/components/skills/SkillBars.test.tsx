@@ -1,4 +1,4 @@
-import { act, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import SkillBars from "@components/skills/SkillBars";
 import { SKILLS, SKILL_MAX_SEGMENTS } from "@constants/skills";
@@ -6,6 +6,17 @@ import styles from "@components/skills/SkillBars.module.css";
 
 /** jsdom has no IntersectionObserver: a mock whose visibility the test drives. */
 let setVisible: (visible: boolean) => void = () => undefined;
+
+/** jsdom has no PointerEvent either: a mouse event that carries its pointer type */
+class MockPointerEvent extends MouseEvent {
+  pointerType: string;
+
+  constructor(type: string, init: PointerEventInit = {}) {
+    super(type, init);
+    this.pointerType = init.pointerType ?? "";
+  }
+}
+window.PointerEvent = MockPointerEvent as unknown as typeof PointerEvent;
 
 /** jsdom has no matchMedia either: a mock answering whether reduced motion is asked for */
 const mockReducedMotion = (reduce: boolean) => {
@@ -76,14 +87,74 @@ describe("SkillBars", () => {
     fills.forEach((fill) => expect(fill).toHaveAttribute("data-filling", "true"));
   });
 
-  it("draws each bar as its segments, lit up to the skill's value", () => {
-    const { container } = render(<SkillBars />);
-    const [name, level] = Object.entries(SKILLS)[0];
+  it("draws each bar as one element, not one per segment", () => {
+    render(<SkillBars />);
+    const [name] = Object.entries(SKILLS)[0];
     const bar = screen.getByRole("meter", { name });
-    const segments = bar.querySelectorAll("span");
 
-    expect(container.querySelector(`.${styles.segments}`)).toBeInTheDocument();
-    expect(segments).toHaveLength(SKILL_MAX_SEGMENTS);
-    expect(bar.querySelectorAll('span[data-on="true"]')).toHaveLength(level);
+    expect(bar.querySelector(`.${styles.segments}`)).toBeInTheDocument();
+    expect(bar.querySelectorAll("span")).toHaveLength(0);
+  });
+
+  describe("hovering a segment", () => {
+    /** The first skill's bar, 500px wide from the left edge, and a pointer at a segment's middle */
+    const setup = () => {
+      render(<SkillBars />);
+      const [name, level] = Object.entries(SKILLS)[0];
+      const segments = screen
+        .getByRole("meter", { name })
+        .querySelector(`.${styles.segments}`) as HTMLElement;
+      segments.getBoundingClientRect = () => ({ left: 0, width: 500 }) as DOMRect;
+
+      const gap = 0.3 / SKILL_MAX_SEGMENTS;
+      const pitch = (1 - (SKILL_MAX_SEGMENTS - 1) * gap) / SKILL_MAX_SEGMENTS + gap;
+      const hover = (segment: number, target: Element = segments) =>
+        fireEvent.pointerMove(target, {
+          pointerType: "mouse",
+          clientX: (segment + 0.35) * pitch * 500,
+        });
+      const highlight = () => segments.querySelector(`.${styles.highlight}`);
+
+      return { segments, level, hover, highlight };
+    };
+
+    it("lifts a lit segment, showing its place on the scale", () => {
+      const { hover, highlight } = setup();
+
+      hover(9);
+      expect(highlight()).toHaveAttribute("data-active", "true");
+      expect(highlight()).toHaveAttribute("data-percent", "20");
+      expect(highlight()).toHaveAttribute("aria-hidden", "true");
+    });
+
+    it("ignores the segments that aren't lit", () => {
+      const { hover, highlight, level } = setup();
+
+      hover(level);
+      expect(highlight()).not.toBeInTheDocument();
+    });
+
+    it("lets the segment ease back once the pointer leaves", () => {
+      const { segments, hover, highlight } = setup();
+
+      hover(9);
+      fireEvent.pointerLeave(segments);
+      expect(highlight()).toHaveAttribute("data-active", "false");
+    });
+
+    it("keeps the segment lifted while its tooltip is hovered", () => {
+      const { hover, highlight } = setup();
+
+      hover(9);
+      hover(20, highlight() as Element);
+      expect(highlight()).toHaveAttribute("data-percent", "20");
+    });
+
+    it("ignores touch", () => {
+      const { segments, highlight } = setup();
+
+      fireEvent.pointerMove(segments, { pointerType: "touch", clientX: 50 });
+      expect(highlight()).not.toBeInTheDocument();
+    });
   });
 });
