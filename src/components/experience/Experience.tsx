@@ -1,10 +1,10 @@
 import { ActiveSectionProps } from "@constants/interfaces";
+import { EXPERIENCE_TIMELINE } from "@constants/experience";
 import Section from "@ui/section/Section";
 import { useTranslations } from "next-intl";
-import ScrollableSubsection from "@ui/scrollableSection/ScrollableSubsection";
-import ExpandableContent from "@ui/expandableContent/ExpandableContent";
 import Title from "@ui/title/Title";
-import Footer from "@components/experience/Footer";
+import Timeline from "@ui/timeline/Timeline";
+import styles from "./Experience.module.css";
 
 const CURRENT_SECTION = "experience";
 
@@ -12,29 +12,16 @@ export default function Experience({ activeSection }: ActiveSectionProps) {
   const t = useTranslations("experience");
 
   return (
-    <Section currentSection={CURRENT_SECTION} activeSection={activeSection}>
+    <Section className={styles.section} currentSection={CURRENT_SECTION} activeSection={activeSection}>
       <Title border>{t("mainTitle")}</Title>
-      <ScrollableSubsection aria-label={t("mainTitle")}>
-            <ScrollableSubsection.Item>
-          <Title variant="subtitle" component="h3">{t("volteraMainTitle")}</Title>
-          <ExpandableContent text={t("volteraDescription")} />
-        </ScrollableSubsection.Item>
-        <ScrollableSubsection.Item>
-          <Title variant="subtitle" component="h3">{t("faiMainTitle")}</Title>
-          <ExpandableContent text={t("faiDescription")} />
-        </ScrollableSubsection.Item>
-
-        <ScrollableSubsection.Item>
-          <Title variant="subtitle" component="h3">{t("bankMainTitle")}</Title>
-          <ExpandableContent text={t("bankMainTitleDescription")} />
-        </ScrollableSubsection.Item>
-
-        <ScrollableSubsection.Item>
-          <Title variant="subtitle" component="h3">{t("faiMainTitle2")}</Title>
-          <ExpandableContent text={t("faiDescription2")} />
-        </ScrollableSubsection.Item>
-      </ScrollableSubsection>
-      <Footer />
+      <Timeline
+        aria-label={t("mainTitle")}
+        items={EXPERIENCE_TIMELINE.map(({ year, titleKey, textKey }) => ({
+          year,
+          title: t(titleKey),
+          text: t(textKey),
+        }))}
+      />
     </Section>
   );
 }

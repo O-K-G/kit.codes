@@ -5,6 +5,7 @@ import { SKILLS, SKILL_MAX_SEGMENTS } from "@constants/skills";
 import { SkillBarsProps } from "@constants/interfaces";
 import styles from "./SkillBars.module.css";
 import classNames from "@utils/classNames";
+import Tooltip from "@ui/tooltip/Tooltip";
 
 /** How much of the list must be visible for the bars to fill */
 const IN_VIEW_THRESHOLD = 0.5;
@@ -35,7 +36,9 @@ interface SkillBarProps {
 /**
  * One skill: its name and its bar. The bar is drawn as a single element (see .segments), not one per
  * segment, so resizing the window doesn't have every segment laid out again. With a mouse, hovering a
- * lit segment lifts it and shows its place on the scale: one highlight, put where the pointer is.
+ * lit segment lifts it and shows its place on the scale in a tooltip (see Tooltip): one highlight, put
+ * where the pointer is. The bar's meter already tells its value, so the highlight is hidden from
+ * assistive technologies.
  */
 function SkillBar({ name, level, filling, labelId }: SkillBarProps) {
   /** The lit segment last hovered, and whether the pointer is still on it */
@@ -88,13 +91,16 @@ function SkillBar({ name, level, filling, labelId }: SkillBarProps) {
           onPointerLeave={deactivate}
         >
           {hovered && (
-            <span
+            <Tooltip
               // A new segment is a new highlight, so it lifts from its place rather than sliding there
               key={hovered.segment}
               aria-hidden
+              open={hovered.active}
+              content={`${segmentPercent(hovered.segment)}%`}
               data-active={hovered.active}
-              data-percent={segmentPercent(hovered.segment)}
               className={styles.highlight}
+              tooltipClassName={styles.tooltip}
+              boxClassName={styles.tooltipBox}
               style={{ "--segment": hovered.segment } as CSSProperties}
             />
           )}
@@ -121,8 +127,6 @@ export default function SkillBars({ className }: SkillBarsProps) {
   const listRef = useRef<HTMLUListElement>(null);
   /** How many rows have started filling (in order) */
   const [filledRows, setFilledRows] = useState(0);
-  /** Escape hides the segments' tooltips until the pointer moves (WCAG 1.4.13) */
-  const [tooltipsHidden, setTooltipsHidden] = useState(false);
   const id = useId();
   const skills = Object.entries(SKILLS);
 
@@ -165,26 +169,10 @@ export default function SkillBars({ className }: SkillBarsProps) {
     };
   }, [skills.length]);
 
-  useEffect(() => {
-    const handleKeyDown = ({ key }: KeyboardEvent) => {
-      if (key === "Escape") {
-        setTooltipsHidden(true);
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
-
-  /** Moving the pointer brings the tooltips back */
-  const handlePointerMove = () => setTooltipsHidden(false);
-
   return (
     <ul
       ref={listRef}
       dir="ltr"
-      data-tooltips-hidden={tooltipsHidden}
-      onPointerMove={handlePointerMove}
       className={classNames(styles.list, className)}
       style={
         {

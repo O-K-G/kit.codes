@@ -151,45 +151,25 @@
         translate: 0;
       }
     }
-
-    /* ...and shows where it is on the scale, in percent, in a tooltip above it. Being part of the
-     * segment, it can be hovered too; Escape hides it until the pointer moves (WCAG 1.4.13) */
-    &::after {
-      content: attr(data-percent) "%";
-      position: absolute;
-      bottom: calc(100% + 0.25 * var(--row));
-      left: 50%;
-      padding: 0.15em 0.4em;
-      border: 1px solid var(--color-title-purple);
-      border-radius: 0.4em;
-      background-color: #1e1035;
-      font-family: var(--font-montserrat);
-      font-size: max(0.75rem, 0.45 * var(--row));
-      font-weight: 600;
-      line-height: 1.2;
-      color: #fff;
-      white-space: nowrap;
-      opacity: 0%;
-      translate: -50% 0.25em;
-      transition:
-        opacity 200ms cubic-bezier(0.4, 0, 0.2, 1),
-        translate 200ms cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    &[data-active="true"]::after {
-      opacity: 100%;
-      translate: -50% 0;
-
-      @starting-style {
-        opacity: 0%;
-        translate: -50% 0.25em;
-      }
-    }
-
-    .list[data-tooltips-hidden="true"] &::after {
-      visibility: hidden;
-    }
   }
+}
+
+/* The highlight's tooltip (see Tooltip): where it is on the scale, in percent, above it. Being part of
+ * the segment, it can be hovered too */
+.tooltip {
+  --tooltip-gap: calc(0.25 * var(--row));
+}
+
+.tooltipBox {
+  padding: 0.15em 0.4em;
+  border-radius: 0.4em;
+  font-family: var(--font-montserrat);
+  font-size: max(0.75rem, 0.45 * var(--row));
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+  background-color: #1e1035;
+  box-shadow: none;
 }
 
 /* Without JavaScript nothing would start the fill: show the bars full right away */

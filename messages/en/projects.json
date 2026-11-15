@@ -1,17 +1,13 @@
 {
   "projects": {
     "mainTitle": "my projects",
-    "dragAndDropTitle": "Drag and Drop",
-    "dragAndDropDescription": "A Proof of Concept (POC) Drag and Drop project for a financial Toronto based Startup.",
-    "thisLandingPageTitle": "THIS LANDING PAGE",
-    "thisLandingPageDescription": "This landing page highlights key projects I've worked on, showcasing my passion for web development and problem-solving. It represents a mix of experimentation, innovation, and practical solutions implemented during my career.",
-    "i18nCoordinatorTitle": "INTERNATIONALIZATION LEAD",
-    "i18nCoordinatorDescription": "As a developer and team lead at one of Israel's largest banks, I oversaw the internationalization and localization of the bank's main business website, ensuring a seamless experience for users across multiple languages and regions.",
-    "onboardingTitle": "CUSTOMER ONBOARDING SOLUTION",
-    "onboardingDescription": "I spearheaded the development of a proof of concept (POC) for a streamlined customer onboarding process, which later also evolved into a reusable UI library. This helped standardize UI solutions across various projects post-POC.",
-    "sharedUITitle": "SHARED REACT UI COMPONENTS",
-    "sharedUIDescription": "I refactored a third-party UI library from SCSS to Tailwind CSS, making it fully compatible with other Tailwind-based projects. This optimization significantly reduced development time by creating reusable components, boosting efficiency across teams.",
-    "scrumMaster": "SCRUM MASTER & TEAM LEAD",
-    "scrumMasterDescription": "In addition to leading development teams, I took on the role of Scrum Master. I facilitated collaboration between frontend, backend, QA, and product teams, ensuring smooth sprint execution and proactively resolving obstacles."
+    "bankMainTitle": "Web Developer and Scrum Master",
+    "bankMainTitleDescription": "Led the front-end development of key components of a new customer facing business website for the largest Israeli bank, creating dynamic, accessible and responsive user interfaces using Next.js, React.js, Tailwind, ReactQuery, TypeScript, and Swagger API. Supported the deployment of the application in test and development environments prior to it's release in the production environment. Enhanced a React.js UI component library to align with front-end development requirements, ensuring full WCAG 2 and ARIA accessibility (a11y) compliance. Designed and delivered a Proof of Concept web app for a customer onboarding platform, serving as a scalable, generic reference for future front-end projects. Acted as a Scrum Master synchronizing teams and prioritizing work tasks, ensuring individual team members remain committed and deliver on their assigned tasks, promoted clear communication and alignment within the scrum.",
+    "faiMainTitle": "Web Developer, TL - FAI Systems",
+    "faiDescription": "Lead the front-end development of a cutting-edge, intuitive Drag and Drop interface in an agile project environment using Next.js. Implement security best practices, including Content Security Policy (CSP), Trusted Types, and DOM sanitation, to safeguard applications against XSS and enhance overall application security. Drive the design and strategic management of future-proofed UI architecture and seamless business logic integration.",
+    "faiMainTitle2": "Founding Web Dev. - FAI Systems",
+    "faiDescription2": "Designed and developed a feature-rich customer-facing website with user registration and authentication for a Toronto-based startup. Supported fundraising through venture capital presentations.",
+    "volteraMainTitle": "Web Developer - Voltera inc.",
+    "volteraDescription": "Lead front-end developer of the company's marketing website in Waterloo ON, Canada. Duties include developming, maintaining and improving existing codebase"
   }
 }

@@ -123,7 +123,7 @@ describe("SkillBars", () => {
 
       hover(9);
       expect(highlight()).toHaveAttribute("data-active", "true");
-      expect(highlight()).toHaveAttribute("data-percent", "20");
+      expect(highlight()).toHaveTextContent("20%");
       expect(highlight()).toHaveAttribute("aria-hidden", "true");
     });
 
@@ -147,7 +147,7 @@ describe("SkillBars", () => {
 
       hover(9);
       hover(20, highlight() as Element);
-      expect(highlight()).toHaveAttribute("data-percent", "20");
+      expect(highlight()).toHaveTextContent("20%");
     });
 
     it("ignores touch", () => {

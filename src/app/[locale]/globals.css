@@ -1,3 +1,7 @@
+/* The cascade layers, weakest first: the reset, then the shared components' own styles (e.g. the
+ * tooltip's), which the components' pages override with their unlayered styles. */
+@layer base, components;
+
 /* Base reset - adapted from Tailwind CSS v4 preflight (MIT License, https://tailwindcss.com).
  * It lives in a layer so that every (unlayered) component style always wins over it. */
 @layer base {

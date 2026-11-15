@@ -18,8 +18,8 @@ export default function Home({ activeSection = "about" }: ActiveSectionProps) {
         <Loader />
         <About activeSection={activeSection} />
         <Skills activeSection={activeSection} />
-        <Projects activeSection={activeSection} />
         <Experience activeSection={activeSection} />
+        <Projects activeSection={activeSection} />
         <Aside activeSection={activeSection} />
       </main>
     </>

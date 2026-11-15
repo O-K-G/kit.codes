@@ -3,6 +3,7 @@ export const i18nFilenames = [
   'experience',
   'inputComponentText',
   'scrollableSectionText',
+  'timelineText',
   'scrollToTopText',
   'shenanigansText',
   'skills',
@@ -34,4 +35,5 @@ export const CLIENT_NAMESPACES = [
   "languageSelect",
   "scrollableSectionText",
   "shenanigansText",
+  "timelineText",
 ] as const;

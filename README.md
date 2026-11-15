@@ -9,7 +9,8 @@ each with its own route (`/en/about`, `/en/skills`, ...):
 
 - **About**: an introduction.
 - **Skills**: skill bars that fill as they come into view.
-- **Projects** and **Experience**: carousels of past work.
+- **Experience**: a timeline of past work, lit up as the page scrolls.
+- **Projects**: a carousel of past work.
 - **Contact**: a slide-in drawer with a contact form that sends the message by email.
 
 Links to GitHub, LinkedIn and the resume sit on the side. The site is built with

@@ -1,6 +1,8 @@
 .main {
   min-height: 100svh;
-  overflow: hidden;
+  /* Clipped without being a scroll container (as `hidden` makes it): view timelines inside (the experience
+   * timeline's) follow the nearest one, which must be the page */
+  overflow: clip;
 
   @media (width >= 64rem) {
     min-height: 100dvh;

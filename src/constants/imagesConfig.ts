@@ -155,10 +155,10 @@ const avif = (src: string, width: number, height: number): AvifVersion => ({
  * each file gets a content-hashed /_next/static/media URL that is cached immutably. Each is cropped at its scene's bottom edge, where a transparent part would show
  * as black: About's are from About.png (1048px tall at 1x; its comet and stars
  * are drawn and animated over it, see SectionSky), Skills' from Skills.png (1042px tall at 1x),
- * Projects' from Projects.png (1062px tall at 1x; its crops are centered),
- * Experience's from Experience.png (1050px tall at 1x), Contact's from Group 5.png
+ * Experience's from Projects.png (1062px tall at 1x; its crops are centered),
+ * Projects' from Experience.png (1050px tall at 1x), Contact's from Group 5.png
  * (no transparent edge; 1116px tall at 1x; its crops are centered).
- * The stars of About, Skills, Projects and Experience are drawn and animated over them too (see
+ * The stars of About, Skills, Experience and Projects are drawn and animated over them too (see
  * SectionSky). Their sizes are given here: they're imported as URLs (see next.config.ts).
  */
 export const SECTION_BACKGROUNDS_AVIF: Record<SectionName, Record<Breakpoint, AvifVersion[]>> = {
@@ -177,18 +177,18 @@ export const SECTION_BACKGROUNDS_AVIF: Record<SectionName, Record<Breakpoint, Av
     '2xl': [avif(skills2Xl1728, 1728, 1042), avif(skills2Xl2592, 2592, 1563), avif(skills2Xl3456, 3456, 2084), avif(skills2Xl5184, 5184, 3126), avif(skills2Xl6912, 6912, 4168)],
   },
   projects: {
-    sm: [avif(projectsSm640, 640, 1062), avif(projectsSm960, 960, 1593), avif(projectsSm1280, 1280, 2124), avif(projectsSm1920, 1920, 3186), avif(projectsSm2560, 2560, 4248)],
-    md: [avif(projectsMd768, 768, 1062), avif(projectsMd1152, 1152, 1593), avif(projectsMd1536, 1536, 2124), avif(projectsMd2304, 2304, 3186), avif(projectsMd3072, 3072, 4248)],
-    lg: [avif(projectsLg1024, 1024, 1062), avif(projectsLg1536, 1536, 1593), avif(projectsLg2048, 2048, 2124), avif(projectsLg3072, 3072, 3186), avif(projectsLg4096, 4096, 4248)],
-    xl: [avif(projectsXl1280, 1280, 1062), avif(projectsXl1920, 1920, 1593), avif(projectsXl2560, 2560, 2124), avif(projectsXl3840, 3840, 3186), avif(projectsXl5120, 5120, 4248)],
-    '2xl': [avif(projects2Xl1728, 1728, 1062), avif(projects2Xl2592, 2592, 1593), avif(projects2Xl3456, 3456, 2124), avif(projects2Xl5184, 5184, 3186), avif(projects2Xl6912, 6912, 4248)],
+    sm: [avif(projectsSm640, 640, 1050), avif(projectsSm960, 960, 1575), avif(projectsSm1280, 1280, 2100), avif(projectsSm1920, 1920, 3150), avif(projectsSm2560, 2560, 4200)],
+    md: [avif(projectsMd768, 768, 1050), avif(projectsMd1152, 1152, 1575), avif(projectsMd1536, 1536, 2100), avif(projectsMd2304, 2304, 3150), avif(projectsMd3072, 3072, 4200)],
+    lg: [avif(projectsLg1024, 1024, 1050), avif(projectsLg1536, 1536, 1575), avif(projectsLg2048, 2048, 2100), avif(projectsLg3072, 3072, 3150), avif(projectsLg4096, 4096, 4200)],
+    xl: [avif(projectsXl1280, 1280, 1050), avif(projectsXl1920, 1920, 1575), avif(projectsXl2560, 2560, 2100), avif(projectsXl3840, 3840, 3150), avif(projectsXl5120, 5120, 4200)],
+    '2xl': [avif(projects2Xl1728, 1728, 1050), avif(projects2Xl2592, 2592, 1575), avif(projects2Xl3456, 3456, 2100), avif(projects2Xl5184, 5184, 3150), avif(projects2Xl6912, 6912, 4200)],
   },
   experience: {
-    sm: [avif(experienceSm640, 640, 1050), avif(experienceSm960, 960, 1575), avif(experienceSm1280, 1280, 2100), avif(experienceSm1920, 1920, 3150), avif(experienceSm2560, 2560, 4200)],
-    md: [avif(experienceMd768, 768, 1050), avif(experienceMd1152, 1152, 1575), avif(experienceMd1536, 1536, 2100), avif(experienceMd2304, 2304, 3150), avif(experienceMd3072, 3072, 4200)],
-    lg: [avif(experienceLg1024, 1024, 1050), avif(experienceLg1536, 1536, 1575), avif(experienceLg2048, 2048, 2100), avif(experienceLg3072, 3072, 3150), avif(experienceLg4096, 4096, 4200)],
-    xl: [avif(experienceXl1280, 1280, 1050), avif(experienceXl1920, 1920, 1575), avif(experienceXl2560, 2560, 2100), avif(experienceXl3840, 3840, 3150), avif(experienceXl5120, 5120, 4200)],
-    '2xl': [avif(experience2Xl1728, 1728, 1050), avif(experience2Xl2592, 2592, 1575), avif(experience2Xl3456, 3456, 2100), avif(experience2Xl5184, 5184, 3150), avif(experience2Xl6912, 6912, 4200)],
+    sm: [avif(experienceSm640, 640, 1062), avif(experienceSm960, 960, 1593), avif(experienceSm1280, 1280, 2124), avif(experienceSm1920, 1920, 3186), avif(experienceSm2560, 2560, 4248)],
+    md: [avif(experienceMd768, 768, 1062), avif(experienceMd1152, 1152, 1593), avif(experienceMd1536, 1536, 2124), avif(experienceMd2304, 2304, 3186), avif(experienceMd3072, 3072, 4248)],
+    lg: [avif(experienceLg1024, 1024, 1062), avif(experienceLg1536, 1536, 1593), avif(experienceLg2048, 2048, 2124), avif(experienceLg3072, 3072, 3186), avif(experienceLg4096, 4096, 4248)],
+    xl: [avif(experienceXl1280, 1280, 1062), avif(experienceXl1920, 1920, 1593), avif(experienceXl2560, 2560, 2124), avif(experienceXl3840, 3840, 3186), avif(experienceXl5120, 5120, 4248)],
+    '2xl': [avif(experience2Xl1728, 1728, 1062), avif(experience2Xl2592, 2592, 1593), avif(experience2Xl3456, 3456, 2124), avif(experience2Xl5184, 5184, 3186), avif(experience2Xl6912, 6912, 4248)],
   },
   contact: {
     sm: [avif(contactSm640, 640, 1116), avif(contactSm960, 960, 1674), avif(contactSm1280, 1280, 2232), avif(contactSm1920, 1920, 3348), avif(contactSm2560, 2560, 4464)],

@@ -30,7 +30,7 @@ export interface DialogTitleProps {
   closeButtonIcon?: ReactNode;
 }
 
-export type SectionName = "about" | "projects" | "skills" | "experience" | "contact";
+export type SectionName = "about" | "skills" | "experience" | "projects" | "contact";
 
 /** The section the current route points at (e.g. /en/skills): its background is fetched first. */
 export interface ActiveSectionProps {
@@ -188,6 +188,36 @@ export interface ScrollableSubsectionItemProps {
   id?: number;
   total?: number;
 }
+/** A timeline branch's data */
+export interface TimelineItem {
+  /** Shown big, with the title under it */
+  year: string;
+  title: string;
+  /** Shown in the tooltip of the branch's "+" circle */
+  text: string;
+}
+
+export interface TimelineProps {
+  items: readonly TimelineItem[];
+  /** Names the list (e.g. its section's title) */
+  "aria-label": string;
+}
+
+export interface TooltipProps extends Omit<ComponentPropsWithoutRef<"span">, "content"> {
+  /** What the tooltip shows */
+  content: ReactNode;
+  /** Shows the tooltip while true; left out, it shows while the element is hovered or focused */
+  open?: boolean;
+  /** Above or below the element */
+  placement?: "top" | "bottom";
+  /** Lined up with the element's start, center or end */
+  align?: "start" | "center" | "end";
+  /** Places and sizes the tooltip */
+  tooltipClassName?: string;
+  /** Styles the tooltip's box */
+  boxClassName?: string;
+}
+
 export interface ContactGoBackButtonProps {
   children: ReactNode;
   onClick: () => void;
