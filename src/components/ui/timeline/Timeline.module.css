@@ -1,9 +1,12 @@
-/* The site's neon purple (see the titles) */
+/* The site's neon purple (see the titles). The unlit color is opaque, so where lines overlap it doesn't
+ * show */
 .timeline {
   --glow: #b377ff;
   --lit: var(--color-title-purple);
-  --unlit: color-mix(in oklab, var(--color-title-purple-dark) 60%, transparent);
-  --axis-width: 0.25rem;
+  --unlit: color-mix(in oklab, var(--color-title-purple-dark) 65%, #000);
+  --axis-width: max(1rem, 1 * var(--desktop-rem));
+  --branch-width: max(0.3125rem, 0.3125 * var(--desktop-rem));
+  --glow-blur: max(0.5rem, 0.5 * var(--desktop-rem));
   --branch-length: max(1.5rem, 3 * var(--desktop-rem));
   --node-size: max(4rem, 5.5 * var(--desktop-rem));
   --gap: max(3.5rem, 4 * var(--desktop-rem));
@@ -26,95 +29,152 @@
   align-items: center;
   gap: 1rem;
   width: 100%;
-  /* Its circle's view timeline (see .node), for the line to the axis to light up along with it */
-  timeline-scope: --timeline-node;
-
-  /* The line from the axis to the circle (on narrow screens the circle sits on the axis) */
-  &::before {
-    content: none;
-    position: absolute;
-    top: 50%;
-    width: var(--branch-length);
-    height: 0.125rem;
-    translate: 0 -50%;
-    background-color: var(--lit);
-    box-shadow: 0 0 0.5rem var(--glow);
-  }
+  /* The view timelines of its circle (see .node) and its part of the axis (see .axisPart), for its
+   * lines' layers to light up along */
+  timeline-scope: --timeline-node, --timeline-axis;
 
   /* From 48rem on the branches alternate: on the start side (circle toward the axis, the text before
    * it), then on the end side */
   @media (width >= 48rem) {
     width: 50%;
 
-    &::before {
-      content: "";
-    }
-
     &:nth-child(odd) {
       flex-direction: row-reverse;
       padding-inline: 0 var(--branch-length);
       text-align: end;
-
-      &::before {
-        inset-inline: auto 0;
-      }
     }
 
     &:nth-child(even) {
       margin-inline-start: 50%;
       padding-inline-start: var(--branch-length);
-
-      &::before {
-        inset-inline-start: 0;
-      }
     }
   }
 }
 
-/* ---- The axis: each branch draws its part, from the middle of the gap above it to the middle of the
- * gap below, so that together they run from the first branch's circle to the last one's. At the start
- * edge on narrow screens (under the circles), in the middle from 48rem on. Its unlit line, then the
- * light ---- */
+/* ---- The lines: each branch draws its part of the axis, from the middle of the gap above it to the
+ * middle of the gap below, so that together they run from the first branch's line to the last one's;
+ * and, from 48rem on, its line from the axis to its circle (on narrow screens the circle sits on the
+ * axis, at the start edge). The axis is a thick trunk with round ends, centered on the first and last
+ * branches' lines.
+ *
+ * In three layers, each with both parts: unlit; the light's glow (the lit lines blurred); the light.
+ * The glows add up (plus-lighter) where they meet, as one blurred line would, so neither the parts nor
+ * the branches' joins show. Each layer sets its parts' color and widths.
+ *
+ * Stacked part by part, across all branches (the layers don't group them): the glows at the bottom,
+ * so they only show around the lines (glows add light: over a line they'd lighten it); then the
+ * branches' lines, unlit and lit, under the axis, unlit and lit, so a line never shows over the axis
+ * it runs into; the circles over all of them ---- */
 
-.axis {
+.lines {
+  --axis-w: var(--axis-width);
+  --branch-h: var(--branch-width);
+  /* Where a branch's line ends, from the axis' middle (see .branchPart) */
+  --branch-end: 0px;
+
   position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.unlit {
+  --line-color: var(--unlit);
+  --branch-z: 3;
+  --axis-z: 5;
+}
+
+/* Wider than the lines, blurred */
+.glow {
+  --line-color: var(--glow);
+  --axis-w: calc(1.75 * var(--axis-width));
+  --branch-h: calc(3 * var(--branch-width));
+  --branch-end: calc(var(--axis-w) / 2);
+  --branch-z: 1;
+  --axis-z: 2;
+
+  .axisPart,
+  .branchPart {
+    filter: blur(var(--glow-blur));
+    mix-blend-mode: plus-lighter;
+  }
+}
+
+.light {
+  --line-color: var(--lit);
+  --branch-z: 4;
+  --axis-z: 6;
+}
+
+/* Painted as a background image, which the light grows from the top (see timeline-axis-light) */
+.axisPart,
+.branchPart {
+  position: absolute;
+  z-index: var(--branch-z);
+  background-image: linear-gradient(var(--line-color), var(--line-color));
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+.axisPart {
+  z-index: var(--axis-z);
   top: calc(var(--gap) / -2);
   bottom: calc(var(--gap) / -2);
-  inset-inline-start: calc(var(--node-size) / 2 - var(--axis-width) / 2);
-  width: var(--axis-width);
-  background-color: var(--unlit);
-  /* Its view timeline runs while it crosses the middle of the screen (the inset leaves just that line
-   * of the screen) */
-  view-timeline: --timeline-axis block;
-  view-timeline-inset: 50%;
+  inset-inline-start: calc(var(--node-size) / 2 - var(--axis-w) / 2);
+  width: var(--axis-w);
 
+  /* Its ends round, centered on the first and last branches' lines */
   .branch:first-child & {
-    top: 50%;
+    top: calc(50% - var(--axis-w) / 2);
+    border-start-start-radius: calc(var(--axis-w) / 2);
+    border-start-end-radius: calc(var(--axis-w) / 2);
   }
 
   .branch:last-child & {
-    bottom: 50%;
+    bottom: calc(50% - var(--axis-w) / 2);
+    border-end-start-radius: calc(var(--axis-w) / 2);
+    border-end-end-radius: calc(var(--axis-w) / 2);
   }
 
+  /* Its view timeline runs while it crosses the middle of the screen (the inset leaves just that line
+   * of the screen) */
+  .unlit & {
+    view-timeline: --timeline-axis block;
+    view-timeline-inset: 50%;
+  }
+
+  /* In the middle */
   @media (width >= 48rem) {
     .branch:nth-child(odd) & {
-      inset-inline: auto calc(var(--axis-width) / -2);
+      inset-inline: auto calc(var(--axis-w) / -2);
     }
 
     .branch:nth-child(even) & {
-      inset-inline-start: calc(var(--axis-width) / -2);
+      inset-inline-start: calc(var(--axis-w) / -2);
     }
   }
+}
 
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-color: var(--lit);
-    box-shadow:
-      0 0 0.5rem var(--glow),
-      0 0 1.25rem var(--glow);
-    transform-origin: top;
+/* With round ends. It starts under the circle and runs into the axis, up to its middle, so neither
+ * curve (the circle's, the axis' round ends) leaves a crack where they meet; under them, in the same
+ * color, the overlap doesn't show. Its glow stops at the axis' glow (--branch-end), as glows add up
+ * where they overlap */
+.branchPart {
+  display: none;
+  top: calc(50% - var(--branch-h) / 2);
+  width: calc(var(--branch-length) + var(--node-size) / 2 - var(--branch-end));
+  height: var(--branch-h);
+  border-radius: calc(var(--branch-h) / 2);
+
+  @media (width >= 48rem) {
+    display: block;
+
+    .branch:nth-child(odd) & {
+      inset-inline-end: var(--branch-end);
+    }
+
+    .branch:nth-child(even) & {
+      inset-inline-start: var(--branch-end);
+    }
   }
 }
 
@@ -123,8 +183,8 @@
 
 .node {
   position: relative;
-  /* Over the axis; with its tooltip open, over the next branches too */
-  z-index: 1;
+  /* Over the lines; with its tooltip open, over the next branches too */
+  z-index: 7;
   display: grid;
   flex-shrink: 0;
   place-items: center;
@@ -139,12 +199,12 @@
     0 0 1.5rem var(--glow),
     inset 0 0 0.75rem var(--glow);
   cursor: help;
-  /* Its view timeline runs while it crosses the middle of the screen (see .axis) */
+  /* Its view timeline runs while it crosses the middle of the screen (see .axisPart) */
   view-timeline: --timeline-node block;
   view-timeline-inset: 50%;
 
   &:is(:hover, :focus) {
-    z-index: 2;
+    z-index: 8;
   }
 
   /* The hover / focus glow: a ring of its own, as the scroll animates the circle's shadow */
@@ -201,7 +261,7 @@
 
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    .axis::after {
+    :is(.glow, .light) .axisPart {
       animation: timeline-axis-light linear both;
       animation-timeline: --timeline-axis;
     }
@@ -213,7 +273,7 @@
       animation-range: cover 30% cover 50%;
     }
 
-    .branch::before {
+    :is(.glow, .light) .branchPart {
       animation: timeline-branch-light linear both;
       animation-timeline: --timeline-node;
       animation-range: cover 30% cover 50%;
@@ -221,9 +281,11 @@
   }
 }
 
+/* Revealed from the top by growing its background, which is painted on the screen's pixels: scaling
+ * or clipping the part isn't, and shows a hairline where two parts meet */
 @keyframes timeline-axis-light {
   from {
-    transform: scaleY(0);
+    background-size: 100% 0%;
   }
 }
 
@@ -240,8 +302,7 @@
 
 @keyframes timeline-branch-light {
   from {
-    background-color: var(--unlit);
-    box-shadow: 0 0 0 transparent;
+    opacity: 0%;
   }
 }
 
