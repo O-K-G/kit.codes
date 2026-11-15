@@ -1,9 +1,11 @@
 "use client";
 
+import { useRef } from "react";
 import { useTranslations } from "next-intl";
 import { TimelineProps } from "@constants/interfaces";
 import Tooltip from "@ui/tooltip/Tooltip";
 import classNames from "@utils/classNames";
+import useEasedScrollLight from "@hooks/useEasedScrollLight";
 import styles from "./Timeline.module.css";
 
 export const TIMELINE_BRANCH_TEST_ID = "timeline-branch-test-id";
@@ -15,16 +17,24 @@ export const TIMELINE_BRANCH_TEST_ID = "timeline-branch-test-id";
  *
  * The axis runs from the first branch's line to the last one's, each branch drawing its part (see
  * Lines). As the page scrolls, it lights up down to the middle of the screen, and each branch's circle
- * and line light up as the light reaches them: all in CSS (scroll-driven animations, see
- * Timeline.module.css).
+ * and line light up as the light reaches them. The light eases after the scroll rather than jumping
+ * with each step of a mouse wheel (see useEasedScrollLight); until that runs, or without it, CSS
+ * scroll-driven animations light it (see Timeline.module.css).
  *
  * The circle can be focused, and its tooltip describes it (see Tooltip).
  */
 export default function Timeline({ items, "aria-label": ariaLabel }: TimelineProps) {
   const t = useTranslations("timelineText");
+  const listRef = useRef<HTMLOListElement>(null);
+  useEasedScrollLight(listRef, {
+    light: styles.light,
+    glow: styles.glow,
+    axisPart: styles.axisPart,
+    node: styles.node,
+  });
 
   return (
-    <ol aria-label={ariaLabel} className={styles.timeline}>
+    <ol ref={listRef} aria-label={ariaLabel} className={styles.timeline}>
       {items.map(({ year, title, text }) => (
         <li key={title} data-testid={TIMELINE_BRANCH_TEST_ID} className={styles.branch}>
           <Lines className={styles.unlit} />

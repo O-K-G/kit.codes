@@ -1,10 +1,3 @@
-/* How much of a part of the axis is lit, from its top (see timeline-axis-light) */
-@property --axis-lit {
-  syntax: "<percentage>";
-  inherits: true;
-  initial-value: 100%;
-}
-
 /* The site's neon purple (see the titles). The unlit color is opaque, so where lines overlap it doesn't
  * show */
 .timeline {
@@ -158,30 +151,27 @@
   }
 }
 
-/* The light and its glow: drawn as far down the part as it's lit (rather than the part's background),
- * ending round, like the axis' ends. Once the part is all lit it ends flat, joining the next part (the
- * clamp() switches it, as --axis-lit nears 100%); but the last part keeps its round end */
+/* The light and its glow: rather than the part's background, a shape that slides down into the part
+ * (see timeline-axis-light), clipped by it, its front round like the axis' ends. It's longer than the
+ * part by its round end, so once the part is all lit that end is past the part's bottom, clipped away:
+ * the light ends flat there, joining the next part's (but the last part's round end clips it round).
+ * Sliding (a transform) rather than growing, so the browser moves it along with the scroll by itself,
+ * smoothly, without laying out or painting anything again */
 :is(.glow, .light) .axisPart {
+  overflow: clip;
   background-image: none;
 }
 
 /* (Not nested: a nested rule can't match a pseudo-element) */
 :is(.glow, .light) .axisPart::before {
-  --front-radius: clamp(0px, (100% - var(--axis-lit)) * 1000, var(--axis-w) / 2);
-
   content: "";
   position: absolute;
   top: 0;
   inset-inline: 0;
-  height: var(--axis-lit);
-  border-radius: inherit;
-  border-end-start-radius: var(--front-radius);
-  border-end-end-radius: var(--front-radius);
+  height: calc(100% + var(--axis-w) / 2);
+  border-end-start-radius: calc(var(--axis-w) / 2);
+  border-end-end-radius: calc(var(--axis-w) / 2);
   background-color: var(--line-color);
-}
-
-.branch:last-child :is(.glow, .light) .axisPart::before {
-  --front-radius: calc(var(--axis-w) / 2);
 }
 
 /* With round ends. It starts under the circle and runs into the axis, up to its middle, so neither
@@ -220,21 +210,40 @@
   place-items: center;
   width: var(--node-size);
   aspect-ratio: 1;
-  border: 0.1875rem solid var(--lit);
+  border: 0.1875rem solid var(--unlit);
   border-radius: 50%;
-  color: var(--lit);
+  color: var(--unlit);
   background-color: #000;
-  box-shadow:
-    0 0 0.75rem var(--glow),
-    0 0 1.5rem var(--glow),
-    inset 0 0 0.75rem var(--glow);
   cursor: help;
 
   &:is(:hover, :focus) {
     z-index: 8;
   }
 
-  /* The hover / focus glow: a ring of its own, as the scroll animates the circle's shadow */
+  /* Its light, over it unlit: the ring, its glow and the "+", which fade in as the scroll reaches it
+   * (see timeline-node-light; fading, rather than changing its colors, so the browser does it along
+   * with the scroll by itself, smoothly) */
+  &::before {
+    content: "+";
+    position: absolute;
+    inset: -0.1875rem;
+    display: grid;
+    place-items: center;
+    border: 0.1875rem solid var(--lit);
+    border-radius: 50%;
+    font-family: var(--font-sans);
+    font-size: calc(var(--node-size) * 0.55);
+    font-weight: 300;
+    line-height: 1;
+    color: var(--lit);
+    box-shadow:
+      0 0 0.75rem var(--glow),
+      0 0 1.5rem var(--glow),
+      inset 0 0 0.75rem var(--glow);
+    pointer-events: none;
+  }
+
+  /* The hover / focus glow: a ring of its own, over its light */
   &::after {
     content: "";
     position: absolute;
@@ -293,14 +302,17 @@
 
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    /* As the middle of the screen goes down it */
-    :is(.glow, .light) .axisPart {
+    /* As the middle of the screen goes down its part: its front at the middle of the screen (its own
+     * view timeline runs over its whole length, the part's and its round end's; it's at the part's
+     * bottom by the part's length) */
+    :is(.glow, .light) .axisPart::before {
       animation: timeline-axis-light linear both;
       animation-timeline: view(block 50%);
+      animation-range: cover 0% cover calc(100% - var(--axis-w) / 2);
     }
 
     /* From when its top third crosses the middle of the screen, fully lit by its center */
-    .node {
+    .node::before {
       animation: timeline-node-light linear both;
       animation-timeline: view(block 50%);
       animation-range: cover 30% cover 50%;
@@ -318,26 +330,45 @@
   }
 }
 
-/* Revealed from the top by growing its light (see .axisPart::before), which is painted on the screen's
- * pixels: scaling or clipping the part isn't, and shows a hairline where two parts meet */
+/* Eased after the scroll (data-smooth, see useEasedScrollLight): the same, with what the script sets
+ * on each branch in place of the scroll-driven animations: how far up its part of the axis' light and
+ * glow are moved (--light-shift, --glow-shift: their round end at the light's front, so it's round
+ * across two parts too), and how lit its circle and line are (--node-progress). Still only transforms
+ * and opacity, which the browser composites on their own layers */
+.timeline[data-smooth] .light .axisPart::before {
+  animation: none;
+  transform: translateY(var(--light-shift, 0));
+  will-change: transform;
+}
+
+.timeline[data-smooth] .glow .axisPart::before {
+  animation: none;
+  transform: translateY(var(--glow-shift, 0));
+  will-change: transform;
+}
+
+.timeline[data-smooth] .node::before,
+.timeline[data-smooth] :is(.glow, .light) .branchPart {
+  animation: none;
+  opacity: var(--node-progress, 1);
+  will-change: opacity;
+}
+
+/* From above its part (where it's clipped away; a little further, or the edge of the part could show a
+ * sliver of it) to its place (see .axisPart::before) */
 @keyframes timeline-axis-light {
   from {
-    --axis-lit: 0%;
+    transform: translateY(calc(-100% - 2px));
   }
 
   to {
-    --axis-lit: 100%;
+    transform: none;
   }
 }
 
 @keyframes timeline-node-light {
   from {
-    border-color: var(--unlit);
-    color: var(--unlit);
-    box-shadow:
-      0 0 0 transparent,
-      0 0 0 transparent,
-      inset 0 0 0 transparent;
+    opacity: 0%;
   }
 }
 
