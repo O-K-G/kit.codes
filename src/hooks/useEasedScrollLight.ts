@@ -21,11 +21,13 @@ interface TimelineLightClasses {
   node: string;
 }
 
-/** A part of the axis (its light's, or its glow's), in page coordinates: its top, its bottom and width */
+/** A part of the axis (its light's, or its glow's), in page coordinates: its top, its bottom and width;
+ * and how far its light reaches above it, so it can slide past it (see shift()) */
 interface AxisPart {
   top: number;
   bottom: number;
   width: number;
+  reach: number;
 }
 
 /** A branch: its part of the axis, in its light and glow layers, and where its circle lights */
@@ -38,13 +40,15 @@ interface Branch {
 }
 
 /**
- * How far a part's light is moved up (see .axisPart::before, which is the part's length and its round
- * end longer), in px, for its round end to be at the light's front: all the way up (hidden above the
- * part) before the front reaches it, not moved once it's past. Every part's round end is at the front,
- * so as the front passes from a part to the next, the round end shows half in each, whole.
+ * How far a part's light is moved (see .axisPart::before: its round end, with its white tip, is half
+ * the axis' width past the part's bottom, and it reaches above the part), in px, for its round end to
+ * be at the light's front: all the way up (hidden above the part) before the front reaches it, and
+ * down past the part (its white tip clipped away below it) once the front is past. Every part's round
+ * end is at the front, so as the front passes from a part to the next, the round end shows half in
+ * each, whole.
  */
-const shift = ({ top, bottom, width }: AxisPart, front: number) =>
-  `${Math.min(Math.max(front - bottom, top - bottom - width / 2 - 2), 0).toFixed(2)}px`;
+const shift = ({ top, bottom, width, reach }: AxisPart, front: number) =>
+  `${Math.min(Math.max(front - bottom, top - bottom - width / 2 - 2), reach).toFixed(2)}px`;
 
 const unit = (value: number) => Math.min(Math.max(value, 0), 1).toFixed(4);
 
@@ -72,13 +76,23 @@ export default function useEasedScrollLight(
 
     let branches: Branch[] = [];
     const measure = () => {
-      const inPage = (rect?: DOMRect) =>
-        rect && { top: rect.top + window.scrollY, bottom: rect.bottom + window.scrollY, width: rect.width };
+      const inPage = (element: Element | null) => {
+        if (!element) {
+          return null;
+        }
+        const rect = element.getBoundingClientRect();
+        return {
+          top: rect.top + window.scrollY,
+          bottom: rect.bottom + window.scrollY,
+          width: rect.width,
+          reach: -parseFloat(getComputedStyle(element, "::before").top) || 0,
+        };
+      };
 
       branches = Array.from(list.children as HTMLCollectionOf<HTMLElement>).flatMap((element) => {
-        const lightPart = inPage(element.querySelector(`.${light} .${axisPart}`)?.getBoundingClientRect());
-        const glowPart = inPage(element.querySelector(`.${glow} .${axisPart}`)?.getBoundingClientRect());
-        const circle = inPage(element.querySelector(`.${node}`)?.getBoundingClientRect());
+        const lightPart = inPage(element.querySelector(`.${light} .${axisPart}`));
+        const glowPart = inPage(element.querySelector(`.${glow} .${axisPart}`));
+        const circle = inPage(element.querySelector(`.${node}`));
         if (!lightPart || !glowPart || !circle) {
           return [];
         }
@@ -132,9 +146,10 @@ export default function useEasedScrollLight(
       ease();
     };
 
+    // First, so the parts are measured as the script lights them (see Timeline.module.css)
+    list.dataset.smooth = "";
     measure();
     apply();
-    list.dataset.smooth = "";
 
     window.addEventListener("scroll", ease, { passive: true });
     window.addEventListener("resize", remeasure);

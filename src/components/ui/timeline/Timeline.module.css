@@ -335,16 +335,27 @@
  * glow are moved (--light-shift, --glow-shift: their round end at the light's front, so it's round
  * across two parts too), and how lit its circle and line are (--node-progress). Still only transforms
  * and opacity, which the browser composites on their own layers */
-.timeline[data-smooth] .light .axisPart::before {
+/* Its round end, at the light's front, glows white: the light (and its glow, so it glows white around
+ * it too) turns white toward it. So that the white shows only at the front, the light slides on past
+ * its part once the front has gone by (the white clipped away below it), so it reaches above the part
+ * by as much (see useEasedScrollLight's shift()), still covering it */
+.timeline[data-smooth] :is(.glow, .light) .axisPart::before {
+  --tip-length: calc(3 * var(--axis-width));
+
+  top: calc(-1 * (var(--tip-length) + var(--axis-w)));
+  bottom: calc(var(--axis-w) / -2);
+  height: auto;
+  background-image: linear-gradient(to bottom, transparent calc(100% - var(--tip-length)), #fff);
   animation: none;
-  transform: translateY(var(--light-shift, 0));
   will-change: transform;
 }
 
+.timeline[data-smooth] .light .axisPart::before {
+  transform: translateY(var(--light-shift, 0));
+}
+
 .timeline[data-smooth] .glow .axisPart::before {
-  animation: none;
   transform: translateY(var(--glow-shift, 0));
-  will-change: transform;
 }
 
 .timeline[data-smooth] .node::before,
