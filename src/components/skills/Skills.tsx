@@ -31,7 +31,15 @@ export default function Skills({ activeSection }: ActiveSectionProps) {
       >
         {t("subtitle")}
       </Title>
-      <SkillBars className={classNames(styles.slideIn, styles.skillBars)} />
+      <SkillBars
+        className={classNames(styles.slideIn, styles.skillBars)}
+        groupNames={{
+          frontEnd: t("groups.frontEnd"),
+          backEnd: t("groups.backEnd"),
+          databases: t("groups.databases"),
+          general: t("groups.general"),
+        }}
+      />
 
       <SideLinks />
     </Section>

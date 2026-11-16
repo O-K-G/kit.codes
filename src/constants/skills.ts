@@ -1,22 +1,48 @@
-/** How many segments a skill bar holds when full (100%) */
-export const SKILL_MAX_SEGMENTS = 50;
+/** How many segments a skill bar holds when full (100%). 60, so every level below (in steps of 5%)
+ * lights a whole number of segments */
+export const SKILL_MAX_SEGMENTS = 60;
 
-/** Each skill and how many of its bar's segments are filled (out of SKILL_MAX_SEGMENTS) */
-export const SKILLS = {
-  HTML: 41,
-  CSS: 29,
-  JavaScript: 43,
-  TypeScript: 36,
-  "React.js": 26,
-  "Next.js": 50,
-  "Node.js": 41,
-  tailwindcss: 45,
-  "Async JS": 26,
-  "REST API": 27,
-  Microservices: 35,
-  MongoDB: 33,
-  A11y: 31,
-  i18n: 33,
-  Zod: 42,
-  "Unit tests": 43,
-} as const satisfies Record<string, number>;
+/** The skills, in groups (each named in messages/<locale>/skills.json, under "groups"), each with its
+ * level in percent */
+export const SKILL_GROUPS = [
+  {
+    id: "frontEnd",
+    skills: {
+      HTML: 100,
+      CSS: 100,
+      "JavaScript/TypeScript": 100,
+      "React.js": 100,
+      "Next.js": 100,
+      "Accessibility (WCAG)": 100,
+    },
+  },
+  {
+    id: "backEnd",
+    skills: {
+      "Node.js": 95,
+      "Express.js": 95,
+      Firebase: 80,
+    },
+  },
+  {
+    id: "databases",
+    skills: {
+      SQL: 80,
+      NoSQL: 80,
+    },
+  },
+  {
+    id: "general",
+    skills: {
+      "REST API": 80,
+      GraphQL: 80,
+      "AI usage": 80,
+    },
+  },
+] as const satisfies readonly { id: string; skills: Record<string, number> }[];
+
+export type SkillGroupId = (typeof SKILL_GROUPS)[number]["id"];
+
+/** How many of a bar's segments a level (in percent) lights */
+export const skillSegments = (percent: number) =>
+  Math.round((percent / 100) * SKILL_MAX_SEGMENTS);

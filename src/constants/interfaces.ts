@@ -1,3 +1,4 @@
+import type { SkillGroupId } from "@constants/skills";
 import { DIRECTION_BY_LANGUAGE } from "@constants/LocaleDirection";
 import { z } from "zod";
 import {
@@ -314,6 +315,8 @@ export interface SelectLanguageButtonProps {
 export interface SkillBarsProps {
   /** Sizes and places the list */
   className?: string;
+  /** Each skill group's name, by its id (see SKILL_GROUPS) */
+  groupNames: Record<SkillGroupId, string>;
 }
 
 export interface GetDirByLocaleProps {

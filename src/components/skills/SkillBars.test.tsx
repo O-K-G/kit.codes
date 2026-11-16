@@ -1,8 +1,20 @@
-import { act, fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import SkillBars from "@components/skills/SkillBars";
-import { SKILLS, SKILL_MAX_SEGMENTS } from "@constants/skills";
+import { SKILL_GROUPS, SKILL_MAX_SEGMENTS, skillSegments } from "@constants/skills";
 import styles from "@components/skills/SkillBars.module.css";
+
+const GROUP_NAMES = {
+  frontEnd: "Front-end",
+  backEnd: "Back-end",
+  databases: "Databases",
+  general: "General",
+};
+
+/** Every skill and its level in percent, in order */
+const SKILLS = SKILL_GROUPS.flatMap(({ skills }) => Object.entries(skills));
+
+const renderBars = () => render(<SkillBars groupNames={GROUP_NAMES} />);
 
 /** jsdom has no IntersectionObserver: a mock whose visibility the test drives. */
 let setVisible: (visible: boolean) => void = () => undefined;
@@ -43,22 +55,42 @@ beforeEach(() => {
 
 describe("SkillBars", () => {
   it("shows every skill as a meter named by the skill, valued in percent", () => {
-    render(<SkillBars />);
+    renderBars();
     const meters = screen.getAllByRole("meter");
 
-    expect(meters).toHaveLength(Object.keys(SKILLS).length);
-    Object.entries(SKILLS).forEach(([name, level]) => {
+    expect(meters).toHaveLength(SKILLS.length);
+    SKILLS.forEach(([name, percent]) => {
       const meter = screen.getByRole("meter", { name });
-      const percent = Math.round((level / SKILL_MAX_SEGMENTS) * 100);
 
       expect(meter).toHaveAttribute("aria-valuenow", `${percent}`);
       expect(meter).toHaveAttribute("aria-valuetext", `${percent}%`);
     });
   });
 
+  it("lists each group's skills under its name", () => {
+    renderBars();
+
+    SKILL_GROUPS.forEach(({ id, skills }) => {
+      const name = GROUP_NAMES[id];
+      const list = screen.getByRole("list", { name });
+
+      expect(screen.getByRole("heading", { name })).toBeInTheDocument();
+      expect(within(list).getAllByRole("meter")).toHaveLength(Object.keys(skills).length);
+      Object.keys(skills).forEach((skill) =>
+        expect(within(list).getByRole("meter", { name: skill })).toBeInTheDocument()
+      );
+    });
+  });
+
+  it("lights a whole number of segments for every level", () => {
+    SKILLS.forEach(([, percent]) =>
+      expect(Number.isInteger((percent / 100) * SKILL_MAX_SEGMENTS)).toBe(true)
+    );
+  });
+
   it("fills the bars once in view, one row after another, and keeps them filled", () => {
     jest.useFakeTimers();
-    const { container } = render(<SkillBars />);
+    const { container } = renderBars();
     const fills = Array.from(container.querySelectorAll(`.${styles.segments}`));
 
     fills.forEach((fill) => expect(fill).toHaveAttribute("data-filling", "false"));
@@ -80,7 +112,7 @@ describe("SkillBars", () => {
 
   it("fills every row at once with reduced motion", () => {
     mockReducedMotion(true);
-    const { container } = render(<SkillBars />);
+    const { container } = renderBars();
     const fills = container.querySelectorAll(`.${styles.segments}`);
 
     setVisible(true);
@@ -88,8 +120,8 @@ describe("SkillBars", () => {
   });
 
   it("draws each bar as one element, not one per segment", () => {
-    render(<SkillBars />);
-    const [name] = Object.entries(SKILLS)[0];
+    renderBars();
+    const [name] = SKILLS[0];
     const bar = screen.getByRole("meter", { name });
 
     expect(bar.querySelector(`.${styles.segments}`)).toBeInTheDocument();
@@ -97,10 +129,11 @@ describe("SkillBars", () => {
   });
 
   describe("hovering a segment", () => {
-    /** The first skill's bar, 500px wide from the left edge, and a pointer at a segment's middle */
+    /** The first skill's bar that isn't full, 500px wide from the left edge, and a pointer at a segment's middle */
     const setup = () => {
-      render(<SkillBars />);
-      const [name, level] = Object.entries(SKILLS)[0];
+      renderBars();
+      const [name, percent] = SKILLS.find(([, level]) => level < 100)!;
+      const level = skillSegments(percent);
       const segments = screen
         .getByRole("meter", { name })
         .querySelector(`.${styles.segments}`) as HTMLElement;
@@ -121,7 +154,7 @@ describe("SkillBars", () => {
     it("lifts a lit segment, showing its place on the scale", () => {
       const { hover, highlight } = setup();
 
-      hover(9);
+      hover(11);
       expect(highlight()).toHaveAttribute("data-active", "true");
       expect(highlight()).toHaveTextContent("20%");
       expect(highlight()).toHaveAttribute("aria-hidden", "true");
@@ -145,7 +178,7 @@ describe("SkillBars", () => {
     it("keeps the segment lifted while its tooltip is hovered", () => {
       const { hover, highlight } = setup();
 
-      hover(9);
+      hover(11);
       hover(20, highlight() as Element);
       expect(highlight()).toHaveTextContent("20%");
     });

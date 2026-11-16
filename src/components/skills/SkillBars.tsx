@@ -1,7 +1,7 @@
 "use client";
 
 import { CSSProperties, PointerEvent, useEffect, useId, useRef, useState } from "react";
-import { SKILLS, SKILL_MAX_SEGMENTS } from "@constants/skills";
+import { SKILL_GROUPS, SKILL_MAX_SEGMENTS, skillSegments } from "@constants/skills";
 import { SkillBarsProps } from "@constants/interfaces";
 import styles from "./SkillBars.module.css";
 import classNames from "@utils/classNames";
@@ -26,8 +26,8 @@ const segmentPercent = (segment: number) =>
 
 interface SkillBarProps {
   name: string;
-  /** How many segments are lit */
-  level: number;
+  /** Its level, in percent */
+  percent: number;
   /** Whether its fill has started */
   filling: boolean;
   /** The id its name goes by, naming the meter */
@@ -41,7 +41,9 @@ interface SkillBarProps {
  * where the pointer is. The bar's meter already tells its value, so the highlight is hidden from
  * assistive technologies.
  */
-function SkillBar({ name, level, filling, labelId }: SkillBarProps) {
+function SkillBar({ name, percent, filling, labelId }: SkillBarProps) {
+  /** How many segments are lit */
+  const level = skillSegments(percent);
   /** The lit segment last hovered, and whether the pointer is still on it */
   const [hovered, setHovered] = useState<{ segment: number; active: boolean } | null>(null);
 
@@ -81,8 +83,8 @@ function SkillBar({ name, level, filling, labelId }: SkillBarProps) {
         aria-labelledby={labelId}
         aria-valuemin={0}
         aria-valuemax={100}
-        aria-valuenow={Math.round((level / SKILL_MAX_SEGMENTS) * 100)}
-        aria-valuetext={`${Math.round((level / SKILL_MAX_SEGMENTS) * 100)}%`}
+        aria-valuenow={percent}
+        aria-valuetext={`${percent}%`}
         className={styles.bar}
       >
         <div
@@ -112,25 +114,34 @@ function SkillBar({ name, level, filling, labelId }: SkillBarProps) {
 }
 
 /**
- * The skills, one per row (see SkillBar): a name and a pill-shaped bar of SKILL_MAX_SEGMENTS segments,
- * painted red to purple to white along the full scale. Once in view, each bar fills segment by segment up to the
- * skill's value, the rows one after the other. The rows share the list's height: what's left goes
- * into the gaps between them.
+ * The skills, in groups (see SKILL_GROUPS): each group's name, then its skills, one per row (see
+ * SkillBar): a name and a pill-shaped bar of SKILL_MAX_SEGMENTS segments, painted red to purple to
+ * white along the full scale. Once in view, each bar fills segment by segment up to the skill's level,
+ * the rows one after the other, across the groups. Each group is framed by a rounded border of its own
+ * color. The groups share the list's height and its columns (through subgrid), so every bar lines up.
  *
  * Each row's fill starts at its turn (rather than all at once, with delays), so the browser doesn't
  * start every row's animation as the list comes into view.
  *
- * Accessibility: each bar is a meter named by its skill, valued in percent. The fill lasts under 5
- * seconds (WCAG 2.2.2); with reduced motion it completes instantly, every row at once (see globals.css).
- * Without JavaScript the bars are shown full (see the `scripting` media query in the CSS).
+ * Accessibility: each group is a list headed by its name; each bar is a meter named by its skill,
+ * valued in percent. The fill lasts under 5 seconds (WCAG 2.2.2); with reduced motion it completes
+ * instantly, every row at once (see globals.css). Without JavaScript the bars are shown full (see the
+ * `scripting` media query in the CSS).
  */
-export default function SkillBars({ className }: SkillBarsProps) {
-  const listRef = useRef<HTMLUListElement>(null);
+export default function SkillBars({ className, groupNames }: SkillBarsProps) {
+  const listRef = useRef<HTMLDivElement>(null);
   /** How many rows have started filling (in order) */
   const [filledRows, setFilledRows] = useState(0);
   const id = useId();
-  const skills = Object.entries(SKILLS);
   const reducedMotion = usePrefersReducedMotion();
+
+  /** Each group's skills, with their place among all the skills (their turn to fill) */
+  let index = 0;
+  const groups = SKILL_GROUPS.map(({ id: groupId, skills }) => ({
+    groupId,
+    skills: Object.entries(skills).map(([name, percent]) => ({ name, percent, index: index++ })),
+  }));
+  const skillCount = index;
 
   useEffect(() => {
     const list = listRef.current;
@@ -147,7 +158,7 @@ export default function SkillBars({ className }: SkillBarsProps) {
         observer.disconnect();
 
         if (reducedMotion) {
-          setFilledRows(skills.length);
+          setFilledRows(skillCount);
           return;
         }
 
@@ -156,7 +167,7 @@ export default function SkillBars({ className }: SkillBarsProps) {
         timer = setInterval(() => {
           started += 1;
           setFilledRows(started);
-          if (started >= skills.length) {
+          if (started >= skillCount) {
             clearInterval(timer);
           }
         }, ROW_DELAY_MS);
@@ -169,29 +180,44 @@ export default function SkillBars({ className }: SkillBarsProps) {
       observer.disconnect();
       clearInterval(timer);
     };
-  }, [skills.length, reducedMotion]);
+  }, [skillCount, reducedMotion]);
 
   return (
-    <ul
+    <div
       ref={listRef}
       dir="ltr"
       className={classNames(styles.list, className)}
       style={
         {
-          "--count": skills.length,
+          "--count": skillCount + groups.length,
+          "--groups": groups.length,
           "--segments": SKILL_MAX_SEGMENTS,
         } as CSSProperties
       }
     >
-      {skills.map(([name, level], index) => (
-        <SkillBar
-          key={name}
-          name={name}
-          level={level}
-          filling={index < filledRows}
-          labelId={`${id}-skill-${index}`}
-        />
+      {groups.map(({ groupId, skills }) => (
+        <div
+          key={groupId}
+          className={styles.group}
+          data-group={groupId}
+          style={{ "--rows": skills.length + 1 } as CSSProperties}
+        >
+          <h3 id={`${id}-${groupId}`} className={styles.groupName}>
+            {groupNames[groupId]}
+          </h3>
+          <ul aria-labelledby={`${id}-${groupId}`} className={styles.skills}>
+            {skills.map(({ name, percent, index: skillIndex }) => (
+              <SkillBar
+                key={name}
+                name={name}
+                percent={percent}
+                filling={skillIndex < filledRows}
+                labelId={`${id}-skill-${skillIndex}`}
+              />
+            ))}
+          </ul>
+        </div>
       ))}
-    </ul>
+    </div>
   );
 }

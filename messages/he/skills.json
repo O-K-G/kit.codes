@@ -1,6 +1,12 @@
 {
   "skills": {
     "mainTitle": "מיומנויות מקצועיות",
-    "subtitle": "הסטאק העיקרי"
+    "subtitle": "הסטאק העיקרי",
+    "groups": {
+      "frontEnd": "פרונט-אנד",
+      "backEnd": "בק-אנד",
+      "databases": "מסדי נתונים",
+      "general": "כללי"
+    }
   }
 }
