@@ -143,6 +143,29 @@ describe("ReviewsTypewriter", () => {
     expect(timestamp()).toHaveTextContent("TTI 00:01");
     advance(64000);
     expect(timestamp()).toHaveTextContent("TTI 01:05");
+
+    // After 99:59, it starts over from 00:00
+    advance((99 * 60 + 59 - 65) * 1000);
+    expect(timestamp()).toHaveTextContent("TTI 99:59");
+    advance(1000);
+    expect(timestamp()).toHaveTextContent("TTI 00:00");
+    advance(1000);
+    expect(timestamp()).toHaveTextContent("TTI 00:01");
+  });
+
+  it("shows the source under the quotes, between `below` and the timestamp", () => {
+    const { container } = render(
+      <ReviewsTypewriter
+        quotes={QUOTES}
+        label="Reviews"
+        below={<span>dish</span>}
+        source={<a href="https://example.com">Source</a>}
+      />
+    );
+    const bottom = container.querySelector(`.${styles.timestamp}`)?.parentElement as HTMLElement;
+
+    expect(Array.from(bottom.children, (child) => child.textContent)).toEqual(["dish", "Source", "TTI 00:00"]);
+    expect(screen.getByRole("link", { name: "Source" })).toHaveAttribute("href", "https://example.com");
   });
 
   it("shows all the quotes at once with reduced motion", () => {

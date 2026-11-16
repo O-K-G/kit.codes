@@ -67,3 +67,36 @@ div.typewriter {
     height: auto;
   }
 }
+
+/* The reviews' source, a link in the readout's style (see ReviewsTypewriter's .readout): told apart from
+ * the text around it by its underline, not only by color (WCAG 1.4.1), and at least 24px tall to click
+ * (2.5.8): its padding grows the area it takes clicks in, not its line (it stays inline), so it stays
+ * lined up with the text around it. Purple while hovered; keyboard focus shows the site's focus ring
+ * (see globals.css) */
+.sourceLink {
+  padding-block: 0.25em;
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.15em;
+
+  @media (hover: hover) {
+    &:hover {
+      color: var(--color-title-purple);
+    }
+  }
+
+  &:active {
+    color: var(--color-title-purple);
+  }
+}
+
+/* For screen readers only */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

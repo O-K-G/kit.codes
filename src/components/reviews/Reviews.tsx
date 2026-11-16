@@ -1,7 +1,8 @@
 import { ActiveSectionProps } from "@constants/interfaces";
 import { REVIEW_QUOTES } from "@constants/reviews";
 import Section from "@ui/section/Section";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { URLs } from "@constants/urls";
 import Title from "@ui/title/Title";
 import Footer from "@components/reviews/Footer";
 import SatelliteDish from "@components/reviews/SatelliteDish";
@@ -17,6 +18,7 @@ const QUOTES = Object.values(REVIEW_QUOTES).map((quote) => `“${quote}”`);
  * under them; then the page's footer */
 export default function Reviews({ activeSection }: ActiveSectionProps) {
   const t = useTranslations("reviews");
+  const locale = useLocale();
 
   return (
     <Section className={styles.section} currentSection={CURRENT_SECTION} activeSection={activeSection}>
@@ -27,6 +29,18 @@ export default function Reviews({ activeSection }: ActiveSectionProps) {
           label={t("mainTitle")}
           className={styles.typewriter}
           below={<SatelliteDish className={styles.dish} />}
+          source={
+            <span lang="en">
+              SRC:{" "}
+              <a href={URLs.linkedIn} target="_blank" rel="noreferrer" className={styles.sourceLink}>
+                LinkedIn
+                <span lang={locale} className={styles.srOnly}>
+                  {" "}
+                  {t("opensInNewTab")}
+                </span>
+              </a>
+            </span>
+          }
         />
       </div>
       <Footer />

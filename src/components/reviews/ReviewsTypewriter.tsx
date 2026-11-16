@@ -20,9 +20,14 @@ const IN_VIEW_THRESHOLD = 0.4;
 
 const REDUCED_MOTION = "(prefers-reduced-motion: reduce)";
 
-/** The time since the box opened, as "TTI mm:ss" (the minutes go past 99 if need be) */
-const formatElapsed = (seconds: number) =>
-  `TTI ${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
+/** How many seconds the timestamp counts up to (99:59) before it starts over from 00:00 */
+const TIMESTAMP_CYCLE_SECONDS = 100 * 60;
+
+/** The time since the box opened, as "TTI mm:ss", starting over from 00:00 after 99:59 */
+const formatElapsed = (elapsedSeconds: number) => {
+  const seconds = elapsedSeconds % TIMESTAMP_CYCLE_SECONDS;
+  return `TTI ${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
+};
 
 /** Whether the user asks for reduced motion (false on the server, and without matchMedia) */
 function usePrefersReducedMotion() {
@@ -44,8 +49,8 @@ function usePrefersReducedMotion() {
  * quote's place is kept for its whole text from the start (the rest of it is there, invisible), so it
  * doesn't move as its lines fill.
  *
- * Under the quotes, `below` (e.g. an illustration) on the left, and on the right the time since the box
- * opened ("TTI 00:00", counting each second).
+ * Under the quotes, `below` (e.g. an illustration) on the left, `source` in the middle, and on the right
+ * the time since the box opened ("TTI 00:00", counting each second, starting over after 99:59).
  *
  * Once the last quote is typed, they all stay for a while, then disappear, and after a moment the typing
  * starts over from the first one, endlessly.
@@ -59,13 +64,16 @@ export default function ReviewsTypewriter({
   label,
   className,
   below,
+  source,
 }: {
   quotes: readonly string[];
   label: string;
   /** Sizes and places the expandable box's container */
   className?: string;
-  /** Shown in the box under the quotes (e.g. an illustration) */
+  /** Shown in the box under the quotes, on the left (e.g. an illustration) */
   below?: ReactNode;
+  /** Shown under the quotes in the middle, in the timestamp's style: where they come from */
+  source?: ReactNode;
 }) {
   const boxRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
@@ -203,8 +211,9 @@ export default function ReviewsTypewriter({
         {/* Hidden until the box is done opening (keeping its place, so the quotes don't move) */}
         <div className={styles.bottom} data-hidden={!opened || undefined}>
           {below}
+          {source && <span className={classNames(styles.readout, styles.source)}>{source}</span>}
           {/* A decorative readout: screen readers would only hear it tick */}
-          <span aria-hidden className={styles.timestamp}>
+          <span aria-hidden className={classNames(styles.readout, styles.timestamp)}>
             {formatElapsed(elapsed)}
           </span>
         </div>

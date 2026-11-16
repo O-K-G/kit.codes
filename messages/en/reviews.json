@@ -1,5 +1,6 @@
 {
   "reviews": {
-    "mainTitle": "reviews"
+    "mainTitle": "reviews",
+    "opensInNewTab": "(opens in a new tab)"
   }
 }

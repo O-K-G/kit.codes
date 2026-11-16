@@ -9,7 +9,7 @@ import styles from "./SatelliteDish.module.css";
  */
 export default function SatelliteDish({ className }: { className?: string }) {
   return (
-    <svg aria-hidden viewBox="50 60 400 455" className={className}>
+    <svg aria-hidden viewBox="50 60 400 452" className={className}>
       <polygon className={styles.light} points="122.877,347.384 70.962,502.58 201.128,502.58 149.213,347.384 136.011,345.734" />
       <polygon className={styles.mid} points="136.011,502.58 201.128,502.58 149.213,347.384 136.011,345.734" />
       <path className={styles.shade} d="M122.946,347.934l15.196-13.684c2.544-2.269,6.395-2.063,8.664,0.481l4.951,5.501 c2.269,2.544,2.063,6.395-0.481,8.664l-15.196,13.684c-2.544,2.269-6.395,2.063-8.664-0.481l-4.951-5.501 C120.196,354.054,120.402,350.204,122.946,347.934z" />
