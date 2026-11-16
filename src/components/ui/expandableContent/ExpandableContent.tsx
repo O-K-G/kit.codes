@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { AnimationEvent, useEffect, useRef, useState } from "react";
+import classNames from "@utils/classNames";
 import AboutTargetIcon from "@ui/expandableContent/AboutTargetIcon";
 import Gauge from "@ui/expandableContent/gauge/Gauge";
 import { ExpandableContentProps } from "@constants/interfaces";
@@ -13,11 +14,14 @@ const IN_VIEW_THRESHOLD = 0.5;
  * A box that reveals its text by itself: once in view, a gauge runs (see Gauge), then the box expands
  * and shows the text. Not interactive.
  *
+ * It shows `children` in place of the text if given, and calls `onOpened` once the box is done opening
+ * (its frame drawn: see expand-button in the CSS).
+ *
  * Accessibility: the text is in the DOM from the start (only visually hidden while the gauge runs), so
  * screen readers read it in place; the gauge is decorative and pauses while out of view. Without
  * JavaScript the text is shown open (see the `scripting` media query in the CSS).
  */
-export default function ExpandableContent({ text }: ExpandableContentProps) {
+export default function ExpandableContent({ text, children, onOpened, className }: ExpandableContentProps) {
   const boxRef = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
   const [open, setOpen] = useState(false);
@@ -42,9 +46,15 @@ export default function ExpandableContent({ text }: ExpandableContentProps) {
   /** The count hit 100%: the brackets blink with it. Then, once it has blinked, the box opens */
   const handleGaugeFull = () => setFull(true);
   const handleGaugeComplete = () => setOpen(true);
+  /** The frame's drawing ends the opening (the keyframes' name is scoped by the CSS module) */
+  const handleContentAnimationEnd = ({ target, currentTarget, animationName }: AnimationEvent) => {
+    if (target === currentTarget && animationName.endsWith("expand-button")) {
+      onOpened?.();
+    }
+  };
 
   return (
-    <div className={styles.container}>
+    <div className={classNames(styles.container, className)}>
       <div ref={boxRef} className={styles.box} data-open={open}>
         <AboutTargetIcon open={open} blink={full} running={inView} />
         <Gauge
@@ -58,8 +68,9 @@ export default function ExpandableContent({ text }: ExpandableContentProps) {
           className={styles.content}
           data-open={open}
           tabIndex={open ? 0 : undefined}
+          onAnimationEnd={handleContentAnimationEnd}
         >
-          <p>{text}</p>
+          {children ?? <p>{text}</p>}
         </div>
         <AboutTargetIcon bottom open={open} blink={full} running={inView} />
       </div>

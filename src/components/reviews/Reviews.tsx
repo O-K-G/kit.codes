@@ -10,18 +10,24 @@ import styles from "./Reviews.module.css";
 
 const CURRENT_SECTION = "reviews";
 
-/** Quotes from reviews of my work (see REVIEW_QUOTES), typed out beside a transmitting satellite dish;
- * then the page's footer */
+/** The quotes, each in quotation marks (typed with it) */
+const QUOTES = Object.values(REVIEW_QUOTES).map((quote) => `“${quote}”`);
+
+/** Quotes from reviews of my work (see REVIEW_QUOTES), typed out in a box, a transmitting satellite dish
+ * under them; then the page's footer */
 export default function Reviews({ activeSection }: ActiveSectionProps) {
   const t = useTranslations("reviews");
 
   return (
     <Section className={styles.section} currentSection={CURRENT_SECTION} activeSection={activeSection}>
       <Title border>{t("mainTitle")}</Title>
-      {/* Left to right on every locale's page: the dish transmits toward the quotes */}
-      <div dir="ltr" className={styles.content}>
-        <SatelliteDish className={styles.dish} />
-        <ReviewsTypewriter quotes={Object.values(REVIEW_QUOTES)} label={t("mainTitle")} />
+      <div className={styles.content}>
+        <ReviewsTypewriter
+          quotes={QUOTES}
+          label={t("mainTitle")}
+          className={styles.typewriter}
+          below={<SatelliteDish className={styles.dish} />}
+        />
       </div>
       <Footer />
     </Section>

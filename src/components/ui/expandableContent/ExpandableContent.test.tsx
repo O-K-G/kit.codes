@@ -1,8 +1,15 @@
-import { act, fireEvent, render, screen } from "@testing-library/react";
+import { act, createEvent, fireEvent, render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import ExpandableContent from "@ui/expandableContent/ExpandableContent";
 import gaugeStyles from "@ui/expandableContent/gauge/Gauge.module.css";
 import { fireAfterAnimationEnd } from "@ui/expandableContent/gauge/fireAfterAnimationEnd";
+
+/** Fires animationend for the named animation (jsdom has no AnimationEvent to carry its name) */
+function fireNamedAnimationEnd(element: HTMLElement, animationName: string) {
+  const event = createEvent.animationEnd(element);
+  Object.defineProperty(event, "animationName", { value: animationName });
+  fireEvent(element, event);
+}
 
 const TEXT = "Results-driven web developer";
 
@@ -81,5 +88,27 @@ describe("ExpandableContent", () => {
     expect(content).toHaveAttribute("data-open", "true");
     expect(content).toHaveAttribute("tabindex", "0");
     expect(disconnect).toHaveBeenCalled();
+  });
+
+  it("shows children in place of the text, and tells once it's done opening", () => {
+    const onOpened = jest.fn();
+    const { container } = render(
+      <ExpandableContent onOpened={onOpened}>
+        <span>Typed quotes</span>
+      </ExpandableContent>
+    );
+    const content = screen.getByText("Typed quotes").parentElement as HTMLElement;
+    setVisible(true);
+    fireAfterAnimationEnd(container.querySelector(`.${gaugeStyles.gauge}`) as HTMLElement);
+    fireAfterAnimationEnd(container.querySelector(`.${gaugeStyles.count}`) as HTMLElement);
+    expect(content).toHaveAttribute("data-open", "true");
+
+    // Only the frame's drawing ends the opening, not the box's other animations or its children's
+    fireNamedAnimationEnd(content, "Module__reveal-while-expanding");
+    fireNamedAnimationEnd(screen.getByText("Typed quotes"), "Module__expand-button");
+    expect(onOpened).not.toHaveBeenCalled();
+
+    fireNamedAnimationEnd(content, "Module__expand-button");
+    expect(onOpened).toHaveBeenCalledTimes(1);
   });
 });

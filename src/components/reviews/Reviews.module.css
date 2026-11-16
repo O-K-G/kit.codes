@@ -6,39 +6,64 @@ section.section {
   @media (width >= 48rem) and (height >= 40rem) {
     padding-top: 10rem;
   }
+
+  /* On desktop, exactly a screen tall: the expandable box takes all the height between the title and
+   * the footer (see .content) */
+  @media (width >= 64rem) {
+    height: 100dvh;
+  }
 }
 
-/* The dish on the left half, the quotes on the right one; on narrow screens, the dish above them */
+/* The expandable box, centered */
 .content {
   position: relative;
   z-index: 1;
-  display: grid;
-  grid-template-columns: 1fr;
-  align-items: center;
-  gap: 1rem;
+  display: flex;
+  justify-content: center;
   width: 100%;
-  max-width: 72rem;
   margin-block: 1rem 4rem;
 
   @media (width >= 48rem) {
     margin-block: 2rem 4rem;
   }
 
-  @media (width >= 48rem) {
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
+  /* All the height left between the title and the footer, never over the footer */
+  @media (width >= 64rem) {
+    flex: 1;
+    min-height: 0;
+    margin-bottom: 1rem;
   }
 }
 
-/* At the top, beside the box the quotes are typed in (as tall): with reduced motion the quotes are all
- * shown, much taller */
+/* The dish, under the quotes in the box, at their start (away from the footer's astronaut, centered
+ * behind the box's bottom): as tall as the room under them (see ReviewsTypewriter's .bottom) */
 .dish {
-  align-self: start;
-  justify-self: center;
-  width: auto;
-  height: clamp(6rem, 18svh, 10rem);
+  flex: none;
+  height: 100%;
+}
+
+/* The expandable box the quotes are typed in (see ReviewsTypewriter): open, 75% of the screen's width
+ * (its container is wider by the room for its corner brackets, see ExpandableContent). On narrow screens
+ * a fixed height; on desktop, down to just above the footer. `div.` outweighs ExpandableContent's own
+ * sizes */
+div.typewriter {
+  --expandable-box-width: 100%;
+  /* Nearly opaque: the footer's planet (with its astronaut) can be behind the box's bottom, and mustn't
+   * show through the quotes */
+  --expandable-box-background: rgb(0 0 0 / 85%);
+
+  flex: none;
+  width: calc(75vw + 3 * var(--fluid-rem));
+  height: clamp(18rem, 50svh, 26rem);
+  max-height: none;
 
   @media (width >= 48rem) {
-    height: clamp(14rem, 50svh, 28rem);
+    height: clamp(20rem, 55svh, 32rem);
+  }
+
+  /* On desktop, the whole height of .content: down to just above the footer */
+  @media (width >= 64rem) {
+    align-self: stretch;
+    height: auto;
   }
 }

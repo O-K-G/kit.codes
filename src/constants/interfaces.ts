@@ -236,7 +236,13 @@ export interface GaugeProps {
 
 export interface ExpandableContentProps {
   /** The text revealed once the gauge has filled */
-  text: string;
+  text?: string;
+  /** Revealed in place of `text`: it fills the open box (lay it out to fit it) */
+  children?: ReactNode;
+  /** Called once the box is done opening */
+  onOpened?: () => void;
+  /** Sizes and places the box's container */
+  className?: string;
 }
 
 export interface MainTitleProps {

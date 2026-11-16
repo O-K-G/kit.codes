@@ -5,6 +5,22 @@ import styles from "@components/reviews/ReviewsTypewriter.module.css";
 
 const QUOTES = ["Sharp.", "Great team player."];
 
+/** The expandable box (tested on its own): here, a button stands for its opening ending. (By a relative
+ * path: the path aliases are compiled into the imports, not jest.mock's) */
+jest.mock("../ui/expandableContent/ExpandableContent", () => ({
+  __esModule: true,
+  default: ({ children, onOpened }: { children: React.ReactNode; onOpened?: () => void }) => (
+    <div>
+      <button type="button" onClick={onOpened}>
+        opened
+      </button>
+      {children}
+    </div>
+  ),
+}));
+
+const finishOpening = () => act(() => screen.getByRole("button", { name: "opened" }).click());
+
 /** jsdom has no IntersectionObserver: a mock whose visibility the test drives */
 let setVisible: (visible: boolean) => void = () => undefined;
 
@@ -49,8 +65,14 @@ describe("ReviewsTypewriter", () => {
     QUOTES.forEach((quote) => expect(screen.getByText(quote, { selector: `.${styles.srOnly}` })).toBeInTheDocument());
   });
 
-  it("types only while in view, then the next quote after a pause", () => {
+  it("types once its box is done opening, only while in view, then the next quote after a pause", () => {
     const { container } = render(<ReviewsTypewriter quotes={QUOTES} label="Reviews" />);
+    setVisible(true);
+    advance(5000);
+    expect(typedTexts(container)).toEqual(["", ""]);
+
+    setVisible(false);
+    finishOpening();
     advance(5000);
     expect(typedTexts(container)).toEqual(["", ""]);
 
@@ -69,6 +91,58 @@ describe("ReviewsTypewriter", () => {
     expect(typedTexts(container)[1]).toBe(QUOTES[1].slice(0, 1));
     expect(container.querySelectorAll("li")[0]).toHaveAttribute("data-state", "typed");
     expect(container.querySelectorAll("li")[1]).toHaveAttribute("data-state", "typing");
+  });
+
+  it("clears the quotes 4s after the last is typed, then starts over 2s after they're gone", () => {
+    const { container } = render(<ReviewsTypewriter quotes={QUOTES} label="Reviews" />);
+    finishOpening();
+    setVisible(true);
+    const list = screen.getByRole("list");
+    // Every letter of both quotes, and the pause between them (a step at a time: each timer is set as
+    // the previous one's update renders)
+    for (let letter = 0; letter < QUOTES[0].length; letter++) {
+      advance(60);
+    }
+    advance(2000);
+    for (let letter = 0; letter < QUOTES[1].length; letter++) {
+      advance(60);
+    }
+    expect(typedTexts(container)).toEqual(QUOTES);
+
+    advance(3900);
+    expect(list).not.toHaveAttribute("data-cleared");
+    advance(100);
+    expect(list).toHaveAttribute("data-cleared");
+    expect(typedTexts(container)).toEqual(QUOTES);
+
+    // Gone (faded out), then empty for 2s
+    advance(2200);
+    expect(list).toHaveAttribute("data-cleared");
+    advance(100);
+    expect(list).not.toHaveAttribute("data-cleared");
+    expect(typedTexts(container)).toEqual(["", ""]);
+    expect(container.querySelectorAll("li")[0]).toHaveAttribute("data-state", "typing");
+
+    advance(60);
+    expect(typedTexts(container)[0]).toBe(QUOTES[0].slice(0, 1));
+  });
+
+  it("counts the time since the box opened, from TTI 00:00", () => {
+    const { container } = render(<ReviewsTypewriter quotes={QUOTES} label="Reviews" />);
+    const timestamp = () => container.querySelector(`.${styles.timestamp}`);
+    advance(5000);
+    expect(timestamp()).toHaveTextContent("TTI 00:00");
+    // Hidden, with the illustration under the quotes, until the box is done opening
+    expect(timestamp()?.parentElement).toHaveAttribute("data-hidden");
+
+    finishOpening();
+    expect(timestamp()?.parentElement).not.toHaveAttribute("data-hidden");
+    advance(999);
+    expect(timestamp()).toHaveTextContent("TTI 00:00");
+    advance(1);
+    expect(timestamp()).toHaveTextContent("TTI 00:01");
+    advance(64000);
+    expect(timestamp()).toHaveTextContent("TTI 01:05");
   });
 
   it("shows all the quotes at once with reduced motion", () => {
