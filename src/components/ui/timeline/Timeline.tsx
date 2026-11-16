@@ -21,7 +21,7 @@ export const TIMELINE_BRANCH_TEST_ID = "timeline-branch-test-id";
  * with each step of a mouse wheel (see useEasedScrollLight); until that runs, or without it, CSS
  * scroll-driven animations light it (see Timeline.module.css).
  *
- * The circle can be focused, and its tooltip describes it (see Tooltip).
+ * The circle can be focused (a named group, not a button), and its tooltip describes it (see Tooltip).
  */
 export default function Timeline({ items, "aria-label": ariaLabel }: TimelineProps) {
   const t = useTranslations("timelineText");
@@ -43,6 +43,9 @@ export default function Timeline({ items, "aria-label": ariaLabel }: TimelinePro
           <Lines className={styles.light} />
 
           <Tooltip
+            // Just a circle, not a button: a group, named ("More about …") and described by its
+            // tooltip. A plain span can't be named (ARIA prohibits it: some screen readers drop it)
+            role="group"
             tabIndex={0}
             aria-label={t("infoLabel", { title })}
             content={text}

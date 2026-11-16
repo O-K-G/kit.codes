@@ -45,7 +45,9 @@
   padding: calc(0.15 * var(--row)) calc(0.4 * var(--row));
   border: 2px solid var(--color-title-purple);
   border-radius: 9999px;
-  background-color: oklch(27.9% 0.041 260.031 / 70%);
+  /* Nearly opaque: the background mustn't show through the empty segments, which keep 3:1 against
+   * the last lit one, where the fill ends (WCAG 1.4.11) */
+  background-color: oklch(27.9% 0.041 260.031 / 95%);
 
   /* Once its fill reaches its last segment (see .segments), the bar glows orange once, fading in and out
    * in 0.7s: a single blink, well within WCAG 2.3.1 (3 flashes a second) and 2.2.2 (5 seconds) */

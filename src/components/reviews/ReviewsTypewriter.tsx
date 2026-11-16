@@ -20,6 +20,10 @@ const IN_VIEW_THRESHOLD = 0.4;
 
 const REDUCED_MOTION = "(prefers-reduced-motion: reduce)";
 
+/** The most the fade at the top of the quotes' box takes (see .box in the CSS), in rem: less when the
+ * quote being typed would reach into it, so that quote is always clear of it */
+const FADE_REM = 3;
+
 /** How many seconds the timestamp counts up to (99:59) before it starts over from 00:00 */
 const TIMESTAMP_CYCLE_SECONDS = 100 * 60;
 
@@ -55,6 +59,15 @@ function usePrefersReducedMotion() {
  * Once the last quote is typed, they all stay for a while, then disappear, and after a moment the typing
  * starts over from the first one, endlessly.
  *
+ * A button at the top pauses it all, and plays it again (WCAG 2.2.2: the typing, the timer and the
+ * animations would otherwise go on endlessly): the typing and its cursor, the timer (which, played
+ * again, shows the time since the box opened), and `below`'s animations (paused along with
+ * [data-paused], see the CSS).
+ *
+ * The quotes' box is at least tall enough for the tallest quote (with large text or wider spacing,
+ * WCAG 1.4.4 / 1.4.12, the open box then scrolls rather than cut it), and its fade at the top never
+ * covers the quote being typed.
+ *
  * It starts once the box is done opening, and types only while in view, pausing where it is otherwise.
  * With reduced motion, all the quotes are shown at once, typed, and stay. Screen readers read each quote whole, in place: the typed copy is hidden from
  * them.
@@ -85,16 +98,25 @@ export default function ReviewsTypewriter({
   const [cleared, setCleared] = useState(false);
   /** Whole seconds since the box opened */
   const [elapsed, setElapsed] = useState(0);
+  /** When the box opened (the clock's time) */
+  const openedAtRef = useRef(0);
+  /** Paused with the button: the typing, the timer and the animations */
+  const [paused, setPaused] = useState(false);
 
-  // The time since the box opened, from the clock (timers drift), each second
+  const handleOpened = () => {
+    openedAtRef.current = Date.now();
+    setOpened(true);
+  };
+
+  // The time since the box opened, from the clock (timers drift), each second, unless paused
   useEffect(() => {
-    if (!opened) {
+    if (!opened || paused) {
       return;
     }
-    const openedAt = Date.now();
-    const interval = setInterval(() => setElapsed(Math.floor((Date.now() - openedAt) / 1000)), 1000);
+    const tick = () => setElapsed(Math.floor((Date.now() - openedAtRef.current) / 1000));
+    const interval = setInterval(tick, 1000);
     return () => clearInterval(interval);
-  }, [opened]);
+  }, [opened, paused]);
   /** The quote being typed, and how many of its letters are typed */
   const [current, setCurrent] = useState(0);
   const [typed, setTyped] = useState(0);
@@ -115,7 +137,7 @@ export default function ReviewsTypewriter({
   // The next letter; once the quote is typed, the next quote after the pause; once the last one is,
   // they all disappear after a while, and once they're gone, after a moment, the first one starts over
   useEffect(() => {
-    if (!opened || !inView || reducedMotion) {
+    if (!opened || !inView || reducedMotion || paused) {
       return;
     }
 
@@ -138,7 +160,7 @@ export default function ReviewsTypewriter({
       timeout = setTimeout(() => setCleared(true), LINGER_MS);
     }
     return () => clearTimeout(timeout);
-  }, [opened, inView, reducedMotion, quotes, current, typed, cleared]);
+  }, [opened, inView, reducedMotion, paused, quotes, current, typed, cleared]);
 
   // The quote being typed, in the box's vertical middle: the list moves up for each new one
   useLayoutEffect(() => {
@@ -151,32 +173,60 @@ export default function ReviewsTypewriter({
     // preference was read: on hydrating, it's taken as false)
     if (reducedMotion) {
       list.style.transform = "";
+      box.style.minHeight = "";
       return;
     }
 
     // Starting over, the list jumps back, unseen (it's empty), rather than gliding down
     list.style.transition = current === 0 ? "none" : "";
     const center = () => {
-      const item = list.children[current] as HTMLElement | undefined;
+      // Tall enough for the tallest quote
+      const items = Array.from(list.children as HTMLCollectionOf<HTMLElement>);
+      const { paddingTop, paddingBottom } = getComputedStyle(box);
+      const minHeight = `${Math.ceil(
+        Math.max(...items.map(({ offsetHeight }) => offsetHeight)) +
+          parseFloat(paddingTop) +
+          parseFloat(paddingBottom)
+      )}px`;
+      if (box.style.minHeight !== minHeight) {
+        box.style.minHeight = minHeight;
+      }
+
+      const item = items[current];
       if (item) {
         const shift = box.clientHeight / 2 - (item.offsetTop + item.offsetHeight / 2);
         list.style.transform = `translateY(${shift.toFixed(1)}px)`;
+        // The fade ends where the quote starts, at most
+        const fade = FADE_REM * parseFloat(getComputedStyle(document.documentElement).fontSize);
+        const above = item.offsetTop + shift;
+        box.style.setProperty("--typewriter-fade", `${Math.max(0, Math.min(fade, above)).toFixed(1)}px`);
       }
     };
     center();
 
-    // Its lines rewrap as the box's width changes
+    // Its lines rewrap as the box's width changes, and its height follows the screen's
     const resizeObserver = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(center);
     resizeObserver?.observe(box);
+    resizeObserver?.observe(list);
     return () => resizeObserver?.disconnect();
   }, [current, reducedMotion]);
 
   const done = typed >= (quotes[current]?.length ?? 0);
 
   return (
-    <ExpandableContent className={className} onOpened={() => setOpened(true)}>
+    <ExpandableContent className={className} onOpened={handleOpened}>
       {/* Left to right on every locale's page, as the quotes are in English */}
-      <div dir="ltr" className={styles.layout}>
+      <div dir="ltr" data-paused={paused || undefined} className={styles.layout}>
+        {/* Hidden until the box is done opening, like the row under the quotes. In English, as the
+         * readouts are */}
+        <div className={styles.top} data-hidden={!opened || undefined}>
+          <button type="button" lang="en" className={styles.pause} onClick={() => setPaused(!paused)}>
+            <span aria-hidden className={styles.pauseIcon}>
+              {paused ? "▶" : "❚❚"}
+            </span>
+            {paused ? "PLAY" : "PAUSE"}
+          </button>
+        </div>
         <div ref={boxRef} className={styles.box} data-static={reducedMotion || undefined}>
           {/* The quotes are in English on every locale's page */}
           <ul
@@ -198,7 +248,7 @@ export default function ReviewsTypewriter({
                     <p aria-hidden className={styles.text}>
                       {quote.slice(0, shown)}
                       {state === "typing" && (
-                        <span className={classNames(styles.cursor, (done || !opened) && styles.blinking)} />
+                        <span className={classNames(styles.cursor, (done || !opened || paused) && styles.blinking)} />
                       )}
                       <span className={styles.rest}>{quote.slice(shown)}</span>
                     </p>

@@ -31,7 +31,8 @@ describe("Timeline", () => {
     renderTimeline();
 
     expect(screen.queryByRole("button")).not.toBeInTheDocument();
-    const info = screen.getByLabelText("More about First");
+    // A named group: ARIA prohibits naming a plain span
+    const info = screen.getByRole("group", { name: "More about First" });
     expect(info).toHaveAttribute("tabindex", "0");
     expect(info).toHaveAccessibleDescription("First text");
   });

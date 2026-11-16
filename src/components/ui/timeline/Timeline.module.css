@@ -19,6 +19,12 @@
   width: min(100%, 64 * var(--fluid-rem));
   margin-top: 2rem;
   padding-block: 3rem;
+
+  /* With a tooltip shown, over the fixed controls at the screen's bottom (z-index 10, later on the page),
+   * which would otherwise cover its end (and take the pointer moving onto it, WCAG 1.4.13) */
+  &:has(.node:is(:hover, :focus-within)) {
+    z-index: 11;
+  }
 }
 
 /* ---- A branch: its circle at the end of a line from the axis, and its year and title beside it ---- */
@@ -301,6 +307,27 @@
  * screen */
 .tooltip {
   width: min(22rem, 100vw - 2rem);
+
+  /* Invisible bridges, as wide as the tooltip and as tall as the circle, on both its sides (it can be
+   * below the circle or, flipped, above it): the circle is round, so between it and the tooltip lie its
+   * box's empty corners, and beside it the room the tooltip sticks out into. The pointer crossing them,
+   * the tooltip stays (they're part of it): it can be moved onto it from anywhere on the circle (WCAG
+   * 1.4.13) */
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    height: var(--node-size);
+  }
+
+  &::before {
+    bottom: 100%;
+  }
+
+  &::after {
+    top: 100%;
+  }
 
   @media (width >= 48rem) {
     .branch:nth-child(odd) & {

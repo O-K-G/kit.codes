@@ -168,6 +168,30 @@ describe("ReviewsTypewriter", () => {
     expect(screen.getByRole("link", { name: "Source" })).toHaveAttribute("href", "https://example.com");
   });
 
+  it("pauses the typing and the timer with its button, and plays them again (WCAG 2.2.2)", () => {
+    const { container } = render(<ReviewsTypewriter quotes={QUOTES} label="Reviews" />);
+    const timestamp = () => container.querySelector(`.${styles.timestamp}`);
+    finishOpening();
+    setVisible(true);
+    advance(60);
+    advance(60);
+    expect(typedTexts(container)[0]).toBe(QUOTES[0].slice(0, 2));
+
+    act(() => screen.getByRole("button", { name: "PAUSE" }).click());
+    expect(container.querySelector(`.${styles.layout}`)).toHaveAttribute("data-paused");
+    advance(5000);
+    expect(typedTexts(container)[0]).toBe(QUOTES[0].slice(0, 2));
+    expect(timestamp()).toHaveTextContent("TTI 00:00");
+
+    act(() => screen.getByRole("button", { name: "PLAY" }).click());
+    expect(container.querySelector(`.${styles.layout}`)).not.toHaveAttribute("data-paused");
+    advance(60);
+    expect(typedTexts(container)[0]).toBe(QUOTES[0].slice(0, 3));
+    // The timer shows the time since the box opened again
+    advance(1000);
+    expect(timestamp()).toHaveTextContent("TTI 00:06");
+  });
+
   it("shows all the quotes at once with reduced motion", () => {
     mockReducedMotion(true);
     const { container } = render(<ReviewsTypewriter quotes={QUOTES} label="Reviews" />);

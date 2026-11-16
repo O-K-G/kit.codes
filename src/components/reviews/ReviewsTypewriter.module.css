@@ -15,6 +15,55 @@
   height: 100%;
 }
 
+/* Over the quotes: the pause button, at the right */
+.top {
+  display: flex;
+  flex: none;
+  justify-content: flex-end;
+  padding: calc(var(--typewriter-block-padding) / 2) var(--typewriter-inline-padding) 0;
+
+  /* Until the box is done opening */
+  &[data-hidden] {
+    visibility: hidden;
+  }
+}
+
+/* The pause button, in the readouts' style (see .readout), framed so it reads as a button; at least
+ * 24px tall to click (WCAG 2.5.8). Purple while hovered; keyboard focus shows the site's focus ring */
+.pause {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  min-height: 1.5rem;
+  padding: 0.2em 0.5em;
+  border: 1px solid var(--color-title-purple);
+  border-radius: 0.25rem;
+  font-family: var(--font-handjet), var(--font-mono);
+  font-size: max(1rem, 0.9rem + 0.3vw, 1.125 * var(--desktop-rem));
+  line-height: 1;
+  letter-spacing: 0.04em;
+  color: #fff;
+  background: transparent;
+  cursor: pointer;
+
+  @media (hover: hover) {
+    &:hover {
+      color: var(--color-title-purple);
+    }
+  }
+}
+
+.pauseIcon {
+  font-size: 0.75em;
+}
+
+/* Paused: the cursor's blink stops (the typing and the timer stop in ReviewsTypewriter), and so do the
+ * animations in `below` */
+.layout[data-paused] *,
+.layout[data-paused] .blinking::before {
+  animation-play-state: paused;
+}
+
 /* Under the quotes: `below` on the left, the source in the middle, the timestamp on the right, lined up
  * with the quotes' sides and the bottom of `below`. About a third of the box's height, within bounds;
  * on very short boxes it shrinks rather than spilling out (`below` is to fill its height) */
@@ -25,7 +74,7 @@
   grid-template-rows: minmax(0, 1fr);
   align-items: end;
   gap: 0.75rem;
-  min-height: 3rem;
+  min-height: 2.5rem;
   height: clamp(5rem, 32%, 14rem);
   margin-block: 0.25rem clamp(0.5rem, 3%, 1.5rem);
   padding-inline: var(--typewriter-inline-padding);
@@ -78,11 +127,14 @@
   flex: 1;
   width: 100%;
   min-height: 0;
-  /* Room between the text and the box's frame */
-  padding: var(--typewriter-block-padding) var(--typewriter-inline-padding);
+  /* Room between the text and the box's frame at the sides (above and below it, the rows over and
+   * under it make the room) */
+  padding: 0.5rem var(--typewriter-inline-padding);
   overflow: clip;
   text-align: start;
-  mask-image: linear-gradient(transparent, #000 40%);
+  /* Earlier quotes fade out at the top: down to where the quote being typed starts, at most 3rem (set
+   * by ReviewsTypewriter, see FADE_REM) */
+  mask-image: linear-gradient(transparent, #000 var(--typewriter-fade, 3rem));
 
   /* With reduced motion: all the quotes, as tall as they are (the expandable box scrolls them) */
   &[data-static] {
