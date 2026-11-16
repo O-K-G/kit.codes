@@ -1,9 +1,9 @@
 import { useTranslations } from "next-intl";
-import planet1565 from "@/assets/images/planet/1565w.avif?url";
-import planet2348 from "@/assets/images/planet/2348w.avif?url";
-import planet3130 from "@/assets/images/planet/3130w.avif?url";
-import planet4695 from "@/assets/images/planet/4695w.avif?url";
-import planet6260 from "@/assets/images/planet/6260w.avif?url";
+import planet1565 from "@/assets/images/planet/reviews-section-blue-planet-orbiting-astronauts-1565w.avif?url";
+import planet2348 from "@/assets/images/planet/reviews-section-blue-planet-orbiting-astronauts-2348w.avif?url";
+import planet3130 from "@/assets/images/planet/reviews-section-blue-planet-orbiting-astronauts-3130w.avif?url";
+import planet4695 from "@/assets/images/planet/reviews-section-blue-planet-orbiting-astronauts-4695w.avif?url";
+import planet6260 from "@/assets/images/planet/reviews-section-blue-planet-orbiting-astronauts-6260w.avif?url";
 import { LOADER_CRITICAL_IMAGE_ATTRIBUTE } from "@constants/loader";
 import styles from "./Planet.module.css";
 

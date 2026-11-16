@@ -43,6 +43,25 @@
     @media screen and (min-width: 1024px) {
       --top-var: 12dvh;
     }
+
+    /* Its text: a dark glow behind Title's purple one, so it stands out from the stars behind it */
+    > h2 {
+      filter: drop-shadow(0 0 0.125rem #000) drop-shadow(0 0 0.25rem #000)
+        drop-shadow(0 0 0.125rem #b377ff);
+
+      @media (width >= 40rem) {
+        filter: drop-shadow(0 0 calc(0.25 * var(--fluid-rem)) #000)
+          drop-shadow(0 0 calc(0.5 * var(--fluid-rem)) #000)
+          drop-shadow(0 0 calc(0.313 * var(--fluid-rem)) #b377ff);
+      }
+    }
+
+    /* The lines over and under it (see Border): the same dark glow, behind their purple one */
+    > div > div {
+      filter: drop-shadow(0 0 calc(0.25 * var(--fluid-rem)) #000)
+        drop-shadow(0 0 calc(0.5 * var(--fluid-rem)) #000)
+        drop-shadow(0 0 calc(0.09 * var(--fluid-rem)) #b377ff);
+    }
   }
 
   .subtitle {

@@ -11,7 +11,7 @@ import handleFontsByLocale from "@utils/handleFontsByLocale";
 import getDirByLocale from "@utils/getDirByLocale";
 import { PropsWithChildren } from "react";
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
+import { getMessages, getTranslations } from "next-intl/server";
 import { CLIENT_NAMESPACES } from "@constants/i18nFilenames";
 import { getPageLocale, setPageLocale } from "@i18n/pageLocale";
 import classNames from "@utils/classNames";
@@ -35,9 +35,14 @@ export async function generateMetadata({
   params,
 }: Pick<RootLayoutProps, "params">): Promise<Metadata> {
   const selectedLocale = await getPageLocale(params);
+  /** The description, in the page's language (see SITE_DESCRIPTION) */
+  const t = await getTranslations({ locale: selectedLocale, namespace: "about" });
+  const description = t("metaDescription");
 
   return {
     ...siteMetadata,
+    description,
+    twitter: { ...siteMetadata.twitter, description },
     alternates: {
       /** Every section route (/en/about, /en/skills, ...) renders this same page, scrolled to a section. */
       canonical: getLocalePath(selectedLocale),
@@ -46,6 +51,7 @@ export async function generateMetadata({
     /** The link preview, in the page's language, pointing at its locale root like the canonical URL */
     openGraph: {
       ...siteMetadata.openGraph,
+      description,
       url: getLocalePath(selectedLocale),
       locale: OG_LOCALES[selectedLocale],
       alternateLocale: routing.locales

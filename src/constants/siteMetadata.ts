@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { URLs } from "@constants/urls";
 import { routing } from "@i18n/routing";
+import enAbout from "@root/messages/en/about.json";
 
 /** Added to the icons' URLs: raise it after changing an icon, so browsers fetch the new one */
 export const CACHE_VERSION = 1;
@@ -19,8 +20,9 @@ export const LOCALE_ALTERNATES = {
 } as Record<Locale | "x-default", string>;
 
 const SITE_TITLE = "kit.codes";
-const SITE_DESCRIPTION =
-  "This is my landing page to showcase some of my web development skills.";
+/** Search results' and link previews' description, short enough not to be cut off (about 155
+ * characters): English by default; each locale's page has its own (see app/[locale]/layout.tsx) */
+const SITE_DESCRIPTION = enAbout.about.metaDescription;
 
 /** Open Graph locales (language_TERRITORY) of the page's locales. The link preview image comes from
  * app/[locale]/opengraph-image.tsx and twitter-image.tsx. */
@@ -44,13 +46,13 @@ export const siteMetadata: Metadata = {
   applicationName: "kit.codes",
   manifest: "/manifest.webmanifest",
   icons: {
-    icon: `/images/icon.png?cacheVersion=${CACHE_VERSION}`,
-    shortcut: `/images/shortcut-icon.png?cacheVersion=${CACHE_VERSION}`,
-    apple: `/images/apple-icon.png?cacheVersion=${CACHE_VERSION}`,
+    icon: `/images/astronaut-coding-laptop-favicon-32x32.png?cacheVersion=${CACHE_VERSION}`,
+    shortcut: `/images/astronaut-coding-laptop-favicon-16x16.png?cacheVersion=${CACHE_VERSION}`,
+    apple: `/images/astronaut-coding-laptop-apple-touch-icon-180x180.png?cacheVersion=${CACHE_VERSION}`,
     other: [
       {
         rel: "mask-icon",
-        url: `/images/safari-pinned-tab.svg?cacheVersion=${CACHE_VERSION}`,
+        url: `/images/astronaut-coding-laptop-safari-pinned-tab.svg?cacheVersion=${CACHE_VERSION}`,
         type: "image/svg+xml",
         sizes: "any",
       },

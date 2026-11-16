@@ -78,6 +78,24 @@ const nextConfig: NextConfig = {
   async headers() {
     return [{ source: "/:path*", headers: SECURITY_HEADERS }];
   },
+  /* Permanent (308) redirects from URLs the site had before: the Projects section, renamed Reviews, and
+   * the icons, renamed (search engines, links and installed apps may still have their old URLs) */
+  async redirects() {
+    const icon = (from: string, to: string) => ({
+      source: `/images/${from}`,
+      destination: `/images/astronaut-coding-laptop-${to}`,
+      permanent: true,
+    });
+    return [
+      { source: "/:locale(en|he)/projects", destination: "/:locale/reviews", permanent: true },
+      icon("android-chrome-192x192.png", "app-icon-192x192.png"),
+      icon("android-chrome-512x512.png", "app-icon-512x512.png"),
+      icon("apple-icon.png", "apple-touch-icon-180x180.png"),
+      icon("icon.png", "favicon-32x32.png"),
+      icon("shortcut-icon.png", "favicon-16x16.png"),
+      icon("safari-pinned-tab.svg", "safari-pinned-tab.svg"),
+    ];
+  },
 };
 
 const withNextIntl = createNextIntlPlugin();

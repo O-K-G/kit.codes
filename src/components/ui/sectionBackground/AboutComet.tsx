@@ -1,5 +1,5 @@
 import { CSSProperties } from "react";
-import comet from "@/assets/images/about/comet.webp";
+import comet from "@/assets/images/about/about-section-pink-shooting-star-comet.webp";
 import styles from "./AboutComet.module.css";
 
 /** The comet image's place in the scene, in the scene's pixels at 1x (it's cut from the 4x scene) */

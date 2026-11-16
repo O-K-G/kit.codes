@@ -12,12 +12,12 @@ export default function manifest(): MetadataRoute.Manifest {
     theme_color: "#ffffff",
     icons: [
       {
-        src: `/images/android-chrome-192x192.png?cacheVersion=${CACHE_VERSION}`,
+        src: `/images/astronaut-coding-laptop-app-icon-192x192.png?cacheVersion=${CACHE_VERSION}`,
         sizes: "192x192",
         type: "image/png",
       },
       {
-        src: `/images/android-chrome-512x512.png?cacheVersion=${CACHE_VERSION}`,
+        src: `/images/astronaut-coding-laptop-app-icon-512x512.png?cacheVersion=${CACHE_VERSION}`,
         sizes: "512x512",
         type: "image/png",
       },

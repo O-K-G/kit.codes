@@ -52,7 +52,7 @@ export default async function OpenGraphImage() {
   const [bebasNeue, icon] = await Promise.all([
     // A TTF: ImageResponse doesn't read WOFF2 (the site's own copy, see handleFontsByLocale)
     readFile(join(process.cwd(), "src/assets/fonts/Bebas_Neue/BebasNeue-Regular.ttf")),
-    readFile(join(publicDir, "images/android-chrome-512x512.png")),
+    readFile(join(publicDir, "images/astronaut-coding-laptop-app-icon-512x512.png")),
   ]);
   const iconSrc = `data:image/png;base64,${icon.toString("base64")}`;
 
