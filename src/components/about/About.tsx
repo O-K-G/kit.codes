@@ -19,6 +19,7 @@ export default function About({ activeSection }: ActiveSectionProps) {
       <header>
         <Title
           component="h1"
+          className={styles.title}
           border
           topLabel={t("topLabel")}
           bottomLabel={t("bottomLabel")}
@@ -32,7 +33,7 @@ export default function About({ activeSection }: ActiveSectionProps) {
         {t("subtitle")}
       </Title>
 
-      <ExpandableContent text={t("alternativeLabel")} />
+      <ExpandableContent className={styles.text} text={t("alternativeLabel")} />
     </Section>
   );
 }
