@@ -61,7 +61,7 @@ function ShenanigansComponent() {
             <h3 className={styles.heading}>
               {t("make")}
             </h3>
-            <div className={styles.srOnly}>{t("graphics")}</div>
+            <div className="sr-only">{t("graphics")}</div>
             <p>
               {t("yourApp")}
               <br />

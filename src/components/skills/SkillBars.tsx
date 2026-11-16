@@ -6,6 +6,7 @@ import { SkillBarsProps } from "@constants/interfaces";
 import styles from "./SkillBars.module.css";
 import classNames from "@utils/classNames";
 import Tooltip from "@ui/tooltip/Tooltip";
+import usePrefersReducedMotion from "@hooks/usePrefersReducedMotion";
 
 /** How much of the list must be visible for the bars to fill */
 const IN_VIEW_THRESHOLD = 0.5;
@@ -129,6 +130,7 @@ export default function SkillBars({ className }: SkillBarsProps) {
   const [filledRows, setFilledRows] = useState(0);
   const id = useId();
   const skills = Object.entries(SKILLS);
+  const reducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
     const list = listRef.current;
@@ -144,7 +146,7 @@ export default function SkillBars({ className }: SkillBarsProps) {
         }
         observer.disconnect();
 
-        if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        if (reducedMotion) {
           setFilledRows(skills.length);
           return;
         }
@@ -167,7 +169,7 @@ export default function SkillBars({ className }: SkillBarsProps) {
       observer.disconnect();
       clearInterval(timer);
     };
-  }, [skills.length]);
+  }, [skills.length, reducedMotion]);
 
   return (
     <ul

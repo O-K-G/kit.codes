@@ -1,3 +1,4 @@
+import { IconsProps } from "@constants/interfaces";
 import styles from "./SatelliteDish.module.css";
 
 /**
@@ -7,7 +8,7 @@ import styles from "./SatelliteDish.module.css";
  * 
  * https://www.svgrepo.com/svg/244927/satellite-dish-radar
  */
-export default function SatelliteDish({ className }: { className?: string }) {
+export default function SatelliteDish({ className }: IconsProps) {
   return (
     <svg aria-hidden viewBox="50 60 400 452" className={className}>
       <polygon className={styles.light} points="122.877,347.384 70.962,502.58 201.128,502.58 149.213,347.384 136.011,345.734" />

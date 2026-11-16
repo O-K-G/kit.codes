@@ -34,7 +34,7 @@ export default function Reviews({ activeSection }: ActiveSectionProps) {
               SRC:{" "}
               <a href={URLs.linkedIn} target="_blank" rel="noreferrer" className={styles.sourceLink}>
                 LinkedIn
-                <span lang={locale} className={styles.srOnly}>
+                <span lang={locale} className="sr-only">
                   {" "}
                   {t("opensInNewTab")}
                 </span>

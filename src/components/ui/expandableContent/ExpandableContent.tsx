@@ -18,11 +18,16 @@ const IN_VIEW_THRESHOLD = 0.5;
  * (its frame drawn: see expand-button in the CSS).
  *
  * Accessibility: the text is in the DOM from the start (only visually hidden while the gauge runs), so
- * screen readers read it in place; the gauge is decorative and pauses while out of view. Without
+ * screen readers read it in place; the gauge is decorative and pauses while out of view. Open, the box
+ * can be focused while its content scrolls (WCAG 2.1.1: keyboard users can scroll it then), and only
+ * then: content that fits needs no stop on the way. Without
  * JavaScript the text is shown open (see the `scripting` media query in the CSS).
  */
 export default function ExpandableContent({ text, children, onOpened, className }: ExpandableContentProps) {
   const boxRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  /** Open, its content overflows the box (and scrolls) */
+  const [scrollable, setScrollable] = useState(false);
   const [inView, setInView] = useState(false);
   const [open, setOpen] = useState(false);
   /** The gauge's count hit 100%: the corner brackets blink along with it */
@@ -41,6 +46,26 @@ export default function ExpandableContent({ text, children, onOpened, className 
     observer.observe(box);
 
     return () => observer.disconnect();
+  }, [open]);
+
+  // Open, whether the content overflows, again as it or what's in it resizes (two levels down: children
+  // fill the box, and what grows is in them)
+  useEffect(() => {
+    const content = contentRef.current;
+    if (!content || !open) {
+      return;
+    }
+    const measure = () => setScrollable(content.scrollHeight > content.clientHeight);
+    measure();
+
+    if (typeof ResizeObserver === "undefined") {
+      return;
+    }
+    const resizeObserver = new ResizeObserver(measure);
+    const children = Array.from(content.children);
+    const grandchildren = children.flatMap((child) => Array.from(child.children));
+    [content, ...children, ...grandchildren].forEach((element) => resizeObserver.observe(element));
+    return () => resizeObserver.disconnect();
   }, [open]);
 
   /** The count hit 100%: the brackets blink with it. Then, once it has blinked, the box opens */
@@ -63,11 +88,12 @@ export default function ExpandableContent({ text, children, onOpened, className 
           onFull={handleGaugeFull}
           onComplete={handleGaugeComplete}
         />
-        {/* Focusable once open, so keyboard users can scroll a long text (WCAG 2.1.1) */}
+        {/* Focusable while it scrolls, so keyboard users can scroll it (WCAG 2.1.1) */}
         <div
+          ref={contentRef}
           className={styles.content}
           data-open={open}
-          tabIndex={open ? 0 : undefined}
+          tabIndex={open && scrollable ? 0 : undefined}
           onAnimationEnd={handleContentAnimationEnd}
         >
           {children ?? <p>{text}</p>}

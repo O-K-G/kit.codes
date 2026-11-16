@@ -38,7 +38,6 @@ section.section {
 /* The dish, under the quotes in the box, at their start (away from the footer's astronaut, centered
  * behind the box's bottom): as tall as the room under them (see ReviewsTypewriter's .bottom) */
 .dish {
-  flex: none;
   height: 100%;
 }
 
@@ -89,14 +88,4 @@ div.typewriter {
   &:active {
     color: var(--color-title-purple);
   }
-}
-
-/* For screen readers only */
-.srOnly {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
 }

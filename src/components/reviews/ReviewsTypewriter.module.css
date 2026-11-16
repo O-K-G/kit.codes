@@ -15,17 +15,35 @@
   height: 100%;
 }
 
+/* The box's text, in Handjet: the quotes, the readouts under them and the pause button. The quotes and
+ * readouts glow like a screen's text, a dark edge first so they read over the bright parts of the
+ * background */
+.quote,
+.readout,
+.pause {
+  font-family: var(--font-handjet), var(--font-mono);
+  color: #fff;
+}
+
+.quote,
+.readout {
+  letter-spacing: 0.02em;
+  text-shadow:
+    0 0 0.15em #000,
+    0 0 0.5em #b377ff;
+}
+
+/* The rows over and under the quotes, until the box is done opening */
+.untilOpened[data-hidden] {
+  visibility: hidden;
+}
+
 /* Over the quotes: the pause button, at the right */
 .top {
   display: flex;
   flex: none;
   justify-content: flex-end;
   padding: calc(var(--typewriter-block-padding) / 2) var(--typewriter-inline-padding) 0;
-
-  /* Until the box is done opening */
-  &[data-hidden] {
-    visibility: hidden;
-  }
 }
 
 /* The pause button, in the readouts' style (see .readout), framed so it reads as a button; at least
@@ -38,11 +56,9 @@
   padding: 0.2em 0.5em;
   border: 1px solid var(--color-title-purple);
   border-radius: 0.25rem;
-  font-family: var(--font-handjet), var(--font-mono);
   font-size: max(1rem, 0.9rem + 0.3vw, 1.125 * var(--desktop-rem));
   line-height: 1;
   letter-spacing: 0.04em;
-  color: #fff;
   background: transparent;
   cursor: pointer;
 
@@ -82,27 +98,16 @@
   > :first-child {
     justify-self: start;
   }
-
-  /* Until the box is done opening */
-  &[data-hidden] {
-    visibility: hidden;
-  }
 }
 
 /* The source and the time since the box opened, in the quotes' font, still. Their boxes end at the
  * letters' baseline (and start at their capitals' top), so the letters sit right on the bottom line of
  * `below`, not above it by the room kept for descenders */
 .readout {
-  font-family: var(--font-handjet), var(--font-mono);
   font-size: max(1.125rem, 1rem + 0.5vw, 1.5 * var(--desktop-rem));
   line-height: 1;
   text-box: trim-both cap alphabetic;
-  letter-spacing: 0.02em;
   white-space: nowrap;
-  color: #fff;
-  text-shadow:
-    0 0 0.15em #000,
-    0 0 0.5em #b377ff;
 }
 
 .source {
@@ -111,7 +116,7 @@
   /* Its link blinks 3 times as the row appears (once the box is done opening): 2 blinks a second, under
    * WCAG 2.3.1's 3 flashes a second, over in 1.5s. With reduced motion, near-instant (see globals.css) */
   .bottom:not([data-hidden]) & a {
-    animation: typewriter-source-blink 0.5s step-end 3;
+    animation: typewriter-blink 0.5s step-end 3;
   }
 }
 
@@ -132,9 +137,9 @@
   padding: 0.5rem var(--typewriter-inline-padding);
   overflow: clip;
   text-align: start;
-  /* Earlier quotes fade out at the top: down to where the quote being typed starts, at most 3rem (set
-   * by ReviewsTypewriter, see FADE_REM) */
-  mask-image: linear-gradient(transparent, #000 var(--typewriter-fade, 3rem));
+  /* Earlier quotes fade out at the top: down to where the quote being typed starts (--typewriter-fade),
+   * at most --typewriter-fade-max (both set by ReviewsTypewriter, see FADE_REM) */
+  mask-image: linear-gradient(transparent, #000 var(--typewriter-fade, var(--typewriter-fade-max)));
 
   /* With reduced motion: all the quotes, as tall as they are (the expandable box scrolls them) */
   &[data-static] {
@@ -143,7 +148,9 @@
   }
 }
 
+/* Positioned, so its quotes' offsets are from it (see centerQuote in ReviewsTypewriter) */
 .list {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -152,25 +159,19 @@
   list-style: none;
   transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
 
-  /* Once all the quotes are typed, they disappear (screen readers still have them, see .srOnly), before
-   * the typing starts over. (CLEAR_MS in ReviewsTypewriter.tsx is this fade's duration) */
+  /* Once all the quotes are typed, they disappear (screen readers still have them), before the typing
+   * starts over: a fade as long as the typewriter takes to clear them (--typewriter-clear, set by
+   * ReviewsTypewriter, see useTypewriter) */
   &[data-cleared] {
     opacity: 0%;
-    transition: opacity 300ms;
+    transition: opacity var(--typewriter-clear);
   }
 }
 
-/* A quote, in Handjet, glowing like a screen's text */
+/* A quote (in the box's Handjet, see .quote above) */
 .quote {
-  font-family: var(--font-handjet), var(--font-mono);
   font-size: max(1.25rem, 1.1rem + 0.5vw, 1.5 * var(--desktop-rem));
   line-height: 1.3;
-  letter-spacing: 0.02em;
-  color: #fff;
-  /* A dark edge first, so it reads over the bright parts of the background */
-  text-shadow:
-    0 0 0.15em #000,
-    0 0 0.5em #b377ff;
   transition: opacity 600ms;
 
   blockquote,
@@ -211,26 +212,11 @@
 }
 
 .blinking::before {
-  animation: typewriter-cursor 0.75s step-end infinite;
+  animation: typewriter-blink 0.75s step-end infinite;
 }
 
-/* The quote whole, for screen readers only (the typed copy is hidden from them) */
-.srOnly {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
-
-@keyframes typewriter-cursor {
-  50% {
-    opacity: 0%;
-  }
-}
-
-@keyframes typewriter-source-blink {
+/* Off for the second half of each blink (with step-end) */
+@keyframes typewriter-blink {
   50% {
     opacity: 0%;
   }

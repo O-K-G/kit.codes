@@ -77,6 +77,9 @@ describe("ExpandableContent", () => {
 
   it("expands once the count has blinked, and stops observing", () => {
     const { gauge, gaugeCount, content } = renderContent();
+    // A text longer than the box: it scrolls, so the box can be focused once open
+    Object.defineProperty(content, "scrollHeight", { configurable: true, value: 500 });
+    Object.defineProperty(content, "clientHeight", { configurable: true, value: 200 });
     setVisible(true);
 
     fireAfterAnimationEnd(gauge);
@@ -88,6 +91,18 @@ describe("ExpandableContent", () => {
     expect(content).toHaveAttribute("data-open", "true");
     expect(content).toHaveAttribute("tabindex", "0");
     expect(disconnect).toHaveBeenCalled();
+  });
+
+  it("isn't a stop for the keyboard when its content fits", () => {
+    const { gauge, gaugeCount, content } = renderContent();
+    Object.defineProperty(content, "scrollHeight", { configurable: true, value: 200 });
+    Object.defineProperty(content, "clientHeight", { configurable: true, value: 200 });
+    setVisible(true);
+    fireAfterAnimationEnd(gauge);
+    fireAfterAnimationEnd(gaugeCount);
+
+    expect(content).toHaveAttribute("data-open", "true");
+    expect(content).not.toHaveAttribute("tabindex");
   });
 
   it("shows children in place of the text, and tells once it's done opening", () => {

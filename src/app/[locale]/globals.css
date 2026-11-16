@@ -303,6 +303,19 @@ html[data-resizing] ::after {
   filter: none !important;
 }
 
+/* For screen readers only: in the page, read in place, but not shown */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border-width: 0;
+}
+
 /* Keyboard focus: a dark purple ring against the element, then a 2px gap, then a white ring, so one of
  * the two contrasts with whatever is behind (WCAG 2.4.7 / 2.4.13). Important, so components' own
  * outlines and shadows can't hide it. In forced colors only the outline (white ring) remains. */

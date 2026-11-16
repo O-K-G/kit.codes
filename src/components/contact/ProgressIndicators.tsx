@@ -19,7 +19,7 @@ export default function ProgressIndicators({
 
   return (
     <div className={styles.container}>
-      <div className={styles.srOnly} aria-live="assertive" role="status">
+      <div className="sr-only" aria-live="assertive" role="status">
         {isValidated && isLoading ? t('sendingMessage') : ''}
         {isMessageSent ? t('messageSent') : ''}
       </div>

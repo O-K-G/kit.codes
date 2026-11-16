@@ -62,7 +62,7 @@ describe("ReviewsTypewriter", () => {
     render(<ReviewsTypewriter quotes={QUOTES} label="Reviews" />);
 
     expect(screen.getByRole("list", { name: "Reviews" })).toBeInTheDocument();
-    QUOTES.forEach((quote) => expect(screen.getByText(quote, { selector: `.${styles.srOnly}` })).toBeInTheDocument());
+    QUOTES.forEach((quote) => expect(screen.getByText(quote, { selector: ".sr-only" })).toBeInTheDocument());
   });
 
   it("types once its box is done opening, only while in view, then the next quote after a pause", () => {

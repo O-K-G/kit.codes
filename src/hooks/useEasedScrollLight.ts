@@ -1,4 +1,5 @@
 import { RefObject, useEffect } from "react";
+import usePrefersReducedMotion from "@hooks/usePrefersReducedMotion";
 
 /** How fast the light catches up with the scroll: an exponential ease, closing all but 1/e of the
  * distance in this many seconds */
@@ -70,9 +71,11 @@ export default function useEasedScrollLight(
   listRef: RefObject<HTMLElement | null>,
   { light, glow, axisPart, node }: TimelineLightClasses
 ) {
+  const reducedMotion = usePrefersReducedMotion();
+
   useEffect(() => {
     const list = listRef.current;
-    if (!list || window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
+    if (!list || reducedMotion) {
       return;
     }
 
@@ -188,5 +191,5 @@ export default function useEasedScrollLight(
         ["--light-shift", "--glow-shift", "--node-progress"].forEach((name) => element.style.removeProperty(name));
       });
     };
-  }, [listRef, light, glow, axisPart, node]);
+  }, [listRef, light, glow, axisPart, node, reducedMotion]);
 }

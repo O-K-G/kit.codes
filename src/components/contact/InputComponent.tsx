@@ -84,7 +84,7 @@ export default function InputComponent({
             </p>
             <p className={styles.counter}>
               <span aria-hidden>{remaining}</span>
-              <span id={counterId} className={styles.srOnly}>
+              <span id={counterId} className="sr-only">
                 {counterText}
               </span>
             </p>

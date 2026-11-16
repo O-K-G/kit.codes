@@ -131,18 +131,6 @@
         background-color: oklch(40% 0.16 25.331 / 85%);
       }
 
-      .srOnly {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        padding: 0;
-        margin: -1px;
-        overflow: hidden;
-        clip-path: inset(50%);
-        white-space: nowrap;
-        border-width: 0;
-      }
-
       /* Under the field: its error (if any) at the start, the characters left at the end */
       .meta {
         display: flex;

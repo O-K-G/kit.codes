@@ -217,6 +217,27 @@ export interface TooltipProps extends Omit<ComponentPropsWithoutRef<"span">, "co
   boxClassName?: string;
 }
 
+export interface ReviewsTypewriterProps {
+  /** Typed out one after another, in the expandable box */
+  quotes: readonly string[];
+  /** Names the list of quotes */
+  label: string;
+  /** Sizes and places the expandable box's container */
+  className?: string;
+  /** Shown in the box under the quotes, on the left (e.g. an illustration): it fills the row's height */
+  below?: ReactNode;
+  /** Shown under the quotes in the middle, in the timestamp's style: where they come from */
+  source?: ReactNode;
+}
+
+export interface TimestampProps {
+  /** When the counting started (the clock's time), or null before it has */
+  since: number | null;
+  /** Holds the count where it is while true; played again, it shows the time since `since` */
+  paused?: boolean;
+  className?: string;
+}
+
 export interface ContactGoBackButtonProps {
   children: ReactNode;
   onClick: () => void;
