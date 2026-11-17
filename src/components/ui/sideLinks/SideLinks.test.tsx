@@ -32,7 +32,6 @@ describe("SideLinks Component", () => {
 
     const messagesObject = Object.assign({}, ...jsonFiles);
 
-    console.log(messagesObject);
     render(
       <NextIntlClientProvider locale={DEFAULT_LOCALE} messages={messagesObject}>
         <SideLinks />

@@ -13,6 +13,21 @@
     gap: 1.5rem;
   }
 
+  /* The message's row: the one that shrinks when the form doesn't fit on the screen, down to its box's
+   * smallest height (see textarea.field). min-height: 0 lets each box on the way down to it shrink. */
+  &:has(textarea) {
+    min-height: 0;
+
+    .fieldColumn {
+      align-self: stretch;
+      min-height: 0;
+    }
+
+    .fieldWrapper {
+      min-height: 0;
+    }
+  }
+
   .labelWrapper {
     display: flex;
     align-items: center;
@@ -102,11 +117,15 @@
         }
       }
 
+      /* As tall as its rows, or smaller on short screens, down to 3 lines */
       textarea.field {
+        flex-shrink: 1;
+        min-height: calc(3lh + 1rem + 4px);
         padding: 0.5rem;
         resize: none;
 
         @media (width >= 40rem) {
+          min-height: calc(3lh + 2rem + 4px);
           padding: 1rem;
         }
       }
