@@ -306,8 +306,9 @@
 /* Its tooltip (see Tooltip), below it (or above, with more room there), toward the axis' side of the
  * screen */
 .tooltip {
-  /* Within the page's gutter on either side */
-  width: min(22rem, 100vw - var(--content-gutter-start) - var(--page-gutter));
+  /* Within the page's gutter on either side. Past the desktop breakpoint it widens with its text (see
+   * .tooltipBox: 22rem holds the same text at 1024px), so the text wraps the same on larger screens */
+  width: min(max(22rem, 22 * var(--desktop-rem)), 100vw - var(--content-gutter-start) - var(--page-gutter));
 
   /* Placed beside its circle (see Tooltip's keepInViewport): no wider than the room from the circle to
    * the screen's edge (the area it's placed in), less the gutter, so it never reaches the edge */

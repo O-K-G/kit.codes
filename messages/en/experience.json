@@ -1,13 +1,13 @@
 {
   "experience": {
     "mainTitle": "Professional Experience",
-    "bankMainTitle": "Web Developer and Scrum Master - Bank Leumi",
-    "bankMainTitleDescription": "Led the front-end development of key components of a new customer facing business website for one of the largest banks, creating dynamic, accessible and responsive user interfaces using Next.js, React.js, Tailwind, ReactQuery, TypeScript, and Swagger API. Supported the deployment of the application in test and development environments prior to its release in the production environment. Enhanced a React.js UI component library to align with front-end development requirements, ensuring full WCAG 2 and ARIA accessibility (a11y) compliance. Designed and delivered a Proof of Concept web app for a customer onboarding platform, serving as a scalable, generic reference for future front-end projects. Acted as a Scrum Master synchronizing teams and prioritizing work tasks, ensuring individual team members remain committed and deliver on their assigned tasks, promoted clear communication and alignment within the scrum.",
+    "bankMainTitle": "Front end team lead - Bank Leumi",
+    "bankMainTitleDescription": "Led a front end team of a major bank's business site with Next.js, forked it's UI library, made it fully WCAG accessible, managed internationalization and localization, and ran a team as a Scrum Master.",
     "faiMainTitle": "Web Developer, TL - FAI Systems",
-    "faiDescription": "Lead the front-end development of a cutting-edge, intuitive Drag and Drop interface in an agile project environment using Next.js. Implement security best practices, including Content Security Policy (CSP), Trusted Types, and DOM sanitation, to safeguard applications against XSS and enhance overall application security. Drive the design and strategic management of future-proofed UI architecture and seamless business logic integration.",
+    "faiDescription": "Led the front end PoC of a Drag and Drop Next.js AI app.",
     "faiMainTitle2": "Founding Web Dev. - FAI Systems",
-    "faiDescription2": "Designed and developed a feature-rich customer-facing website with user registration and authentication for a Toronto-based startup. Supported fundraising through venture capital presentations.",
+    "faiDescription2": "Remotely built a Toronto based startup's website from scratch, with sign-up and secure login, and helped create the pitch decks that helped raise VC funding.",
     "volteraMainTitle": "Web Developer - Voltera inc.",
-    "volteraDescription": "Lead front-end developer of the company's marketing website in Waterloo ON, Canada. Duties include developing, maintaining and improving the existing codebase."
+    "volteraDescription": "Lead the front end of Voltera's marketing website in Waterloo, Canada: shipping new features and keeping the code modern and clean."
   }
 }
