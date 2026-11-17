@@ -1,12 +1,19 @@
-/* Grows past the viewport when its content doesn't fit (short screens): the aside then scrolls. */
+/* One screen tall, as the aside is: the form's message box shrinks to fit (see ContactForm), so
+ * nothing scrolls. Short screens (e.g. landscape phones) can't fit it: there it grows, and the aside
+ * scrolls. */
 .section {
   position: relative;
+  height: 100dvh;
   padding-top: 5rem;
   /* Room for the focus rings of the last links, grown on focus (WCAG 2.4.7) */
   padding-bottom: calc(2 * var(--fluid-rem));
 
   @media (width >= 48rem) {
     padding-top: 2.5rem;
+  }
+
+  @media (height < 30rem) {
+    height: auto;
   }
 
   .background {
