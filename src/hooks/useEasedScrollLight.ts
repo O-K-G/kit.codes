@@ -1,5 +1,29 @@
-import { RefObject, useEffect } from "react";
+import { RefObject, useEffect, useSyncExternalStore } from "react";
 import usePrefersReducedMotion from "@hooks/usePrefersReducedMotion";
+
+/** A mouse (or trackpad): its wheel scrolls in steps, which the light would jump with */
+const FINE_POINTER = "(hover: hover) and (pointer: fine)";
+
+const subscribeToPointer = (onChange: () => void) => {
+  const query = window.matchMedia?.(FINE_POINTER);
+  query?.addEventListener?.("change", onChange);
+  return () => query?.removeEventListener?.("change", onChange);
+};
+
+/**
+ * Whether the light needs easing: with a mouse, or where the browser can't light it by itself (no
+ * scroll-driven animations). Touch scrolling is smooth already, and there the CSS scroll-driven
+ * animations light it in step with the finger, off the main thread; this script, writing the light's
+ * properties at every frame, restyles the whole timeline each time, on the main thread, which a phone
+ * can't keep up with while scrolling
+ */
+const needsEasing = () =>
+  !!window.matchMedia?.(FINE_POINTER).matches ||
+  typeof CSS === "undefined" ||
+  !CSS.supports?.("animation-timeline: view()");
+
+/** On the server, and while hydrating, not known yet: the CSS lights it meanwhile */
+const getServerSnapshot = () => false;
 
 /** How fast the light catches up with the scroll: an exponential ease, closing all but 1/e of the
  * distance in this many seconds */
@@ -65,17 +89,19 @@ const unit = (value: number) => Math.min(Math.max(value, 0), 1).toFixed(4);
  *
  * The branches are measured once, and again when the list's size changes, not while scrolling: each
  * frame only sets those two properties, which the CSS turns into transforms and opacity. The list gets
- * data-smooth while this runs. With reduced motion it doesn't: the CSS leaves the timeline all lit.
+ * data-smooth while this runs. With reduced motion it doesn't: the CSS leaves the timeline all lit. Nor
+ * on touch screens where the CSS can light it the same, by itself (see needsEasing()).
  */
 export default function useEasedScrollLight(
   listRef: RefObject<HTMLElement | null>,
   { light, glow, axisPart, node }: TimelineLightClasses
 ) {
   const reducedMotion = usePrefersReducedMotion();
+  const easing = useSyncExternalStore(subscribeToPointer, needsEasing, getServerSnapshot);
 
   useEffect(() => {
     const list = listRef.current;
-    if (!list || reducedMotion) {
+    if (!list || reducedMotion || !easing) {
       return;
     }
 
@@ -191,5 +217,5 @@ export default function useEasedScrollLight(
         ["--light-shift", "--glow-shift", "--node-progress"].forEach((name) => element.style.removeProperty(name));
       });
     };
-  }, [listRef, light, glow, axisPart, node, reducedMotion]);
+  }, [listRef, light, glow, axisPart, node, reducedMotion, easing]);
 }

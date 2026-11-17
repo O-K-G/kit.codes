@@ -11,7 +11,7 @@ import styles from "./SectionSky.module.css";
  * (they've been cut out of the image) and sit where they were in it. `children` are drawn over the image
  * too (About's comet).
  *
- * The stars are drawn in the browser, while the section is on screen (see SkyStars).
+ * The stars are drawn in the browser, on a canvas, while the section is on screen (see SkyStars).
  *
  * Decorative: hidden from screen readers. With reduced motion, they hold still; off screen, they pause.
  */
@@ -34,12 +34,11 @@ export default function SectionSky({
         {
           "--h": sky.height,
           "--centered": Number(sky.centered),
-          "--star-opacity": sky.starOpacity,
         } as CSSProperties
       }
     >
       {children}
-      <SkyStars seed={sky.seed} starsTop={sky.starsTop} height={sky.height} />
+      <SkyStars seed={sky.seed} starsTop={sky.starsTop} height={sky.height} opacity={sky.starOpacity} />
     </PauseOffscreen>
   );
 }
