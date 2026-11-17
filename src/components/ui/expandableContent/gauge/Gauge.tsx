@@ -58,16 +58,16 @@ function ringPath(context: CanvasRenderingContext2D, center: number, inner: numb
 
 /** The inner ring's segments, each drawn 2 corner-widths smaller then stroked with round joins, which
  * grows it back to the ring's size with its corners rounded */
-function segmentsPath(context: CanvasRenderingContext2D, center: number, radius: number) {
-  const corner = SEGMENT_CORNER * radius;
-  const outer = INNER_OUTER_EDGE * radius - corner;
-  const inner = INNER_INNER_EDGE * radius + corner;
+function segmentsPath(context: CanvasRenderingContext2D, center: number) {
+  const corner = SEGMENT_CORNER * center;
+  const outer = INNER_OUTER_EDGE * center - corner;
+  const inner = INNER_INNER_EDGE * center + corner;
+  // Shrunk by the corner at either end too, along the outer edge
+  const inset = (corner / outer) * (180 / Math.PI);
   context.beginPath();
   for (let index = 0; index < SEGMENTS; index++) {
     const start = index * SEGMENT_DEG;
     const end = start + SEGMENT_DEG - SEGMENT_GAP_DEG;
-    // Shrunk by the corner at either end, along the outer edge (as the original's segments are)
-    const inset = (corner / outer) * (180 / Math.PI);
     context.moveTo(center + inner * Math.cos(fromTop(start + inset)), center + inner * Math.sin(fromTop(start + inset)));
     context.arc(center, center, outer, fromTop(start + inset), fromTop(end - inset));
     context.arc(center, center, inner, fromTop(end - inset), fromTop(start + inset), true);
@@ -75,48 +75,51 @@ function segmentsPath(context: CanvasRenderingContext2D, center: number, radius:
   }
 }
 
-/** A wedge from the top, clockwise, over `degrees`: what's filled so far */
-function wedgePath(context: CanvasRenderingContext2D, center: number, radius: number, degrees: number) {
+type CanvasFillStyle = string | CanvasGradient;
+
+/** Paints the inner ring's segments (see segmentsPath) in the given style */
+function paintSegments(context: CanvasRenderingContext2D, center: number, style: CanvasFillStyle) {
+  segmentsPath(context, center);
+  context.fillStyle = style;
+  context.strokeStyle = style;
+  context.lineWidth = 2 * SEGMENT_CORNER * center;
+  context.lineJoin = "round";
+  context.fill();
+  context.stroke();
+}
+
+/** A wedge from the top, clockwise, over `degrees`, as far as the gauge's edge: what's filled so far */
+function wedgePath(context: CanvasRenderingContext2D, center: number, degrees: number) {
   context.beginPath();
   context.moveTo(center, center);
-  context.arc(center, center, radius, fromTop(0), fromTop(degrees));
+  context.arc(center, center, center, fromTop(0), fromTop(degrees));
   context.closePath();
 }
 
-/** The two fills, from the top: the outer ring's, `outer` degrees of it, and the inner ring's
- * segments, `inner` degrees of them, in the given style (a color or a gradient) */
-function drawFills(
-  context: CanvasRenderingContext2D,
-  size: number,
-  outer: number,
-  inner: number,
-  innerStyle: CanvasFillStyle
-) {
-  const center = size / 2;
-  if (outer > 0) {
-    const outerGradient = context.createConicGradient(fromTop(0), center, center);
-    outerGradient.addColorStop(0, PURPLE);
-    outerGradient.addColorStop(1, RED);
-    ringPath(context, center, OUTER_INNER_EDGE * center, center, outer);
-    context.fillStyle = outerGradient;
-    context.fill();
+/** The outer ring's fill, purple to red, over its first `degrees` from the top */
+function paintOuterFill(context: CanvasRenderingContext2D, center: number, degrees: number) {
+  if (degrees <= 0) {
+    return;
   }
-  if (inner > 0) {
-    context.save();
-    wedgePath(context, center, center, inner);
-    context.clip();
-    segmentsPath(context, center, center);
-    context.fillStyle = innerStyle;
-    context.strokeStyle = innerStyle;
-    context.lineWidth = 2 * SEGMENT_CORNER * center;
-    context.lineJoin = "round";
-    context.fill();
-    context.stroke();
-    context.restore();
-  }
+  const gradient = context.createConicGradient(fromTop(0), center, center);
+  gradient.addColorStop(0, PURPLE);
+  gradient.addColorStop(1, RED);
+  ringPath(context, center, OUTER_INNER_EDGE * center, center, degrees);
+  context.fillStyle = gradient;
+  context.fill();
 }
 
-type CanvasFillStyle = string | CanvasGradient;
+/** The inner ring's fill, its segments over their first `degrees` from the top, in the given style */
+function paintInnerFill(context: CanvasRenderingContext2D, center: number, degrees: number, style: CanvasFillStyle) {
+  if (degrees <= 0) {
+    return;
+  }
+  context.save();
+  wedgePath(context, center, degrees);
+  context.clip();
+  paintSegments(context, center, style);
+  context.restore();
+}
 
 /**
  * A decorative gauge that fills by itself: an outer ring (purple to red), a segmented inner ring
@@ -202,14 +205,15 @@ export default function Gauge({ running, onFull, onComplete, className, ref }: G
       ringPath(context, center, OUTER_INNER_EDGE * center, center);
       context.fillStyle = "rgb(255 255 255 / 20%)";
       context.fill();
-      drawFills(context, size, outer, 0, "");
+      paintOuterFill(context, center, outer);
 
       // The glow: the fills (the inner one in red), blurred and brightened, swelling back and forth
       if (glow && glowContext) {
         glowContext.setTransform(1, 0, 0, 1, 0, 0);
         glowContext.clearRect(0, 0, full, full);
         glowContext.translate(room, room);
-        drawFills(glowContext, size, outer, inner, RED);
+        paintOuterFill(glowContext, center, outer);
+        paintInnerFill(glowContext, center, inner, RED);
         const swing = (elapsed / PULSE_MS) % 2;
         const pulse = easeInOut(swing < 1 ? swing : 2 - swing);
         const scale = 1 + 0.04 * pulse;
@@ -226,17 +230,13 @@ export default function Gauge({ running, onFull, onComplete, className, ref }: G
       ringPath(context, center, INNER_INNER_EDGE * center, INNER_OUTER_EDGE * center);
       context.fillStyle = "#000";
       context.fill();
-      segmentsPath(context, center, center);
-      context.fillStyle = "rgb(255 255 255 / 20%)";
-      context.strokeStyle = "rgb(255 255 255 / 20%)";
-      context.lineWidth = 2 * SEGMENT_CORNER * center;
-      context.lineJoin = "round";
-      context.fill();
-      context.stroke();
+      // Opaque (20% white over the black), as each segment is painted twice (filled, then stroked to round
+      // its corners): see-through, the two would add up where they overlap, outlining it
+      paintSegments(context, center, "#333");
       const innerGradient = context.createConicGradient(fromTop(0), center, center);
       innerGradient.addColorStop(0, "#fff");
       innerGradient.addColorStop(1, PALE_ORANGE);
-      drawFills(context, size, 0, inner, innerGradient);
+      paintInnerFill(context, center, inner, innerGradient);
 
       // The count, white to purple as it counts, with the subtitles' neon glow; it blinks off for the
       // first half of each of its two blinks

@@ -5,7 +5,8 @@ import { useTranslations } from "next-intl";
 import { TimelineProps } from "@constants/interfaces";
 import Tooltip from "@ui/tooltip/Tooltip";
 import classNames from "@utils/classNames";
-import useEasedScrollLight, { useAxisEnds } from "@hooks/useEasedScrollLight";
+import useEasedScrollLight from "@hooks/useEasedScrollLight";
+import useAxisEnds from "@hooks/useAxisEnds";
 import styles from "./Timeline.module.css";
 
 export const TIMELINE_BRANCH_TEST_ID = "timeline-branch-test-id";

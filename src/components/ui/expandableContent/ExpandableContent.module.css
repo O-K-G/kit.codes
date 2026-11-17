@@ -83,7 +83,7 @@
       background-color 500ms var(--open-easing) var(--open-duration);
   }
 
-  /* The lines across its top and bottom: drawn as it opens (see frame-line-top), then kept. Each as
+  /* The lines across its top and bottom: drawn as it opens (see frame-line), then kept. Each as
    * tall as the frame, its line on its edge, so it can be moved to the middle in percent of its height */
   &::before,
   &::after {
@@ -95,22 +95,23 @@
     pointer-events: none;
   }
 
+  /* Moved down from the top, and up from the bottom (see frame-line) */
   &::before {
+    --line-direction: 1;
+
     border-top-width: calc(0.0625 * var(--fluid-rem));
   }
 
   &::after {
+    --line-direction: -1;
+
     border-bottom-width: calc(0.0625 * var(--fluid-rem));
   }
 
-  &[data-open="true"]::before {
-    opacity: 100%;
-    animation: frame-line-top var(--open-duration) linear;
-  }
-
+  &[data-open="true"]::before,
   &[data-open="true"]::after {
     opacity: 100%;
-    animation: frame-line-bottom var(--open-duration) linear;
+    animation: frame-line var(--open-duration) linear;
   }
 }
 
@@ -264,17 +265,12 @@
   }
 }
 
-/* The text, clipped to between the frame's lines (see frame-line-top): all of it, down to a line across
- * the middle, then all of it again. Between lines that close in and part linearly over the box's
- * height as it grows (the box's opening, eased, see .frame): so their distance is the product of the
- * two, which no single transition follows. Hence the keyframes, every 5%, generated: at each, the
- * lines' distance is h * (the closed square * (1 - e) + the box * e), h the lines' linear share (1 to 0
- * to 1), e the box's eased progress (cubic-bezier(0.4, 0, 0.2, 1), as --open-easing), and each line is
- * half the rest from its edge. Percentages are of the box's height (the text's and the lines' boxes
- * are the box's size) */
+/* The opening (see .frame and .content): the text clipped to between the frame's lines (expand-button),
+ * which close in to the middle and part again (frame-line) while the box grows. Generated, with how
+ * they're worked out: see scripts/generate-expand-keyframes.mjs (run it again if --open-easing changes) */
 @keyframes expand-button {
   0% {
-    clip-path: inset(calc(50% - (1.0 * var(--closed-size) + 0.0 * 100%) / 2) 0);
+    clip-path: inset(calc(50% - (1 * var(--closed-size) + 0 * 100%) / 2) 0);
   }
 
   5% {
@@ -314,7 +310,7 @@
   }
 
   50% {
-    clip-path: inset(calc(50% - (0.0 * var(--closed-size) + 0.0 * 100%) / 2) 0);
+    clip-path: inset(calc(50% - (0 * var(--closed-size) + 0 * 100%) / 2) 0);
   }
 
   55% {
@@ -354,223 +350,114 @@
   }
 
   100% {
-    clip-path: inset(calc(50% - (0.0 * var(--closed-size) + 1.0 * 100%) / 2) 0);
+    clip-path: inset(calc(50% - (0 * var(--closed-size) + 1 * 100%) / 2) 0);
   }
 }
 
-/* The frame's top line: at the top of the text's clip, appearing as it closes in */
-@keyframes frame-line-top {
+@keyframes frame-line {
   0% {
     opacity: 0%;
-    translate: 0 calc(50% - (1.0 * var(--closed-size) + 0.0 * 100%) / 2);
+    translate: 0 calc(var(--line-direction) * (50% - (1 * var(--closed-size) + 0 * 100%) / 2));
   }
 
   5% {
     opacity: 10%;
-    translate: 0 calc(50% - (0.8948 * var(--closed-size) + 0.0052 * 100%) / 2);
+    translate: 0 calc(var(--line-direction) * (50% - (0.8948 * var(--closed-size) + 0.0052 * 100%) / 2));
   }
 
   10% {
     opacity: 20%;
-    translate: 0 calc(50% - (0.7793 * var(--closed-size) + 0.0207 * 100%) / 2);
+    translate: 0 calc(var(--line-direction) * (50% - (0.7793 * var(--closed-size) + 0.0207 * 100%) / 2));
   }
 
   15% {
     opacity: 30%;
-    translate: 0 calc(50% - (0.6538 * var(--closed-size) + 0.0462 * 100%) / 2);
+    translate: 0 calc(var(--line-direction) * (50% - (0.6538 * var(--closed-size) + 0.0462 * 100%) / 2));
   }
 
   20% {
     opacity: 40%;
-    translate: 0 calc(50% - (0.5196 * var(--closed-size) + 0.0804 * 100%) / 2);
+    translate: 0 calc(var(--line-direction) * (50% - (0.5196 * var(--closed-size) + 0.0804 * 100%) / 2));
   }
 
   25% {
     opacity: 50%;
-    translate: 0 calc(50% - (0.3817 * var(--closed-size) + 0.1183 * 100%) / 2);
+    translate: 0 calc(var(--line-direction) * (50% - (0.3817 * var(--closed-size) + 0.1183 * 100%) / 2));
   }
 
   30% {
     opacity: 60%;
-    translate: 0 calc(50% - (0.2531 * var(--closed-size) + 0.1469 * 100%) / 2);
+    translate: 0 calc(var(--line-direction) * (50% - (0.2531 * var(--closed-size) + 0.1469 * 100%) / 2));
   }
 
   35% {
     opacity: 70%;
-    translate: 0 calc(50% - (0.15 * var(--closed-size) + 0.15 * 100%) / 2);
+    translate: 0 calc(var(--line-direction) * (50% - (0.15 * var(--closed-size) + 0.15 * 100%) / 2));
   }
 
   40% {
     opacity: 80%;
-    translate: 0 calc(50% - (0.0773 * var(--closed-size) + 0.1227 * 100%) / 2);
+    translate: 0 calc(var(--line-direction) * (50% - (0.0773 * var(--closed-size) + 0.1227 * 100%) / 2));
   }
 
   45% {
     opacity: 90%;
-    translate: 0 calc(50% - (0.0296 * var(--closed-size) + 0.0704 * 100%) / 2);
+    translate: 0 calc(var(--line-direction) * (50% - (0.0296 * var(--closed-size) + 0.0704 * 100%) / 2));
   }
 
   50% {
     opacity: 100%;
-    translate: 0 calc(50% - (0.0 * var(--closed-size) + 0.0 * 100%) / 2);
+    translate: 0 calc(var(--line-direction) * (50% - (0 * var(--closed-size) + 0 * 100%) / 2));
   }
 
   55% {
     opacity: 100%;
-    translate: 0 calc(50% - (0.0168 * var(--closed-size) + 0.0832 * 100%) / 2);
+    translate: 0 calc(var(--line-direction) * (50% - (0.0168 * var(--closed-size) + 0.0832 * 100%) / 2));
   }
 
   60% {
     opacity: 100%;
-    translate: 0 calc(50% - (0.0248 * var(--closed-size) + 0.1752 * 100%) / 2);
+    translate: 0 calc(var(--line-direction) * (50% - (0.0248 * var(--closed-size) + 0.1752 * 100%) / 2));
   }
 
   65% {
     opacity: 100%;
-    translate: 0 calc(50% - (0.0267 * var(--closed-size) + 0.2733 * 100%) / 2);
+    translate: 0 calc(var(--line-direction) * (50% - (0.0267 * var(--closed-size) + 0.2733 * 100%) / 2));
   }
 
   70% {
     opacity: 100%;
-    translate: 0 calc(50% - (0.0247 * var(--closed-size) + 0.3753 * 100%) / 2);
+    translate: 0 calc(var(--line-direction) * (50% - (0.0247 * var(--closed-size) + 0.3753 * 100%) / 2));
   }
 
   75% {
     opacity: 100%;
-    translate: 0 calc(50% - (0.0203 * var(--closed-size) + 0.4797 * 100%) / 2);
+    translate: 0 calc(var(--line-direction) * (50% - (0.0203 * var(--closed-size) + 0.4797 * 100%) / 2));
   }
 
   80% {
     opacity: 100%;
-    translate: 0 calc(50% - (0.0148 * var(--closed-size) + 0.5852 * 100%) / 2);
+    translate: 0 calc(var(--line-direction) * (50% - (0.0148 * var(--closed-size) + 0.5852 * 100%) / 2));
   }
 
   85% {
     opacity: 100%;
-    translate: 0 calc(50% - (0.0093 * var(--closed-size) + 0.6907 * 100%) / 2);
+    translate: 0 calc(var(--line-direction) * (50% - (0.0093 * var(--closed-size) + 0.6907 * 100%) / 2));
   }
 
   90% {
     opacity: 100%;
-    translate: 0 calc(50% - (0.0045 * var(--closed-size) + 0.7955 * 100%) / 2);
+    translate: 0 calc(var(--line-direction) * (50% - (0.0045 * var(--closed-size) + 0.7955 * 100%) / 2));
   }
 
   95% {
     opacity: 100%;
-    translate: 0 calc(50% - (0.0012 * var(--closed-size) + 0.8988 * 100%) / 2);
+    translate: 0 calc(var(--line-direction) * (50% - (0.0012 * var(--closed-size) + 0.8988 * 100%) / 2));
   }
 
   100% {
     opacity: 100%;
-    translate: 0 calc(50% - (0.0 * var(--closed-size) + 1.0 * 100%) / 2);
-  }
-}
-
-/* The bottom line, likewise, from below */
-@keyframes frame-line-bottom {
-  0% {
-    opacity: 0%;
-    translate: 0 calc(-1 * calc(50% - (1.0 * var(--closed-size) + 0.0 * 100%) / 2));
-  }
-
-  5% {
-    opacity: 10%;
-    translate: 0 calc(-1 * calc(50% - (0.8948 * var(--closed-size) + 0.0052 * 100%) / 2));
-  }
-
-  10% {
-    opacity: 20%;
-    translate: 0 calc(-1 * calc(50% - (0.7793 * var(--closed-size) + 0.0207 * 100%) / 2));
-  }
-
-  15% {
-    opacity: 30%;
-    translate: 0 calc(-1 * calc(50% - (0.6538 * var(--closed-size) + 0.0462 * 100%) / 2));
-  }
-
-  20% {
-    opacity: 40%;
-    translate: 0 calc(-1 * calc(50% - (0.5196 * var(--closed-size) + 0.0804 * 100%) / 2));
-  }
-
-  25% {
-    opacity: 50%;
-    translate: 0 calc(-1 * calc(50% - (0.3817 * var(--closed-size) + 0.1183 * 100%) / 2));
-  }
-
-  30% {
-    opacity: 60%;
-    translate: 0 calc(-1 * calc(50% - (0.2531 * var(--closed-size) + 0.1469 * 100%) / 2));
-  }
-
-  35% {
-    opacity: 70%;
-    translate: 0 calc(-1 * calc(50% - (0.15 * var(--closed-size) + 0.15 * 100%) / 2));
-  }
-
-  40% {
-    opacity: 80%;
-    translate: 0 calc(-1 * calc(50% - (0.0773 * var(--closed-size) + 0.1227 * 100%) / 2));
-  }
-
-  45% {
-    opacity: 90%;
-    translate: 0 calc(-1 * calc(50% - (0.0296 * var(--closed-size) + 0.0704 * 100%) / 2));
-  }
-
-  50% {
-    opacity: 100%;
-    translate: 0 calc(-1 * calc(50% - (0.0 * var(--closed-size) + 0.0 * 100%) / 2));
-  }
-
-  55% {
-    opacity: 100%;
-    translate: 0 calc(-1 * calc(50% - (0.0168 * var(--closed-size) + 0.0832 * 100%) / 2));
-  }
-
-  60% {
-    opacity: 100%;
-    translate: 0 calc(-1 * calc(50% - (0.0248 * var(--closed-size) + 0.1752 * 100%) / 2));
-  }
-
-  65% {
-    opacity: 100%;
-    translate: 0 calc(-1 * calc(50% - (0.0267 * var(--closed-size) + 0.2733 * 100%) / 2));
-  }
-
-  70% {
-    opacity: 100%;
-    translate: 0 calc(-1 * calc(50% - (0.0247 * var(--closed-size) + 0.3753 * 100%) / 2));
-  }
-
-  75% {
-    opacity: 100%;
-    translate: 0 calc(-1 * calc(50% - (0.0203 * var(--closed-size) + 0.4797 * 100%) / 2));
-  }
-
-  80% {
-    opacity: 100%;
-    translate: 0 calc(-1 * calc(50% - (0.0148 * var(--closed-size) + 0.5852 * 100%) / 2));
-  }
-
-  85% {
-    opacity: 100%;
-    translate: 0 calc(-1 * calc(50% - (0.0093 * var(--closed-size) + 0.6907 * 100%) / 2));
-  }
-
-  90% {
-    opacity: 100%;
-    translate: 0 calc(-1 * calc(50% - (0.0045 * var(--closed-size) + 0.7955 * 100%) / 2));
-  }
-
-  95% {
-    opacity: 100%;
-    translate: 0 calc(-1 * calc(50% - (0.0012 * var(--closed-size) + 0.8988 * 100%) / 2));
-  }
-
-  100% {
-    opacity: 100%;
-    translate: 0 calc(-1 * calc(50% - (0.0 * var(--closed-size) + 1.0 * 100%) / 2));
+    translate: 0 calc(var(--line-direction) * (50% - (0 * var(--closed-size) + 1 * 100%) / 2));
   }
 }
 

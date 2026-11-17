@@ -357,6 +357,34 @@
   line-height: 1.5;
 }
 
+/* The light's tip, blurry: a soft white glow over the light's round end, at its front, while the scroll
+ * lights the timeline (as the tip's own box's bottom, see below: its box can be taller). One for the
+ * whole axis (over its parts' light, under the circles), so it doesn't show where two parts meet. Only
+ * shown, with `content`, by the two ways it's lit (the scroll-driven animations, or data-smooth) */
+.timeline::after {
+  position: absolute;
+  z-index: 6;
+  inset-inline-start: calc(var(--node-size) / 2);
+  width: var(--tip-width);
+  margin-inline-start: calc(var(--tip-width) / -2);
+  /* A bright core, spreading out softly */
+  background-image: radial-gradient(
+    closest-side,
+    #fff 18%,
+    rgb(255 255 255 / 60%) 38%,
+    rgb(255 255 255 / 22%) 65%,
+    transparent
+  );
+  background-repeat: no-repeat;
+  background-position: bottom;
+  background-size: 100% var(--tip-height);
+  pointer-events: none;
+
+  @media (width >= 48rem) {
+    inset-inline-start: 50%;
+  }
+}
+
 /* ---- Scrolling lights the timeline up: the axis down to the middle of the screen, and each circle
  * (with its line to the axis) as the light reaches its center. Without scroll-driven animations, or
  * with reduced motion, it's all lit.
@@ -398,32 +426,15 @@
       animation-duration: auto;
     }
 
-    /* The light's blurry tip, as when eased (see .timeline[data-smooth]::after), following the list's
-     * timeline: a box as tall as the list (and the tip), the tip drawn at its bottom, sliding from a
-     * list's height up to its place, so the tip goes from the list's top to its bottom as the middle of
-     * the screen does. It fades in over the axis' first round end and out over its last, on the same
+    /* The light's blurry tip (see .timeline::after), following the list's timeline: a box as tall as the
+     * list (and the tip), the tip drawn at its bottom, sliding from a list's height up to its place, so
+     * the tip goes from the list's top to its bottom as the middle of the screen does. It fades in over the axis' first round end and out over its last, on the same
      * timeline (where the axis starts and ends in the list, --axis-head and --axis-tail, are measured by
      * useAxisEnds): so it's never shown past the axis, wherever the browser has it. Each fade holds only
      * on its own side (fill backwards, forwards), leaving the tip shown between them */
     .timeline:not([data-smooth])::after {
       content: "";
-      position: absolute;
-      z-index: 6;
       inset-block: calc(var(--tip-height) / -2);
-      inset-inline-start: calc(var(--node-size) / 2);
-      width: var(--tip-width);
-      margin-inline-start: calc(var(--tip-width) / -2);
-      background-image: radial-gradient(
-        closest-side,
-        #fff 18%,
-        rgb(255 255 255 / 60%) 38%,
-        rgb(255 255 255 / 22%) 65%,
-        transparent
-      );
-      background-repeat: no-repeat;
-      background-position: bottom;
-      background-size: 100% var(--tip-height);
-      pointer-events: none;
       animation:
         timeline-tip-move linear both,
         timeline-tip-in linear backwards,
@@ -434,10 +445,6 @@
         normal,
         cover var(--axis-head, 3rem) cover calc(var(--axis-head, 3rem) + var(--axis-width)),
         cover calc(100% - var(--axis-tail, 3rem) - var(--axis-width)) cover calc(100% - var(--axis-tail, 3rem));
-
-      @media (width >= 48rem) {
-        inset-inline-start: 50%;
-      }
     }
 
     /* From when its top third crosses the middle of the screen, fully lit by its center */
@@ -494,34 +501,14 @@
   transform: translateY(var(--light-shift, 0));
 }
 
-/* The light's tip, blurry: a soft white glow over its round end, at its front (--tip-y and
- * --tip-opacity, see useEasedScrollLight). One for the whole axis (over its parts' light, under the
- * circles), so it doesn't show where two parts meet */
+/* The light's tip at its front (--tip-y and --tip-opacity, see useEasedScrollLight) */
 .timeline[data-smooth]::after {
   content: "";
-  position: absolute;
-  z-index: 6;
   top: calc(var(--tip-height) / -2);
-  inset-inline-start: calc(var(--node-size) / 2);
-  width: var(--tip-width);
   height: var(--tip-height);
-  margin-inline-start: calc(var(--tip-width) / -2);
-  /* A bright core, spreading out softly */
-  background-image: radial-gradient(
-    closest-side,
-    #fff 18%,
-    rgb(255 255 255 / 60%) 38%,
-    rgb(255 255 255 / 22%) 65%,
-    transparent
-  );
   opacity: var(--tip-opacity, 0);
   transform: translateY(var(--tip-y, 0));
-  pointer-events: none;
   will-change: transform, opacity;
-
-  @media (width >= 48rem) {
-    inset-inline-start: 50%;
-  }
 }
 
 .timeline[data-smooth] .glow .axisPart::before {
@@ -529,13 +516,8 @@
 }
 
 .timeline[data-smooth] .node::before,
+.timeline[data-smooth] .node .iconLit,
 .timeline[data-smooth] :is(.glow, .light) .branchPart {
-  animation: none;
-  opacity: var(--node-progress, 1);
-  will-change: opacity;
-}
-
-.timeline[data-smooth] .node .iconLit {
   animation: none;
   opacity: var(--node-progress, 1);
   will-change: opacity;

@@ -8,7 +8,7 @@ import useRevealed from "@hooks/useRevealed";
 import { ExpandableContentProps } from "@constants/interfaces";
 import styles from "./ExpandableContent.module.css";
 
-/** How much of the box must be visible for the gauge to run */
+/** How much of the gauge must be visible for it to run */
 const IN_VIEW_THRESHOLD = 0.5;
 
 /**

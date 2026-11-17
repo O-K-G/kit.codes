@@ -20,7 +20,7 @@
   height: 100%;
 }
 
-/* Decorative: never in the way of what's under it (it stays, faded out, over the opened text) */
+/* Decorative: never in the way of what's under it */
 .gauge {
   pointer-events: none;
 }
