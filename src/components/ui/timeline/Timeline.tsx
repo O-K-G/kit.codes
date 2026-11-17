@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { TimelineProps } from "@constants/interfaces";
 import Tooltip from "@ui/tooltip/Tooltip";
 import classNames from "@utils/classNames";
-import useEasedScrollLight from "@hooks/useEasedScrollLight";
+import useEasedScrollLight, { useAxisEnds } from "@hooks/useEasedScrollLight";
 import styles from "./Timeline.module.css";
 
 export const TIMELINE_BRANCH_TEST_ID = "timeline-branch-test-id";
@@ -32,6 +32,7 @@ export default function Timeline({ items, "aria-label": ariaLabel }: TimelinePro
     axisPart: styles.axisPart,
     node: styles.node,
   });
+  useAxisEnds(listRef, styles.light, styles.axisPart);
 
   return (
     <ol ref={listRef} aria-label={ariaLabel} className={styles.timeline}>

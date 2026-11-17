@@ -368,10 +368,8 @@
 
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    /* The list's own timeline (for the light's tip, see below), and the first and last parts of the
-     * axis' light, found by the tip from the list (timeline-scope) */
+    /* The list's own timeline, for the light's tip (see below) */
     .timeline:not([data-smooth]) {
-      timeline-scope: --timeline-axis-start, --timeline-axis-end;
       view-timeline: --timeline-list block;
       view-timeline-inset: 50%;
     }
@@ -382,25 +380,10 @@
      * timeline, inset so that it starts as the middle of the screen is just above the part (by the round
      * end and 2px) and ends as it's past it by the shape's reach above the part: over that, the shape
      * moves exactly as far as the middle of the screen does, from the first transform to the second (see
-     * useEasedScrollLight's shift(): the same, worked out by the browser). The first and last parts'
-     * timelines are named for the tip too */
+     * useEasedScrollLight's shift(): the same, worked out by the browser) */
     .timeline:not([data-smooth]) :is(.glow, .light) .axisPart {
       view-timeline: --timeline-part block;
       view-timeline-inset: calc(50% - var(--tip-length) - var(--axis-w)) calc(50% - var(--axis-w) / 2 - 2px);
-    }
-
-    .timeline:not([data-smooth]) .branch:first-child .light .axisPart {
-      view-timeline: --timeline-part block, --timeline-axis-start block;
-      view-timeline-inset:
-        calc(50% - var(--tip-length) - var(--axis-w)) calc(50% - var(--axis-w) / 2 - 2px),
-        calc(50% - var(--tip-length) - var(--axis-w)) calc(50% - var(--axis-w) / 2 - 2px);
-    }
-
-    .timeline:not([data-smooth]) .branch:last-child .light .axisPart {
-      view-timeline: --timeline-part block, --timeline-axis-end block;
-      view-timeline-inset:
-        calc(50% - var(--tip-length) - var(--axis-w)) calc(50% - var(--axis-w) / 2 - 2px),
-        calc(50% - var(--tip-length) - var(--axis-w)) calc(50% - var(--axis-w) / 2 - 2px);
     }
 
     .timeline:not([data-smooth]) :is(.glow, .light) .axisPart::before {
@@ -410,13 +393,18 @@
       background-image: linear-gradient(to bottom, transparent calc(100% - var(--tip-length)), #fff);
       animation: timeline-axis-light linear both;
       animation-timeline: --timeline-part;
+      /* As long as its range: the shorthand sets 0s, with which it would jump at its range's start (here
+       * and below) */
+      animation-duration: auto;
     }
 
     /* The light's blurry tip, as when eased (see .timeline[data-smooth]::after), following the list's
      * timeline: a box as tall as the list (and the tip), the tip drawn at its bottom, sliding from a
      * list's height up to its place, so the tip goes from the list's top to its bottom as the middle of
-     * the screen does. It fades in over the axis' first round end (the first part's timeline), and
-     * shrinks away over its last (the last one's: opacity is taken) */
+     * the screen does. It fades in over the axis' first round end and out over its last, on the same
+     * timeline (where the axis starts and ends in the list, --axis-head and --axis-tail, are measured by
+     * useAxisEnds): so it's never shown past the axis, wherever the browser has it. Each fade holds only
+     * on its own side (fill backwards, forwards), leaving the tip shown between them */
     .timeline:not([data-smooth])::after {
       content: "";
       position: absolute;
@@ -435,17 +423,17 @@
       background-repeat: no-repeat;
       background-position: bottom;
       background-size: 100% var(--tip-height);
-      transform-origin: 50% calc(100% - var(--tip-height) / 2);
       pointer-events: none;
       animation:
         timeline-tip-move linear both,
-        timeline-tip-in linear both,
-        timeline-tip-out linear both;
-      animation-timeline: --timeline-list, --timeline-axis-start, --timeline-axis-end;
+        timeline-tip-in linear backwards,
+        timeline-tip-out linear forwards;
+      animation-timeline: --timeline-list;
+      animation-duration: auto;
       animation-range:
         normal,
-        cover calc(var(--axis-width) / 2 + 2px) cover calc(1.5 * var(--axis-width) + 2px),
-        cover calc(100% - var(--tip-length) - 2 * var(--axis-width)) cover calc(100% - var(--tip-length) - var(--axis-width));
+        cover var(--axis-head, 3rem) cover calc(var(--axis-head, 3rem) + var(--axis-width)),
+        cover calc(100% - var(--axis-tail, 3rem) - var(--axis-width)) cover calc(100% - var(--axis-tail, 3rem));
 
       @media (width >= 48rem) {
         inset-inline-start: 50%;
@@ -456,6 +444,7 @@
     .node::before {
       animation: timeline-node-light linear both;
       animation-timeline: view(block 50%);
+      animation-duration: auto;
       animation-range: cover 30% cover 50%;
     }
 
@@ -464,6 +453,7 @@
     .node .iconLit {
       animation: timeline-icon-light linear both;
       animation-timeline: view(block 50%);
+      animation-duration: auto;
       animation-range:
         cover calc(var(--icon-size) / 2 - 0.2 * var(--node-size))
         cover calc(var(--icon-size) / 2);
@@ -474,6 +464,7 @@
     :is(.glow, .light) .branchPart {
       animation: timeline-branch-light linear both;
       animation-timeline: view(block 50%);
+      animation-duration: auto;
       animation-range:
         cover calc(var(--branch-h) / 2 - 0.2 * var(--node-size))
         cover calc(var(--branch-h) / 2);
@@ -581,7 +572,7 @@
 
 @keyframes timeline-tip-out {
   to {
-    scale: 0;
+    opacity: 0%;
   }
 }
 
