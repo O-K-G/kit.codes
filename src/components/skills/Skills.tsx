@@ -5,7 +5,6 @@ import SkillBars from "@components/skills/SkillBars";
 import SideLinks from "@ui/sideLinks/SideLinks";
 import Title from "@ui/title/Title";
 import styles from "./Skills.module.css";
-import classNames from "@utils/classNames";
 
 const CURRENT_SECTION = "skills";
 
@@ -18,21 +17,14 @@ export default function Skills({ activeSection }: ActiveSectionProps) {
       currentSection={CURRENT_SECTION}
       activeSection={activeSection}
     >
-      <Title
-        className={classNames(styles.slideIn, styles.mainTitle)}
-        border
-      >
+      <Title className={styles.mainTitle} border>
         {t("mainTitle")}
       </Title>
-      <Title
-        className={classNames(styles.slideIn, styles.subtitle)}
-        variant="subtitle"
-        component="p"
-      >
+      <Title variant="subtitle" component="p">
         {t("subtitle")}
       </Title>
       <SkillBars
-        className={classNames(styles.slideIn, styles.skillBars)}
+        className={styles.skillBars}
         groupNames={{
           frontEnd: t("groups.frontEnd"),
           backEnd: t("groups.backEnd"),
