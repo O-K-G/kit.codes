@@ -18,12 +18,12 @@
 
     &:dir(ltr) {
       left: 0;
-      margin-left: 1rem;
+      margin-left: var(--page-gutter);
     }
 
     &:dir(rtl) {
       right: 0;
-      margin-right: 1rem;
+      margin-right: var(--page-gutter);
     }
   }
 

@@ -6,7 +6,8 @@
   width: 100%;
   /* svh: fits the screen even while the mobile browser toolbar is shown (vh = the larger, toolbar-hidden one). */
   min-height: 100svh;
-  padding-inline: 1rem;
+  /* Past the side links' column on phones (see globals.css) */
+  padding-inline: var(--content-gutter-start) var(--page-gutter);
   padding-bottom: 1rem;
   overflow: hidden;
   background-color: #000;

@@ -78,12 +78,12 @@
 .defaultPosition {
   &:dir(ltr) {
     right: 0;
-    margin-right: var(--fluid-rem);
+    margin-right: var(--page-gutter);
   }
 
   &:dir(rtl) {
     left: 0;
-    margin-left: var(--fluid-rem);
+    margin-left: var(--page-gutter);
   }
 }
 

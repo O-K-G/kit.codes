@@ -1,6 +1,8 @@
 .section {
   position: relative;
   height: 200svh;
+  /* Its passage through the screen, which the skills' layer follows (see .skillBars) */
+  view-timeline: --skills-section block;
   padding-top: 5rem;
 
   @media (width >= 48rem) {
@@ -72,16 +74,24 @@
     }
   }
 
-  /* Under the subtitle, down to above the planet at the bottom of the background, centered; on wider
-   * screens it leaves room for the side links on the left (and the same on the right, to stay
+  /* Under the subtitle, centered. On phones, down to just above the buttons at the bottom of the
+   * screen (over the planet: its groups have dark backdrops), as its rows need the room; wider, down to
+   * above the planet, leaving room for the side links on the left (and the same on the right, to stay
    * centered) */
   .skillBars {
     --top-var: 34svh;
 
-    right: 0;
-    left: 0;
-    width: min(100% - 2 * var(--fluid-rem), 40 * var(--fluid-rem));
-    height: calc(72svh - var(--top-var));
+    /* Past the side links' column, on the page's start side (the list itself is left-to-right, see
+     * SkillBars, so its own inline sides don't follow the page's) */
+    right: var(--page-gutter);
+    left: var(--content-gutter-start);
+
+    :root[dir="rtl"] & {
+      right: var(--content-gutter-start);
+      left: var(--page-gutter);
+    }
+    width: min(100% - var(--content-gutter-start) - var(--page-gutter), 40 * var(--fluid-rem));
+    height: calc(100svh - 6rem - var(--top-var));
     margin-inline: auto;
 
     @media (width >= 40rem) {
@@ -96,6 +106,40 @@
 
       height: calc(82dvh - var(--top-var));
     }
+
+    /* Over the planet, which it reaches on phones. The planet is fixed too, later in the page (in the
+     * footer), so it's painted over the skills; raised above it, the skills would be over the sections
+     * after this one too. So they're raised only while this section fills the screen, and drop back
+     * as it starts to leave (as the next one comes in, to cover them) */
+    @media (prefers-reduced-motion: reduce) {
+      /* In the section's flow (see .slideIn): the sections after it don't reach it */
+      z-index: 1;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      @supports (animation-timeline: view()) {
+        animation-name: skills, skills-raised;
+        animation-timeline: view(), --skills-section;
+        animation-range-start: 0, exit 0%;
+        animation-range-end: 200svh, exit 1%;
+        animation-fill-mode: forwards, both;
+
+        @media (width >= 64rem) {
+          animation-range-end: 200dvh, exit 1%;
+        }
+      }
+    }
+  }
+}
+
+/* Raised, then (once the section starts leaving the screen) back on the page's layer */
+@keyframes skills-raised {
+  from {
+    z-index: 1;
+  }
+
+  to {
+    z-index: 0;
   }
 }
 

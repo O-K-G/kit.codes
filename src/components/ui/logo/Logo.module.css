@@ -3,9 +3,10 @@
 .text {
   top: 0;
   z-index: 10;
-  margin-top: 1rem;
+  margin-top: var(--header-top);
   font-size: max(1.5rem, 0.75rem + 3.75vw, 3.15 * var(--desktop-rem));
-  line-height: max(1.5rem, 0.75rem + 3.75vw, 3.15 * var(--desktop-rem));
+  /* Shorter in Hebrew (see globals.css) */
+  line-height: var(--header-line-height);
   color: #fff;
   text-transform: uppercase;
   /* A dark outline around the letters, so they keep their contrast over any part of the background
@@ -40,24 +41,15 @@
   @media (width >= 64rem) {
     cursor: pointer;
   }
-
-  /* Hebrew line heights - more specific, so they win at every breakpoint. */
-  &:lang(he) {
-    line-height: max(1rem, min(0.2857rem + 3.5714vw, 1.8594rem + 0.2928vw), 2.0468 * var(--desktop-rem));
-  }
 }
 
-/* Across from the "Contact me" button: at the start of the line (left, or right in Hebrew). Unlike
- * it, it isn't fixed: it sits at the top of the page, over the first section, and scrolls away. */
+/* Across from the "Contact me" button, on its line: at the start of it (left, or right in Hebrew).
+ * Unlike it, it isn't fixed: it sits at the top of the page, over the first section, and scrolls away
+ * (on phones the side links' row stays, right under where it was, see SideLinks). */
 .logo {
   composes: text;
 
   position: absolute;
   inset-inline-start: 0;
-  margin-inline-start: 1rem;
-
-  /* On phones the side links are a row at the top-start corner (see SideLinks): just below it */
-  @media (width < 40rem) {
-    margin-top: 3.875rem;
-  }
+  margin-inline-start: var(--page-gutter);
 }

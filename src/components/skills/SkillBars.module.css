@@ -3,10 +3,21 @@
  * container: the rows scale with its height). */
 .list {
   --row-height: max(2rem, 1.6591rem + 1.7045vw, 2.75 * var(--desktop-rem));
+  /* In rows: the gap between two rows, a group's padding above and below (see .group), and how tall
+   * the skills' names are at most (see .name). Tighter on phones, where the list is short for its
+   * rows, so they're as tall as they can be */
+  --row-gap: 0.25;
+  --group-padding: 0.3;
+  --name-height: 0.8;
   /* The list's height in rows: every row (the groups' names and their skills) and the gaps between
-   * them (a quarter of a row), and each group's padding (see .group), with a little to spare for the
-   * borders */
-  --rows-tall: calc(1.25 * var(--count) + 0.6 * var(--groups));
+   * them, and each group's padding, with a little to spare for the borders */
+  --rows-tall: calc((1 + var(--row-gap)) * var(--count) + 2 * var(--group-padding) * var(--groups));
+
+  @media (width < 40rem) {
+    --row-gap: 0.15;
+    --group-padding: 0.2;
+    --name-height: 0.9;
+  }
 
   display: grid;
   grid-template-columns: max-content 1fr;
@@ -26,8 +37,8 @@
   grid-column: 1 / -1;
   grid-template-columns: subgrid;
   grid-template-rows: repeat(var(--rows), var(--row));
-  row-gap: calc(0.25 * var(--row));
-  padding: calc(0.3 * var(--row)) calc(0.5 * var(--row));
+  row-gap: calc(var(--row-gap) * var(--row));
+  padding: calc(var(--group-padding) * var(--row)) calc(0.5 * var(--row));
   border: 2px solid var(--group-color);
   border-radius: calc(0.6 * var(--row));
   /* A dark backdrop, faintly tinted with the group's color, so the group stands out from the
@@ -95,7 +106,7 @@
   font-family: var(--font-montserrat);
   font-size: min(
     max(0.875rem, min(0.6071rem + 1.3393vw, 0.9865rem + 0.549vw), 1.3379 * var(--desktop-rem)),
-    0.8 * var(--row)
+    var(--name-height) * var(--row)
   );
   line-height: 1;
   color: #fff;

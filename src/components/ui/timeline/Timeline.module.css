@@ -306,7 +306,14 @@
 /* Its tooltip (see Tooltip), below it (or above, with more room there), toward the axis' side of the
  * screen */
 .tooltip {
-  width: min(22rem, 100vw - 2rem);
+  /* Within the page's gutter on either side */
+  width: min(22rem, 100vw - var(--content-gutter-start) - var(--page-gutter));
+
+  /* Placed beside its circle (see Tooltip's keepInViewport): no wider than the room from the circle to
+   * the screen's edge (the area it's placed in), less the gutter, so it never reaches the edge */
+  @supports (anchor-scope: all) and (position-try-order: most-height) {
+    max-width: calc(100% - var(--page-gutter));
+  }
 
   /* Invisible bridges, as wide as the tooltip and as tall as the circle, on both its sides (it can be
    * below the circle or, flipped, above it): the circle is round, so between it and the tooltip lie its

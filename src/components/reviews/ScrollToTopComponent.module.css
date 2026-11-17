@@ -1,12 +1,21 @@
 .position {
+  /* On phones, without its label (the link is named by its own aria-label), so it's no wider than the
+   * button and stays in the side gutter, under the side links' column, clear of the content past it
+   * (see --content-gutter-start in globals.css) */
+  @media (width < 40rem) {
+    > :first-child {
+      display: none;
+    }
+  }
+
   &:dir(ltr) {
     left: 0;
-    margin-left: var(--fluid-rem);
+    margin-left: var(--page-gutter);
   }
 
   &:dir(rtl) {
     right: 0;
-    margin-right: var(--fluid-rem);
+    margin-right: var(--page-gutter);
   }
 
   > a {
