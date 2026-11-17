@@ -8,3 +8,9 @@ if (typeof window !== 'undefined') {
   const getComputedStyle = window.getComputedStyle.bind(window);
   window.getComputedStyle = (element: Element) => getComputedStyle(element);
 }
+
+/* jsdom has no canvas: getContext logs a "Not implemented" error and returns null. The canvases here
+ * (the gauge, the stars) only draw, and skip drawing without a context: return null quietly. */
+if (typeof HTMLCanvasElement !== 'undefined') {
+  HTMLCanvasElement.prototype.getContext = (() => null) as typeof HTMLCanvasElement.prototype.getContext;
+}

@@ -2,7 +2,10 @@ import { act, createEvent, fireEvent, render, screen } from "@testing-library/re
 import "@testing-library/jest-dom";
 import ExpandableContent from "@ui/expandableContent/ExpandableContent";
 import gaugeStyles from "@ui/expandableContent/gauge/Gauge.module.css";
-import { fireAfterAnimationEnd } from "@ui/expandableContent/gauge/fireAfterAnimationEnd";
+
+/** Runs the gauge for `ms` (its timing follows requestAnimationFrame, faked here): it hits 100% at 0.8s
+ * and is done at 1.6s */
+const advance = (ms: number) => act(() => jest.advanceTimersByTime(ms));
 
 /** Fires animationend for the named animation (jsdom has no AnimationEvent to carry its name) */
 function fireNamedAnimationEnd(element: HTMLElement, animationName: string) {
@@ -17,7 +20,10 @@ const TEXT = "Results-driven web developer";
 let setVisible: (visible: boolean) => void = () => undefined;
 const disconnect = jest.fn();
 
+afterEach(() => jest.useRealTimers());
+
 beforeEach(() => {
+  jest.useFakeTimers();
   disconnect.mockClear();
   window.IntersectionObserver = jest.fn(
     (callback: IntersectionObserverCallback) => {
@@ -36,9 +42,8 @@ beforeEach(() => {
 function renderContent() {
   const { container } = render(<ExpandableContent text={TEXT} />);
   const gauge = container.querySelector(`.${gaugeStyles.gauge}`) as HTMLElement;
-  const gaugeCount = container.querySelector(`.${gaugeStyles.count}`) as HTMLElement;
   const content = screen.getByText(TEXT).parentElement as HTMLElement;
-  return { container, gauge, gaugeCount, content };
+  return { container, gauge, content };
 }
 
 describe("ExpandableContent", () => {
@@ -71,35 +76,37 @@ describe("ExpandableContent", () => {
     expect(brackets.length).toBeGreaterThan(0);
     brackets.forEach((element) => expect(element).toHaveAttribute("data-blink", "false"));
 
-    fireEvent.animationEnd(container.querySelector(`.${gaugeStyles.count}`) as HTMLElement);
+    advance(900);
     brackets.forEach((element) => expect(element).toHaveAttribute("data-blink", "true"));
   });
 
   it("expands once the count has blinked, and stops observing", () => {
-    const { gauge, gaugeCount, content } = renderContent();
+    const { gauge, content } = renderContent();
     // A text longer than the box: it scrolls, so the box can be focused once open
     Object.defineProperty(content, "scrollHeight", { configurable: true, value: 500 });
     Object.defineProperty(content, "clientHeight", { configurable: true, value: 200 });
     setVisible(true);
 
-    fireAfterAnimationEnd(gauge);
+    // Full, still blinking
+    advance(1200);
     expect(content).toHaveAttribute("data-open", "false");
 
-    // The end of the count's text's (::after) blinks
-    fireAfterAnimationEnd(gaugeCount);
+    // Done blinking
+    advance(500);
 
     expect(content).toHaveAttribute("data-open", "true");
     expect(content).toHaveAttribute("tabindex", "0");
     expect(disconnect).toHaveBeenCalled();
+    // Done: the gauge stops
+    expect(gauge).toHaveAttribute("data-running", "false");
   });
 
   it("isn't a stop for the keyboard when its content fits", () => {
-    const { gauge, gaugeCount, content } = renderContent();
+    const { content } = renderContent();
     Object.defineProperty(content, "scrollHeight", { configurable: true, value: 200 });
     Object.defineProperty(content, "clientHeight", { configurable: true, value: 200 });
     setVisible(true);
-    fireAfterAnimationEnd(gauge);
-    fireAfterAnimationEnd(gaugeCount);
+    advance(1700);
 
     expect(content).toHaveAttribute("data-open", "true");
     expect(content).not.toHaveAttribute("tabindex");
@@ -107,15 +114,14 @@ describe("ExpandableContent", () => {
 
   it("shows children in place of the text, and tells once it's done opening", () => {
     const onOpened = jest.fn();
-    const { container } = render(
+    render(
       <ExpandableContent onOpened={onOpened}>
         <span>Typed quotes</span>
       </ExpandableContent>
     );
     const content = screen.getByText("Typed quotes").parentElement as HTMLElement;
     setVisible(true);
-    fireAfterAnimationEnd(container.querySelector(`.${gaugeStyles.gauge}`) as HTMLElement);
-    fireAfterAnimationEnd(container.querySelector(`.${gaugeStyles.count}`) as HTMLElement);
+    advance(1700);
     expect(content).toHaveAttribute("data-open", "true");
 
     // Only the frame's drawing ends the opening, not the box's other animations or its children's

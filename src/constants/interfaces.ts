@@ -5,6 +5,7 @@ import {
   ComponentPropsWithoutRef,
   MouseEventHandler,
   ReactNode,
+  Ref,
 } from "react";
 
 /** Zod doesn't try compiling its validators with `Function` (eval): the CSP forbids it (see proxy.ts),
@@ -254,6 +255,8 @@ export interface GaugeProps {
   onComplete?: () => void;
   /** Sizes and places the gauge, which otherwise fills its parent */
   className?: string;
+  /** Its root element (the box watches it come into view) */
+  ref?: Ref<HTMLDivElement>;
 }
 
 export interface ExpandableContentProps {

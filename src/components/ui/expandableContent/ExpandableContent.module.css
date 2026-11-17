@@ -18,16 +18,15 @@
   /* Room for the corner brackets (see AboutTargetIcon), which sit outside the square */
   padding: calc(1.5 * var(--fluid-rem));
   container-type: size;
-  /* The open box's width (see .box[data-open="true"]), in the container's units: never wider than the
-   * container, which squeezes it to fit */
-  --open-width: 100cqw;
-
-  @media (width >= 48rem) {
-    --open-width: min(100cqh, 100cqw);
-  }
+  /* The closed box: a square sized by the container's width, capped by its height (short / landscape
+   * screens), in the container's units (left unregistered: they resolve where they're used, inside it) */
+  --closed-size: min(50cqw, 100cqh);
+  /* How long the box takes to open, and how it eases */
+  --open-duration: 1000ms;
+  --open-easing: cubic-bezier(0.4, 0, 0.2, 1);
 
   @media (width >= 64rem) {
-    --open-width: 75cqw;
+    --closed-size: min(25cqw, 100cqh);
   }
 
   @media (width >= 40rem) {
@@ -46,60 +45,127 @@
   }
 }
 
-/* A square holding the gauge, which grows into the text box once the gauge is full */
+/* The box, always at its open size: closed, only the square around the gauge shows (see .frame and
+ * .corner). Its width and background can be set from outside, with --expandable-box-width and
+ * --expandable-box-background on the container (see ExpandableContent's className) */
 .box {
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* A square sized by the container's width, capped by its height (short / landscape screens) */
-  width: min(50cqw, 100cqh);
-  height: min(50cqw, 100cqh);
-  transition: all 1000ms cubic-bezier(0.4, 0, 0.2, 1);
+  width: var(--expandable-box-width, 100%);
+  height: min(100cqw, 100cqh);
 
-  @media (width >= 64rem) {
-    width: min(25cqw, 100cqh);
-    height: min(25cqw, 100cqh);
+  @media (width >= 48rem) {
+    width: var(--expandable-box-width, 100cqh);
+    height: 100%;
   }
 
-  /* Open: the text's background darkens as the text appears. It's here rather than on the text box
-   * (which this box's size it shares) so the text's fade (see .content) leaves it whole. Its width can
-   * and background can be set from outside, with --expandable-box-width and --expandable-box-background
-   * on the container (see ExpandableContent's className) */
-  &[data-open="true"] {
-    width: var(--expandable-box-width, 100%);
-    height: min(100cqw, 100cqh);
-    background-color: var(--expandable-box-background, rgb(0 0 0 / 50%));
-    transition:
-      all 1000ms cubic-bezier(0.4, 0, 0.2, 1),
-      background-color 500ms cubic-bezier(0.4, 0, 0.2, 1) 1s;
-
-    @media (width >= 48rem) {
-      width: var(--expandable-box-width, 100cqh);
-      height: 100%;
-    }
-
-    @media (width >= 64rem) {
-      width: var(--expandable-box-width, 75%);
-    }
+  @media (width >= 64rem) {
+    width: var(--expandable-box-width, 75%);
   }
 }
 
-/* ---- The gauge (see Gauge), centered in the square; it fades out as the box opens ---- */
+/* ---- The frame: the box's background and its text, clipped to the closed square, then to the whole
+ * box (and a little past it, so the focus rings of what's in it show, see globals.css) as it opens.
+ * Clip insets in percent are of the box's own width and height, so (100% - the square) / 2 each side
+ * leaves the square. Open, the background darkens behind the text, once the box is done opening ---- */
+.frame {
+  --ring-room: calc(var(--focus-ring-offset) + 2 * var(--focus-ring-width));
+
+  position: absolute;
+  inset: 0;
+  clip-path: inset(calc(50% - var(--closed-size) / 2));
+  transition: clip-path var(--open-duration) var(--open-easing);
+
+  &[data-open="true"] {
+    clip-path: inset(calc(-1 * var(--ring-room)));
+    background-color: var(--expandable-box-background, rgb(0 0 0 / 50%));
+    transition:
+      clip-path var(--open-duration) var(--open-easing),
+      background-color 500ms var(--open-easing) var(--open-duration);
+  }
+
+  /* The lines across its top and bottom: drawn as it opens (see frame-line-top), then kept. Each as
+   * tall as the frame, its line on its edge, so it can be moved to the middle in percent of its height */
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 0 solid #fff;
+    opacity: 0%;
+    pointer-events: none;
+  }
+
+  &::before {
+    border-top-width: calc(0.0625 * var(--fluid-rem));
+  }
+
+  &::after {
+    border-bottom-width: calc(0.0625 * var(--fluid-rem));
+  }
+
+  &[data-open="true"]::before {
+    opacity: 100%;
+    animation: frame-line-top var(--open-duration) linear;
+  }
+
+  &[data-open="true"]::after {
+    opacity: 100%;
+    animation: frame-line-bottom var(--open-duration) linear;
+  }
+}
+
+/* ---- The corner brackets (see AboutTargetIcon): each in a layer as big as the box, at its corner.
+ * Closed, the layers are moved in to the square's corners (in percent of their size, the box's); open,
+ * they ease out to the box's ---- */
+.corner {
+  --corner-x: calc(50% - var(--closed-size) / 2);
+  --corner-y: calc(50% - var(--closed-size) / 2);
+
+  position: absolute;
+  inset: 0;
+  translate: var(--corner-x) var(--corner-y);
+  transition: translate var(--open-duration) var(--open-easing);
+  pointer-events: none;
+
+  &:dir(rtl) {
+    --corner-x: calc(var(--closed-size) / 2 - 50%);
+  }
+
+  &.bottomCorner {
+    --corner-x: calc(var(--closed-size) / 2 - 50%);
+    --corner-y: calc(var(--closed-size) / 2 - 50%);
+
+    &:dir(rtl) {
+      --corner-x: calc(50% - var(--closed-size) / 2);
+    }
+  }
+
+  &[data-open="true"] {
+    translate: none;
+  }
+}
+
+/* ---- The gauge (see Gauge), centered in the square; it fades out as the box opens, then isn't drawn
+ * at all ---- */
 .gauge {
   position: absolute;
   inset: 0;
-  width: 70%;
-  height: 70%;
+  width: calc(0.7 * var(--closed-size));
+  height: calc(0.7 * var(--closed-size));
   margin: auto;
-  transition: opacity 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 300ms var(--open-easing);
 
   .box[data-open="true"] > & {
+    visibility: hidden;
     opacity: 0%;
+    transition:
+      opacity 300ms var(--open-easing),
+      visibility 0s 300ms;
   }
 }
 
-/* ---- The text ---- */
+/* ---- The text: laid out at the open box's size from the start, so it never reflows as the box opens
+ * ---- */
 .content {
   display: flex;
   justify-content: center;
@@ -126,16 +192,16 @@
     opacity: 0%;
   }
 
-  /* Open: the box draws its frame (expand-button), revealing the text, already at its final size, as it
-   * grows (reveal-while-expanding); the background darkens behind the text (on .box). The text is shown
-   * as soon as the box opens, rather than once it's done, which also keeps it from being the page's
-   * late Largest Contentful Paint */
+  /* Open: the frame's lines meet in the middle and part again, the text showing between them
+   * (expand-button), while the frame grows to the box's edges; the background darkens behind the text
+   * (on .frame). The text is shown as soon as the box opens, rather than once it's done, which also
+   * keeps it from being the page's late Largest Contentful Paint */
   &[data-open="true"] {
     align-items: flex-start;
     padding: 0.5rem;
     overflow-y: auto;
     border-inline-color: #fff;
-    animation: expand-button 1s linear forwards, reveal-while-expanding 1s;
+    animation: expand-button var(--open-duration) linear, reveal-while-expanding var(--open-duration);
 
     /* With a mouse, no scrollbar: WCAG doesn't require one. The text stays reachable: the wheel or
      * trackpad scrolls it, and so does the keyboard, as the box is focusable (WCAG 2.1.1) */
@@ -153,7 +219,7 @@
      * timelines, no fade (a fixed one would cover the last line).
      * Masks (bottom layer to top): everything, unclipped, so the focus rings outside the box stay;
      * minus the padding box; plus the padding box, faded at its bottom edge, right down to the frame.
-     * So only the text fades, not the frame (the background is on .box). */
+     * So only the text fades, not the frame (the background is on .frame). */
     @supports (animation-timeline: scroll()) {
       mask-image:
         linear-gradient(#000 calc(100% - var(--scroll-fade)), transparent),
@@ -162,29 +228,28 @@
       mask-clip: padding-box, padding-box, no-clip;
       mask-origin: padding-box, padding-box, border-box;
       mask-composite: add, exclude, add;
-      animation: expand-button 1s linear forwards, reveal-while-expanding 1s, scroll-fade linear both;
+      animation:
+        expand-button var(--open-duration) linear,
+        reveal-while-expanding var(--open-duration),
+        scroll-fade linear both;
       animation-timeline: auto, auto, scroll(self);
       animation-range: normal, normal, calc(100% - 3rem) 100%;
     }
   }
 
-  /* While the box expands, --expandable-text-width (see reveal-while-expanding) is the width the text
-   * will have once open, so it's laid out once, at its final size (not shrunk to the growing box), and
-   * revealed by the growing frame rather than reflowing as it grows. Left unregistered on purpose: its
-   * container units then resolve here, against the container, rather than where it's animated.
-   * Otherwise the text fits its box as usual */
   > p {
-    flex-shrink: var(--expandable-text-shrink, 1);
-    width: var(--expandable-text-width, auto);
     margin-block: auto;
   }
 }
 
 /* Without JavaScript nothing would ever open the box: show the text right away */
 @media (scripting: none) {
-  .box[data-open="false"] {
-    width: 100%;
-    height: 100%;
+  .frame {
+    clip-path: none;
+  }
+
+  .corner {
+    translate: none;
   }
 
   .gauge {
@@ -199,23 +264,313 @@
   }
 }
 
+/* The text, clipped to between the frame's lines (see frame-line-top): all of it, down to a line across
+ * the middle, then all of it again. Between lines that close in and part linearly over the box's
+ * height as it grows (the box's opening, eased, see .frame): so their distance is the product of the
+ * two, which no single transition follows. Hence the keyframes, every 5%, generated: at each, the
+ * lines' distance is h * (the closed square * (1 - e) + the box * e), h the lines' linear share (1 to 0
+ * to 1), e the box's eased progress (cubic-bezier(0.4, 0, 0.2, 1), as --open-easing), and each line is
+ * half the rest from its edge. Percentages are of the box's height (the text's and the lines' boxes
+ * are the box's size) */
 @keyframes expand-button {
   0% {
-    border-top: calc(0.0625 * var(--fluid-rem)) solid transparent;
-    border-bottom: calc(0.0625 * var(--fluid-rem)) solid transparent;
-    height: 100%;
+    clip-path: inset(calc(50% - (1.0 * var(--closed-size) + 0.0 * 100%) / 2) 0);
+  }
+
+  5% {
+    clip-path: inset(calc(50% - (0.8948 * var(--closed-size) + 0.0052 * 100%) / 2) 0);
+  }
+
+  10% {
+    clip-path: inset(calc(50% - (0.7793 * var(--closed-size) + 0.0207 * 100%) / 2) 0);
+  }
+
+  15% {
+    clip-path: inset(calc(50% - (0.6538 * var(--closed-size) + 0.0462 * 100%) / 2) 0);
+  }
+
+  20% {
+    clip-path: inset(calc(50% - (0.5196 * var(--closed-size) + 0.0804 * 100%) / 2) 0);
+  }
+
+  25% {
+    clip-path: inset(calc(50% - (0.3817 * var(--closed-size) + 0.1183 * 100%) / 2) 0);
+  }
+
+  30% {
+    clip-path: inset(calc(50% - (0.2531 * var(--closed-size) + 0.1469 * 100%) / 2) 0);
+  }
+
+  35% {
+    clip-path: inset(calc(50% - (0.15 * var(--closed-size) + 0.15 * 100%) / 2) 0);
+  }
+
+  40% {
+    clip-path: inset(calc(50% - (0.0773 * var(--closed-size) + 0.1227 * 100%) / 2) 0);
+  }
+
+  45% {
+    clip-path: inset(calc(50% - (0.0296 * var(--closed-size) + 0.0704 * 100%) / 2) 0);
   }
 
   50% {
-    border-top: calc(0.0625 * var(--fluid-rem)) solid white;
-    border-bottom: calc(0.0625 * var(--fluid-rem)) solid white;
-    height: 0%;
+    clip-path: inset(calc(50% - (0.0 * var(--closed-size) + 0.0 * 100%) / 2) 0);
+  }
+
+  55% {
+    clip-path: inset(calc(50% - (0.0168 * var(--closed-size) + 0.0832 * 100%) / 2) 0);
+  }
+
+  60% {
+    clip-path: inset(calc(50% - (0.0248 * var(--closed-size) + 0.1752 * 100%) / 2) 0);
+  }
+
+  65% {
+    clip-path: inset(calc(50% - (0.0267 * var(--closed-size) + 0.2733 * 100%) / 2) 0);
+  }
+
+  70% {
+    clip-path: inset(calc(50% - (0.0247 * var(--closed-size) + 0.3753 * 100%) / 2) 0);
+  }
+
+  75% {
+    clip-path: inset(calc(50% - (0.0203 * var(--closed-size) + 0.4797 * 100%) / 2) 0);
+  }
+
+  80% {
+    clip-path: inset(calc(50% - (0.0148 * var(--closed-size) + 0.5852 * 100%) / 2) 0);
+  }
+
+  85% {
+    clip-path: inset(calc(50% - (0.0093 * var(--closed-size) + 0.6907 * 100%) / 2) 0);
+  }
+
+  90% {
+    clip-path: inset(calc(50% - (0.0045 * var(--closed-size) + 0.7955 * 100%) / 2) 0);
+  }
+
+  95% {
+    clip-path: inset(calc(50% - (0.0012 * var(--closed-size) + 0.8988 * 100%) / 2) 0);
   }
 
   100% {
-    border-top: calc(0.0625 * var(--fluid-rem)) solid white;
-    border-bottom: calc(0.0625 * var(--fluid-rem)) solid white;
-    height: 100%;
+    clip-path: inset(calc(50% - (0.0 * var(--closed-size) + 1.0 * 100%) / 2) 0);
+  }
+}
+
+/* The frame's top line: at the top of the text's clip, appearing as it closes in */
+@keyframes frame-line-top {
+  0% {
+    opacity: 0%;
+    translate: 0 calc(50% - (1.0 * var(--closed-size) + 0.0 * 100%) / 2);
+  }
+
+  5% {
+    opacity: 10%;
+    translate: 0 calc(50% - (0.8948 * var(--closed-size) + 0.0052 * 100%) / 2);
+  }
+
+  10% {
+    opacity: 20%;
+    translate: 0 calc(50% - (0.7793 * var(--closed-size) + 0.0207 * 100%) / 2);
+  }
+
+  15% {
+    opacity: 30%;
+    translate: 0 calc(50% - (0.6538 * var(--closed-size) + 0.0462 * 100%) / 2);
+  }
+
+  20% {
+    opacity: 40%;
+    translate: 0 calc(50% - (0.5196 * var(--closed-size) + 0.0804 * 100%) / 2);
+  }
+
+  25% {
+    opacity: 50%;
+    translate: 0 calc(50% - (0.3817 * var(--closed-size) + 0.1183 * 100%) / 2);
+  }
+
+  30% {
+    opacity: 60%;
+    translate: 0 calc(50% - (0.2531 * var(--closed-size) + 0.1469 * 100%) / 2);
+  }
+
+  35% {
+    opacity: 70%;
+    translate: 0 calc(50% - (0.15 * var(--closed-size) + 0.15 * 100%) / 2);
+  }
+
+  40% {
+    opacity: 80%;
+    translate: 0 calc(50% - (0.0773 * var(--closed-size) + 0.1227 * 100%) / 2);
+  }
+
+  45% {
+    opacity: 90%;
+    translate: 0 calc(50% - (0.0296 * var(--closed-size) + 0.0704 * 100%) / 2);
+  }
+
+  50% {
+    opacity: 100%;
+    translate: 0 calc(50% - (0.0 * var(--closed-size) + 0.0 * 100%) / 2);
+  }
+
+  55% {
+    opacity: 100%;
+    translate: 0 calc(50% - (0.0168 * var(--closed-size) + 0.0832 * 100%) / 2);
+  }
+
+  60% {
+    opacity: 100%;
+    translate: 0 calc(50% - (0.0248 * var(--closed-size) + 0.1752 * 100%) / 2);
+  }
+
+  65% {
+    opacity: 100%;
+    translate: 0 calc(50% - (0.0267 * var(--closed-size) + 0.2733 * 100%) / 2);
+  }
+
+  70% {
+    opacity: 100%;
+    translate: 0 calc(50% - (0.0247 * var(--closed-size) + 0.3753 * 100%) / 2);
+  }
+
+  75% {
+    opacity: 100%;
+    translate: 0 calc(50% - (0.0203 * var(--closed-size) + 0.4797 * 100%) / 2);
+  }
+
+  80% {
+    opacity: 100%;
+    translate: 0 calc(50% - (0.0148 * var(--closed-size) + 0.5852 * 100%) / 2);
+  }
+
+  85% {
+    opacity: 100%;
+    translate: 0 calc(50% - (0.0093 * var(--closed-size) + 0.6907 * 100%) / 2);
+  }
+
+  90% {
+    opacity: 100%;
+    translate: 0 calc(50% - (0.0045 * var(--closed-size) + 0.7955 * 100%) / 2);
+  }
+
+  95% {
+    opacity: 100%;
+    translate: 0 calc(50% - (0.0012 * var(--closed-size) + 0.8988 * 100%) / 2);
+  }
+
+  100% {
+    opacity: 100%;
+    translate: 0 calc(50% - (0.0 * var(--closed-size) + 1.0 * 100%) / 2);
+  }
+}
+
+/* The bottom line, likewise, from below */
+@keyframes frame-line-bottom {
+  0% {
+    opacity: 0%;
+    translate: 0 calc(-1 * calc(50% - (1.0 * var(--closed-size) + 0.0 * 100%) / 2));
+  }
+
+  5% {
+    opacity: 10%;
+    translate: 0 calc(-1 * calc(50% - (0.8948 * var(--closed-size) + 0.0052 * 100%) / 2));
+  }
+
+  10% {
+    opacity: 20%;
+    translate: 0 calc(-1 * calc(50% - (0.7793 * var(--closed-size) + 0.0207 * 100%) / 2));
+  }
+
+  15% {
+    opacity: 30%;
+    translate: 0 calc(-1 * calc(50% - (0.6538 * var(--closed-size) + 0.0462 * 100%) / 2));
+  }
+
+  20% {
+    opacity: 40%;
+    translate: 0 calc(-1 * calc(50% - (0.5196 * var(--closed-size) + 0.0804 * 100%) / 2));
+  }
+
+  25% {
+    opacity: 50%;
+    translate: 0 calc(-1 * calc(50% - (0.3817 * var(--closed-size) + 0.1183 * 100%) / 2));
+  }
+
+  30% {
+    opacity: 60%;
+    translate: 0 calc(-1 * calc(50% - (0.2531 * var(--closed-size) + 0.1469 * 100%) / 2));
+  }
+
+  35% {
+    opacity: 70%;
+    translate: 0 calc(-1 * calc(50% - (0.15 * var(--closed-size) + 0.15 * 100%) / 2));
+  }
+
+  40% {
+    opacity: 80%;
+    translate: 0 calc(-1 * calc(50% - (0.0773 * var(--closed-size) + 0.1227 * 100%) / 2));
+  }
+
+  45% {
+    opacity: 90%;
+    translate: 0 calc(-1 * calc(50% - (0.0296 * var(--closed-size) + 0.0704 * 100%) / 2));
+  }
+
+  50% {
+    opacity: 100%;
+    translate: 0 calc(-1 * calc(50% - (0.0 * var(--closed-size) + 0.0 * 100%) / 2));
+  }
+
+  55% {
+    opacity: 100%;
+    translate: 0 calc(-1 * calc(50% - (0.0168 * var(--closed-size) + 0.0832 * 100%) / 2));
+  }
+
+  60% {
+    opacity: 100%;
+    translate: 0 calc(-1 * calc(50% - (0.0248 * var(--closed-size) + 0.1752 * 100%) / 2));
+  }
+
+  65% {
+    opacity: 100%;
+    translate: 0 calc(-1 * calc(50% - (0.0267 * var(--closed-size) + 0.2733 * 100%) / 2));
+  }
+
+  70% {
+    opacity: 100%;
+    translate: 0 calc(-1 * calc(50% - (0.0247 * var(--closed-size) + 0.3753 * 100%) / 2));
+  }
+
+  75% {
+    opacity: 100%;
+    translate: 0 calc(-1 * calc(50% - (0.0203 * var(--closed-size) + 0.4797 * 100%) / 2));
+  }
+
+  80% {
+    opacity: 100%;
+    translate: 0 calc(-1 * calc(50% - (0.0148 * var(--closed-size) + 0.5852 * 100%) / 2));
+  }
+
+  85% {
+    opacity: 100%;
+    translate: 0 calc(-1 * calc(50% - (0.0093 * var(--closed-size) + 0.6907 * 100%) / 2));
+  }
+
+  90% {
+    opacity: 100%;
+    translate: 0 calc(-1 * calc(50% - (0.0045 * var(--closed-size) + 0.7955 * 100%) / 2));
+  }
+
+  95% {
+    opacity: 100%;
+    translate: 0 calc(-1 * calc(50% - (0.0012 * var(--closed-size) + 0.8988 * 100%) / 2));
+  }
+
+  100% {
+    opacity: 100%;
+    translate: 0 calc(-1 * calc(50% - (0.0 * var(--closed-size) + 1.0 * 100%) / 2));
   }
 }
 
@@ -229,13 +584,11 @@
   }
 }
 
-/* While the box expands: the text is clipped by the frame (not scrolled), at the open box's inner
- * width (less its padding and borders), and the frame's sides are drawn once it's done */
+/* While the box opens: the text is clipped (not scrolled), and the frame's sides are drawn once it's
+ * done */
 @keyframes reveal-while-expanding {
   from,
   to {
-    --expandable-text-width: calc(var(--open-width) - 1rem - 2px);
-    --expandable-text-shrink: 0;
     overflow: hidden;
     border-inline-color: transparent;
   }

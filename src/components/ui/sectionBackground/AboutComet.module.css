@@ -7,7 +7,6 @@
   left: calc((var(--x) - var(--crop-x)) / var(--cw) * 100%);
   width: calc(var(--width) / var(--cw) * 100%);
   height: calc(var(--height) / var(--h) * 100%);
-  overflow: visible;
 
   /* Hidden while the window is being resized (see PauseWhileResizing): its smoke filter makes it one of
    * the costliest things to redraw at each step. It's back once the size settles */
@@ -16,10 +15,22 @@
   }
 }
 
+/* The comet itself fills the box (its viewBox has the box's proportions) */
+.drawing {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* A wisp: a soft pink disc, placed over the drawing (see AboutComet) */
 .puff {
+  position: absolute;
+  border-radius: 50%;
+  background-image: radial-gradient(closest-side, rgb(255 150 174 / 16%), rgb(255 150 174 / 0%));
   opacity: 0;
-  transform-box: fill-box;
-  transform-origin: center;
+  pointer-events: none;
 }
 
 /* With reduced motion, it stays as illustrated */
@@ -47,6 +58,7 @@
 
   100% {
     opacity: 0;
-    transform: translate(240px, -150px) scale(1.8);
+    /* 240 by -150 of the comet image's units: in its own size (2 * 70 of them) */
+    transform: translate(171.43%, -107.14%) scale(1.8);
   }
 }
