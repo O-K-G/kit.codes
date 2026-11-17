@@ -1,5 +1,13 @@
 import { RefObject, useEffect } from "react";
+import useMediaQuery from "@hooks/useMediaQuery";
 import usePrefersReducedMotion from "@hooks/usePrefersReducedMotion";
+
+/** A mouse (or trackpad): its wheel scrolls in steps, which the light would jump with */
+const FINE_POINTER = "(hover: hover) and (pointer: fine)";
+
+/** Whether the browser can light the timeline by itself, with scroll-driven animations (see the CSS) */
+const lightsByItself = () =>
+  typeof CSS !== "undefined" && !!CSS.supports?.("animation-timeline: view()");
 
 /** How fast the light catches up with the scroll: an exponential ease, closing all but 1/e of the
  * distance in this many seconds */
@@ -66,16 +74,22 @@ const unit = (value: number) => Math.min(Math.max(value, 0), 1).toFixed(4);
  * The branches are measured once, and again when the list's size changes, not while scrolling: each
  * frame only sets those two properties, which the CSS turns into transforms and opacity. The list gets
  * data-smooth while this runs. With reduced motion it doesn't: the CSS leaves the timeline all lit.
+ *
+ * It runs only with a mouse, or where the browser can't light it by itself. Touch scrolling is smooth
+ * already, and there the CSS scroll-driven animations light it in step with the finger, off the main
+ * thread: this script, writing the light's properties at every frame, restyles the whole timeline each
+ * time, on the main thread, which a phone can't keep up with while scrolling.
  */
 export default function useEasedScrollLight(
   listRef: RefObject<HTMLElement | null>,
   { light, glow, axisPart, node }: TimelineLightClasses
 ) {
   const reducedMotion = usePrefersReducedMotion();
+  const finePointer = useMediaQuery(FINE_POINTER);
 
   useEffect(() => {
     const list = listRef.current;
-    if (!list || reducedMotion) {
+    if (!list || reducedMotion || !(finePointer || !lightsByItself())) {
       return;
     }
 
@@ -191,5 +205,6 @@ export default function useEasedScrollLight(
         ["--light-shift", "--glow-shift", "--node-progress"].forEach((name) => element.style.removeProperty(name));
       });
     };
-  }, [listRef, light, glow, axisPart, node, reducedMotion]);
+  }, [listRef, light, glow, axisPart, node, reducedMotion, finePointer]);
 }
+

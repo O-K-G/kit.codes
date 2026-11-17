@@ -7,6 +7,7 @@ import styles from "./SkillBars.module.css";
 import classNames from "@utils/classNames";
 import Tooltip from "@ui/tooltip/Tooltip";
 import usePrefersReducedMotion from "@hooks/usePrefersReducedMotion";
+import useRevealed from "@hooks/useRevealed";
 
 /** How much of the list must be visible for the bars to fill */
 const IN_VIEW_THRESHOLD = 0.5;
@@ -134,6 +135,8 @@ export default function SkillBars({ className, groupNames }: SkillBarsProps) {
   const [filledRows, setFilledRows] = useState(0);
   const id = useId();
   const reducedMotion = usePrefersReducedMotion();
+  /** The page is in full view (the loader has faded out): the bars wait for it, to be seen */
+  const revealed = useRevealed();
 
   /** Each group's skills, with their place among all the skills (their turn to fill) */
   let index = 0;
@@ -145,7 +148,7 @@ export default function SkillBars({ className, groupNames }: SkillBarsProps) {
 
   useEffect(() => {
     const list = listRef.current;
-    if (!list) {
+    if (!list || !revealed) {
       return;
     }
 
@@ -180,7 +183,7 @@ export default function SkillBars({ className, groupNames }: SkillBarsProps) {
       observer.disconnect();
       clearInterval(timer);
     };
-  }, [skillCount, reducedMotion]);
+  }, [skillCount, reducedMotion, revealed]);
 
   return (
     <div

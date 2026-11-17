@@ -33,6 +33,17 @@
   .overlay {
     pointer-events: none;
   }
+
+  /* Well off screen (see BackgroundContainer): neither drawn nor zoomed, so the browser has no layers
+   * of it to move at each frame of the scroll. Back before its section scrolls in, at the zoom the
+   * scroll position gives */
+  &[data-offscreen] {
+    img,
+    .overlay {
+      visibility: hidden;
+      animation: none;
+    }
+  }
 }
 
 .minHeightFull {

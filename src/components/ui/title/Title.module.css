@@ -23,7 +23,7 @@
    * the content's gutters (less its padding). Its width is estimated from its length (--title-length,
    * set by Title) in its font's average letter width; without a length it keeps its size */
   .mainTitle {
-    --title-room: calc(100vw - var(--content-gutter-start) - var(--page-gutter) - 1rem);
+    --title-room: calc(100vw - 2 * var(--content-gutter) - 1rem);
 
     /* Outlined letters: transparent fill, stroked contour */
     color: transparent;
@@ -114,6 +114,15 @@
 
     &::before {
       animation-delay: 5s;
+    }
+  }
+
+  /* Held until the page shows (see LoaderVisibility: REVEALED_ATTRIBUTE), so it types seen rather than
+   * under the loader. Only with scripting: without it there's no loader, and nothing would release it */
+  @media (scripting: enabled) {
+    :global(html:not([data-revealed])) & :is(.typing, .delayedTyping),
+    :global(html:not([data-revealed])) & :is(.typing, .delayedTyping)::before {
+      animation-play-state: paused;
     }
   }
 }

@@ -11,6 +11,7 @@ import {
 import { SKIES } from "@constants/sky";
 import SectionSky from "@ui/sectionBackground/SectionSky";
 import AboutComet from "@ui/sectionBackground/AboutComet";
+import BackgroundContainer from "@ui/sectionBackground/BackgroundContainer";
 import styles from "./SectionBackground.module.css";
 import classNames from "@utils/classNames";
 
@@ -44,7 +45,7 @@ export default function SectionBackground({
   const widest = avifImages["2xl"];
 
   return (
-    <div
+    <BackgroundContainer
       className={classNames(styles.container, minHeightClassName)}
     >
       {/* Per breakpoint, the crop for that width, in the version the screen needs; wider than every
@@ -92,6 +93,6 @@ export default function SectionBackground({
           </SectionSky>
         </div>
       )}
-    </div>
+    </BackgroundContainer>
   );
 }

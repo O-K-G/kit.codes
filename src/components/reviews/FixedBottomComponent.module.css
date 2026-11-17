@@ -9,7 +9,10 @@
   margin-bottom: var(--fluid-rem);
   transition: all 1000ms cubic-bezier(0.4, 0, 0.2, 1);
 
-  /* Fades in/out according to the page's scroll position. */
+  /* Fades in/out according to the page's scroll position: the opacity in an animation of its own, which
+   * the browser runs off the main thread (smooth however busy the page is), and visibility (out of
+   * reach of clicks, the keyboard and screen readers while faded out) in a second one: it can't run
+   * there, and in the same animation would hold the fade back on the main thread too. */
   &[data-hide-on-scroll="true"],
   &[data-show-on-scroll="true"] {
     @media (prefers-reduced-motion: no-preference) {
@@ -20,13 +23,13 @@
 
   &[data-hide-on-scroll="true"] {
     @media (prefers-reduced-motion: no-preference) {
-      animation-name: hide-components;
+      animation-name: fade-out, hide-out;
     }
   }
 
   &[data-show-on-scroll="true"] {
     @media (prefers-reduced-motion: no-preference) {
-      animation-name: show-components;
+      animation-name: fade-in, show-in;
     }
   }
 
@@ -87,35 +90,48 @@
   }
 }
 
-@keyframes show-components {
+/* Fades in over the first 10% of the scroll, and is reachable from there on */
+@keyframes fade-in {
   0% {
     opacity: 0;
+  }
+
+  10%,
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes show-in {
+  0% {
     visibility: hidden;
   }
 
-  10% {
-    opacity: 1;
-    visibility: visible;
-  }
-
+  10%,
   to {
-    opacity: 1;
     visibility: visible;
   }
 }
 
-@keyframes hide-components {
+/* Fades out over the first 10% of the scroll, and is out of reach from there on */
+@keyframes fade-out {
   0% {
     opacity: 1;
   }
 
-  10% {
-    opacity: 0;
-    visibility: hidden;
-  }
-
+  10%,
   to {
     opacity: 0;
+  }
+}
+
+@keyframes hide-out {
+  0% {
+    visibility: visible;
+  }
+
+  10%,
+  to {
     visibility: hidden;
   }
 }

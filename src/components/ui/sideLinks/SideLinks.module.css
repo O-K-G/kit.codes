@@ -17,13 +17,20 @@
 
   /* Centered down the side of the screen. On phones the logo's line is across the top, over the side:
    * there the column is centered between equal insets, top and bottom, that keep it under that line
-   * (with room for a link to grow), so it's still centered on the screen */
+   * (with room for a link to grow), so it's still centered on the screen.
+   * Pinned to the top with a height in svh, rather than stretched between top and bottom: a fixed
+   * box's bottom follows the mobile browser's toolbar, and Chrome on Android lays it out again only
+   * once a scroll ends, so a stretched (dvh-like) column jumped by half the toolbar's height after
+   * every scroll. svh never changes while scrolling, so the column only slides along with the page's
+   * top; on desktop svh is the window's height, as before */
+  --side-links-inset: calc(var(--header-top) + var(--header-line-height) + 0.25 * var(--icon-size) + 0.5rem);
+
   position: fixed;
-  inset-block: calc(var(--header-top) + var(--header-line-height) + 0.25 * var(--icon-size) + 0.5rem);
-  margin-block: auto;
+  top: var(--side-links-inset);
+  height: calc(100svh - 2 * var(--side-links-inset));
 
   @media (width >= 40rem) {
-    inset-block: 0;
+    --side-links-inset: 0px;
   }
 
   /* Fixed for the whole page, so other sections can cover the links: the focused one is brought to

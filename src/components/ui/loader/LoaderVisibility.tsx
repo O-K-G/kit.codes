@@ -4,8 +4,14 @@ import { ReactNode, useEffect, useState } from "react";
 import {
   LOADER_CRITICAL_IMAGE_ATTRIBUTE,
   LOADER_DEFERRED_IMAGE_ATTRIBUTE,
+  REVEALED_ATTRIBUTE,
+  REVEALED_EVENT,
 } from "@constants/loader";
 import prefetchAllImages from "@utils/prefetchAllImages";
+
+/** Past the fade-out (1s, see Loader.module.css), the loader is taken as gone even if its transitionend
+ * never came (e.g. a transition cut short): the intro animations wait for it */
+const FADE_OUT_FALLBACK_MS = 1500;
 
 /** Resolves once the image is decoded (or has failed), so revealing it never shows a half-painted image. */
 const whenImageReady = (img: HTMLImageElement) =>
@@ -27,6 +33,9 @@ const whenImageLoaded = (img: HTMLImageElement) =>
  * Once ready, the deferred (lazy) images are fetched, so they're in place before they're scrolled to.
  * Once those have loaded too, every other version of the images is downloaded in the background
  * (see prefetchAllImages).
+ *
+ * Once it has faded out, it marks the page revealed (REVEALED_ATTRIBUTE on <html>, see useRevealed):
+ * the intro animations start then, on the page in full view, rather than under it, or under its fade.
  */
 export default function LoaderVisibility({
   open,
@@ -75,6 +84,31 @@ export default function LoaderVisibility({
     };
   }, []);
 
+  const shown = !isFirstScreenReady || !!open;
+
+  /** Faded out: the page is in full view */
+  const gone = !shown && !isLoader;
+
+  // Covering the page, or fading out: not revealed (again, if it's shown anew); gone: revealed
+  useEffect(() => {
+    const root = document.documentElement;
+    if (!gone) {
+      root.removeAttribute(REVEALED_ATTRIBUTE);
+    } else if (!root.hasAttribute(REVEALED_ATTRIBUTE)) {
+      root.setAttribute(REVEALED_ATTRIBUTE, "");
+      window.dispatchEvent(new Event(REVEALED_EVENT));
+    }
+  }, [gone]);
+
+  // Fading out: gone once its transition ends (see handleTransitionEnd), or past the fade at the latest
+  useEffect(() => {
+    if (shown || !isLoader) {
+      return;
+    }
+    const timer = setTimeout(() => setIsLoader(false), FADE_OUT_FALLBACK_MS);
+    return () => clearTimeout(timer);
+  }, [shown, isLoader]);
+
   /** Once the loader has faded out, it's removed */
   const handleTransitionEnd = () => setIsLoader(false);
 
@@ -86,7 +120,7 @@ export default function LoaderVisibility({
     <div
       data-nosnippet
       onTransitionEnd={handleTransitionEnd}
-      data-open={!!(!isFirstScreenReady || open)}
+      data-open={shown}
       className={className}
     >
       {children}
