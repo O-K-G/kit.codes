@@ -265,10 +265,11 @@
    * page (smaller on phones) */
   --side-link-size: max(2rem, 1.7484rem + 1.2579vw, 2.5535 * var(--desktop-rem));
   --side-column-link-size: var(--side-link-size);
-  /* The content's gutter on the side links' side: on phones the links' column runs down over the
-   * content's edge, so the content starts past it (the column's margin and its links, which grow by a
-   * quarter of their size past each side, then a gap). Wider, the column sits in the margin beside it */
-  --content-gutter-start: var(--page-gutter);
+  /* The content's gutter, the same on both sides so it's centered: on phones the side links' column runs
+   * down over the content's edge, so the content keeps clear of it (the column's margin and its links,
+   * which grow by a quarter of their size past each side, then a gap), and as far from the other side.
+   * Wider, the column sits in the margin beside it */
+  --content-gutter: var(--page-gutter);
 
   --color-title-purple: #ceb7ff;
   --color-title-purple-dark: #75629f;
@@ -287,7 +288,7 @@
 @media (width < 40rem) {
   :root {
     --side-column-link-size: 1.5rem;
-    --content-gutter-start: calc(var(--page-gutter) + 1.25 * var(--side-column-link-size) + 0.5rem);
+    --content-gutter: calc(var(--page-gutter) + 1.25 * var(--side-column-link-size) + 0.5rem);
   }
 }
 
