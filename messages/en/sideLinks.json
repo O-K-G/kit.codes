@@ -2,6 +2,7 @@
   "sideLinks": {
     "navAriaLabel": "External links",
     "ghLinkAriaLabel": "The GitHub repository for this page",
-    "liLinkAriaLabel": "My LinkedIn"
+    "liLinkAriaLabel": "My LinkedIn",
+    "cvLinkAriaLabel": "My resume, on Google Drive"
   }
 }

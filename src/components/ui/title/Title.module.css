@@ -1,0 +1,141 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .title {
+    padding: 0.5rem;
+    text-align: center;
+    text-transform: uppercase;
+    /* The neon glow. Like the stroke below, it grows with the text past the desktop breakpoint (see --fluid-rem). */
+    filter: drop-shadow(0px 0px 0.125rem #b377ff);
+
+    @media (width >= 40rem) {
+      padding-block: 1rem;
+      filter: drop-shadow(0px 0px calc(0.313 * var(--fluid-rem)) #b377ff);
+    }
+  }
+
+  /* ---- Variants ---- */
+
+  /* A title types out on one line, so it can't wrap: on narrow screens a long one shrinks to fit between
+   * the content's gutters (less its padding). Its width is estimated from its length (--title-length,
+   * set by Title) in its font's average letter width; without a length it keeps its size */
+  .mainTitle {
+    --title-room: calc(100vw - var(--content-gutter-start) - var(--page-gutter) - 1rem);
+
+    /* Outlined letters: transparent fill, stroked contour */
+    color: transparent;
+    -webkit-text-stroke: 0.07rem #ceb7ff;
+
+    @media (width >= 40rem) {
+      -webkit-text-stroke-width: calc(0.125 * var(--fluid-rem));
+    }
+
+    &:lang(en) {
+      --title-fit: calc(var(--title-room) / (0.83 * var(--title-length)));
+
+      font-family: var(--font-just-in-the-firestorm);
+      font-size: min(
+        max(1rem, min(0.375rem + 3.125vw, 2.1555rem + 0.1575vw), 2.2563 * var(--desktop-rem)),
+        var(--title-fit, 100vw)
+      );
+      line-height: max(1.5rem, min(0.9643rem + 2.6786vw, 2.056rem + 0.7744vw), 2.5516 * var(--desktop-rem));
+    }
+
+    &:lang(he) {
+      --title-fit: calc(var(--title-room) / (0.6 * var(--title-length)));
+
+      font-family: var(--font-motion-display-web);
+      font-size: min(
+        max(1.5rem, min(0.4286rem + 5.3571vw, 2.7892rem + 0.4392vw), 3.0703 * var(--desktop-rem)),
+        var(--title-fit, 100vw)
+      );
+      line-height: max(2rem, min(1.2857rem + 3.5714vw, 2.4378rem + 1.1713vw), 3.1874 * var(--desktop-rem));
+      letter-spacing: 0.05em;
+
+      @media (width >= 48rem) {
+        letter-spacing: 0em;
+      }
+    }
+  }
+
+  .subtitle {
+    font-size: max(1.8rem, 0.6rem + 6vw, 4.44 * var(--desktop-rem));
+    line-height: max(2rem, min(1rem + 5vw, 4.2647rem + 0.3361vw), 4.2 * var(--desktop-rem), 1em);
+    color: #fff;
+
+    &:lang(en) {
+      font-family: var(--font-bebas-neue);
+    }
+
+    &:lang(he) {
+      font-family: var(--font-sans);
+      font-weight: 700;
+    }
+  }
+
+  /* ---- Typing animation: the text is revealed from start to end, followed by a blinking caret ---- */
+
+  .typing,
+  .delayedTyping {
+    margin-inline: 0;
+    margin-block: auto;
+    overflow: clip;
+    white-space: nowrap;
+    opacity: 0%;
+    animation: title-type 3.5s steps(40, end) forwards;
+
+    /* The caret */
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: max(0.5rem, 0.4497rem + 0.2516vw, 0.6107 * var(--desktop-rem));
+      height: 80%;
+      margin-block: auto;
+      animation: typing-caret 0.75s 5;
+    }
+
+    &:dir(ltr)::before {
+      right: 0;
+    }
+
+    &:dir(rtl)::before {
+      left: 0;
+    }
+  }
+
+  .delayedTyping {
+    width: 0;
+    animation-delay: 5s;
+
+    &::before {
+      animation-delay: 5s;
+    }
+  }
+}
+
+@keyframes title-type {
+  0% {
+    width: 0%;
+    opacity: 100%;
+  }
+
+  100% {
+    width: 100%;
+    opacity: 100%;
+  }
+}
+
+@keyframes typing-caret {
+  0% {
+    background: #ceb7ff;
+  }
+
+  100% {
+    background: transparent;
+  }
+}

@@ -1,0 +1,156 @@
+.section {
+  position: relative;
+  height: 200svh;
+  /* Its passage through the screen, which the skills' layer follows (see .skillBars) */
+  view-timeline: --skills-section block;
+  padding-top: 5rem;
+
+  @media (width >= 48rem) {
+    padding-top: 10rem;
+  }
+
+  @media (width >= 64rem) {
+    height: 200dvh;
+  }
+
+  /* The titles and the skills slide from below the viewport to their own --top-var position, driven
+   * by the scroll position. */
+  .slideIn {
+    position: fixed;
+    top: 110vh;
+
+    /* Without the motion: in the section's flow, so they're shown (and only over their own section) */
+    @media (prefers-reduced-motion: reduce) {
+      position: relative;
+      top: auto;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      animation-fill-mode: forwards;
+      animation-timing-function: linear;
+      animation-timeline: view();
+      animation-range-start: 0;
+      animation-range-end: 200svh;
+      animation-name: skills;
+    }
+
+    @media screen and (min-width: 1024px) {
+      animation-range-end: 200dvh;
+    }
+  }
+
+  .mainTitle {
+    --top-var: 12svh;
+
+    @media screen and (min-width: 1024px) {
+      --top-var: 12dvh;
+    }
+
+    /* Its text: a dark glow behind Title's purple one, so it stands out from the stars behind it */
+    > h2 {
+      filter: drop-shadow(0 0 0.125rem #000) drop-shadow(0 0 0.25rem #000)
+        drop-shadow(0 0 0.125rem #b377ff);
+
+      @media (width >= 40rem) {
+        filter: drop-shadow(0 0 calc(0.25 * var(--fluid-rem)) #000)
+          drop-shadow(0 0 calc(0.5 * var(--fluid-rem)) #000)
+          drop-shadow(0 0 calc(0.313 * var(--fluid-rem)) #b377ff);
+      }
+    }
+
+    /* The lines over and under it (see Border): the same dark glow, behind their purple one */
+    > div > div {
+      filter: drop-shadow(0 0 calc(0.25 * var(--fluid-rem)) #000)
+        drop-shadow(0 0 calc(0.5 * var(--fluid-rem)) #000)
+        drop-shadow(0 0 calc(0.09 * var(--fluid-rem)) #b377ff);
+    }
+  }
+
+  .subtitle {
+    --top-var: 25svh;
+
+    @media screen and (min-width: 1024px) {
+      --top-var: 25dvh;
+    }
+  }
+
+  /* Under the subtitle, centered. On phones, down to just above the buttons at the bottom of the
+   * screen (over the planet: its groups have dark backdrops), as its rows need the room; wider, down to
+   * above the planet, leaving room for the side links on the left (and the same on the right, to stay
+   * centered) */
+  .skillBars {
+    --top-var: 34svh;
+
+    /* Past the side links' column, on the page's start side (the list itself is left-to-right, see
+     * SkillBars, so its own inline sides don't follow the page's) */
+    right: var(--page-gutter);
+    left: var(--content-gutter-start);
+    width: min(100% - var(--content-gutter-start) - var(--page-gutter), 40 * var(--fluid-rem));
+    /* On phones, down to just above the "Scroll to top" button and its margin (see
+     * FixedBottomComponent) */
+    height: calc(100svh - 6rem - var(--top-var));
+    margin-inline: auto;
+
+    :root[dir="rtl"] & {
+      right: var(--content-gutter-start);
+      left: var(--page-gutter);
+    }
+
+    @media (width >= 40rem) {
+      --top-var: 37svh;
+
+      width: min(100% - 10 * var(--fluid-rem), 48 * var(--fluid-rem));
+      height: calc(82svh - var(--top-var));
+    }
+
+    @media (width >= 64rem) {
+      --top-var: 37dvh;
+
+      height: calc(82dvh - var(--top-var));
+    }
+
+    /* Over the planet, which it reaches on phones. The planet is fixed too, later in the page (in the
+     * footer), so it's painted over the skills; raised above it, the skills would be over the sections
+     * after this one too. So they're raised only while this section fills the screen, and drop back
+     * as it starts to leave (as the next one comes in, to cover them) */
+    @media (prefers-reduced-motion: reduce) {
+      /* In the section's flow (see .slideIn): the sections after it don't reach it */
+      z-index: 1;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      @supports (animation-timeline: view()) {
+        animation-name: skills, skills-raised;
+        animation-timeline: view(), --skills-section;
+        animation-range-start: 0, exit 0%;
+        animation-range-end: 200svh, exit 1%;
+        animation-fill-mode: forwards, both;
+
+        @media (width >= 64rem) {
+          animation-range-end: 200dvh, exit 1%;
+        }
+      }
+    }
+  }
+}
+
+/* Raised, then (once the section starts leaving the screen) back on the page's layer */
+@keyframes skills-raised {
+  from {
+    z-index: 1;
+  }
+
+  to {
+    z-index: 0;
+  }
+}
+
+@keyframes skills {
+  from {
+    top: 120svh;
+  }
+
+  to {
+    top: var(--top-var);
+  }
+}

@@ -2,6 +2,7 @@
   "errorDialog": {
     "error": "Error",
     "errorMessage": "Sorry, but something went wrong. You can either close this window and try again, or read the error details below, if available.",
+    "rateLimitedMessage": "You've sent several messages in a short time. Please wait a few minutes and try again.",
     "errorDetails": "Error details: ",
     "noErrorDetailsFound": "No error details found."
   }

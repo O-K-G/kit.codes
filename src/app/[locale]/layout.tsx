@@ -1,58 +1,65 @@
 import "@locale/globals.css";
 import { Metadata, Viewport } from "next";
-import { CACHE_VERSION } from "@root/postcss.config.mjs";
+import {
+  siteMetadata,
+  LOCALE_ALTERNATES,
+  OG_LOCALES,
+  getLocalePath,
+} from "@constants/siteMetadata";
+import { routing } from "@i18n/routing";
 import handleFontsByLocale from "@utils/handleFontsByLocale";
 import getDirByLocale from "@utils/getDirByLocale";
-import { PropsWithChildren, ReactNode } from "react";
+import { PropsWithChildren } from "react";
 import { NextIntlClientProvider } from "next-intl";
+import { getMessages, getTranslations } from "next-intl/server";
+import { CLIENT_NAMESPACES } from "@constants/i18nFilenames";
+import { getPageLocale, setPageLocale } from "@i18n/pageLocale";
+import classNames from "@utils/classNames";
+import PauseWhileResizing from "@ui/pauseWhileResizing/PauseWhileResizing";
 
 interface RootLayoutProps extends PropsWithChildren {
+  /** `rest`: the catch-all route (app/[...rest]) reuses this layout, with no locale */
   params: Promise<{ locale?: string; rest?: string[] }>;
 }
 
+/** Each locale's pages are prerendered at build time; any other "locale" is a 404 */
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
+export const dynamicParams = false;
+
 const { fontsByLocale } = handleFontsByLocale();
 
-export const metadata: Metadata = {
-  title: "Dev Space Center",
-  description:
-    "This is my landing page to showcase some of my web development skills. ",
-  applicationName: "devspacecenter",
-  keywords: [
-    "console",
-    "log",
-    "HTML",
-    "React.js",
-    "Async JS",
-    "A11y",
-    "JavaScript",
-    "tailwindcss",
-    "REST API",
-    "i18n",
-    "CSS",
-    "Next.js",
-    "Microservices",
-    "Zod",
-    "TypeScript",
-    "Node.js",
-    "MongoDB",
-    "Unit tests",
-    "Web development",
-  ],
-  manifest: "/manifest.webmanifest",
-  icons: {
-    icon: `/images/icon.png?cacheVersion=${CACHE_VERSION}`,
-    shortcut: `/images/shortcut-icon.png?cacheVersion=${CACHE_VERSION}`,
-    apple: `/images/apple-icon.png?cacheVersion=${CACHE_VERSION}`,
-    other: [
-      {
-        rel: "mask-icon",
-        url: `/images/safari-pinned-tab.svg?cacheVersion=${CACHE_VERSION}`,
-        type: "image/svg+xml",
-        sizes: "any",
-      },
-    ],
-  },
-};
+export async function generateMetadata({
+  params,
+}: Pick<RootLayoutProps, "params">): Promise<Metadata> {
+  const selectedLocale = await getPageLocale(params);
+  /** The description, in the page's language (see SITE_DESCRIPTION) */
+  const t = await getTranslations({ locale: selectedLocale, namespace: "about" });
+  const description = t("metaDescription");
+
+  return {
+    ...siteMetadata,
+    description,
+    twitter: { ...siteMetadata.twitter, description },
+    alternates: {
+      /** Every section route (/en/about, /en/skills, ...) renders this same page, scrolled to a section. */
+      canonical: getLocalePath(selectedLocale),
+      languages: LOCALE_ALTERNATES,
+    },
+    /** The link preview, in the page's language, pointing at its locale root like the canonical URL */
+    openGraph: {
+      ...siteMetadata.openGraph,
+      description,
+      url: getLocalePath(selectedLocale),
+      locale: OG_LOCALES[selectedLocale],
+      alternateLocale: routing.locales
+        .filter((other) => other !== selectedLocale)
+        .map((other) => OG_LOCALES[other]),
+    },
+  };
+}
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -64,20 +71,25 @@ export default async function RootLayout({
   children,
   params,
 }: RootLayoutProps) {
-  const { locale } = await params;
-  const selectedLocale = locale || "en";
-  const dir = getDirByLocale({ locale: selectedLocale }) || "ltr";
+  const selectedLocale = await setPageLocale(params);
+  const dir = getDirByLocale({ locale: selectedLocale });
+  const messages = await getMessages();
+  /** Only what client components need goes to the browser (see CLIENT_NAMESPACES) */
+  const clientMessages = Object.fromEntries(
+    CLIENT_NAMESPACES.map((namespace) => [namespace, messages[namespace]])
+  );
 
   const { mainTitle, borderTitle, infoText, regularText, shenanigansText } =
-    fontsByLocale[selectedLocale as keyof typeof fontsByLocale];
+    fontsByLocale[selectedLocale];
 
   return (
-    <html dir={dir} lang={selectedLocale}>
-      <NextIntlClientProvider>
+    <html dir={dir} lang={selectedLocale} data-scroll-behavior="smooth">
+      <NextIntlClientProvider messages={clientMessages}>
         <body
-          className={`has-[dialog[data-open=true]]:overflow-hidden has-[main_aside[data-open=true]]:overflow-hidden ${mainTitle} ${borderTitle} ${infoText} ${regularText} ${shenanigansText}`}
+          className={classNames(mainTitle, borderTitle, infoText, regularText, shenanigansText)}
         >
           {children}
+          <PauseWhileResizing />
         </body>
       </NextIntlClientProvider>
     </html>

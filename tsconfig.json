@@ -18,13 +18,13 @@
         "name": "next"
       }
     ],
-    "baseUrl": "./",
     "paths": {
       "@/*": ["./src/*"],
       "@root/*": ["./*"],
       "@locale/*": ["./src/app/[locale]/*"],
       "@locales/*": ["./messages/*"],
       "@components/*": ["./src/components/*"],
+      "@ui/*": ["./src/components/ui/*"],
       "@constants/*": ["./src/constants/*"],
       "@hooks/*": ["./src/hooks/*"],
       "@i18nEn/*": ["./messages/en/*"],

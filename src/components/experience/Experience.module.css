@@ -1,0 +1,13 @@
+/* As tall as the timeline needs (at least a screen). `section.` outweighs Section's own .section */
+section.section {
+  position: relative;
+  padding-top: 5rem;
+  padding-bottom: 4rem;
+  /* Clipped like the other sections, without being a scroll container (as `hidden` makes it): the
+   * timeline's scroll-driven animations follow the nearest one, which must be the page */
+  overflow: clip;
+
+  @media (width >= 48rem) and (height >= 40rem) {
+    padding-top: 10rem;
+  }
+}

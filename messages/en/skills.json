@@ -1,6 +1,12 @@
 {
   "skills": {
     "mainTitle": "Technical Skills",
-    "subtitle": "here is a list of some of my skills"
+    "subtitle": "Main stack",
+    "groups": {
+      "frontEnd": "Front-end",
+      "backEnd": "Back-end",
+      "databases": "Databases",
+      "general": "General"
+    }
   }
 }

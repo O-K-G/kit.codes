@@ -1,0 +1,16 @@
+/* Wrapped in :where() (zero specificity) so a className passed by the parent can override these defaults. */
+:where(.button) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:disabled {
+    pointer-events: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  @media (width >= 64rem) {
+    cursor: pointer;
+  }
+}

@@ -6,3 +6,5 @@ README.md
 .next
 docker
 .git
+# Secrets: never copied into an image (pass them at run time, e.g. docker run --env-file .env)
+.env*

@@ -1,0 +1,172 @@
+/* How tall the soft fade at the bottom of a scrolling tooltip's text is (see .box) */
+@property --tooltip-scroll-fade {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+/* In the "components" layer (see globals.css): the pages' own styles, unlayered, always win over these */
+@layer components {
+  .trigger {
+    position: relative;
+  }
+
+  /* Its place: next to the element, the gap between them part of it, so the pointer can move onto it
+   * without leaving the element. Not displayed until shown (it then fades in, and out before it goes,
+   * a little toward the element): each showing places it anew, see below */
+  .tooltip {
+    --tooltip-gap: 0.5rem;
+    --tooltip-display: block;
+    --shift-x: 0;
+    --shift-y: 0.25rem;
+
+    position: absolute;
+    z-index: 20;
+    display: none;
+    opacity: 0%;
+    translate: var(--shift-x) var(--shift-y);
+    cursor: auto;
+    transition:
+      opacity 200ms cubic-bezier(0.4, 0, 0.2, 1),
+      translate 200ms cubic-bezier(0.4, 0, 0.2, 1),
+      display 200ms allow-discrete;
+
+    &[data-placement="top"] {
+      bottom: 100%;
+      padding-bottom: var(--tooltip-gap);
+    }
+
+    &[data-placement="bottom"] {
+      --shift-y: -0.25rem;
+
+      top: 100%;
+      padding-top: var(--tooltip-gap);
+    }
+
+    &[data-align="start"] {
+      --tooltip-area-inline: span-inline-end;
+
+      inset-inline-start: 0;
+    }
+
+    &[data-align="center"] {
+      --shift-x: -50%;
+      --tooltip-area-inline: span-all;
+
+      left: 50%;
+    }
+
+    &[data-align="end"] {
+      --tooltip-area-inline: span-inline-start;
+
+      inset-inline-end: 0;
+    }
+  }
+
+  /* Kept in the viewport (given `keepInViewport`): anchored to the element, on its side (above or
+   * below) with the most room, no taller than that room (the text then scrolls, see .box). Lined up as
+   * asked (--tooltip-area-inline, which pages can set), moved sideways if it would stick out. Fixed, so
+   * the viewport bounds it: the element must not be in a transformed or filtered one. It's placed where
+   * the element is when it's shown: hidden, it isn't displayed at all, as a tooltip that stays
+   * displayed (only invisible) would keep the place it got when the page loaded. Without anchor
+   * positioning, placed as usual */
+  @supports (anchor-scope: all) and (position-try-order: most-height) {
+    .trigger[data-keep-in-viewport] {
+      anchor-name: --tooltip-trigger;
+      anchor-scope: --tooltip-trigger;
+
+      > .tooltip {
+        --shift-x: 0;
+        --tooltip-display: flex;
+
+        position: fixed;
+        position-anchor: --tooltip-trigger;
+        inset: auto;
+        flex-direction: column;
+        max-height: calc(100% - 0.5rem);
+        position-area: var(--tooltip-area-block) var(--tooltip-area-inline);
+        justify-self: anchor-center;
+        position-try-order: most-height;
+        position-try-fallbacks: flip-block, flip-inline, flip-block flip-inline;
+
+        &[data-placement="top"] {
+          --tooltip-area-block: block-start;
+        }
+
+        &[data-placement="bottom"] {
+          --tooltip-area-block: block-end;
+        }
+
+        &:not([data-align="center"]) {
+          justify-self: normal;
+        }
+      }
+    }
+  }
+
+  /* Shown while hovered or focused, or, given `open`, while open; unless closed with Escape */
+  .trigger:not([data-open], [data-dismissed]):is(:hover, :focus-within) > .tooltip,
+  .trigger[data-open="true"]:not([data-dismissed]) > .tooltip {
+    display: var(--tooltip-display);
+    opacity: 100%;
+    translate: var(--shift-x) 0;
+
+    /* Just put there (given `open`, the element may have just appeared): it eases in from below/above */
+    @starting-style {
+      opacity: 0%;
+      translate: var(--shift-x) var(--shift-y);
+    }
+  }
+
+  /* Its box, in the site's neon purple */
+  .box {
+    display: block;
+    padding: 0.4em 0.75em;
+    border: 1px solid var(--color-title-purple);
+    border-radius: 0.5rem;
+    font-family: var(--font-montserrat), var(--font-sans);
+    line-height: 1.4;
+    text-align: start;
+    color: #fff;
+    background-color: #000;
+    box-shadow: 0 0 1rem color-mix(in oklab, #b377ff 50%, transparent);
+    /* Text that doesn't fit scrolls, without a scrollbar: the wheel or trackpad scrolls it */
+    min-height: 0;
+    overflow-y: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* A soft fade at the bottom of the text while there's more below: a cue that it scrolls. It's full
+     * until the last 3rem of scrolling, then shrinks away, so the last line ends up clear; text that
+     * fits can't scroll, which leaves the timeline inactive and the fade at 0. Without scroll timelines,
+     * no fade (a fixed one would cover the last line).
+     * Masks (bottom layer to top): everything, unclipped, so the glow outside the box stays; minus the
+     * padding box; plus the padding box, faded at its bottom edge, right down to the frame. So only the
+     * text fades, not the frame */
+    @supports (animation-timeline: scroll()) {
+      mask-image:
+        linear-gradient(#000 calc(100% - var(--tooltip-scroll-fade)), transparent),
+        linear-gradient(#000, #000),
+        linear-gradient(#000, #000);
+      mask-clip: padding-box, padding-box, no-clip;
+      mask-origin: padding-box, padding-box, border-box;
+      mask-composite: add, exclude, add;
+      animation: tooltip-scroll-fade linear both;
+      animation-timeline: scroll(self);
+      animation-range: calc(100% - 3rem) 100%;
+    }
+  }
+}
+
+@keyframes tooltip-scroll-fade {
+  from {
+    --tooltip-scroll-fade: 2.5rem;
+  }
+
+  to {
+    --tooltip-scroll-fade: 0px;
+  }
+}

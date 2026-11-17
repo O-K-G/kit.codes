@@ -1,0 +1,155 @@
+.icon {
+  position: absolute;
+  width: max(1.9185rem, 1.7254rem + 0.9653vw, 2.3432 * var(--desktop-rem));
+  height: max(1.702rem, 1.5307rem + 0.8564vw, 2.0788 * var(--desktop-rem));
+  overflow: hidden;
+
+  &[data-open="false"] {
+    filter: drop-shadow(0px 0px calc(0.313 * var(--fluid-rem)) #b377ff);
+  }
+
+  &[data-open="true"] {
+    filter: drop-shadow(0px 0px calc(0.313 * var(--fluid-rem)) #ffffff);
+  }
+
+  /* ---- The blink: red twice, along with the gauge's count (see Gauge). The bracket's color is
+   * animated on the bracket and its bars themselves, so its 1s color transition doesn't smooth it.
+   * Two blinks in 0.8s: under WCAG 2.3.1's 3 flashes per second. ---- */
+  &[data-blink="true"] {
+    animation: icon-blink 0.4s step-end 2;
+  }
+
+  .bracket[data-blink="true"] {
+    animation: bracket-blink 0.4s step-end 2;
+
+    &::before,
+    &::after {
+      animation: bracket-bar-blink 0.4s step-end 2;
+    }
+  }
+
+  /* Pauses with the gauge while out of view */
+  &[data-running="false"],
+  .bracket[data-running="false"],
+  .bracket[data-running="false"]::before,
+  .bracket[data-running="false"]::after {
+    animation-play-state: paused;
+  }
+
+  /* The corner bracket: a double top/left border, with short bars extending its ends. */
+  .bracket {
+    position: relative;
+    height: 100%;
+    border-style: double;
+    border-top-width: max(0.375rem, 0.3624rem + 0.0629vw, 0.4027 * var(--desktop-rem));
+    border-left-width: max(0.375rem, 0.3624rem + 0.0629vw, 0.4027 * var(--desktop-rem));
+    transition: all 1000ms cubic-bezier(0.4, 0, 0.2, 1);
+
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      transition: all 1000ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    &::before {
+      top: calc(-0.5 * var(--fluid-rem));
+      right: 0;
+      width: calc(0.125 * var(--fluid-rem));
+      height: calc(0.5 * var(--fluid-rem));
+    }
+
+    &::after {
+      bottom: 0;
+      left: calc(-0.5 * var(--fluid-rem));
+      width: calc(0.5 * var(--fluid-rem));
+      height: calc(0.125 * var(--fluid-rem));
+    }
+
+    &[data-open="false"] {
+      border-color: #fff;
+
+      &::before,
+      &::after {
+        background-color: #fff;
+      }
+    }
+
+    &[data-open="true"] {
+      border-color: var(--color-title-purple);
+
+      &::before,
+      &::after {
+        background-color: var(--color-title-purple);
+      }
+    }
+
+    @media (width >= 48rem) {
+      &::before {
+        width: calc(0.25 * var(--fluid-rem));
+      }
+
+      &::after {
+        height: calc(0.25 * var(--fluid-rem));
+      }
+    }
+  }
+}
+
+.topCorner {
+  top: calc(-1.25 * var(--fluid-rem));
+
+  &:dir(ltr) {
+    left: calc(-1.25 * var(--fluid-rem));
+  }
+
+  &:dir(rtl) {
+    right: calc(-1.25 * var(--fluid-rem));
+    rotate: 90deg;
+  }
+}
+
+.bottomCorner {
+  bottom: calc(-1.25 * var(--fluid-rem));
+
+  &:dir(ltr) {
+    right: calc(-1.25 * var(--fluid-rem));
+    rotate: 180deg;
+  }
+
+  &:dir(rtl) {
+    left: calc(-1.25 * var(--fluid-rem));
+    rotate: 270deg;
+  }
+}
+
+/* Red for the first half of each blink, then back to the colors it has outside the animation */
+@keyframes icon-blink {
+  0% {
+    filter: drop-shadow(0px 0px calc(0.313 * var(--fluid-rem)) oklch(63.7% 0.237 25.331));
+  }
+
+  50% {
+    filter: drop-shadow(0px 0px calc(0.313 * var(--fluid-rem)) #b377ff);
+  }
+}
+
+@keyframes bracket-blink {
+  0% {
+    border-color: oklch(63.7% 0.237 25.331);
+  }
+
+  50% {
+    border-color: #fff;
+  }
+}
+
+@keyframes bracket-bar-blink {
+  0% {
+    background-color: oklch(63.7% 0.237 25.331);
+  }
+
+  50% {
+    background-color: #fff;
+  }
+}

@@ -1,0 +1,183 @@
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: #4cae9a;
+
+  @media (width >= 64rem) {
+    cursor: crosshair;
+  }
+
+  > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    border: 2px solid;
+    border-color: #fff oklch(44.6% 0.03 256.802) oklch(44.6% 0.03 256.802) #fff;
+    background-color: #b4b3b3;
+    color: #000;
+    font-family: var(--font-handjet);
+
+    @media (width >= 64rem) {
+      cursor: default;
+    }
+
+    .dialogTitle {
+      padding-inline: 1rem;
+      background-color: oklch(44.6% 0.03 256.802);
+      color: #fff;
+      font-size: calc(1.25 * var(--fluid-rem));
+      line-height: calc(1.75 * var(--fluid-rem));
+
+      .closeButtonIcon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /* At least 44px, a comfortable touch target (WCAG 2.5.5), growing to 48px at the desktop breakpoint */
+        width: max(2.75rem, 2.6364rem + 0.5682vw, 3 * var(--desktop-rem));
+        height: max(2.75rem, 2.6364rem + 0.5682vw, 3 * var(--desktop-rem));
+        border-color: #b4b3b3;
+        border-radius: 9999px;
+        background-color: oklch(80.8% 0.114 19.571);
+        box-shadow: inset 0 2px 4px 0 #000;
+        rotate: 180deg;
+
+        @media (hover: hover) {
+          button:hover & {
+            background-color: #fff;
+          }
+        }
+
+        button:focus &,
+        button:active & {
+          background-color: #fff;
+        }
+      }
+    }
+
+    .windowBody {
+      padding: 1rem;
+      color: #000;
+
+      > div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        border: 2px solid;
+        border-color: oklch(44.6% 0.03 256.802) #fff #fff oklch(44.6% 0.03 256.802);
+        background-color: #fff;
+
+        .heading {
+          text-align: center;
+          font-size: max(1.125rem, min(1rem + 0.625vw, 0.9003rem + 0.8741vw), 1.4 * var(--desktop-rem));
+          line-height: max(1.75rem, 1.4858rem + 1.3208vw, 2.3311 * var(--desktop-rem));
+        }
+
+        .headingBold {
+          font-weight: 700;
+        }
+
+        > p {
+          margin-top: 0.5rem;
+          font-size: var(--fluid-rem);
+          line-height: calc(1.5 * var(--fluid-rem));
+        }
+
+        .quitButtonWrapper {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+          margin-top: 0.5rem;
+
+          > button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            border: 1px solid #000;
+            /* The heading's fluid size */
+            font-size: max(1.125rem, min(1rem + 0.625vw, 0.9003rem + 0.8741vw), 1.4 * var(--desktop-rem));
+            line-height: max(1.75rem, 1.4858rem + 1.3208vw, 2.3311 * var(--desktop-rem));
+            font-weight: 700;
+            box-shadow: 0 1px 2px 0 #000;
+
+            @media (hover: hover) {
+              &:hover {
+                background-color: oklch(96.7% 0.003 264.542);
+              }
+            }
+
+            &:active {
+              background-color: oklch(88.2% 0.059 254.128);
+            }
+
+            &:focus {
+              .oldschoolButtonLabel {
+                border-style: dashed;
+                border-color: #000;
+              }
+            }
+
+            @media (width >= 64rem) {
+              cursor: pointer;
+            }
+
+            .oldschoolButtonLabel {
+              padding-inline: 0.5rem;
+              border: 1px solid transparent;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.button {
+  z-index: 10;
+  /* A dark outline around the letters, so they keep their contrast over any part of the background
+   * (WCAG 1.4.3 / 1.4.11). Painted behind the fill, so only its outer half shows and the letters
+   * keep their shape. */
+  -webkit-text-stroke: 0.12em #000;
+  paint-order: stroke fill;
+  font-size: max(1rem, min(0.75rem + 1.25vw, 0.9703rem + 0.6993vw), 1.4179 * var(--desktop-rem));
+  line-height: max(1.5rem, min(1.25rem + 1.25vw, 1.3024rem + 1.1189vw), 2.0185 * var(--desktop-rem));
+  color: #fff;
+  text-transform: uppercase;
+
+  &:lang(en) {
+    font-family: var(--font-bebas-neue);
+  }
+
+  &:lang(he) {
+    font-family: var(--font-sans);
+    font-weight: 700;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      color: var(--color-title-purple);
+    }
+  }
+
+  &:focus {
+    color: var(--color-title-purple);
+  }
+
+  &:active {
+    color: var(--color-title-purple-dark);
+  }
+
+  @media (width >= 64rem) {
+    cursor: pointer;
+  }
+}

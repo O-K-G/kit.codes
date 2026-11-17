@@ -1,8 +1,5 @@
-'use server';
-
-import { MailHTMLTemplateProps } from '@constants/interfaces';
+import { ContactMessage } from '@constants/interfaces';
 import mailHTMLText from '@i18nEn/mailHTMLText.json';
-import { ReactNode } from 'react';
 
 const STYLE = {
   main: {
@@ -22,7 +19,7 @@ const STYLE = {
     justifyContent: 'center',
     width: '100%',
     fontSize: '0.75rem',
-    lineHight: '1rem',
+    lineHeight: '1rem',
   },
   span: {
     width: '100%',
@@ -41,15 +38,16 @@ const STYLE = {
     width: '100%',
     textAlign: 'left',
     margin: '0',
+    // Keeps the message's line breaks and paragraphs
+    whiteSpace: 'pre-wrap',
   },
 } as const;
 
-export default async function mailHTMLTemplate({
-  dir,
-  email,
-  subject,
-  content,
-}: MailHTMLTemplateProps) {
+/**
+ * Server-only: the contact message as an HTML email. Rendered by React, so everything the visitor
+ * typed is escaped.
+ */
+export default async function mailHTMLTemplate({ dir, email, subject, content }: ContactMessage) {
   const {
     subject: subjectText,
     sendersEmailAddressText,
@@ -59,23 +57,19 @@ export default async function mailHTMLTemplate({
   } = mailHTMLText;
   const title = `${subjectText}:\xa0${website}`;
 
-  const getData = async (component: ReactNode) => {
-    const ReactDOMServer = (await import('react-dom/server')).default;
-    const staticMarkup = ReactDOMServer.renderToStaticMarkup(component);
-    return staticMarkup;
-  };
+  // Imported here: Next doesn't allow react-dom/server in modules that could reach the app's code
+  const { renderToStaticMarkup } = await import('react-dom/server');
 
-  const html = await getData(
+  const html = renderToStaticMarkup(
     <html lang="en">
-      {/* eslint-disable-next-line */}
+      {/* An email's own document, not a Next page, so next/head doesn't apply */}
+      {/* eslint-disable-next-line @next/next/no-head-element */}
       <head>
-        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-        {/* @ts-expect-error */}
-        <meta charset="UTF-8" />
+        <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>{title}</title>
       </head>
-      <body dir={dir || 'ltr'}>
+      <body dir={dir}>
         <main style={STYLE.main}>
           <h1 style={STYLE.h1}>{title}</h1>
           <span style={STYLE.span}>
@@ -98,7 +92,7 @@ export default async function mailHTMLTemplate({
         </main>
       </body>
     </html>
-  ).then((data) => data);
+  );
 
   return `<!DOCTYPE html>${html}`;
 }

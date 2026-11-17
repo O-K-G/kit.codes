@@ -1,113 +1,303 @@
-@import "tailwindcss";
-@import "./styles/main-title.css";
-@import "./styles/icons-scroll-animations.css";
-@import "./styles/expand-collapse-button.css";
-@import "./styles/loader-animations.css";
-@import "./styles/planet-rotate-animations.css";
-@import "./styles/backgrounds.css";
-@import "./styles/skills.css";
-@import "./styles/aside.css";
-@import "./styles/side-links.css";
-@import "./styles/contact-go-button.css";
-@import "./styles/attribution.css";
+/* The cascade layers, weakest first: the reset, then the shared components' own styles (e.g. the
+ * tooltip's), which the components' pages override with their unlayered styles. */
+@layer base, components;
 
-@theme {
-  --drop-shadow-purple-glow: 0px 0px 0.125rem #b377ff;
-  --drop-shadow-white-glow-sm: 0px 0px 0.313rem #ffffff;
-  --drop-shadow-purple-glow-sm: 0px 0px 0.313rem #b377ff;
-  --drop-shadow-border-purple-glow: 0px 0px 0.09rem #b377ff;
-
-  --rotate-270: 270deg;
-
-  --color-title-purple: #ceb7ff;
-  --color-title-purple-dark: #75629f;
-
-  --font-just-in-the-firestorm: var(--font-just-in-the-firestorm);
-  --font-star-date-81316: var(--font-star-date-81316);
-  --font-bebas-neue: var(--font-bebas-neue);
-  --font-montserrat: var(--font-montserrat);
-  --font-stop-motion: var(--font-stop-motion);
-  --font-karantina-regular: var(--font-karantina-regular);
-  --font-varela-round-regular: var(--font-varela-round-regular);
-  --font-handjet: var(--font-handjet);
-}
-
+/* Base reset - adapted from Tailwind CSS v4 preflight (MIT License, https://tailwindcss.com).
+ * It lives in a layer so that every (unlayered) component style always wins over it. */
 @layer base {
   *,
   ::after,
   ::before,
   ::backdrop,
   ::file-selector-button {
-    border-color: var(--color-gray-200, currentColor);
-  }
-}
-
-@utility hide-scrollbars {
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
-
-@utility center-elements {
-  @apply flex items-center justify-center;
-}
-
-@utility transition-300 {
-  @apply transition-all ease-in-out duration-300;
-}
-
-@utility transition-1000 {
-  @apply transition-all ease-in-out duration-1000;
-}
-
-@utility info-text-font-classNames {
-  &:lang(en) {
-    @apply font-bebas-neue;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0 solid;
+    border-color: oklch(92.8% 0.006 264.531);
   }
 
-  &:lang(he) {
-    @apply font-sans font-bold;
+  html,
+  :host {
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    tab-size: 4;
+    font-family: var(--font-sans);
+    font-feature-settings: normal;
+    font-variation-settings: normal;
+    -webkit-tap-highlight-color: transparent;
   }
-}
 
-@utility regular-text-font-by-locale {
-  &:lang(en) {
-    @apply font-montserrat;
+  hr {
+    height: 0;
+    color: inherit;
+    border-top-width: 1px;
   }
 
-  &:lang(he) {
-    @apply font-varela-round-regular;
+  abbr:where([title]) {
+    -webkit-text-decoration: underline dotted;
+    text-decoration: underline dotted;
   }
-}
 
-/* Shorthand for animation breaks in production environment with FireFox after upgrade to Tailwind 4.0.9. */
-@utility animate-scroll-polyfill {
-  @media (prefers-reduced-motion: no-preference) {
-    @supports not (animation-timeline: scroll()) {
-      animation-fill-mode: forwards;
-      animation-timing-function: linear;
-      animation-duration: 1s;
-      animation-delay: calc(var(--scroll) * -1s);
-      animation-play-state: paused;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-size: inherit;
+    font-weight: inherit;
+  }
+
+  a {
+    color: inherit;
+    -webkit-text-decoration: inherit;
+    text-decoration: inherit;
+  }
+
+  b,
+  strong {
+    font-weight: bolder;
+  }
+
+  code,
+  kbd,
+  samp,
+  pre {
+    font-family: var(--font-mono);
+    font-feature-settings: normal;
+    font-variation-settings: normal;
+    font-size: 1em;
+  }
+
+  small {
+    font-size: 80%;
+  }
+
+  sub,
+  sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+  }
+
+  sub {
+    bottom: -0.25em;
+  }
+
+  sup {
+    top: -0.5em;
+  }
+
+  table {
+    text-indent: 0;
+    border-color: inherit;
+    border-collapse: collapse;
+  }
+
+  :-moz-focusring {
+    outline: auto;
+  }
+
+  progress {
+    vertical-align: baseline;
+  }
+
+  summary {
+    display: list-item;
+  }
+
+  ol,
+  ul,
+  menu {
+    list-style: none;
+  }
+
+  img,
+  svg,
+  video,
+  canvas,
+  audio,
+  iframe,
+  embed,
+  object {
+    display: block;
+    vertical-align: middle;
+  }
+
+  img,
+  video {
+    max-width: 100%;
+    height: auto;
+  }
+
+  button,
+  input,
+  select,
+  optgroup,
+  textarea,
+  ::file-selector-button {
+    font: inherit;
+    font-feature-settings: inherit;
+    font-variation-settings: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+    border-radius: 0;
+    background-color: transparent;
+    opacity: 1;
+  }
+
+  :where(select:is([multiple], [size])) optgroup {
+    font-weight: bolder;
+  }
+
+  :where(select:is([multiple], [size])) optgroup option {
+    padding-inline-start: 20px;
+  }
+
+  ::file-selector-button {
+    margin-inline-end: 4px;
+  }
+
+  ::placeholder {
+    opacity: 1;
+  }
+
+  @supports (not (-webkit-appearance: -apple-pay-button)) or
+    (contain-intrinsic-size: 1px) {
+    ::placeholder {
+      color: currentcolor;
+      color: color-mix(in oklab, currentcolor 50%, transparent);
     }
   }
-}
 
-@utility animate-scroll {
-  @media (prefers-reduced-motion: no-preference) {
-    @supports (animation-timeline: scroll()) {
-      animation-timing-function: linear;
-      animation-timeline: scroll();
-    }
+  textarea {
+    resize: vertical;
+  }
+
+  ::-webkit-search-decoration {
+    -webkit-appearance: none;
+  }
+
+  ::-webkit-date-and-time-value {
+    min-height: 1lh;
+    text-align: inherit;
+  }
+
+  ::-webkit-datetime-edit {
+    display: inline-flex;
+  }
+
+  ::-webkit-datetime-edit-fields-wrapper {
+    padding: 0;
+  }
+
+  ::-webkit-datetime-edit,
+  ::-webkit-datetime-edit-year-field,
+  ::-webkit-datetime-edit-month-field,
+  ::-webkit-datetime-edit-day-field,
+  ::-webkit-datetime-edit-hour-field,
+  ::-webkit-datetime-edit-minute-field,
+  ::-webkit-datetime-edit-second-field,
+  ::-webkit-datetime-edit-millisecond-field,
+  ::-webkit-datetime-edit-meridiem-field {
+    padding-block: 0;
+  }
+
+  ::-webkit-calendar-picker-indicator {
+    line-height: 1;
+  }
+
+  :-moz-ui-invalid {
+    box-shadow: none;
+  }
+
+  button,
+  input:where([type="button"], [type="reset"], [type="submit"]),
+  ::file-selector-button {
+    appearance: button;
+  }
+
+  ::-webkit-inner-spin-button,
+  ::-webkit-outer-spin-button {
+    height: auto;
+  }
+
+  [hidden]:where(:not([hidden="until-found"])) {
+    display: none !important;
   }
 }
 
+/* The locale fonts (--font-bebas-neue, --font-montserrat, etc.) are defined on <body> by next/font. */
 :root {
+  --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+
+  /* Fluid sizes (text, icons, buttons, decorations). The design is set at the start of the mobile
+   * (20rem) and desktop (64rem = 1024px) breakpoints; in between, sizes interpolate between the two, and
+   * from the desktop breakpoint on they keep the ratio to the viewport they have at 1024px wide.
+   *  --desktop-rem: one rem of the 1024px-wide design, scaled with the viewport (1rem at 1024px; 0 below
+   *    the desktop breakpoint). On screens wider than 16:9 it follows the height instead, so content fits.
+   *  --fluid-rem: for sizes the design keeps fixed: 1rem up to the desktop breakpoint, then --desktop-rem.
+   * Interpolated sizes become max(<mobile size>, <interpolation>, <size at 1024px> * var(--desktop-rem)). */
+  --desktop-rem: 0px;
+  --fluid-rem: max(1rem, var(--desktop-rem));
+
+  /* The keyboard focus ring (see :focus-visible): how far out from the element it starts, and its width */
+  --focus-ring-offset: 6px;
+  --focus-ring-width: 4px;
+  /* The least room between the content and the viewport's sides, on every page and screen: enough for
+   * a focus ring, with a gap left between it and the edge. Things that grow (on hover or focus) keep
+   * their growth inside it too, on top of it (see SideLinks) */
+  --page-gutter: max(var(--fluid-rem), var(--focus-ring-offset) + var(--focus-ring-width) + 0.5rem);
+
+  /* The top line: the logo and, across from it, the "Contact me" button (see Logo). How far down it
+   * is, its text's size and how tall it is: on phones it's over the side links' column, which keeps
+   * clear of it (see SideLinks) */
+  --header-top: 1rem;
+  --header-font-size: max(1.5rem, 0.75rem + 3.75vw, 3.15 * var(--desktop-rem));
+  --header-line-height: var(--header-font-size);
+
+  /* The side links' size (see SideLinks), and the size of those in the column down the side of the
+   * page (smaller on phones) */
+  --side-link-size: max(2rem, 1.7484rem + 1.2579vw, 2.5535 * var(--desktop-rem));
+  --side-column-link-size: var(--side-link-size);
+  /* The content's gutter on the side links' side: on phones the links' column runs down over the
+   * content's edge, so the content starts past it (the column's margin and its links, which grow by a
+   * quarter of their size past each side, then a gap). Wider, the column sits in the margin beside it */
+  --content-gutter-start: var(--page-gutter);
+
+  --color-title-purple: #ceb7ff;
+  --color-title-purple-dark: #75629f;
+
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+}
+
+@media (width >= 64rem) {
+  :root {
+    --desktop-rem: min(100vw / 64, 100svh / 36);
+  }
+}
+
+@media (width < 40rem) {
+  :root {
+    --side-column-link-size: 1.5rem;
+    --content-gutter-start: calc(var(--page-gutter) + 1.25 * var(--side-column-link-size) + 0.5rem);
+  }
+}
+
+/* The top line's Hebrew font sits in shorter lines */
+:root:lang(he) {
+  --header-line-height: max(
+    1rem,
+    min(0.2857rem + 3.5714vw, 1.8594rem + 0.2928vw),
+    2.0468 * var(--desktop-rem)
+  );
 }
 
 @media (prefers-color-scheme: dark) {
@@ -116,6 +306,69 @@
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 0, 0, 0;
   }
+}
+
+/* Smooth in-page scrolling (e.g. the "#top" scroll-to-top link). Next.js disables it during route
+ * navigations thanks to data-scroll-behavior="smooth" on <html> (see layout.tsx). */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Reduced motion: every animation and transition jumps to its end state instead of being removed,
+ * so content revealed by an animation (e.g. the typing titles) still shows up, and logic that waits
+ * for animationend/transitionend (the loader, the contact aside) still runs. Scroll-driven
+ * animations and smooth scrolling are opted in under (prefers-reduced-motion: no-preference) instead. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+  }
+}
+
+/* While the window is being resized (see PauseWhileResizing), every animation holds still, and the
+ * glows and blurs (filters) are off, back once the size settles: the screen is redrawn at every step of
+ * the resize, and they're a good part of drawing it. Transitions keep running: logic waits for them to
+ * end. */
+html[data-resizing] *,
+html[data-resizing] ::before,
+html[data-resizing] ::after {
+  animation-play-state: paused !important;
+  filter: none !important;
+}
+
+/* For screen readers only: in the page, read in place, but not shown */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Keyboard focus: a dark purple ring against the element, then a 2px gap, then a white ring, so one of
+ * the two contrasts with whatever is behind (WCAG 2.4.7 / 2.4.13). Important, so components' own
+ * outlines and shadows can't hide it. In forced colors only the outline (white ring) remains. */
+:focus-visible {
+  box-shadow: 0 0 0 4px var(--color-title-purple-dark) !important;
+  outline: var(--focus-ring-width) solid #fff !important;
+  outline-offset: var(--focus-ring-offset) !important;
+}
+
+/* The rings follow the focused element's corners: square ones get slightly rounded corners, so no ring
+ * is sharp-cornered. Without specificity, so an element's own radius (round icons, pills) wins */
+:where(:focus-visible) {
+  border-radius: 0.375rem;
 }
 
 body {

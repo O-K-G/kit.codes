@@ -1,0 +1,90 @@
+.languagesList {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100svw;
+  padding-bottom: 1rem;
+  border: 2px solid var(--color-title-purple);
+  border-radius: 10px;
+  /* Opaque: nothing behind it shows through */
+  background-color: #000;
+  color: #fff;
+
+  &:lang(en) {
+    font-family: var(--font-montserrat);
+  }
+
+  &:lang(he) {
+    font-family: var(--font-round-sans-web);
+  }
+
+  @media (width >= 40rem) {
+    width: 50svw;
+  }
+
+  @media (width >= 48rem) {
+    width: 25svw;
+  }
+
+  > div {
+    font-size: calc(1.25 * var(--fluid-rem));
+    line-height: calc(1.75 * var(--fluid-rem));
+  }
+
+  > ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
+    > li {
+      width: 100%;
+
+      > button {
+        width: 100%;
+        padding: 0.5rem 1rem;
+        text-align: center;
+        font-size: var(--fluid-rem);
+        line-height: calc(1.5 * var(--fluid-rem));
+
+        &[data-current-locale="false"] {
+          color: #fff;
+        }
+
+        /* Underlined as well as colored, so it isn't told apart by its color alone (WCAG 1.4.1) */
+        &[data-current-locale="true"] {
+          color: var(--color-title-purple);
+          text-decoration: underline;
+          text-underline-offset: 0.2em;
+        }
+
+        @media (hover: hover) {
+          &:hover {
+            background-color: rgb(255 255 255 / 30%);
+            cursor: pointer;
+          }
+        }
+
+        &:focus {
+          background-color: rgb(255 255 255 / 30%);
+        }
+
+        &:active {
+          background-color: rgb(255 255 255 / 50%);
+        }
+      }
+    }
+  }
+}
+
+/* Looks and grows like the side links it's among (see SideLinks.module.css) */
+.iconButton {
+  composes: icon from "../sideLinks/SideLinks.module.css";
+
+  /* It's only in the side links' column (see SideLinks and globals.css) */
+  --icon-size: var(--side-column-link-size);
+
+  border-radius: 9999px;
+}

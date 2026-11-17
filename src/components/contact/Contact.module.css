@@ -1,0 +1,44 @@
+/* Grows past the viewport when its content doesn't fit (short screens): the aside then scrolls. */
+.section {
+  position: relative;
+  padding-top: 5rem;
+  /* Room for the focus rings of the last links, grown on focus (WCAG 2.4.7) */
+  padding-bottom: calc(2 * var(--fluid-rem));
+
+  @media (width >= 48rem) {
+    padding-top: 2.5rem;
+  }
+
+  .background {
+    min-height: 100%;
+  }
+
+  .goBackButton {
+    position: absolute;
+
+    &:dir(ltr) {
+      left: 0;
+      margin-left: var(--page-gutter);
+    }
+
+    &:dir(rtl) {
+      right: 0;
+      margin-right: var(--page-gutter);
+    }
+  }
+
+  /* Rendered under the form's send button, centered with it (see ContactForm) */
+  .sideLinks {
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .sideLinksList {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+    }
+  }
+}

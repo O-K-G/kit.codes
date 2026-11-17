@@ -1,0 +1,86 @@
+.position {
+  /* On phones, without its label (the link is named by its own aria-label), so it's no wider than the
+   * button and stays in the side gutter, under the side links' column, clear of the content past it
+   * (see --content-gutter-start in globals.css) */
+  @media (width < 40rem) {
+    > :first-child {
+      display: none;
+    }
+  }
+
+  &:dir(ltr) {
+    left: 0;
+    margin-left: var(--page-gutter);
+  }
+
+  &:dir(rtl) {
+    right: 0;
+    margin-right: var(--page-gutter);
+  }
+
+  > a {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    width: max(2.246rem, 2.133rem + 0.565vw, 2.4946 * var(--desktop-rem));
+    height: max(3rem, 2.8994rem + 0.5031vw, 3.2214 * var(--desktop-rem));
+    padding: calc(0.125 * var(--fluid-rem));
+    border: 0 solid var(--color-title-purple);
+    border-top-width: max(0.25rem, 0.2311rem + 0.0946vw, 0.2916 * var(--desktop-rem));
+    border-radius: var(--fluid-rem);
+
+    @media (hover: hover) {
+      &:hover {
+        border-color: #fff;
+      }
+    }
+
+    &:focus {
+      border-color: var(--color-title-purple);
+
+      /* Dark circle behind the arrow */
+      &::before {
+        content: "";
+        position: absolute;
+        top: calc(-0.5 * var(--fluid-rem));
+        z-index: -10;
+        width: 125%;
+        height: 125%;
+        border-radius: 9999px;
+        background-color: rgb(0 0 0 / 70%);
+      }
+    }
+
+    &:active {
+      border-color: var(--color-title-purple-dark);
+    }
+
+    @media (width >= 48rem) {
+      border-radius: calc(1.5 * var(--fluid-rem));
+    }
+
+    @media (width >= 64rem) {
+      border-radius: 9999px;
+    }
+
+    > svg {
+      height: max(1.25rem, 1.1947rem + 0.2767vw, 1.3718 * var(--desktop-rem));
+      fill: var(--color-title-purple);
+
+      @media (hover: hover) {
+        a:hover & {
+          fill: #fff;
+        }
+      }
+
+      a:focus & {
+        fill: var(--color-title-purple);
+      }
+
+      a:active & {
+        fill: var(--color-title-purple-dark);
+      }
+    }
+  }
+}

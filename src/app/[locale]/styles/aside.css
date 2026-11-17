@@ -1,7 +1,0 @@
-@utility aside-closed {
-  @apply w-0 ltr:-left-[100vw] rtl:-right-[100vw] overflow-y-hidden;
-}
-
-@utility aside-open {
-  @apply w-full ltr:left-0 rtl:right-0 overflow-y-auto;
-}

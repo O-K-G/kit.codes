@@ -1,0 +1,166 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  color: #fff;
+  /* The label's line height, which a text field beside it matches */
+  --label-height: max(1.25rem, min(0.25rem + 5vw, 2.0542rem + 0.4895vw), 2.3675 * var(--desktop-rem));
+
+  @media (width >= 40rem) {
+    flex-direction: row;
+    gap: 1.5rem;
+  }
+
+  .labelWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    @media (width >= 40rem) {
+      justify-content: flex-end;
+      width: calc(2 / 12 * 100%);
+    }
+
+    @media (width >= 48rem) {
+      width: 25%;
+      max-width: calc(6 * var(--fluid-rem));
+    }
+
+    > label {
+      /* A minimum, so a longer label (e.g. "CONTENT:") widens instead of running into its field */
+      min-width: max(3rem, 2.6981rem + 1.5094vw, 3.6641 * var(--desktop-rem));
+      font-size: max(0.875rem, min(5vw - 0.125rem, 1.8051rem + 0.1748vw), 1.917 * var(--desktop-rem));
+      line-height: var(--label-height);
+      text-transform: uppercase;
+
+      &:lang(en) {
+        font-family: var(--font-bebas-neue);
+      }
+
+      &:lang(he) {
+        font-family: var(--font-sans);
+        font-weight: 700;
+      }
+    }
+  }
+
+  .fieldColumn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
+    .fieldWrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: center;
+      width: 100%;
+
+      .field {
+        width: 100%;
+        /* Marks the field's edges over any part of the background (WCAG 1.4.11) */
+        border: 2px solid var(--color-title-purple);
+        font-size: max(0.875rem, min(0.5rem + 1.875vw, 1.0402rem + 0.5245vw), 1.3759 * var(--desktop-rem));
+        line-height: max(1.25rem, min(0.75rem + 2.5vw, 1.4423rem + 0.7692vw), 1.9346 * var(--desktop-rem));
+
+        &:lang(en) {
+          font-family: var(--font-montserrat);
+        }
+
+        &:lang(he) {
+          font-family: var(--font-round-sans-web);
+        }
+
+        /* At least 4.5:1 against the field over any part of the background (WCAG 1.4.3) */
+        &::placeholder {
+          color: rgb(255 255 255 / 75%);
+          text-transform: uppercase;
+        }
+
+        &:lang(en)::placeholder {
+          font-family: var(--font-bebas-neue);
+        }
+
+        &:lang(he)::placeholder {
+          font-family: var(--font-sans);
+          font-weight: 700;
+        }
+      }
+
+      input.field {
+        height: 3.188rem;
+        padding-inline: 0.5rem;
+
+        /* Beside its label: as tall as it, so the two line up */
+        @media (width >= 40rem) {
+          height: var(--label-height);
+          padding-inline: 1rem;
+        }
+      }
+
+      textarea.field {
+        padding: 0.5rem;
+        resize: none;
+
+        @media (width >= 40rem) {
+          padding: 1rem;
+        }
+      }
+
+      /* Dark enough for white text over any part of the background (at least 8:1; WCAG 1.4.3) */
+      .field:not([aria-invalid="true"]) {
+        background-color: rgb(52 30 96 / 60%);
+
+        @media (hover: hover) {
+          &:hover {
+            background-color: rgb(0 0 0 / 70%);
+          }
+        }
+
+        &:focus,
+        &:active {
+          background-color: rgb(0 0 0 / 70%);
+        }
+      }
+
+      .field[aria-invalid="true"] {
+        background-color: oklch(40% 0.16 25.331 / 85%);
+      }
+
+      /* Under the field: its error (if any) at the start, the characters left at the end */
+      .meta {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: var(--fluid-rem);
+        width: 100%;
+        font-family: var(--font-bebas-neue);
+        font-size: var(--fluid-rem);
+        line-height: calc(1.5 * var(--fluid-rem));
+        /* A dark outline around the letters, so they keep their contrast over any part of the
+         * background (WCAG 1.4.3). Painted behind the fill, so only its outer half shows. */
+        -webkit-text-stroke: 0.12em #000;
+        paint-order: stroke fill;
+      }
+
+      .error {
+        color: oklch(80.8% 0.114 19.571);
+        text-transform: uppercase;
+
+        &:lang(he) {
+          font-family: var(--font-sans);
+          font-weight: 700;
+        }
+      }
+
+      .counter {
+        flex-shrink: 0;
+        margin-inline-start: auto;
+      }
+    }
+  }
+}

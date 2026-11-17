@@ -1,0 +1,62 @@
+/* Sized by its text: as tall as the title, the message and the details need. (A text taller than the
+ * screen scrolls the whole dialog, see Dialog.) */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 1rem;
+  /* Long words (an error's details) wrap anywhere rather than widen the box */
+  overflow-wrap: anywhere;
+  border: 2px solid var(--color-title-purple);
+  border-radius: 10px;
+  background-color: #000;
+  color: #fff;
+  font-size: max(1rem, min(0.7727rem + 1.1364vw, 1.0864rem + 0.6462vw), 1.5 * var(--desktop-rem));
+  line-height: max(1.5rem, min(1.2727rem + 1.1364vw, 1.2763rem + 1.1309vw), 2 * var(--desktop-rem));
+
+  @media (width >= 40rem) {
+    width: 50svw;
+  }
+
+  @media (width >= 48rem) {
+    width: 40dvw;
+  }
+
+  @media (width >= 64rem) {
+    cursor: default;
+  }
+
+  .message {
+    width: 100%;
+    padding-bottom: 1rem;
+    text-align: center;
+
+    &:lang(en) {
+      font-family: var(--font-montserrat);
+    }
+
+    &:lang(he) {
+      font-family: var(--font-round-sans-web);
+    }
+  }
+
+  .details {
+    display: flex;
+    width: 100%;
+    padding-top: 1rem;
+    border-top: 1px solid;
+    border-color: #fff;
+  }
+
+  .detailsFound {
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+
+  .detailsNotFound {
+    align-items: center;
+    justify-content: center;
+  }
+}

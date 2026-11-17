@@ -1,0 +1,48 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+
+  > h2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 33.333333%;
+  }
+
+  > div {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: calc(100% / 3);
+
+    > button {
+      height: calc(3.5 * var(--fluid-rem));
+      border-radius: calc(0.5 * var(--fluid-rem));
+
+      > svg {
+        height: 100%;
+        fill: #fff;
+        stroke: #fff;
+
+        @media (hover: hover) {
+          button:hover & {
+            fill: var(--color-title-purple);
+            stroke: var(--color-title-purple);
+          }
+        }
+
+        button:focus & {
+          fill: var(--color-title-purple);
+          stroke: var(--color-title-purple);
+        }
+
+        button:active & {
+          fill: var(--color-title-purple-dark);
+          stroke: var(--color-title-purple-dark);
+        }
+      }
+    }
+  }
+}

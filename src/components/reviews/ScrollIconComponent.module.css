@@ -1,0 +1,23 @@
+.icon {
+  position: absolute;
+  top: calc(0.125 * var(--fluid-rem));
+  right: 0;
+  left: 0;
+  --scroll-icon-top: min(-0.7rem, -0.6648rem - 0.1761vw, -0.7775 * var(--desktop-rem));
+  height: max(1.25rem, 1.1947rem + 0.2767vw, 1.3718 * var(--desktop-rem));
+  margin-inline: auto;
+  fill: var(--color-title-purple);
+  /* Twice (4s): movement that starts by itself must stop within 5 seconds (WCAG 2.2.2) */
+  animation: scroll-icon 2s linear 2 alternate;
+}
+
+@keyframes scroll-icon {
+  0%,
+  100% {
+    top: calc(0.125 * var(--fluid-rem));
+  }
+
+  50% {
+    top: var(--scroll-icon-top);
+  }
+}

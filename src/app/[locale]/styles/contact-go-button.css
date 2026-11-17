@@ -1,5 +1,0 @@
-.contact-go-button-font-classNames {
-  &:lang(he) {
-    @apply font-sans font-bold leading-[1rem] sm:leading-5 md:leading-8;
-  }
-}

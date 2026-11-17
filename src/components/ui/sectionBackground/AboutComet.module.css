@@ -1,0 +1,52 @@
+/* The comet image's place, given in the image's pixels at 1x (see SectionSky: --crop-x), placed in
+ * percent of the frame (the crop, --cw by --h): like the stars, a value that doesn't depend on the
+ * window's size, so resizing it doesn't restyle the comet */
+.comet {
+  position: absolute;
+  top: calc(var(--y) / var(--h) * 100%);
+  left: calc((var(--x) - var(--crop-x)) / var(--cw) * 100%);
+  width: calc(var(--width) / var(--cw) * 100%);
+  height: calc(var(--height) / var(--h) * 100%);
+  overflow: visible;
+
+  /* Hidden while the window is being resized (see PauseWhileResizing): its smoke filter makes it one of
+   * the costliest things to redraw at each step. It's back once the size settles */
+  :global(html[data-resizing]) & {
+    visibility: hidden;
+  }
+}
+
+.puff {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* With reduced motion, it stays as illustrated */
+@media (prefers-reduced-motion: no-preference) {
+  .smoke {
+    filter: url(#about-comet-smoke);
+  }
+
+  .puff {
+    animation: puff 9.6s ease-out infinite;
+    animation-delay: var(--delay);
+  }
+}
+
+/* A wisp leaves the tail: it appears, drifts on along the tail's direction while spreading, and fades */
+@keyframes puff {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.6);
+  }
+
+  25% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(240px, -150px) scale(1.8);
+  }
+}

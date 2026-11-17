@@ -1,0 +1,37 @@
+.section {
+  position: relative;
+  gap: 2.5rem;
+  height: 100svh;
+  padding-top: 5rem;
+
+  @media (width >= 48rem) and (height >= 40rem) {
+    padding-top: 10rem;
+  }
+
+  @media (width >= 64rem) {
+    height: 100dvh;
+  }
+
+  /* Short screens (e.g. landscape phones) can't fit the content in one screen: grow, and let the page scroll. */
+  @media (height < 30rem) {
+    height: auto;
+  }
+
+  > header {
+    margin-top: 2rem;
+
+    @media (width >= 40rem) {
+      margin-top: 0;
+    }
+  }
+}
+
+/* The main title: room between its text and the lines over and under it */
+.title {
+  gap: calc(0.625 * var(--fluid-rem));
+}
+
+/* The text in the expandable box: no single word left alone on its last line */
+.text {
+  text-wrap: pretty;
+}

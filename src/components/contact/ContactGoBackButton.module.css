@@ -1,0 +1,18 @@
+/* Looks like the logo, across from it at the top of the screen (see Logo) */
+.button {
+  composes: text from "../ui/logo/Logo.module.css";
+}
+
+.defaultPosition {
+  position: fixed;
+
+  &:dir(ltr) {
+    right: 0;
+    margin-right: var(--page-gutter);
+  }
+
+  &:dir(rtl) {
+    left: 0;
+    margin-left: var(--page-gutter);
+  }
+}

@@ -1,0 +1,223 @@
+/* The open expandable box's inside: the quotes, then what's under them (see .bottom) */
+.layout {
+  /* Tight on phones, where the box is narrow (the box adds its own 0.5rem, see ExpandableContent) */
+  --typewriter-inline-padding: 0.5rem;
+  --typewriter-block-padding: 0.5rem;
+
+  @media (width >= 48rem) {
+    --typewriter-inline-padding: clamp(1.25rem, 3.5vw, 3rem);
+    --typewriter-block-padding: clamp(1rem, 2.5vw, 2rem);
+  }
+
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+/* The box's text, in Handjet: the quotes, the readouts under them and the pause button. The quotes and
+ * readouts glow like a screen's text, a dark edge first so they read over the bright parts of the
+ * background */
+.quote,
+.readout,
+.pause {
+  font-family: var(--font-handjet), var(--font-mono);
+  color: #fff;
+}
+
+.quote,
+.readout {
+  letter-spacing: 0.02em;
+  text-shadow:
+    0 0 0.15em #000,
+    0 0 0.5em #b377ff;
+}
+
+/* The rows over and under the quotes, until the box is done opening */
+.untilOpened[data-hidden] {
+  visibility: hidden;
+}
+
+/* Over the quotes: the pause button, at the right */
+.top {
+  display: flex;
+  flex: none;
+  justify-content: flex-end;
+  padding: calc(var(--typewriter-block-padding) / 2) var(--typewriter-inline-padding) 0;
+}
+
+/* The pause button, in the readouts' style (see .readout), framed so it reads as a button; at least
+ * 24px tall to click (WCAG 2.5.8). Purple while hovered; keyboard focus shows the site's focus ring */
+.pause {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  min-height: 1.5rem;
+  padding: 0.2em 0.5em;
+  border: 1px solid var(--color-title-purple);
+  border-radius: 0.25rem;
+  font-size: max(1rem, 0.9rem + 0.3vw, 1.125 * var(--desktop-rem));
+  line-height: 1;
+  letter-spacing: 0.04em;
+  background: transparent;
+  cursor: pointer;
+
+  @media (hover: hover) {
+    &:hover {
+      color: var(--color-title-purple);
+    }
+  }
+}
+
+.pauseIcon {
+  font-size: 0.75em;
+}
+
+/* Paused: the cursor's blink stops (the typing and the timer stop in ReviewsTypewriter), and so do the
+ * animations in `below` */
+.layout[data-paused] *,
+.layout[data-paused] .blinking::before {
+  animation-play-state: paused;
+}
+
+/* Under the quotes: `below` on the left, the source in the middle, the timestamp on the right, lined up
+ * with the quotes' sides and the bottom of `below`. About a third of the box's height, within bounds;
+ * on very short boxes it shrinks rather than spilling out (`below` is to fill its height) */
+.bottom {
+  display: grid;
+  flex: 0 1 auto;
+  grid-template-columns: 1fr auto 1fr;
+  grid-template-rows: minmax(0, 1fr);
+  align-items: end;
+  gap: 0.75rem;
+  min-height: 2.5rem;
+  height: clamp(5rem, 32%, 14rem);
+  margin-block: 0.25rem clamp(0.5rem, 3%, 1.5rem);
+  padding-inline: var(--typewriter-inline-padding);
+
+  > :first-child {
+    justify-self: start;
+  }
+}
+
+/* The source and the time since the box opened, in the quotes' font, still. Their boxes end at the
+ * letters' baseline (and start at their capitals' top), so the letters sit right on the bottom line of
+ * `below`, not above it by the room kept for descenders */
+.readout {
+  font-size: max(1.125rem, 1rem + 0.5vw, 1.5 * var(--desktop-rem));
+  line-height: 1;
+  text-box: trim-both cap alphabetic;
+  white-space: nowrap;
+}
+
+.source {
+  justify-self: center;
+
+  /* Its link blinks 3 times as the row appears (once the box is done opening): 2 blinks a second, under
+   * WCAG 2.3.1's 3 flashes a second, over in 1.5s. With reduced motion, near-instant (see globals.css) */
+  .bottom:not([data-hidden]) & a {
+    animation: typewriter-blink 0.5s step-end 3;
+  }
+}
+
+.timestamp {
+  justify-self: end;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The box the quotes are typed in, filling the open expandable box (see ExpandableContent): the quote
+ * being typed in its vertical middle, the ones before it fading out at its top */
+.box {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  /* Room between the text and the box's frame at the sides (above and below it, the rows over and
+   * under it make the room) */
+  padding: 0.5rem var(--typewriter-inline-padding);
+  overflow: clip;
+  text-align: start;
+  /* Earlier quotes fade out at the top: down to where the quote being typed starts (--typewriter-fade),
+   * at most --typewriter-fade-max (both set by ReviewsTypewriter, see FADE_REM) */
+  mask-image: linear-gradient(transparent, #000 var(--typewriter-fade, var(--typewriter-fade-max)));
+
+  /* With reduced motion: all the quotes, as tall as they are (the expandable box scrolls them) */
+  &[data-static] {
+    flex: none;
+    mask-image: none;
+  }
+}
+
+/* Positioned, so its quotes' offsets are from it (see centerQuote in ReviewsTypewriter) */
+.list {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Once all the quotes are typed, they disappear (screen readers still have them), before the typing
+   * starts over: a fade as long as the typewriter takes to clear them (--typewriter-clear, set by
+   * ReviewsTypewriter, see useTypewriter) */
+  &[data-cleared] {
+    opacity: 0%;
+    transition: opacity var(--typewriter-clear);
+  }
+}
+
+/* A quote (in the box's Handjet, see .quote above) */
+.quote {
+  font-size: max(1.25rem, 1.1rem + 0.5vw, 1.5 * var(--desktop-rem));
+  line-height: 1.3;
+  transition: opacity 600ms;
+
+  blockquote,
+  p {
+    margin: 0;
+  }
+
+  /* The ones already typed dim as the next one is typed */
+  &[data-state="typed"] {
+    opacity: 70%;
+  }
+
+  [data-static] & {
+    opacity: 100%;
+  }
+}
+
+/* The rest of the quote, yet to be typed: invisible, keeping its place */
+.rest {
+  visibility: hidden;
+}
+
+/* The cursor typing it, like the titles' (see Title.module.css): a block after the last letter typed.
+ * It takes no room, so the text doesn't move as it goes. Steady while typing, blinking while it waits */
+.cursor {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0.1em;
+    left: 0.05em;
+    width: 0.45em;
+    height: 1.1em;
+    background: #ceb7ff;
+    box-shadow: 0 0 0.4em #b377ff;
+  }
+}
+
+.blinking::before {
+  animation: typewriter-blink 0.75s step-end infinite;
+}
+
+/* Off for the second half of each blink (with step-end) */
+@keyframes typewriter-blink {
+  50% {
+    opacity: 0%;
+  }
+}

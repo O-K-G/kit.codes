@@ -14,13 +14,6 @@ const config: Config = {
     "<rootDir>/node_modules/",
     "<rootDir>/playwright-tests/",
   ],
-  moduleNameMapper: {
-    "^@/(.*)$": "src/$1",
-    "^@/root/(.*)$": "/$1",
-    "^@/components/(.*)$": "src/components/$1",
-    "^@/constants/(.*)$": "src/constants/$1",
-    "^@/hooks/(.*)$": "src/hooks/$1",
-  },
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
   testEnvironment: "jsdom",
 };

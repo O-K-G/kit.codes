@@ -1,0 +1,121 @@
+.container {
+  position: fixed;
+  bottom: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--fluid-rem);
+  transition: all 1000ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Fades in/out according to the page's scroll position. */
+  &[data-hide-on-scroll="true"],
+  &[data-show-on-scroll="true"] {
+    @media (prefers-reduced-motion: no-preference) {
+      animation-timing-function: linear;
+      animation-timeline: scroll();
+    }
+  }
+
+  &[data-hide-on-scroll="true"] {
+    @media (prefers-reduced-motion: no-preference) {
+      animation-name: hide-components;
+    }
+  }
+
+  &[data-show-on-scroll="true"] {
+    @media (prefers-reduced-motion: no-preference) {
+      animation-name: show-components;
+    }
+  }
+
+  .label {
+    text-align: center;
+    font-size: max(1rem, min(0.7727rem + 1.1364vw, 1.0864rem + 0.6462vw), 1.5 * var(--desktop-rem));
+    line-height: max(1.5rem, min(1.2727rem + 1.1364vw, 1.2763rem + 1.1309vw), 2 * var(--desktop-rem));
+    color: var(--color-title-purple);
+    text-transform: uppercase;
+    white-space: nowrap;
+    /* A dark outline around the letters, so they keep their contrast over any part of the background
+     * (WCAG 1.4.3). Painted behind the fill, so only its outer half shows and the letters keep their
+     * shape. */
+    -webkit-text-stroke: 0.12em #000;
+    paint-order: stroke fill;
+
+    &:lang(en) {
+      font-family: var(--font-bebas-neue);
+    }
+
+    &:lang(he) {
+      font-family: var(--font-sans);
+      font-weight: 700;
+    }
+  }
+
+  .slotFrame {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    width: max(2.246rem, 2.133rem + 0.565vw, 2.4946 * var(--desktop-rem));
+    height: max(3rem, 2.8994rem + 0.5031vw, 3.2214 * var(--desktop-rem));
+    padding: calc(0.125 * var(--fluid-rem));
+    border: solid var(--color-title-purple);
+    border-width: max(0.25rem, 0.2311rem + 0.0946vw, 0.2916 * var(--desktop-rem));
+    border-radius: var(--fluid-rem);
+
+    @media (width >= 48rem) {
+      border-radius: calc(1.5 * var(--fluid-rem));
+    }
+
+    @media (width >= 64rem) {
+      border-radius: 9999px;
+    }
+  }
+}
+
+.defaultPosition {
+  &:dir(ltr) {
+    right: 0;
+    margin-right: var(--page-gutter);
+  }
+
+  &:dir(rtl) {
+    left: 0;
+    margin-left: var(--page-gutter);
+  }
+}
+
+@keyframes show-components {
+  0% {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  10% {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  to {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+@keyframes hide-components {
+  0% {
+    opacity: 1;
+  }
+
+  10% {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}

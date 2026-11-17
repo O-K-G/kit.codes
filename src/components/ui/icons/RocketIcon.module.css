@@ -1,0 +1,8 @@
+/* Its color (pink); the fill follows it (currentColor), and it has no stroke. A page can recolor it
+ * through `color` */
+.icon {
+  flex-shrink: 0;
+  color: #f9a8d4;
+  fill: currentColor;
+  stroke: none;
+}

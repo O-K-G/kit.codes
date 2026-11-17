@@ -1,0 +1,54 @@
+/* The logo's text: large uppercase letters with a dark outline. The "Contact me" button, across from
+ * it at the top of the screen, shares it (see ContactGoBackButton) */
+.text {
+  top: 0;
+  z-index: 10;
+  margin-top: var(--header-top);
+  /* Its lines are shorter in Hebrew (see globals.css) */
+  font-size: var(--header-font-size);
+  line-height: var(--header-line-height);
+  color: #fff;
+  text-transform: uppercase;
+  /* A dark outline around the letters, so they keep their contrast over any part of the background
+   * (WCAG 1.4.3). Painted behind the fill, so only its outer half shows and the letters keep their
+   * shape. */
+  -webkit-text-stroke: 0.12em #000;
+  paint-order: stroke fill;
+
+  &:lang(en) {
+    font-family: var(--font-bebas-neue);
+  }
+
+  &:lang(he) {
+    font-family: var(--font-sans);
+    font-weight: 700;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      color: var(--color-title-purple);
+    }
+  }
+
+  &:focus {
+    color: var(--color-title-purple);
+  }
+
+  &:active {
+    color: var(--color-title-purple-dark);
+  }
+
+  @media (width >= 64rem) {
+    cursor: pointer;
+  }
+}
+
+/* Across from the "Contact me" button, on its line: at the start of it (left, or right in Hebrew).
+ * Unlike it, it isn't fixed: it sits at the top of the page, over the first section, and scrolls away. */
+.logo {
+  composes: text;
+
+  position: absolute;
+  inset-inline-start: 0;
+  margin-inline-start: var(--page-gutter);
+}

@@ -1,0 +1,51 @@
+.form {
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  /* Space below the section's title: 1.5rem on mobile, growing to the 2.5rem gap between the form's rows */
+  margin-top: max(1.5rem, 1.0455rem + 2.2727vw, 2.5 * var(--desktop-rem));
+
+  > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 0.5rem;
+    width: 100%;
+
+    @media (width >= 40rem) {
+      gap: 2.5rem;
+    }
+
+    @media (width >= 48rem) {
+      width: calc(8 / 12 * 100%);
+    }
+  }
+
+  /* Leaves room for the side links next to the form. Follows the form's own, toggleable, dir
+   * attribute ([dir] rather than :dir(), which Chromium doesn't re-evaluate when it changes). */
+  @media (width >= 40rem) {
+    &[dir="ltr"] {
+      padding-right: 6rem;
+    }
+
+    &[dir="rtl"] {
+      padding-left: 9rem;
+    }
+  }
+}
+
+/* The bot trap: clipped away rather than display: none, which some bots know to skip. (Not moved
+ * off screen: far to the left would scroll the page sideways in right-to-left languages.) */
+.honeypot {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  opacity: 0;
+  pointer-events: none;
+}

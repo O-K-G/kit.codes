@@ -1,0 +1,78 @@
+.container {
+  position: relative;
+  width: 100%;
+  min-height: 2rem;
+
+  > svg {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    height: 100%;
+    margin-block: auto;
+    border-radius: 9999px;
+    fill: #fff;
+    animation: spin 1s linear infinite;
+    transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+
+    &[data-loading="false"] {
+      z-index: -10;
+      opacity: 0%;
+    }
+
+    &[data-loading="true"] {
+      opacity: 100%;
+    }
+
+    /* The form's direction can be toggled, so any right-to-left ancestor counts */
+    [dir="rtl"] & {
+      right: 0;
+    }
+  }
+
+  .sentMessage {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-block: auto;
+    font-size: max(1.125rem, min(0.375rem + 3.75vw, 1.6652rem + 0.5245vw), 2.0009 * var(--desktop-rem));
+    line-height: max(1.75rem, min(1.25rem + 2.5vw, 1.7745rem + 1.1888vw), 2.5353 * var(--desktop-rem));
+    color: #fff;
+    text-transform: uppercase;
+    transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:lang(en) {
+      /* Bebas Neue's capitals sit 0.05em above the middle of the line: moved down to center them */
+      translate: 0 0.05em;
+      font-family: var(--font-bebas-neue);
+    }
+
+    &:lang(he) {
+      font-family: var(--font-sans);
+      font-weight: 700;
+    }
+
+    &[data-sent="false"] {
+      z-index: -10;
+      opacity: 0%;
+    }
+
+    &[data-sent="true"] {
+      opacity: 100%;
+    }
+
+    [dir="rtl"] & {
+      right: 0;
+    }
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
