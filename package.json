@@ -2,9 +2,6 @@
   "name": "kit.codes",
   "version": "1.0.2",
   "private": true,
-  "engines": {
-    "node": "^24.22.3"
-  },
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "npm run test && next build",
