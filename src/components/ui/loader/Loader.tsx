@@ -1,50 +1,13 @@
-import { ReactNode } from "react";
 import LoaderVisibility from "@ui/loader/LoaderVisibility";
-import {
-  BoltProps,
-  CogwheelProps,
-  LoaderProps,
-  LoaderTextProps,
-} from "@constants/interfaces";
+import { LoaderProps, LoaderTextProps } from "@constants/interfaces";
+import { CACHE_VERSION } from "@constants/siteMetadata";
 import styles from "./Loader.module.css";
-import classNames from "@utils/classNames";
 
 export const LOADER_TEST_ID = "loader-test";
 
-function Cogwheel({
-  sizeClassName = styles.size24,
-  children,
-  childrenClassName,
-  bgClassName = styles.blue,
-  className,
-  "data-testid": dataTestId,
-}: CogwheelProps) {
-  const cogwheelClassName = classNames(styles.cogwheelPart, bgClassName);
-
-  return (
-    <div
-      data-testid={dataTestId}
-      className={classNames(styles.cogwheel, sizeClassName, className)}
-    >
-      <div className={cogwheelClassName} />
-      <div className={classNames(cogwheelClassName, styles.cogwheelPartRotated)}>
-        <div className={classNames(styles.cogwheelCenter, childrenClassName)}>
-          {children}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function Bolt({ centerPointClassName }: BoltProps) {
-  return (
-    <div className={styles.bolt}>
-      <div>
-        <div className={classNames(styles.boltCenter, centerPointClassName)} />
-      </div>
-    </div>
-  );
-}
+/** The site's app icon (the astronaut), at 2x its size on screen, or bigger for denser screens */
+const ICON_SRC = `/images/astronaut-coding-laptop-app-icon-192x192.png?cacheVersion=${CACHE_VERSION}`;
+const ICON_SRC_SET = `${ICON_SRC} 2x, /images/astronaut-coding-laptop-app-icon-512x512.png?cacheVersion=${CACHE_VERSION} 3x`;
 
 function LoaderText({ label, slot }: LoaderTextProps) {
   if (label ?? slot) {
@@ -59,12 +22,12 @@ function LoaderText({ label, slot }: LoaderTextProps) {
   }
 }
 
-function CogwheelsSeparator({ children }: { children: ReactNode }) {
-  return (
-    <div className={styles.cogwheelsSeparator}>{children}</div>
-  );
-}
-
+/**
+ * Covers the page until it's ready (see LoaderVisibility): the site's icon, still, and an optional label.
+ * Still rather than animated: while the page loads, the browser is at its busiest, and it skips frames
+ * now and then (taking in the page, decoding its images); a spinner, followed by the eye, shows every one
+ * of them, while a still icon has nothing to stutter.
+ */
 export default function Loader({
   open,
   label,
@@ -72,46 +35,20 @@ export default function Loader({
 }: LoaderProps) {
   return (
     <LoaderVisibility open={open} className={styles.loader}>
-      <Cogwheel
+      {/* Decorative. Fetched first thing (it's in the page's HTML), at high priority, and shown as it
+       * comes: the loader is up before it */}
+      <img
         data-testid={LOADER_TEST_ID}
-        childrenClassName={styles.cogwheelCenterTop}
-      >
-        <CogwheelsSeparator>
-          {[
-            {
-              bgClassName: styles.emerald,
-              sizeClassName: styles.size12,
-            },
-            {
-              bgClassName: styles.red,
-              sizeClassName: styles.size10,
-            },
-          ].map((props: CogwheelProps) => (
-            <Cogwheel key={`cog-1-${props.bgClassName}`} {...props}>
-              <Bolt />
-            </Cogwheel>
-          ))}
-        </CogwheelsSeparator>
-        <CogwheelsSeparator>
-          {[
-            {
-              bgClassName: styles.pink,
-              sizeClassName: styles.size16,
-              bolt: <Bolt centerPointClassName={styles.boltCenterLowered} />,
-            },
-            {
-              className: styles.raised,
-              bgClassName: styles.zinc,
-              sizeClassName: styles.size8,
-              bolt: <Bolt />,
-            },
-          ].map(({ bolt, ...props }) => (
-            <Cogwheel key={`cog-2-${props.bgClassName}`} {...props}>
-              {bolt}
-            </Cogwheel>
-          ))}
-        </CogwheelsSeparator>
-      </Cogwheel>
+        className={styles.icon}
+        src={ICON_SRC}
+        srcSet={ICON_SRC_SET}
+        alt=""
+        aria-hidden
+        width={192}
+        height={192}
+        fetchPriority="high"
+        decoding="async"
+      />
       <LoaderText label={label} slot={loaderTextAdditionalSlot} />
     </LoaderVisibility>
   );

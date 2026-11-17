@@ -145,19 +145,6 @@ export interface AnchorLinkProps {
   "data-testid": string;
 }
 
-export interface CogwheelProps {
-  sizeClassName?: string;
-  children?: ReactNode;
-  childrenClassName?: string;
-  bgClassName?: string;
-  className?: string;
-  "data-testid"?: string;
-}
-
-export interface BoltProps {
-  centerPointClassName?: string;
-}
-
 export interface ArrowRightIconProps {
   className?: string;
   strokeClassName: string;
