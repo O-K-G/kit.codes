@@ -20,6 +20,7 @@ function AnchorLink({
   return (
     <li data-rounded={isRounded} className={styles.listItem}>
       <a
+        className={styles.icon}
         data-rounded={isRounded}
         href={url}
         rel="noreferrer"

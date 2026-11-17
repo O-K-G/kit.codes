@@ -85,14 +85,16 @@
      * SkillBars, so its own inline sides don't follow the page's) */
     right: var(--page-gutter);
     left: var(--content-gutter-start);
+    width: min(100% - var(--content-gutter-start) - var(--page-gutter), 40 * var(--fluid-rem));
+    /* On phones, down to just above the "Scroll to top" button and its margin (see
+     * FixedBottomComponent) */
+    height: calc(100svh - 6rem - var(--top-var));
+    margin-inline: auto;
 
     :root[dir="rtl"] & {
       right: var(--content-gutter-start);
       left: var(--page-gutter);
     }
-    width: min(100% - var(--content-gutter-start) - var(--page-gutter), 40 * var(--fluid-rem));
-    height: calc(100svh - 6rem - var(--top-var));
-    margin-inline: auto;
 
     @media (width >= 40rem) {
       --top-var: 37svh;

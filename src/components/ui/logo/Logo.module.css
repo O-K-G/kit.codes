@@ -4,8 +4,8 @@
   top: 0;
   z-index: 10;
   margin-top: var(--header-top);
-  font-size: max(1.5rem, 0.75rem + 3.75vw, 3.15 * var(--desktop-rem));
-  /* Shorter in Hebrew (see globals.css) */
+  /* Its lines are shorter in Hebrew (see globals.css) */
+  font-size: var(--header-font-size);
   line-height: var(--header-line-height);
   color: #fff;
   text-transform: uppercase;
@@ -44,8 +44,7 @@
 }
 
 /* Across from the "Contact me" button, on its line: at the start of it (left, or right in Hebrew).
- * Unlike it, it isn't fixed: it sits at the top of the page, over the first section, and scrolls away
- * (on phones the side links' row stays, right under where it was, see SideLinks). */
+ * Unlike it, it isn't fixed: it sits at the top of the page, over the first section, and scrolls away. */
 .logo {
   composes: text;
 

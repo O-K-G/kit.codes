@@ -79,49 +79,12 @@
   }
 }
 
-/* Same look as the side links (see SideLinks.module.css) */
+/* Looks and grows like the side links it's among (see SideLinks.module.css) */
 .iconButton {
+  composes: icon from "../sideLinks/SideLinks.module.css";
+
   /* It's only in the side links' column (see SideLinks and globals.css) */
   --icon-size: var(--side-column-link-size);
 
-  width: var(--icon-size);
-  height: var(--icon-size);
   border-radius: 9999px;
-  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
-
-  /* Grows by half, keeping its icon sharp and its room the same (as the side links do, see
-   * SideLinks.module.css) */
-  @media (hover: hover) {
-    &:hover {
-      width: calc(1.5 * var(--icon-size));
-      height: calc(1.5 * var(--icon-size));
-      margin: calc(-0.25 * var(--icon-size));
-    }
-  }
-
-  &:focus,
-  &:active {
-    width: calc(1.5 * var(--icon-size));
-    height: calc(1.5 * var(--icon-size));
-    margin: calc(-0.25 * var(--icon-size));
-  }
-
-  > svg {
-    height: 100%;
-    fill: var(--color-title-purple);
-
-    @media (hover: hover) {
-      button:hover & {
-        fill: #fff;
-      }
-    }
-
-    button:focus & {
-      fill: var(--color-title-purple);
-    }
-
-    button:active & {
-      fill: var(--color-title-purple-dark);
-    }
-  }
 }

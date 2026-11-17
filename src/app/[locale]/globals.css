@@ -255,9 +255,11 @@
   --page-gutter: max(var(--fluid-rem), var(--focus-ring-offset) + var(--focus-ring-width) + 0.5rem);
 
   /* The top line: the logo and, across from it, the "Contact me" button (see Logo). How far down it
-   * is and how tall: on phones the side links' row sits right under it (see SideLinks) */
+   * is, its text's size and how tall it is: on phones it's over the side links' column, which keeps
+   * clear of it (see SideLinks) */
   --header-top: 1rem;
-  --header-line-height: max(1.5rem, 0.75rem + 3.75vw, 3.15 * var(--desktop-rem));
+  --header-font-size: max(1.5rem, 0.75rem + 3.75vw, 3.15 * var(--desktop-rem));
+  --header-line-height: var(--header-font-size);
 
   /* The side links' size (see SideLinks), and the size of those in the column down the side of the
    * page (smaller on phones) */
