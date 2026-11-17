@@ -116,6 +116,15 @@
       animation-delay: 5s;
     }
   }
+
+  /* Held until the page shows (see LoaderVisibility: REVEALED_ATTRIBUTE), so it types seen rather than
+   * under the loader. Only with scripting: without it there's no loader, and nothing would release it */
+  @media (scripting: enabled) {
+    :global(html:not([data-revealed])) & :is(.typing, .delayedTyping),
+    :global(html:not([data-revealed])) & :is(.typing, .delayedTyping)::before {
+      animation-play-state: paused;
+    }
+  }
 }
 
 @keyframes title-type {

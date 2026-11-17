@@ -14,3 +14,9 @@ if (typeof window !== 'undefined') {
 if (typeof HTMLCanvasElement !== 'undefined') {
   HTMLCanvasElement.prototype.getContext = (() => null) as typeof HTMLCanvasElement.prototype.getContext;
 }
+
+/* Most tests render components without the loader: the page is taken as showing (see LoaderVisibility's
+ * REVEALED_ATTRIBUTE), so the intro animations don't wait for it. Tests of the wait remove it. */
+if (typeof document !== 'undefined') {
+  beforeEach(() => document.documentElement.setAttribute('data-revealed', ''));
+}

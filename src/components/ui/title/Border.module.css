@@ -57,6 +57,14 @@
     /* 6 blinks (4.5s): blinking that starts by itself must stop within 5 seconds (WCAG 2.2.2) */
     &[data-blink="true"] {
       animation: border-subtitle-blink 0.75s 6;
+
+      /* Held until the page shows (see LoaderVisibility: REVEALED_ATTRIBUTE), so it blinks seen rather
+       * than under the loader. Only with scripting: without it there's no loader to wait for */
+      @media (scripting: enabled) {
+        :global(html:not([data-revealed])) & {
+          animation-play-state: paused;
+        }
+      }
     }
   }
 }

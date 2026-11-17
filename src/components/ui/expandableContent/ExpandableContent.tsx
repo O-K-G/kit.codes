@@ -4,6 +4,7 @@ import { AnimationEvent, useEffect, useRef, useState } from "react";
 import classNames from "@utils/classNames";
 import AboutTargetIcon from "@ui/expandableContent/AboutTargetIcon";
 import Gauge from "@ui/expandableContent/gauge/Gauge";
+import useRevealed from "@hooks/useRevealed";
 import { ExpandableContentProps } from "@constants/interfaces";
 import styles from "./ExpandableContent.module.css";
 
@@ -36,6 +37,8 @@ export default function ExpandableContent({ text, children, onOpened, className 
   const [scrollable, setScrollable] = useState(false);
   const [inView, setInView] = useState(false);
   const [open, setOpen] = useState(false);
+  /** The page is in full view (the loader has faded out): the gauge waits for it, to be seen */
+  const revealed = useRevealed();
   /** The gauge's count hit 100%: the corner brackets blink along with it */
   const [full, setFull] = useState(false);
 
@@ -88,13 +91,13 @@ export default function ExpandableContent({ text, children, onOpened, className 
     <div className={classNames(styles.container, className)}>
       <div className={styles.box} data-open={open}>
         <div className={styles.corner} data-open={open}>
-          <AboutTargetIcon open={open} blink={full} running={inView} />
+          <AboutTargetIcon open={open} blink={full} running={inView && revealed} />
         </div>
         {/* Done once open: paused, so its endless glow pulse doesn't keep the page redrawing under the text */}
         <Gauge
           ref={gaugeRef}
           className={styles.gauge}
-          running={inView && !open}
+          running={inView && revealed && !open}
           onFull={handleGaugeFull}
           onComplete={handleGaugeComplete}
         />
@@ -111,7 +114,7 @@ export default function ExpandableContent({ text, children, onOpened, className 
           </div>
         </div>
         <div className={classNames(styles.corner, styles.bottomCorner)} data-open={open}>
-          <AboutTargetIcon bottom open={open} blink={full} running={inView} />
+          <AboutTargetIcon bottom open={open} blink={full} running={inView && revealed} />
         </div>
       </div>
     </div>

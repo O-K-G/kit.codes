@@ -68,6 +68,19 @@ describe("ExpandableContent", () => {
     expect(gauge).toHaveAttribute("data-running", "false");
   });
 
+  it("waits for the page to show (the loader fading out) before running the gauge", () => {
+    document.documentElement.removeAttribute("data-revealed");
+    const { gauge } = renderContent();
+    setVisible(true);
+    expect(gauge).toHaveAttribute("data-running", "false");
+
+    act(() => {
+      document.documentElement.setAttribute("data-revealed", "");
+      window.dispatchEvent(new Event("site-revealed"));
+    });
+    expect(gauge).toHaveAttribute("data-running", "true");
+  });
+
   it("blinks the corner brackets once the count hits 100%", () => {
     const { container } = renderContent();
     setVisible(true);
