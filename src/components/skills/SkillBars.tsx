@@ -195,12 +195,12 @@ export default function SkillBars({ className, groupNames }: SkillBarsProps) {
         } as CSSProperties
       }
     >
-      {groups.map(({ groupId, skills }) => (
+      {groups.map(({ groupId, skills }, groupIndex) => (
         <div
           key={groupId}
           className={styles.group}
           data-group={groupId}
-          style={{ "--rows": skills.length + 1 } as CSSProperties}
+          style={{ "--rows": skills.length + 1, "--index": groupIndex } as CSSProperties}
         >
           <h3 id={`${id}-${groupId}`} className={styles.groupName}>
             {groupNames[groupId]}

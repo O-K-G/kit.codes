@@ -19,9 +19,7 @@ styled with native CSS (CSS Modules), and served with a strict Content Security 
 
 ## Requirements
 
-- **Node.js 24** (v24.22.3): the version the project is developed with, and the one its Docker image uses
-  (`node:24.22.3-alpine`). It's enforced: `package.json`'s `engines` requires `^24.22.3` (24.22.3 or a
-  later Node 24), and `.npmrc`'s `engine-strict=true` makes `npm install` fail on any other version.
+- **Node.js 26** (v26.13.1): the version the Docker image uses (`node:26.13.1-alpine`).
 - npm (comes with Node.js).
 - Docker, optionally, to run it in a container.
 

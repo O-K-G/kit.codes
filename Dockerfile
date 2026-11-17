@@ -1,8 +1,8 @@
-FROM node:24.22.3-alpine AS base
+FROM node:26.13.1-alpine AS base
 
 RUN apk add --no-cache g++ make py3-pip libc6-compat
 WORKDIR /app
-COPY package*.json .npmrc ./
+COPY package*.json ./
 EXPOSE 3000
 
 FROM base as builder

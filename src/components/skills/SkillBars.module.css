@@ -44,6 +44,10 @@
   /* A dark backdrop, faintly tinted with the group's color, so the group stands out from the
    * background (and its names read over it) */
   background-color: color-mix(in oklab, var(--group-color) 10%, rgb(10 6 24 / 75%));
+  /* While the list slides in (see Skills), each group trails further behind the one before it, so they
+   * come up one after the other, and all settle in place together. --skills-lag goes from 1 to 0 with
+   * the scroll (0 without the motion) */
+  translate: 0 calc(var(--skills-lag, 0) * var(--index) * 12svh);
   /* The border glows in its color: outward, and faintly inward */
   box-shadow:
     0 0 calc(0.3 * var(--row)) color-mix(in oklab, var(--group-color) 80%, transparent),
