@@ -1,7 +1,7 @@
 "use client";
 
 import { CSSProperties, PointerEvent, useEffect, useId, useRef, useState } from "react";
-import { SKILL_GROUPS, SKILL_MAX_SEGMENTS, skillSegments } from "@constants/skills";
+import { SKILL_GROUPS, SKILL_MAX_SEGMENTS, SKILL_SHORT_NAMES, skillSegments } from "@constants/skills";
 import { SkillBarsProps } from "@constants/interfaces";
 import styles from "./SkillBars.module.css";
 import classNames from "@utils/classNames";
@@ -45,6 +45,8 @@ interface SkillBarProps {
 function SkillBar({ name, percent, filling, labelId }: SkillBarProps) {
   /** How many segments are lit */
   const level = skillSegments(percent);
+  /** Its shorter name on phones, if it has one */
+  const shortName = SKILL_SHORT_NAMES[name];
   /** The lit segment last hovered, and whether the pointer is still on it */
   const [hovered, setHovered] = useState<{ segment: number; active: boolean } | null>(null);
 
@@ -76,8 +78,19 @@ function SkillBar({ name, percent, filling, labelId }: SkillBarProps) {
 
   return (
     <li className={styles.skill} style={{ "--level": level } as CSSProperties}>
+      {/* With a short name, phones show it, and the full name only to screen readers: the meter is
+        * always named by the full name */}
       <span id={labelId} className={styles.name}>
-        {name}
+        {shortName ? (
+          <>
+            <span className={styles.fullName}>{name}</span>
+            <span className={styles.shortName} aria-hidden>
+              {shortName}
+            </span>
+          </>
+        ) : (
+          name
+        )}
       </span>
       <div
         role="meter"

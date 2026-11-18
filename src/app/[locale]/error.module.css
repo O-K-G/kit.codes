@@ -16,8 +16,13 @@
     .retryIcon {
       width: 100%;
       height: 100%;
-      animation: spin 1s linear infinite;
       fill: var(--color-title-purple);
+
+      /* Turning all along; with reduced motion, still */
+      @media (prefers-reduced-motion: no-preference) {
+        animation: spin 1s linear infinite;
+      }
+
       stroke: var(--color-title-purple);
 
       @media (hover: hover) {

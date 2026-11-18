@@ -73,14 +73,22 @@
   position: absolute;
   inset: 0;
   clip-path: inset(calc(50% - var(--closed-size) / 2));
-  transition: clip-path var(--open-duration) var(--open-easing);
+
+  /* With reduced motion it doesn't grow: it's open at once (the background still fades in) */
+  @media (prefers-reduced-motion: no-preference) {
+    transition: clip-path var(--open-duration) var(--open-easing);
+  }
 
   &[data-open="true"] {
     clip-path: inset(calc(-1 * var(--ring-room)));
     background-color: var(--expandable-box-background, rgb(0 0 0 / 50%));
-    transition:
-      clip-path var(--open-duration) var(--open-easing),
-      background-color 500ms var(--open-easing) var(--open-duration);
+    transition: background-color 500ms var(--open-easing);
+
+    @media (prefers-reduced-motion: no-preference) {
+      transition:
+        clip-path var(--open-duration) var(--open-easing),
+        background-color 500ms var(--open-easing) var(--open-duration);
+    }
   }
 
   /* The lines across its top and bottom: drawn as it opens (see frame-line), then kept. Each as
@@ -111,7 +119,10 @@
   &[data-open="true"]::before,
   &[data-open="true"]::after {
     opacity: 100%;
-    animation: frame-line var(--open-duration) linear;
+
+    @media (prefers-reduced-motion: no-preference) {
+      animation: frame-line var(--open-duration) linear;
+    }
   }
 }
 
@@ -125,8 +136,11 @@
   position: absolute;
   inset: 0;
   translate: var(--corner-x) var(--corner-y);
-  transition: translate var(--open-duration) var(--open-easing);
   pointer-events: none;
+
+  @media (prefers-reduced-motion: no-preference) {
+    transition: translate var(--open-duration) var(--open-easing);
+  }
 
   &:dir(rtl) {
     --corner-x: calc(var(--closed-size) / 2 - 50%);
@@ -196,13 +210,17 @@
   /* Open: the frame's lines meet in the middle and part again, the text showing between them
    * (expand-button), while the frame grows to the box's edges; the background darkens behind the text
    * (on .frame). The text is shown as soon as the box opens, rather than once it's done, which also
-   * keeps it from being the page's late Largest Contentful Paint */
+   * keeps it from being the page's late Largest Contentful Paint. With reduced motion it's shown open
+   * at once (ExpandableContent then doesn't wait for expand-button to end) */
   &[data-open="true"] {
     align-items: flex-start;
     padding: 0.5rem;
     overflow-y: auto;
     border-inline-color: #fff;
-    animation: expand-button var(--open-duration) linear, reveal-while-expanding var(--open-duration);
+
+    @media (prefers-reduced-motion: no-preference) {
+      animation: expand-button var(--open-duration) linear, reveal-while-expanding var(--open-duration);
+    }
 
     /* With a mouse, no scrollbar: WCAG doesn't require one. The text stays reachable: the wheel or
      * trackpad scrolls it, and so does the keyboard, as the box is focusable (WCAG 2.1.1) */
@@ -221,7 +239,8 @@
      * Masks (bottom layer to top): everything, unclipped, so the focus rings outside the box stay;
      * minus the padding box; plus the padding box, faded at its bottom edge, right down to the frame.
      * So only the text fades, not the frame (the background is on .frame). */
-    @supports (animation-timeline: scroll()) {
+    /* animation-range too: browsers with only partial support have scroll timelines without it */
+    @supports ((animation-timeline: scroll()) and (animation-range: 0% 100%)) {
       mask-image:
         linear-gradient(#000 calc(100% - var(--scroll-fade)), transparent),
         linear-gradient(#000, #000),
@@ -229,12 +248,19 @@
       mask-clip: padding-box, padding-box, no-clip;
       mask-origin: padding-box, padding-box, border-box;
       mask-composite: add, exclude, add;
-      animation:
-        expand-button var(--open-duration) linear,
-        reveal-while-expanding var(--open-duration),
-        scroll-fade linear both;
-      animation-timeline: auto, auto, scroll(self);
-      animation-range: normal, normal, calc(100% - 3rem) 100%;
+      /* The fade follows the scroll, it doesn't move: kept with reduced motion */
+      animation: scroll-fade linear both;
+      animation-timeline: scroll(self);
+      animation-range: calc(100% - 3rem) 100%;
+
+      @media (prefers-reduced-motion: no-preference) {
+        animation:
+          expand-button var(--open-duration) linear,
+          reveal-while-expanding var(--open-duration),
+          scroll-fade linear both;
+        animation-timeline: auto, auto, scroll(self);
+        animation-range: normal, normal, calc(100% - 3rem) 100%;
+      }
     }
   }
 

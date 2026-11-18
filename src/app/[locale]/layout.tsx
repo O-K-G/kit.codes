@@ -65,6 +65,9 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   interactiveWidget: "resizes-content",
+  /* <meta name="color-scheme">: the browser knows the page's schemes before the CSS loads, so the
+   * canvas doesn't flash white in dark mode (see color-scheme in globals.css) */
+  colorScheme: "light dark",
 };
 
 export default async function RootLayout({

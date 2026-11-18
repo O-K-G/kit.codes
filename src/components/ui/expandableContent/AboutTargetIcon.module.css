@@ -14,17 +14,20 @@
 
   /* ---- The blink: red twice, along with the gauge's count (see Gauge). The bracket's color is
    * animated on the bracket and its bars themselves, so its 1s color transition doesn't smooth it.
-   * Two blinks in 0.8s: under WCAG 2.3.1's 3 flashes per second. ---- */
-  &[data-blink="true"] {
-    animation: icon-blink 0.4s step-end 2;
-  }
+   * Two blinks in 0.8s: under WCAG 2.3.1's 3 flashes per second. With reduced motion, no blink: the
+   * gauge completes at once there, and the box opens right away ---- */
+  @media (prefers-reduced-motion: no-preference) {
+    &[data-blink="true"] {
+      animation: icon-blink 0.4s step-end 2;
+    }
 
-  .bracket[data-blink="true"] {
-    animation: bracket-blink 0.4s step-end 2;
+    .bracket[data-blink="true"] {
+      animation: bracket-blink 0.4s step-end 2;
 
-    &::before,
-    &::after {
-      animation: bracket-bar-blink 0.4s step-end 2;
+      &::before,
+      &::after {
+        animation: bracket-bar-blink 0.4s step-end 2;
+      }
     }
   }
 

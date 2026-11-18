@@ -5,6 +5,7 @@ import styles from './InputComponent.module.css';
 
 export default function InputComponent({
   component: Component = 'input',
+  type = 'text',
   id,
   maxLength,
   onChange,
@@ -63,13 +64,16 @@ export default function InputComponent({
       </div>
       <div className={styles.fieldColumn}>
         <div className={styles.fieldWrapper}>
+          {/* Required (the form checks it itself, see ContactForm's noValidate). An address is an
+           * identifier, not prose: no autocorrect, capitals or spellcheck */}
           <Component
-            type="text"
+            {...(Component === 'input' && { type })}
+            {...(type === 'email' && { autoCorrect: 'off', autoCapitalize: 'none', spellCheck: false })}
             onChange={handleChange}
             value={value}
             maxLength={maxLength}
+            required
             aria-invalid={isError}
-            aria-required
             aria-describedby={isError ? `${errorId} ${counterId}` : counterId}
             id={id}
             name={id}
@@ -77,9 +81,11 @@ export default function InputComponent({
             {...rest}
           />
           {/* Named by its <label>; the error and the characters left describe it. The error is shown
-           * in text, not only by the field's color (WCAG 1.4.1, 3.3.1), and announced when it appears */}
+           * in text, not only by the field's color (WCAG 1.4.1, 3.3.1). It isn't a live region: after a
+           * failed send, the focus moves to the first field with an error, which reads it out (see
+           * ContactForm) */}
           <div className={styles.meta}>
-            <p id={errorId} aria-live="assertive" className={styles.error}>
+            <p id={errorId} className={styles.error}>
               {isError ? errorText : ''}
             </p>
             <p className={styles.counter}>

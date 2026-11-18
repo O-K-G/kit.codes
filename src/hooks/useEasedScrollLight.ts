@@ -5,9 +5,11 @@ import usePrefersReducedMotion from "@hooks/usePrefersReducedMotion";
 /** A mouse (or trackpad): its wheel scrolls in steps, which the light would jump with */
 const FINE_POINTER = "(hover: hover) and (pointer: fine)";
 
-/** Whether the browser can light the timeline by itself, with scroll-driven animations (see the CSS) */
+/** Whether the browser can light the timeline by itself, with scroll-driven animations (see the CSS:
+ * the same test, animation-range included, which browsers with only partial support lack) */
 const lightsByItself = () =>
-  typeof CSS !== "undefined" && !!CSS.supports?.("animation-timeline: view()");
+  typeof CSS !== "undefined" &&
+  !!CSS.supports?.("(animation-timeline: view()) and (animation-range: entry)");
 
 /** How fast the light catches up with the scroll: an exponential ease, closing all but 1/e of the
  * distance in this many seconds */

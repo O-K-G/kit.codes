@@ -1,7 +1,7 @@
 import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import SkillBars from "@components/skills/SkillBars";
-import { SKILL_GROUPS, SKILL_MAX_SEGMENTS, skillSegments } from "@constants/skills";
+import { SKILL_GROUPS, SKILL_MAX_SEGMENTS, SKILL_SHORT_NAMES, skillSegments } from "@constants/skills";
 import styles from "@components/skills/SkillBars.module.css";
 
 const GROUP_NAMES = {
@@ -54,6 +54,19 @@ beforeEach(() => {
 });
 
 describe("SkillBars", () => {
+  it("has short names for phones, hidden from screen readers: meters keep the full names", () => {
+    renderBars();
+
+    expect(Object.keys(SKILL_SHORT_NAMES).length).toBeGreaterThan(0);
+    Object.entries(SKILL_SHORT_NAMES).forEach(([name, shortName]) => {
+      expect(screen.getByRole("meter", { name })).toBeInTheDocument();
+      const short = screen.getByText(shortName as string);
+      expect(short).toHaveClass(styles.shortName);
+      expect(short).toHaveAttribute("aria-hidden", "true");
+      expect(screen.getByText(name)).toHaveClass(styles.fullName);
+    });
+  });
+
   it("shows every skill as a meter named by the skill, valued in percent", () => {
     renderBars();
     const meters = screen.getAllByRole("meter");

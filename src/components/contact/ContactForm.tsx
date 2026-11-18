@@ -1,7 +1,7 @@
 "use client";
 
 import InputComponent from "@components/contact/InputComponent";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useEffectEvent, useId, useRef, useState } from "react";
 import { sendMessage } from "@components/contact/sendMessage";
 import formValidation from "@utils/formValidation";
 import ProgressIndicators from "@components/contact/ProgressIndicators";
@@ -29,6 +29,9 @@ const EMAIL_ID = "email";
 const SUBJECT_ID = "subject";
 const CONTENT_ID = "content";
 
+/** The fields in the form's order: after a failed send, the focus goes to the first with an error */
+const FIELD_ORDER: Fields[] = [EMAIL_ID, SUBJECT_ID, CONTENT_ID];
+
 /**
  * `footer` (the side links) goes under the send button, in the fields' column, so the two share a
  * center whatever the labels' width. It keeps the page's direction when the form's is toggled.
@@ -45,12 +48,31 @@ export default function ContactForm({ footer }: ContactFormProps) {
   const [isRateLimited, setRateLimited] = useState(false);
   /** When the form was shown, for the server to tell people from bots, which send it at once */
   const startedAt = useRef(0);
+  /** Counts failed sends: each moves the focus to the first field with an error (see below) */
+  const [failedSends, setFailedSends] = useState(0);
+  /** The error dialog's message, which describes it */
+  const sendErrorMessageId = useId();
   const t = useTranslations("contact");
 
   // Set after hydration: a time rendered on the server wouldn't match the browser's
   useEffect(() => {
     startedAt.current = Date.now();
   }, []);
+
+  // After a failed send, once the errors are rendered (each field described by its own), the focus goes
+  // to the first field with one, so screen readers read its error out (WCAG 3.3.1) and keyboard users
+  // are at the field to fix. Only on a new failed send, not as errors clear while typing
+  const focusFirstError = useEffectEvent(() => {
+    const first = FIELD_ORDER.find((field) => (errors as Fields[]).includes(field));
+    if (first) {
+      document.getElementById(first)?.focus();
+    }
+  });
+  useEffect(() => {
+    if (failedSends) {
+      focusFirstError();
+    }
+  }, [failedSends]);
 
   /**
    * The form's action: checks the fields here first (and shows what's wrong), then sends the message
@@ -69,6 +91,7 @@ export default function ContactForm({ footer }: ContactFormProps) {
 
     if (invalidFields.length) {
       setErrors(invalidFields);
+      setFailedSends((count) => count + 1);
       return;
     }
 
@@ -80,6 +103,7 @@ export default function ContactForm({ footer }: ContactFormProps) {
         startedAt.current = Date.now();
       } else if (result.error === "invalid") {
         setErrors(result.fieldErrors);
+        setFailedSends((count) => count + 1);
       } else {
         setMessageSent(false);
         setRateLimited(result.error === "rate-limited");
@@ -117,10 +141,13 @@ export default function ContactForm({ footer }: ContactFormProps) {
 
   return (
     <>
+      {/* noValidate: the form checks the fields itself (see handleSend), with its own messages in the
+        * page's language, shown by each field, rather than the browser's bubbles */}
       <form
         dir={dir}
         className={styles.form}
         action={handleSend}
+        noValidate
       >
         {/* A bot trap: hidden from people and assistive tech, so only bots fill it in */}
         <input
@@ -140,7 +167,8 @@ export default function ContactForm({ footer }: ContactFormProps) {
               placeholder: t("emailPlaceholder"),
               /* Lets browsers fill in the user's address (WCAG 1.3.5), with an email keyboard */
               autoComplete: "email",
-              inputMode: "email" as const,
+              type: "email" as const,
+              enterKeyHint: "next" as const,
               maxLength: CONTACT_FORM_EMAIL_MAX_LENGTH,
               onChange: () => handleOnChange(EMAIL_ID),
               onClick: handleOnClick,
@@ -150,6 +178,7 @@ export default function ContactForm({ footer }: ContactFormProps) {
               id: SUBJECT_ID,
               label: t("subjectLabel"),
               placeholder: t("subjectPlaceholder"),
+              enterKeyHint: "next" as const,
               minLength: CONTACT_FORM_SUBJECT_MIN_LENGTH,
               maxLength: CONTACT_FORM_SUBJECT_MAX_LENGTH,
               onChange: () => handleOnChange(SUBJECT_ID),
@@ -168,7 +197,6 @@ export default function ContactForm({ footer }: ContactFormProps) {
                 <>
                   <BottomInputComponentButtons
                     dir={dir}
-                    isSubmitDisabled={!!errors.length}
                     onSubmit={handleSendClick}
                     onClick={handleAlign}
                     leftSlot={<ProgressIndicators isMessageSent={isMessageSent} />}
@@ -189,8 +217,17 @@ export default function ContactForm({ footer }: ContactFormProps) {
           ))}
         </div>
       </form>
-      <Dialog open={sendError !== null} onClose={handleCloseSendError}>
-        <ErrorDialogMeesage details={sendError ?? ""} isRateLimited={isRateLimited} />
+      {/* Named by its title, described by its message: both are read out as it opens */}
+      <Dialog
+        open={sendError !== null}
+        onClose={handleCloseSendError}
+        aria-describedby={sendErrorMessageId}
+      >
+        <ErrorDialogMeesage
+          messageId={sendErrorMessageId}
+          details={sendError ?? ""}
+          isRateLimited={isRateLimited}
+        />
       </Dialog>
     </>
   );
