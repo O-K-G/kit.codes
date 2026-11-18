@@ -25,23 +25,34 @@
 
   > path {
     @media (prefers-reduced-motion: no-preference) {
+      --stagger-time: 0.2s;
       opacity: 20%;
       animation: dish-wave 1.6s ease-in-out infinite;
 
-      &:nth-child(2) {
-        animation-delay: 0.2s;
+      /* Each wave waits one step more than the one before it (the first doesn't wait). The @supports
+       * tests a literal time, not var(), so it isn't always true */
+      @supports (animation-delay: calc(sibling-index() * 0.1s)) {
+        animation-delay: calc((sibling-index() - 1) * var(--stagger-time));
       }
 
-      &:nth-child(3) {
-        animation-delay: 0.4s;
-      }
+      /* Browsers without sibling-index(): one rule per wave. In @supports not, so these more specific
+       * rules don't override the sibling-index() rule where it works */
+      @supports not (animation-delay: calc(sibling-index() * 0.1s)) {
+        &:nth-child(2) {
+          animation-delay: 0.2s;
+        }
 
-      &:nth-child(4) {
-        animation-delay: 0.6s;
-      }
+        &:nth-child(3) {
+          animation-delay: 0.4s;
+        }
 
-      &:nth-child(5) {
-        animation-delay: 0.8s;
+        &:nth-child(4) {
+          animation-delay: 0.6s;
+        }
+
+        &:nth-child(5) {
+          animation-delay: 0.8s;
+        }
       }
     }
   }

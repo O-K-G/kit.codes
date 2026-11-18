@@ -7,8 +7,11 @@
   height: max(1.25rem, 1.1947rem + 0.2767vw, 1.3718 * var(--desktop-rem));
   margin-inline: auto;
   fill: var(--color-title-purple);
-  /* Twice (4s): movement that starts by itself must stop within 5 seconds (WCAG 2.2.2) */
-  animation: scroll-icon 2s linear 2 alternate;
+  /* Twice (4s): movement that starts by itself must stop within 5 seconds (WCAG 2.2.2). With reduced
+   * motion, it stays put */
+  @media (prefers-reduced-motion: no-preference) {
+    animation: scroll-icon 2s linear 2 alternate;
+  }
 
   /* Held until the page shows (see LoaderVisibility: REVEALED_ATTRIBUTE), so it bounces seen rather
    * than under the loader. Only with scripting: without it there's no loader to wait for */

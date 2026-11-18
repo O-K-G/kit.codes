@@ -8,12 +8,12 @@ import styles from "./BottomInputComponentButtons.module.css";
 export default function BottomInputComponentButtons({
   dir,
   onClick,
-  isSubmitDisabled,
   leftSlot,
   onSubmit,
 }: BottomInputComponentButtonsProps) {
   const { pending: isLoading } = useFormStatus();
-  const isBusy = isLoading ?? isSubmitDisabled;
+  /** Only while sending: with errors it stays usable, sending again shows them again */
+  const isBusy = isLoading;
   const t = useTranslations("inputComponentText");
   const isLTR = dir === "ltr";
 

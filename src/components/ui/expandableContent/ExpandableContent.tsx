@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimationEvent, useEffect, useRef, useState } from "react";
+import { AnimationEvent, useEffect, useEffectEvent, useRef, useState } from "react";
 import classNames from "@utils/classNames";
 import AboutTargetIcon from "@ui/expandableContent/AboutTargetIcon";
 import Gauge from "@ui/expandableContent/gauge/Gauge";
@@ -21,7 +21,8 @@ const IN_VIEW_THRESHOLD = 0.5;
  * laid out, which the browser does without laying anything out again at each frame.
  *
  * It shows `children` in place of the text if given, and calls `onOpened` once the box is done opening
- * (its frame drawn: see expand-button in the CSS).
+ * (its frame drawn: see expand-button in the CSS), or as soon as it opens with reduced motion, where it
+ * opens at once.
  *
  * Accessibility: the text is in the DOM from the start (only visually hidden while the gauge runs), so
  * screen readers read it in place; the gauge is decorative and pauses while out of view. Open, the box
@@ -75,6 +76,23 @@ export default function ExpandableContent({ text, children, onOpened, className 
     const grandchildren = children.flatMap((child) => Array.from(child.children));
     [content, ...children, ...grandchildren].forEach((element) => resizeObserver.observe(element));
     return () => resizeObserver.disconnect();
+  }, [open]);
+
+  const notifyOpened = useEffectEvent(() => onOpened?.());
+
+  // Opened without the opening animation (reduced motion: see the CSS), it's done opening at once, as no
+  // animationend will come. Where getAnimations isn't there, the animationend is waited for
+  useEffect(() => {
+    const content = contentRef.current;
+    if (!open || !content?.getAnimations) {
+      return;
+    }
+    const opening = content
+      .getAnimations()
+      .some((animation) => "animationName" in animation && String(animation.animationName).endsWith("expand-button"));
+    if (!opening) {
+      notifyOpened();
+    }
   }, [open]);
 
   /** The count hit 100%: the brackets blink with it. Then, once it has blinked, the box opens */

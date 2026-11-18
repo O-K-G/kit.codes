@@ -34,4 +34,15 @@
 /* The text in the expandable box: no single word left alone on its last line */
 .text {
   text-wrap: pretty;
+
+  /* On phones the box is set a sixth of the way down the room under the subtitle rather than halfway,
+   * so it sits closer under it. The box (its only child) is min(100cqw, 100cqh) tall there (see
+   * ExpandableContent's .box), in the container's units */
+  @media (width < 40rem) {
+    align-items: flex-start;
+
+    > * {
+      margin-top: calc((100cqh - min(100cqw, 100cqh)) / 6);
+    }
+  }
 }

@@ -19,6 +19,18 @@
     display 200ms allow-discrete;
 }
 
+/* Scrolling inside it, or over its backdrop, doesn't carry on to the page behind (the backdrop isn't a
+ * scroll container by default, so it would ignore overscroll-behavior). Where the browser doesn't
+ * enforce it (Safari), usePreventPageScroll does the same */
+:where(.dialog):modal {
+  overscroll-behavior: contain;
+}
+
+:where(.dialog)::backdrop {
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+
 :where(.dialog[open]) {
   opacity: 100%;
 

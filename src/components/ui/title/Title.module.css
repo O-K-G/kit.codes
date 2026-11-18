@@ -76,7 +76,8 @@
     }
   }
 
-  /* ---- Typing animation: the text is revealed from start to end, followed by a blinking caret ---- */
+  /* ---- Typing animation: the text is revealed from start to end, followed by a blinking caret. With
+   * reduced motion, the text is simply there, with no caret ---- */
 
   .typing,
   .delayedTyping {
@@ -84,8 +85,11 @@
     margin-block: auto;
     overflow: clip;
     white-space: nowrap;
-    opacity: 0%;
-    animation: title-type 3.5s steps(40, end) forwards;
+
+    @media (prefers-reduced-motion: no-preference) {
+      opacity: 0%;
+      animation: title-type 3.5s steps(40, end) forwards;
+    }
 
     /* The caret */
     &::before {
@@ -96,7 +100,10 @@
       width: max(0.5rem, 0.4497rem + 0.2516vw, 0.6107 * var(--desktop-rem));
       height: 80%;
       margin-block: auto;
-      animation: typing-caret 0.75s 5;
+
+      @media (prefers-reduced-motion: no-preference) {
+        animation: typing-caret 0.75s 5;
+      }
     }
 
     &:dir(ltr)::before {
@@ -109,11 +116,13 @@
   }
 
   .delayedTyping {
-    width: 0;
-    animation-delay: 5s;
-
-    &::before {
+    @media (prefers-reduced-motion: no-preference) {
+      width: 0;
       animation-delay: 5s;
+
+      &::before {
+        animation-delay: 5s;
+      }
     }
   }
 

@@ -394,7 +394,8 @@
  * timeline shared between elements (timeline-scope), which browsers without it can't find, leaving the
  * element as it is: lit ---- */
 
-@supports (animation-timeline: view()) {
+/* animation-range too: browsers with only partial support have view timelines without it */
+@supports ((animation-timeline: view()) and (animation-range: entry)) {
   @media (prefers-reduced-motion: no-preference) {
     /* The list's own timeline, for the light's tip (see below) */
     .timeline:not([data-smooth]) {

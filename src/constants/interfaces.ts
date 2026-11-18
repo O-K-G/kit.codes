@@ -64,7 +64,6 @@ export interface AboutTargetIconProps {
 export interface BottomInputComponentButtonsProps {
   dir: "ltr" | "rtl";
   onClick: (val: "ltr" | "rtl") => void;
-  isSubmitDisabled: boolean;
   leftSlot: ReactNode;
   onSubmit: () => void;
 }
@@ -74,7 +73,10 @@ export interface InputComponentProps {
   id: string;
   /** The kind of data the field takes, so browsers can fill it in (WCAG 1.3.5) */
   autoComplete?: string;
-  inputMode?: "email" | "text";
+  /** An input's type (not a textarea's): "email" brings the email keyboard, and turns off autocorrect */
+  type?: "email" | "text";
+  /** The label of the on-screen keyboard's Enter key */
+  enterKeyHint?: "next" | "done";
   placeholder: string;
   minLength?: number;
   maxLength: number;

@@ -13,6 +13,7 @@ function renderField(isError = false) {
         placeholder="you@example.com"
         maxLength={100}
         autoComplete="email"
+        type="email"
         onChange={jest.fn()}
         isError={isError}
       />
@@ -37,5 +38,21 @@ describe("InputComponent", () => {
     expect(field).toHaveAttribute("aria-invalid", "true");
     expect(screen.getByText("Error - email is invalid")).toBeVisible();
     expect(field).toHaveAccessibleDescription(/^Error - email is invalid/);
+  });
+
+  it("is required, and its error isn't a live region (the form moves the focus to it instead)", () => {
+    const field = renderField(true);
+
+    expect(field).toBeRequired();
+    expect(screen.getByText("Error - email is invalid")).not.toHaveAttribute("aria-live");
+  });
+
+  it("takes an email address as one: its type, without autocorrect, capitals or spellcheck", () => {
+    const field = renderField();
+
+    expect(field).toHaveAttribute("type", "email");
+    expect(field).toHaveAttribute("autocorrect", "off");
+    expect(field).toHaveAttribute("autocapitalize", "none");
+    expect(field).toHaveAttribute("spellcheck", "false");
   });
 });

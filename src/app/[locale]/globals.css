@@ -274,9 +274,39 @@
   --color-title-purple: #ceb7ff;
   --color-title-purple-dark: #75629f;
 
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  /* The page's own colors, light and dark. The browser follows the system's scheme for its own UI too
+   * (scrollbars, form controls, the canvas before the page paints): see colorScheme in layout.tsx */
+  --color-foreground-light: #000;
+  --color-foreground-dark: #fff;
+  --color-background-start-light: rgb(214 219 220);
+  --color-background-start-dark: #000;
+  --color-background-end-light: #fff;
+  --color-background-end-dark: #000;
+
+  --color-foreground: var(--color-foreground-light);
+  --color-background-start: var(--color-background-start-light);
+  --color-background-end: var(--color-background-end-light);
+
+  /* Browsers without light-dark() */
+  @media (prefers-color-scheme: dark) {
+    --color-foreground: var(--color-foreground-dark);
+    --color-background-start: var(--color-background-start-dark);
+    --color-background-end: var(--color-background-end-dark);
+  }
+
+  @supports (color: light-dark(white, black)) {
+    --color-foreground: light-dark(var(--color-foreground-light), var(--color-foreground-dark));
+    --color-background-start: light-dark(
+      var(--color-background-start-light),
+      var(--color-background-start-dark)
+    );
+    --color-background-end: light-dark(
+      var(--color-background-end-light),
+      var(--color-background-end-dark)
+    );
+  }
+
+  color-scheme: light dark;
 }
 
 @media (width >= 64rem) {
@@ -301,14 +331,6 @@
   );
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
 /* Smooth in-page scrolling (e.g. the "#top" scroll-to-top link). Next.js disables it during route
  * navigations thanks to data-scroll-behavior="smooth" on <html> (see layout.tsx). */
 @media (prefers-reduced-motion: no-preference) {
@@ -317,22 +339,11 @@
   }
 }
 
-/* Reduced motion: every animation and transition jumps to its end state instead of being removed,
- * so content revealed by an animation (e.g. the typing titles) still shows up, and logic that waits
- * for animationend/transitionend (the loader, the contact aside) still runs. Scroll-driven
- * animations and smooth scrolling are opted in under (prefers-reduced-motion: no-preference) instead. */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  ::before,
-  ::after {
-    animation-duration: 0.01ms !important;
-    animation-delay: 0s !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    transition-delay: 0s !important;
-  }
-}
-
+/* Reduced motion is handled where each animation is, not here for all of them: movement (sliding,
+ * growing, spinning, blinking) is opted in under (prefers-reduced-motion: no-preference), with the
+ * element shown in its end state without it (e.g. the typing titles), while fades and color changes
+ * stay. Logic that waits for an animation or transition to end still runs: the loader and the contact
+ * drawer keep a short fade, and ExpandableContent doesn't wait when its opening doesn't run. */
 /* While the window is being resized (see PauseWhileResizing), every animation holds still, and the
  * glows and blurs (filters) are off, back once the size settles: the screen is redrawn at every step of
  * the resize, and they're a good part of drawing it. Transitions keep running: logic waits for them to
@@ -373,11 +384,7 @@ html[data-resizing] ::after {
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  color: var(--color-foreground);
+  background: linear-gradient(to bottom, transparent, var(--color-background-end))
+    var(--color-background-start);
 }

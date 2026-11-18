@@ -28,8 +28,15 @@
     cursor: auto;
     transition:
       opacity 200ms cubic-bezier(0.4, 0, 0.2, 1),
-      translate 200ms cubic-bezier(0.4, 0, 0.2, 1),
       display 200ms allow-discrete;
+
+    /* It slides a little as it fades, unless motion is reduced: then it only fades */
+    @media (prefers-reduced-motion: no-preference) {
+      transition:
+        opacity 200ms cubic-bezier(0.4, 0, 0.2, 1),
+        translate 200ms cubic-bezier(0.4, 0, 0.2, 1),
+        display 200ms allow-discrete;
+    }
 
     &[data-placement="top"] {
       bottom: 100%;
@@ -146,7 +153,8 @@
      * Masks (bottom layer to top): everything, unclipped, so the glow outside the box stays; minus the
      * padding box; plus the padding box, faded at its bottom edge, right down to the frame. So only the
      * text fades, not the frame */
-    @supports (animation-timeline: scroll()) {
+    /* animation-range too: browsers with only partial support have scroll timelines without it */
+    @supports ((animation-timeline: scroll()) and (animation-range: 0% 100%)) {
       mask-image:
         linear-gradient(#000 calc(100% - var(--tooltip-scroll-fade)), transparent),
         linear-gradient(#000, #000),

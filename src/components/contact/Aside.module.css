@@ -1,9 +1,12 @@
 /* The contact drawer (see AsideDrawer): a modal <dialog> restyled as a full-height side panel, sliding
  * in from the start edge (left, or right in Hebrew). allow-discrete keeps it displayed, and in the top
- * layer, until it has slid out; @starting-style is where it slides in from. */
+ * layer, until it has slid out; @starting-style is where it slides in from. With reduced motion it
+ * fades in and out in place instead: a fade still ends with a transitionend, which AsideDrawer waits
+ * for. */
 .aside {
   position: fixed;
   top: 0;
+  inset-inline-start: 0;
   inset-inline-end: auto;
   z-index: 10;
   /* Scrolling a focused control into view leaves room for its focus rings, and for the side links'
@@ -12,6 +15,7 @@
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
+  width: 100%;
   height: 100dvh;
   max-width: none;
   max-height: none;
@@ -22,38 +26,21 @@
   background: transparent;
   opacity: 100%;
   transition:
-    all 700ms cubic-bezier(0.4, 0, 0.2, 1),
-    display 700ms allow-discrete,
-    overlay 700ms allow-discrete;
+    opacity 300ms cubic-bezier(0.4, 0, 0.2, 1),
+    display 300ms allow-discrete,
+    overlay 300ms allow-discrete;
 
   &:not([open]) {
     display: none;
-    width: 0;
     overflow-y: hidden;
-
-    &:dir(ltr) {
-      left: -100vw;
-    }
-
-    &:dir(rtl) {
-      right: -100vw;
-    }
+    opacity: 0%;
   }
 
   &[open] {
-    width: 100%;
     overflow-y: auto;
 
-    &:dir(ltr) {
-      left: 0;
-    }
-
-    &:dir(rtl) {
-      right: 0;
-    }
-
     @starting-style {
-      width: 0;
+      opacity: 0%;
     }
   }
 
@@ -62,18 +49,48 @@
     display: none;
   }
 
-  @media (width >= 64rem) {
-    transition-duration: 1000ms;
+  /* Sliding in and out, from and to past its start edge */
+  @media (prefers-reduced-motion: no-preference) {
+    transition:
+      all 700ms cubic-bezier(0.4, 0, 0.2, 1),
+      display 700ms allow-discrete,
+      overlay 700ms allow-discrete;
+
+    @media (width >= 64rem) {
+      transition-duration: 1000ms;
+    }
+
+    &:not([open]) {
+      width: 0;
+      opacity: 100%;
+
+      &:dir(ltr) {
+        left: -100vw;
+      }
+
+      &:dir(rtl) {
+        right: -100vw;
+      }
+    }
+
+    &[open] {
+      @starting-style {
+        width: 0;
+        opacity: 100%;
+      }
+    }
   }
 }
 
 /* Where it slides in from */
-@starting-style {
-  .aside[open]:dir(ltr) {
-    left: -100vw;
-  }
+@media (prefers-reduced-motion: no-preference) {
+  @starting-style {
+    .aside[open]:dir(ltr) {
+      left: -100vw;
+    }
 
-  .aside[open]:dir(rtl) {
-    right: -100vw;
+    .aside[open]:dir(rtl) {
+      right: -100vw;
+    }
   }
 }

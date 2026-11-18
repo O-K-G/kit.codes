@@ -41,6 +41,13 @@ export const SKILL_GROUPS = [
   },
 ] as const satisfies readonly { id: string; skills: Record<string, number> }[];
 
+/** Shorter names shown on phones, so the names' column is narrower and the bars get the room (see
+ * SkillBar). Screen readers still get the full name */
+export const SKILL_SHORT_NAMES: Partial<Record<string, string>> = {
+  "JavaScript/TypeScript": "JavaScript+TS",
+  "Accessibility (WCAG)": "Accessibility",
+};
+
 export type SkillGroupId = (typeof SKILL_GROUPS)[number]["id"];
 
 /** How many of a bar's segments a level (in percent) lights */
