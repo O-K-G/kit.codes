@@ -248,6 +248,13 @@
   /* The scale's colors, at each segment's middle: white at the first, purple halfway, yellow three
    * quarters of the way, red at the last. Nothing is lit until the fill starts */
   &::after {
+    /* Over the chevrons' mask, a second one the fill sweeps in with (see skill-bar-fill): a bar's width
+     * shown, then fading out over two chevrons, so each one shows up gradually as it passes. At rest
+     * it's past the skill's last lit chevron (where the cut is), so they're all shown whole */
+    --reveal-fade: calc(2 * var(--step));
+    --revealed: calc(var(--lit-end) - 100cqw);
+    --unrevealed: calc(-100cqw - var(--reveal-fade));
+
     background-image: linear-gradient(
       in oklab to right,
       #fff calc(var(--point) / 2),
@@ -255,17 +262,27 @@
       var(--scale-yellow) calc(var(--point) / 2 + (100% - var(--point)) * 0.75),
       var(--scale-red) calc(100% - var(--point) / 2)
     );
+    mask-image:
+      linear-gradient(to right, #000 calc(100% - var(--reveal-fade)), transparent), var(--chevrons);
+    mask-size:
+      calc(100cqw + var(--reveal-fade)) 100%,
+      100% 100%;
+    mask-position:
+      var(--revealed) 0,
+      0 0;
+    mask-composite: intersect, add;
     clip-path: var(--unlit-clip);
   }
 
-  /* Once its row starts filling (the rows 80ms apart, see SkillBars), the skill's segments light up one
-   * by one from the left (the whole bar in 1.2s, a step per segment), the last one as the bar glows
-   * (see .bar). With reduced motion, the skill's segments are all lit at once */
+  /* Once its row starts filling (the rows 80ms apart, see SkillBars), the skill's segments light up
+   * from the left, each one fading in as the fill sweeps past it (the whole bar in 1.2s, slowing
+   * towards its end), the last one as the bar glows (see .bar). With reduced motion, the skill's
+   * segments are all lit at once */
   &[data-filling="true"]::after {
     clip-path: var(--lit-clip);
 
     @media (prefers-reduced-motion: no-preference) {
-      animation: skill-bar-fill 1.2s steps(var(--level), jump-end) both;
+      animation: skill-bar-fill 1.2s cubic-bezier(0.33, 1, 0.68, 1) both;
     }
   }
 }
@@ -419,14 +436,18 @@
   }
 }
 
-/* From nothing lit to the skill's last segment (in steps: see .segments) */
+/* From nothing lit to the skill's last segment, sweeping its reveal along (see .segments) */
 @keyframes skill-bar-fill {
   from {
-    clip-path: var(--unlit-clip);
+    mask-position:
+      var(--unrevealed) 0,
+      0 0;
   }
 
   to {
-    clip-path: var(--lit-clip);
+    mask-position:
+      var(--revealed) 0,
+      0 0;
   }
 }
 
