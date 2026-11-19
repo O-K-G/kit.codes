@@ -26,11 +26,6 @@
   }
 }
 
-/* The main title: room between its text and the lines over and under it */
-.title {
-  gap: calc(0.625 * var(--fluid-rem));
-}
-
 /* The text in the expandable box: no single word left alone on its last line */
 .text {
   text-wrap: pretty;

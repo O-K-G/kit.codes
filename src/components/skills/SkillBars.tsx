@@ -1,7 +1,13 @@
 "use client";
 
 import { CSSProperties, PointerEvent, useEffect, useId, useRef, useState } from "react";
-import { SKILL_GROUPS, SKILL_MAX_SEGMENTS, SKILL_SHORT_NAMES, skillSegments } from "@constants/skills";
+import {
+  SKILL_GROUPS,
+  SKILL_MAX_SEGMENTS,
+  SKILL_SHORT_NAMES,
+  skillChevrons,
+  skillSegments,
+} from "@constants/skills";
 import { SkillBarsProps } from "@constants/interfaces";
 import styles from "./SkillBars.module.css";
 import classNames from "@utils/classNames";
@@ -15,11 +21,21 @@ const IN_VIEW_THRESHOLD = 0.5;
 /** The rows start filling one after another, this far apart */
 const ROW_DELAY_MS = 80;
 
-/* A bar's segments, as fractions of its width (as in the CSS, see .segments): SKILL_MAX_SEGMENTS
- * segments, each followed by a gap of 30% of the width shared out between them (but the last) */
-const SEGMENT_GAP = 0.3 / SKILL_MAX_SEGMENTS;
-const SEGMENT_WIDTH = (1 - (SKILL_MAX_SEGMENTS - 1) * SEGMENT_GAP) / SKILL_MAX_SEGMENTS;
-const SEGMENT_PITCH = SEGMENT_WIDTH + SEGMENT_GAP;
+/** The bars' mask (see the CSS, .segments), for bars of this size: the chevrons (see skillChevrons),
+ * as one SVG path, whose edges the browser smooths (gradients drawn into their shape wouldn't be) */
+const chevronsMask = (width: number, height: number) => {
+  const { tip, step, arm } = skillChevrons(width, height);
+  const round = (value: number) => Math.round(value * 100) / 100;
+  const [w, h, half] = [width, height, height / 2].map(round);
+  const path = Array.from({ length: SKILL_MAX_SEGMENTS }, (_, i) => {
+    const start = i * step;
+    const [left, end, point, notch] = [start, start + arm, start + arm + tip, start + tip].map(round);
+    return `M${left} 0H${end}L${point} ${half}L${end} ${h}H${left}L${notch} ${half}Z`;
+  }).join("");
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><path d="${path}"/></svg>`;
+
+  return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
+};
 
 /** Where a segment sits on the full scale, in percent (shown in its tooltip) */
 const segmentPercent = (segment: number) =>
@@ -62,10 +78,14 @@ function SkillBar({ name, percent, filling, labelId }: SkillBarProps) {
       return;
     }
 
-    const { left, width } = event.currentTarget.getBoundingClientRect();
-    const x = (event.clientX - left) / width;
-    const segment = Math.floor(x / SEGMENT_PITCH);
-    const onSegment = segment >= 0 && segment < level && x - segment * SEGMENT_PITCH <= SEGMENT_WIDTH;
+    // The chevrons slant: measured halfway into their point, each one starts a step after the last.
+    // In a right-to-left page the bar is mirrored (see the CSS), so they're counted from its right
+    const { left, right, width, height } = event.currentTarget.getBoundingClientRect();
+    const { tip, step, arm } = skillChevrons(width, height);
+    const isRtl = event.currentTarget.closest("[dir]")?.getAttribute("dir") === "rtl";
+    const x = (isRtl ? right - event.clientX : event.clientX - left) - tip / 2;
+    const segment = Math.floor(x / step);
+    const onSegment = segment >= 0 && segment < level && x - segment * step <= arm;
 
     if (onSegment) {
       setHovered((current) =>
@@ -79,17 +99,20 @@ function SkillBar({ name, percent, filling, labelId }: SkillBarProps) {
   return (
     <li className={styles.skill} style={{ "--level": level } as CSSProperties}>
       {/* With a short name, phones show it, and the full name only to screen readers: the meter is
-        * always named by the full name */}
+        * always named by the full name. Isolated (bdi, dir="auto"), so in a right-to-left page an English
+        * name keeps its brackets in place */}
       <span id={labelId} className={styles.name}>
         {shortName ? (
           <>
-            <span className={styles.fullName}>{name}</span>
-            <span className={styles.shortName} aria-hidden>
+            <span className={styles.fullName} dir="auto">
+              {name}
+            </span>
+            <span className={styles.shortName} dir="auto" aria-hidden>
               {shortName}
             </span>
           </>
         ) : (
-          name
+          <bdi>{name}</bdi>
         )}
       </span>
       <div
@@ -129,10 +152,11 @@ function SkillBar({ name, percent, filling, labelId }: SkillBarProps) {
 
 /**
  * The skills, in groups (see SKILL_GROUPS): each group's name, then its skills, one per row (see
- * SkillBar): a name and a pill-shaped bar of SKILL_MAX_SEGMENTS segments, painted red to purple to
- * white along the full scale. Once in view, each bar fills segment by segment up to the skill's level,
- * the rows one after the other, across the groups. Each group is framed by a rounded border of its own
- * color. The groups share the list's height and its columns (through subgrid), so every bar lines up.
+ * SkillBar): a name and a pill-shaped bar of SKILL_MAX_SEGMENTS chevrons, painted white to purple to
+ * yellow to red along the full scale. Once in view, each bar fills segment by segment up to the
+ * skill's level, the rows one after the other, across the groups. Each group is framed by a rounded
+ * border of its own color. The groups share the list's height and its columns (through subgrid), so
+ * every bar lines up.
  *
  * Each row's fill starts at its turn (rather than all at once, with delays), so the browser doesn't
  * start every row's animation as the list comes into view.
@@ -158,6 +182,31 @@ export default function SkillBars({ className, groupNames }: SkillBarsProps) {
     skills: Object.entries(skills).map(([name, percent]) => ({ name, percent, index: index++ })),
   }));
   const skillCount = index;
+
+  // The bars' chevrons, drawn for their size (they're all as big: they share the list's columns and
+  // rows), again whenever it changes
+  useEffect(() => {
+    const list = listRef.current;
+    const bar = list?.querySelector(`.${styles.segments}`);
+    if (!list || !bar || typeof ResizeObserver === "undefined") {
+      return;
+    }
+
+    // Redrawn only when the size changes by a whole pixel: the mask stretches to the bar, so smaller
+    // changes (e.g. while the window is resized) don't need a new one
+    let drawn = "";
+    const resizeObserver = new ResizeObserver(([entry]) => {
+      const { width, height } = entry.contentRect;
+      const size = `${Math.round(width)}x${Math.round(height)}`;
+      if (width > 0 && height > 0 && size !== drawn) {
+        drawn = size;
+        list.style.setProperty("--chevrons", chevronsMask(width, height));
+      }
+    });
+    resizeObserver.observe(bar);
+
+    return () => resizeObserver.disconnect();
+  }, []);
 
   useEffect(() => {
     const list = listRef.current;
@@ -201,7 +250,6 @@ export default function SkillBars({ className, groupNames }: SkillBarsProps) {
   return (
     <div
       ref={listRef}
-      dir="ltr"
       className={classNames(styles.list, className)}
       style={
         {
@@ -211,12 +259,12 @@ export default function SkillBars({ className, groupNames }: SkillBarsProps) {
         } as CSSProperties
       }
     >
-      {groups.map(({ groupId, skills }, groupIndex) => (
+      {groups.map(({ groupId, skills }) => (
         <div
           key={groupId}
           className={styles.group}
           data-group={groupId}
-          style={{ "--rows": skills.length + 1, "--index": groupIndex } as CSSProperties}
+          style={{ "--rows": skills.length + 1 } as CSSProperties}
         >
           <h3 id={`${id}-${groupId}`} className={styles.groupName}>
             {groupNames[groupId]}
