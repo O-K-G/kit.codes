@@ -1,7 +1,7 @@
 import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import SkillBars from "@components/skills/SkillBars";
-import { SKILL_GROUPS, SKILL_MAX_SEGMENTS, SKILL_SHORT_NAMES, skillSegments } from "@constants/skills";
+import { SKILL_GROUPS, SKILL_MAX_SEGMENTS, SKILL_SHORT_NAMES, skillChevrons, skillSegments } from "@constants/skills";
 import styles from "@components/skills/SkillBars.module.css";
 
 const GROUP_NAMES = {
@@ -150,14 +150,13 @@ describe("SkillBars", () => {
       const segments = screen
         .getByRole("meter", { name })
         .querySelector(`.${styles.segments}`) as HTMLElement;
-      segments.getBoundingClientRect = () => ({ left: 0, width: 500 }) as DOMRect;
+      segments.getBoundingClientRect = () => ({ left: 0, width: 500, height: 20 }) as DOMRect;
 
-      const gap = 0.3 / SKILL_MAX_SEGMENTS;
-      const pitch = (1 - (SKILL_MAX_SEGMENTS - 1) * gap) / SKILL_MAX_SEGMENTS + gap;
+      const { tip, step, arm } = skillChevrons(500, 20);
       const hover = (segment: number, target: Element = segments) =>
         fireEvent.pointerMove(target, {
           pointerType: "mouse",
-          clientX: (segment + 0.35) * pitch * 500,
+          clientX: segment * step + tip / 2 + arm / 2,
         });
       const highlight = () => segments.querySelector(`.${styles.highlight}`);
 
@@ -167,7 +166,8 @@ describe("SkillBars", () => {
     it("lifts a lit segment, showing its place on the scale", () => {
       const { hover, highlight } = setup();
 
-      hover(11);
+      // The 4th of 20 segments: 20% of the scale
+      hover(3);
       expect(highlight()).toHaveAttribute("data-active", "true");
       expect(highlight()).toHaveTextContent("20%");
       expect(highlight()).toHaveAttribute("aria-hidden", "true");
@@ -191,9 +191,29 @@ describe("SkillBars", () => {
     it("keeps the segment lifted while its tooltip is hovered", () => {
       const { hover, highlight } = setup();
 
-      hover(11);
+      // The 4th of 20 segments: 20% of the scale
+      hover(3);
       hover(20, highlight() as Element);
       expect(highlight()).toHaveTextContent("20%");
+    });
+
+    it("counts the segments from the right in a right-to-left page, where the bar is mirrored", () => {
+      document.documentElement.setAttribute("dir", "rtl");
+      try {
+        const { segments, highlight } = setup();
+        segments.getBoundingClientRect = () =>
+          ({ left: 0, right: 500, width: 500, height: 20 }) as DOMRect;
+        const { tip, step, arm } = skillChevrons(500, 20);
+
+        // The 4th segment from the right: 20% of the scale
+        fireEvent.pointerMove(segments, {
+          pointerType: "mouse",
+          clientX: 500 - (3 * step + tip / 2 + arm / 2),
+        });
+        expect(highlight()).toHaveTextContent("20%");
+      } finally {
+        document.documentElement.removeAttribute("dir");
+      }
     });
 
     it("ignores touch", () => {
