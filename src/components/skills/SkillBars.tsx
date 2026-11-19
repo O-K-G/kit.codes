@@ -22,24 +22,17 @@ const IN_VIEW_THRESHOLD = 0.5;
 const ROW_DELAY_MS = 80;
 
 /** The bars' mask (see the CSS, .segments), for bars of this size: the chevrons (see skillChevrons),
- * as SVG polygons, which the browser smooths the edges of (gradients drawn into their shape wouldn't be) */
+ * as one SVG path, whose edges the browser smooths (gradients drawn into their shape wouldn't be) */
 const chevronsMask = (width: number, height: number) => {
   const { tip, step, arm } = skillChevrons(width, height);
-  const half = height / 2;
   const round = (value: number) => Math.round(value * 100) / 100;
-  const polygons = Array.from({ length: SKILL_MAX_SEGMENTS }, (_, i) => {
+  const [w, h, half] = [width, height, height / 2].map(round);
+  const path = Array.from({ length: SKILL_MAX_SEGMENTS }, (_, i) => {
     const start = i * step;
-    const points = [
-      [start, 0],
-      [start + arm, 0],
-      [start + arm + tip, half],
-      [start + arm, height],
-      [start, height],
-      [start + tip, half],
-    ];
-    return `<polygon points="${points.map((point) => point.map(round).join(",")).join(" ")}"/>`;
+    const [left, end, point, notch] = [start, start + arm, start + arm + tip, start + tip].map(round);
+    return `M${left} 0H${end}L${point} ${half}L${end} ${h}H${left}L${notch} ${half}Z`;
   }).join("");
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${round(width)} ${round(height)}" preserveAspectRatio="none">${polygons}</svg>`;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><path d="${path}"/></svg>`;
 
   return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
 };
@@ -162,7 +155,8 @@ function SkillBar({ name, percent, filling, labelId }: SkillBarProps) {
  * SkillBar): a name and a pill-shaped bar of SKILL_MAX_SEGMENTS chevrons, painted white to purple to
  * yellow to red along the full scale. Once in view, each bar fills segment by segment up to the
  * skill's level, the rows one after the other, across the groups. Each group is framed by a rounded
- * border of its own color. The groups share the list's height and its columns (through subgrid), so every bar lines up.
+ * border of its own color. The groups share the list's height and its columns (through subgrid), so
+ * every bar lines up.
  *
  * Each row's fill starts at its turn (rather than all at once, with delays), so the browser doesn't
  * start every row's animation as the list comes into view.
@@ -198,9 +192,14 @@ export default function SkillBars({ className, groupNames }: SkillBarsProps) {
       return;
     }
 
+    // Redrawn only when the size changes by a whole pixel: the mask stretches to the bar, so smaller
+    // changes (e.g. while the window is resized) don't need a new one
+    let drawn = "";
     const resizeObserver = new ResizeObserver(([entry]) => {
       const { width, height } = entry.contentRect;
-      if (width > 0 && height > 0) {
+      const size = `${Math.round(width)}x${Math.round(height)}`;
+      if (width > 0 && height > 0 && size !== drawn) {
+        drawn = size;
         list.style.setProperty("--chevrons", chevronsMask(width, height));
       }
     });
@@ -260,14 +259,12 @@ export default function SkillBars({ className, groupNames }: SkillBarsProps) {
         } as CSSProperties
       }
     >
-      {groups.map(({ groupId, skills }, groupIndex) => (
+      {groups.map(({ groupId, skills }) => (
         <div
           key={groupId}
           className={styles.group}
           data-group={groupId}
-          style={
-            { "--rows": skills.length + 1, "--index": groupIndex } as CSSProperties
-          }
+          style={{ "--rows": skills.length + 1 } as CSSProperties}
         >
           <h3 id={`${id}-${groupId}`} className={styles.groupName}>
             {groupNames[groupId]}

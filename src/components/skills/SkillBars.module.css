@@ -9,8 +9,15 @@
   --row-gap: 0.25;
   --group-padding: 0.3;
   --name-height: 0.8;
-  /* A bar's padding above and below its segments, in rows: thin, so the dots are nearly as tall as it */
+  /* A bar's padding above and below its segments, in rows: thin, so the chevrons are nearly as tall
+   * as it */
   --bar-padding: 0.06;
+  /* The bar's color (see .bar), and its empty segments' (see .segments): faintly lighter */
+  --bar-color: oklch(27.9% 0.041 260.031);
+  --unlit-tint: 7%;
+  /* The scale's colors past purple (see .segments and .highlight) */
+  --scale-yellow: oklch(85.2% 0.199 91.936);
+  --scale-red: oklch(63.7% 0.237 25.331);
   /* The list's height in rows: every row (the groups' names and their skills) and the gaps between
    * them, and each group's padding, with a little to spare for the borders */
   --rows-tall: calc((1 + var(--row-gap)) * var(--count) + 2 * var(--group-padding) * var(--groups));
@@ -37,11 +44,13 @@
    * pseudo-elements and its highlight, in it. Half a chevron's height (the row's, less the bar's padding
    * and border, see .bar), and its point's (and notch's) depth: as much, for 45° arms, or 30% of a full
    * share of the bar if more (on wide bars, which are pointier) */
+  --share: calc(100cqw / var(--segments));
   --half: calc((0.5 - var(--bar-padding)) * var(--row) - 2px);
-  --tip: max(var(--half), 0.3 / var(--segments) * 100cqw);
-  /* The gap between two chevrons: 30% of a full share of the bar, or half the point's depth if less, so
-   * each point enters the next notch */
-  --gap: min(0.3 / var(--segments) * 100cqw, 0.5 * var(--tip));
+  --tip: max(var(--half), 0.3 * var(--share));
+  /* The gap between two chevrons: 30% of a full share of the bar, down to 20% on small chevrons (a
+   * share under 30px, on phones), or half the point's depth if less, so each point enters the next
+   * notch (as in skillChevrons) */
+  --gap: min(clamp(0.2 * var(--share), 0.3 * var(--share) - 3px, 0.3 * var(--share)), 0.5 * var(--tip));
   /* From one chevron to the next, a chevron's width (less its point), and its point from its start */
   --step: calc((100cqw + var(--gap) - var(--tip)) / var(--segments));
   --arm: calc(var(--step) - var(--gap));
@@ -56,13 +65,8 @@
   grid-template-rows: repeat(var(--rows), var(--row));
   row-gap: calc(var(--row-gap) * var(--row));
   padding: calc(var(--group-padding) * var(--row)) calc(0.5 * var(--row));
-  /* Its border (and the border's glow): a shade of purple, from the lightest on the first group to the
-   * darkest on the last (by its place, --index, among the --groups) */
-  --border-color: color-mix(
-    in oklab,
-    oklch(88% 0.08 300),
-    oklch(48% 0.22 300) calc(var(--index) / (var(--groups) - 1) * 100%)
-  );
+  /* Its border (and the border's glow): a light purple, the same on every group */
+  --border-color: oklch(88% 0.08 300);
 
   border: 2px solid var(--border-color);
   border-radius: calc(0.6 * var(--row));
@@ -174,7 +178,7 @@
   border-radius: 9999px;
   /* Nearly opaque: the background mustn't show through the empty segments, which keep 3:1 against
    * the last lit one, where the fill ends (WCAG 1.4.11) */
-  background-color: oklch(27.9% 0.041 260.031 / 95%);
+  background-color: color-mix(in oklab, var(--bar-color) 95%, transparent);
 
   /* Once its fill reaches its last segment (see .segments), the bar glows orange once, fading in and out
    * in 0.7s: a single blink, well within WCAG 2.3.1 (3 flashes a second) and 2.2.2 (5 seconds). Not
@@ -187,18 +191,31 @@
 }
 
 /* The bar's --segments segments, drawn as one element rather than one per segment (so resizing the
- * window doesn't lay each one out again): a row of right-pointing chevrons cut out by a mask, each one's
- * point entering the next one's notch, the last one's ending at the bar's end (as in skillChevrons, which
- * SkillBar finds the hovered segment by). The faint empty segments are its ::before, the lit ones its
- * ::after, painted white to purple to yellow to red along the full scale and cut off along the notch of the
- * skill's first unlit segment. The lengths below hold 100cqw, the bar's width: they're for its
- * pseudo-elements and its highlight, in it */
+ * window doesn't lay each one out again): a row of right-pointing chevrons cut out by a mask, each
+ * one's point entering the next one's notch, the last one's ending at the bar's end (as in
+ * skillChevrons, which SkillBar draws them and finds the hovered segment by). The faint empty segments
+ * are its ::before, the lit ones its ::after, painted white to purple to yellow to red along the full
+ * scale and cut off along the notch of the skill's first unlit segment. */
 .segments {
   /* The lit chevrons are cut off along the notch of the skill's first unlit one, halfway into the gap
    * before it (cut on its edge, the cut's soft edge would show on it): where the cut starts, and before
-   * the fill, where it starts with none lit */
+   * the fill, where it starts with none lit; and the cuts themselves */
   --lit-end: calc(var(--level) * var(--step) - var(--gap) / 2);
   --unlit-end: calc(var(--gap) / -2);
+  --lit-clip: polygon(
+    0 0,
+    var(--lit-end) 0,
+    calc(var(--lit-end) + var(--tip)) 50%,
+    var(--lit-end) 100%,
+    0 100%
+  );
+  --unlit-clip: polygon(
+    0 0,
+    var(--unlit-end) 0,
+    calc(var(--unlit-end) + var(--tip)) 50%,
+    var(--unlit-end) 100%,
+    0 100%
+  );
 
   position: relative;
   height: 100%;
@@ -225,34 +242,27 @@
   }
 
   &::before {
-    background-color: rgb(255 255 255 / 7%);
+    background-color: rgb(255 255 255 / var(--unlit-tint));
   }
 
   /* The scale's colors, at each segment's middle: white at the first, purple halfway, yellow three
-   * quarters of the way, red at the last.
-   * Nothing is lit until the fill starts */
+   * quarters of the way, red at the last. Nothing is lit until the fill starts */
   &::after {
     background-image: linear-gradient(
       in oklab to right,
       #fff calc(var(--point) / 2),
       var(--color-title-purple) 50%,
-      oklch(85.2% 0.199 91.936) calc(var(--point) / 2 + (100% - var(--point)) * 0.75),
-      oklch(63.7% 0.237 25.331) calc(100% - var(--point) / 2)
+      var(--scale-yellow) calc(var(--point) / 2 + (100% - var(--point)) * 0.75),
+      var(--scale-red) calc(100% - var(--point) / 2)
     );
-    clip-path: polygon(0 0, var(--unlit-end) 0, calc(var(--unlit-end) + var(--tip)) 50%, var(--unlit-end) 100%, 0 100%);
+    clip-path: var(--unlit-clip);
   }
 
   /* Once its row starts filling (the rows 80ms apart, see SkillBars), the skill's segments light up one
    * by one from the left (the whole bar in 1.2s, a step per segment), the last one as the bar glows
    * (see .bar). With reduced motion, the skill's segments are all lit at once */
   &[data-filling="true"]::after {
-    clip-path: polygon(
-      0 0,
-      var(--lit-end) 0,
-      calc(var(--lit-end) + var(--tip)) 50%,
-      var(--lit-end) 100%,
-      0 100%
-    );
+    clip-path: var(--lit-clip);
 
     @media (prefers-reduced-motion: no-preference) {
       animation: skill-bar-fill 1.2s steps(var(--level), jump-end) both;
@@ -263,6 +273,24 @@
 /* The hovered lit segment (see SkillBar), over its place in the bar: in its color on the scale */
 .highlight {
   --position: calc(var(--segment) / (var(--segments) - 1));
+  /* How much it grows and brightens when lifted (see below) */
+  --lift: 1.3;
+  --lift-brightness: 1.4;
+  /* Its color on the scale */
+  --segment-color: color-mix(
+    in oklab,
+    color-mix(
+      in oklab,
+      color-mix(in oklab, #fff, var(--color-title-purple) clamp(0%, var(--position) * 200%, 100%)),
+      var(--scale-yellow) clamp(0%, (var(--position) - 0.5) * 400%, 100%)
+    ),
+    var(--scale-red) clamp(0%, (var(--position) - 0.75) * 400%, 100%)
+  );
+  /* Its border: 2px once lifted (so less before it grows), in the empty segments' color. Along the
+   * slanted sides, the inner chevron's corners move in by the border over the sides' slope */
+  --border: calc(2px / var(--lift));
+  --border-x: calc(var(--border) * hypot(var(--tip), var(--half)) / var(--half));
+  --border-slope: calc(var(--border) * var(--tip) / var(--half));
 
   display: none;
   position: absolute;
@@ -270,21 +298,24 @@
   top: 0;
   bottom: 0;
   left: calc(var(--segment) * var(--step));
-  /* Its chevron, with its point: drawn by its ::before (a clip-path here would clip the tooltip) */
+  /* Its chevron, with its point: drawn by its pseudo-elements (a clip-path here would clip the
+   * tooltip), the border by its ::before and the chevron within it by its ::after */
   width: calc(var(--arm) + var(--tip));
 
-  &::before {
+  &::before,
+  &::after {
     content: "";
     position: absolute;
     inset: 0;
+  }
+
+  &::before {
+    /* The empty segments' color over the bar (white over it, mixed in sRGB as it's painted), darkened
+     * in sRGB by as much as the lift brightens it (see below), so it shows as theirs */
     background-color: color-mix(
-      in oklab,
-      color-mix(
-        in oklab,
-        color-mix(in oklab, #fff, var(--color-title-purple) clamp(0%, var(--position) * 200%, 100%)),
-        oklch(85.2% 0.199 91.936) clamp(0%, (var(--position) - 0.5) * 400%, 100%)
-      ),
-      oklch(63.7% 0.237 25.331) clamp(0%, (var(--position) - 0.75) * 400%, 100%)
+      in srgb,
+      color-mix(in srgb, var(--bar-color), #fff var(--unlit-tint)),
+      #000 calc((1 - 1 / var(--lift-brightness)) * 100%)
     );
     clip-path: polygon(
       0 0,
@@ -293,6 +324,18 @@
       calc(100% - var(--tip)) 100%,
       0 100%,
       var(--tip) 50%
+    );
+  }
+
+  &::after {
+    background-color: var(--segment-color);
+    clip-path: polygon(
+      calc(var(--border-x) + var(--border-slope)) var(--border),
+      calc(100% - var(--tip) + var(--border-slope) - var(--border-x)) var(--border),
+      calc(100% - var(--border-x)) 50%,
+      calc(100% - var(--tip) + var(--border-slope) - var(--border-x)) calc(100% - var(--border)),
+      calc(var(--border-x) + var(--border-slope)) calc(100% - var(--border)),
+      calc(var(--tip) + var(--border-x)) 50%
     );
   }
 
@@ -316,8 +359,8 @@
     display: block;
 
     &[data-active="true"] {
-      filter: brightness(1.4);
-      scale: 1.3;
+      filter: brightness(var(--lift-brightness));
+      scale: var(--lift);
       translate: 0 -20%;
       opacity: 100%;
       pointer-events: auto;
@@ -358,13 +401,7 @@
 /* Without JavaScript nothing would start the fill: show the bars full right away */
 @media (scripting: none) {
   .segments::after {
-    clip-path: polygon(
-      0 0,
-      var(--lit-end) 0,
-      calc(var(--lit-end) + var(--tip)) 50%,
-      var(--lit-end) 100%,
-      0 100%
-    );
+    clip-path: var(--lit-clip);
   }
 }
 
@@ -385,16 +422,38 @@
 /* From nothing lit to the skill's last segment (in steps: see .segments) */
 @keyframes skill-bar-fill {
   from {
-    clip-path: polygon(0 0, var(--unlit-end) 0, calc(var(--unlit-end) + var(--tip)) 50%, var(--unlit-end) 100%, 0 100%);
+    clip-path: var(--unlit-clip);
   }
 
   to {
-    clip-path: polygon(
-      0 0,
-      var(--lit-end) 0,
-      calc(var(--lit-end) + var(--tip)) 50%,
-      var(--lit-end) 100%,
-      0 100%
-    );
+    clip-path: var(--lit-clip);
+  }
+}
+
+/* Forced colors (e.g. Windows High Contrast) drop the scale's gradient, which would leave every bar
+ * looking empty: the level is the bar's content, so its segments keep system colors instead, lit ones
+ * in Highlight, empty ones in GrayText, and the hovered one in CanvasText, with a Canvas border */
+@media (forced-colors: active) {
+  .segments::before,
+  .segments::after,
+  .highlight::before,
+  .highlight::after {
+    forced-color-adjust: none;
+  }
+
+  .segments::before {
+    background-color: GrayText;
+  }
+
+  .segments::after {
+    background: Highlight;
+  }
+
+  .highlight::before {
+    background-color: Canvas;
+  }
+
+  .highlight::after {
+    background-color: CanvasText;
   }
 }
