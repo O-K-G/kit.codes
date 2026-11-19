@@ -19,7 +19,6 @@ export default function About({ activeSection }: ActiveSectionProps) {
       <header>
         <Title
           component="h1"
-          className={styles.title}
           border
           topLabel={t("topLabel")}
           bottomLabel={t("bottomLabel")}
