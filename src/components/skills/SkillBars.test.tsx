@@ -132,13 +132,15 @@ describe("SkillBars", () => {
     fills.forEach((fill) => expect(fill).toHaveAttribute("data-filling", "true"));
   });
 
-  it("draws each bar as one element, not one per segment", () => {
+  it("draws each bar's segments as a few elements, not one per segment", () => {
     renderBars();
     const [name] = SKILLS[0];
     const bar = screen.getByRole("meter", { name });
 
     expect(bar.querySelector(`.${styles.segments}`)).toBeInTheDocument();
-    expect(bar.querySelectorAll("span")).toHaveLength(0);
+    // The lit segments and the reveal they're swept in with (see .fill), whatever the segments' count
+    expect(bar.querySelectorAll("span")).toHaveLength(2);
+    expect(bar.querySelector(`.${styles.fill} > .${styles.lit}`)).toBeInTheDocument();
   });
 
   describe("hovering a segment", () => {

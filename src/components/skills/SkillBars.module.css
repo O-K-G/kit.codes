@@ -179,12 +179,28 @@
   /* Nearly opaque: the background mustn't show through the empty segments, which keep 3:1 against
    * the last lit one, where the fill ends (WCAG 1.4.11) */
   background-color: color-mix(in oklab, var(--bar-color) 95%, transparent);
+  /* Holds its glow (see ::after) */
+  position: relative;
+
+  /* Its glow: drawn once, hidden until it fades in (only its opacity is animated, which the browser
+   * runs off the main thread: an animated box-shadow was repainted at every frame) */
+  &::after {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    box-shadow:
+      0 0 calc(0.25 * var(--row)) calc(0.05 * var(--row)) oklch(75% 0.183 55.934),
+      0 0 calc(0.6 * var(--row)) calc(0.1 * var(--row)) oklch(75% 0.183 55.934 / 60%);
+    opacity: 0;
+    pointer-events: none;
+  }
 
   /* Once its fill reaches its last segment (see .segments), the bar glows orange once, fading in and out
    * in 0.7s: a single blink, well within WCAG 2.3.1 (3 flashes a second) and 2.2.2 (5 seconds). Not
    * with reduced motion */
   @media (prefers-reduced-motion: no-preference) {
-    &:has([data-filling="true"]) {
+    &:has([data-filling="true"])::after {
       animation: skill-bar-glow 0.7s ease-in-out 1.2s;
     }
   }
@@ -229,32 +245,46 @@
     scale: -1 1;
   }
 
-  /* The mask: the chevrons, drawn for the bars' size (--chevrons, set on the list by SkillBars). Until
-   * it's set (or without scripting) the bar is shown whole */
-  &::before,
-  &::after {
+  /* The empty segments: the chevrons, drawn for the bars' size (--chevrons, set on the list by
+   * SkillBars) as a mask. Until it's set (or without scripting) the bar is shown whole */
+  &::before {
     content: "";
     position: absolute;
     inset: 0;
     mask-image: var(--chevrons);
     mask-size: 100% 100%;
     mask-repeat: no-repeat;
-  }
-
-  &::before {
     background-color: rgb(255 255 255 / var(--unlit-tint));
   }
 
-  /* The scale's colors, at each segment's middle: white at the first, purple halfway, yellow three
-   * quarters of the way, red at the last. Nothing is lit until the fill starts */
-  &::after {
-    /* Over the chevrons' mask, a second one the fill sweeps in with (see skill-bar-fill): a bar's width
-     * shown, then fading out over two chevrons, so each one shows up gradually as it passes. At rest
-     * it's past the skill's last lit chevron (where the cut is), so they're all shown whole */
+  /* The reveal the fill sweeps the lit segments in with: a bar's width shown, then fading out over two
+   * chevrons, so each one shows up gradually as it passes. At rest it's past the skill's last lit
+   * chevron (where the cut is), so they're all shown whole. It moves (translate) while the lit
+   * segments in it move back as much, so they hold still under its edge: both moves are transforms,
+   * which the browser runs off the main thread, so the fill stays smooth while the page scrolls (a
+   * moving mask-position was repainted at every frame, on the main thread) */
+  .fill {
     --reveal-fade: calc(2 * var(--step));
     --revealed: calc(var(--lit-end) - 100cqw);
     --unrevealed: calc(-100cqw - var(--reveal-fade));
 
+    position: absolute;
+    inset-block: 0;
+    left: 0;
+    width: calc(100cqw + var(--reveal-fade));
+    mask-image: linear-gradient(to right, #000 calc(100% - var(--reveal-fade)), transparent);
+    translate: var(--revealed) 0;
+    pointer-events: none;
+  }
+
+  /* The lit segments: the scale's colors, at each segment's middle: white at the first, purple
+   * halfway, yellow three quarters of the way, red at the last, in the chevrons' mask. Nothing is lit
+   * until the fill starts */
+  .lit {
+    position: absolute;
+    inset-block: 0;
+    left: 0;
+    width: 100cqw;
     background-image: linear-gradient(
       in oklab to right,
       #fff calc(var(--point) / 2),
@@ -262,27 +292,30 @@
       var(--scale-yellow) calc(var(--point) / 2 + (100% - var(--point)) * 0.75),
       var(--scale-red) calc(100% - var(--point) / 2)
     );
-    mask-image:
-      linear-gradient(to right, #000 calc(100% - var(--reveal-fade)), transparent), var(--chevrons);
-    mask-size:
-      calc(100cqw + var(--reveal-fade)) 100%,
-      100% 100%;
-    mask-position:
-      var(--revealed) 0,
-      0 0;
-    mask-composite: intersect, add;
+    mask-image: var(--chevrons);
+    mask-size: 100% 100%;
+    mask-repeat: no-repeat;
     clip-path: var(--unlit-clip);
+    translate: calc(-1 * var(--revealed)) 0;
   }
 
   /* Once its row starts filling (the rows 80ms apart, see SkillBars), the skill's segments light up
    * from the left, each one fading in as the fill sweeps past it (the whole bar in 1.2s, slowing
    * towards its end), the last one as the bar glows (see .bar). With reduced motion, the skill's
    * segments are all lit at once */
-  &[data-filling="true"]::after {
-    clip-path: var(--lit-clip);
+  &[data-filling="true"] {
+    .lit {
+      clip-path: var(--lit-clip);
+    }
 
     @media (prefers-reduced-motion: no-preference) {
-      animation: skill-bar-fill 1.2s cubic-bezier(0.33, 1, 0.68, 1) both;
+      .fill {
+        animation: skill-bar-fill 1.2s cubic-bezier(0.33, 1, 0.68, 1) both;
+      }
+
+      .lit {
+        animation: skill-bar-fill-hold 1.2s cubic-bezier(0.33, 1, 0.68, 1) both;
+      }
     }
   }
 }
@@ -417,37 +450,42 @@
 
 /* Without JavaScript nothing would start the fill: show the bars full right away */
 @media (scripting: none) {
-  .segments::after {
+  .segments .lit {
     clip-path: var(--lit-clip);
   }
 }
 
-/* One glow: in by the middle, out by the end */
+/* One glow (see .bar::after, which holds it): in by the middle, out by the end */
 @keyframes skill-bar-glow {
   0%,
   100% {
-    box-shadow: 0 0 0 0 transparent, 0 0 0 0 transparent;
+    opacity: 0;
   }
 
   50% {
-    box-shadow:
-      0 0 calc(0.25 * var(--row)) calc(0.05 * var(--row)) oklch(75% 0.183 55.934),
-      0 0 calc(0.6 * var(--row)) calc(0.1 * var(--row)) oklch(75% 0.183 55.934 / 60%);
+    opacity: 1;
   }
 }
 
 /* From nothing lit to the skill's last segment, sweeping its reveal along (see .segments) */
 @keyframes skill-bar-fill {
   from {
-    mask-position:
-      var(--unrevealed) 0,
-      0 0;
+    translate: var(--unrevealed) 0;
   }
 
   to {
-    mask-position:
-      var(--revealed) 0,
-      0 0;
+    translate: var(--revealed) 0;
+  }
+}
+
+/* The lit segments, moved back as much as the reveal they're in moves, so they hold still */
+@keyframes skill-bar-fill-hold {
+  from {
+    translate: calc(-1 * var(--unrevealed)) 0;
+  }
+
+  to {
+    translate: calc(-1 * var(--revealed)) 0;
   }
 }
 
@@ -456,7 +494,7 @@
  * in Highlight, empty ones in GrayText, and the hovered one in CanvasText, with a Canvas border */
 @media (forced-colors: active) {
   .segments::before,
-  .segments::after,
+  .segments .lit,
   .highlight::before,
   .highlight::after {
     forced-color-adjust: none;
@@ -466,7 +504,7 @@
     background-color: GrayText;
   }
 
-  .segments::after {
+  .segments .lit {
     background: Highlight;
   }
 

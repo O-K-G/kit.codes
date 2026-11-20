@@ -130,6 +130,10 @@ function SkillBar({ name, percent, filling, labelId }: SkillBarProps) {
           onPointerMove={handlePointerMove}
           onPointerLeave={deactivate}
         >
+          {/* The lit segments, in the reveal that sweeps them in (see .fill in the CSS) */}
+          <span className={styles.fill}>
+            <span className={styles.lit} />
+          </span>
           {hovered && (
             <Tooltip
               // A new segment is a new highlight, so it lifts from its place rather than sliding there
