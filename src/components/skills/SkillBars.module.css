@@ -18,14 +18,28 @@
   /* The scale's colors past purple (see .segments and .highlight) */
   --scale-yellow: oklch(85.2% 0.199 91.936);
   --scale-red: oklch(63.7% 0.237 25.331);
-  /* The list's height in rows: every row (the groups' names and their skills) and the gaps between
-   * them, and each group's padding, with a little to spare for the borders */
-  --rows-tall: calc((1 + var(--row-gap)) * var(--count) + 2 * var(--group-padding) * var(--groups));
+  /* The list's height in rows: every row (the groups' names, a row each, and their skills, as tall
+   * as their names where those are taller, see .skill) and the gaps between them, and each group's
+   * padding, with a little to spare for the borders */
+  --skill-rows: max(1, var(--name-height));
+  --rows-tall: calc(
+    (var(--skill-rows) + var(--row-gap)) * var(--count) - (var(--skill-rows) - 1) * var(--groups) +
+      2 * var(--group-padding) * var(--groups)
+  );
 
   @media (width < 40rem) {
     --row-gap: 0.15;
     --group-padding: 0.2;
     --name-height: 0.9;
+  }
+
+  /* On desktops the list is held by its height, so its rows are short for the viewport: the rows and
+   * the groups closer together, so the rows are taller, and the names larger, slightly overflowing
+   * their rows (into the gaps between them). The bars are shorter too (see Skills' .skillBars) */
+  @media (width >= 64rem) {
+    --row-gap: 0.15;
+    --group-padding: 0.2;
+    --name-height: 1.15;
   }
 
   display: grid;
@@ -41,11 +55,11 @@
 .group {
   /* Its bars' chevrons, as SkillBar draws them (see skillChevrons), for the fill's cut and the
    * highlight (see .segments). Their lengths hold 100cqw, a bar's width: they're for its
-   * pseudo-elements and its highlight, in it. Half a chevron's height (the row's, less the bar's padding
-   * and border, see .bar), and its point's (and notch's) depth: as much, for 45° arms, or 30% of a full
+   * pseudo-elements and its highlight, in it. Half a chevron's height (the row's, less the bar's padding,
+   * see .bar), and its point's (and notch's) depth: as much, for 45° arms, or 30% of a full
    * share of the bar if more (on wide bars, which are pointier) */
   --share: calc(100cqw / var(--segments));
-  --half: calc((0.5 - var(--bar-padding)) * var(--row) - 2px);
+  --half: calc((0.5 - var(--bar-padding)) * var(--row));
   --tip: max(var(--half), 0.3 * var(--share));
   /* The gap between two chevrons: 30% of a full share of the bar, down to 20% on small chevrons (a
    * share under 30px, on phones), or half the point's depth if less, so each point enters the next
@@ -62,7 +76,9 @@
   display: grid;
   grid-column: 1 / -1;
   grid-template-columns: subgrid;
-  grid-template-rows: repeat(var(--rows), var(--row));
+  /* A row at least, or as tall as what's in it (a skill's name can be taller than its bar, see
+   * .skill), so the group fits its names and its bars */
+  grid-template-rows: repeat(var(--rows), minmax(var(--row), auto));
   row-gap: calc(var(--row-gap) * var(--row));
   padding: calc(var(--group-padding) * var(--row)) calc(0.5 * var(--row));
   /* Its border (and the border's glow): a light purple, the same on every group */
@@ -127,7 +143,8 @@
   grid-column: 1 / -1;
   grid-template-columns: subgrid;
   align-items: center;
-  height: var(--row);
+  /* Its bar's height, or its name's if taller (see .name), so the name stays in its row */
+  min-height: var(--row);
 }
 
 .name {
@@ -170,11 +187,11 @@
   }
 }
 
-/* ---- The bar: a purple pill holding the segments ---- */
+/* ---- The bar: a dark pill holding the segments, borderless ---- */
 .bar {
-  height: 100%;
+  /* A row tall, centered in its row when the name makes it taller */
+  height: var(--row);
   padding: calc(var(--bar-padding) * var(--row)) calc(0.4 * var(--row));
-  border: 2px solid var(--color-title-purple);
   border-radius: 9999px;
   /* Nearly opaque: the background mustn't show through the empty segments, which keep 3:1 against
    * the last lit one, where the fill ends (WCAG 1.4.11) */
@@ -187,7 +204,7 @@
   &::after {
     content: "";
     position: absolute;
-    inset: -2px;
+    inset: 0;
     border-radius: inherit;
     box-shadow:
       0 0 calc(0.25 * var(--row)) calc(0.05 * var(--row)) oklch(75% 0.183 55.934),
