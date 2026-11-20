@@ -64,6 +64,11 @@
       width: min(100% - 10 * var(--fluid-rem), 48 * var(--fluid-rem));
     }
 
+    /* On desktops the rows are short for the bars' length (see SkillBars): shorter bars */
+    @media (width >= 64rem) {
+      width: min(100% - 10 * var(--fluid-rem), 36 * var(--fluid-rem));
+    }
+
     /* The section grows to fit (see above): the list gets a height of its own */
     @media (height < 30rem) {
       flex: none;

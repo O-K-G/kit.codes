@@ -18,14 +18,28 @@
   /* The scale's colors past purple (see .segments and .highlight) */
   --scale-yellow: oklch(85.2% 0.199 91.936);
   --scale-red: oklch(63.7% 0.237 25.331);
-  /* The list's height in rows: every row (the groups' names and their skills) and the gaps between
-   * them, and each group's padding, with a little to spare for the borders */
-  --rows-tall: calc((1 + var(--row-gap)) * var(--count) + 2 * var(--group-padding) * var(--groups));
+  /* The list's height in rows: every row (the groups' names, a row each, and their skills, as tall
+   * as their names where those are taller, see .skill) and the gaps between them, and each group's
+   * padding, with a little to spare for the borders */
+  --skill-rows: max(1, var(--name-height));
+  --rows-tall: calc(
+    (var(--skill-rows) + var(--row-gap)) * var(--count) - (var(--skill-rows) - 1) * var(--groups) +
+      2 * var(--group-padding) * var(--groups)
+  );
 
   @media (width < 40rem) {
     --row-gap: 0.15;
     --group-padding: 0.2;
     --name-height: 0.9;
+  }
+
+  /* On desktops the list is held by its height, so its rows are short for the viewport: the rows and
+   * the groups closer together, so the rows are taller, and the names larger, slightly overflowing
+   * their rows (into the gaps between them). The bars are shorter too (see Skills' .skillBars) */
+  @media (width >= 64rem) {
+    --row-gap: 0.15;
+    --group-padding: 0.2;
+    --name-height: 1.15;
   }
 
   display: grid;
@@ -62,7 +76,9 @@
   display: grid;
   grid-column: 1 / -1;
   grid-template-columns: subgrid;
-  grid-template-rows: repeat(var(--rows), var(--row));
+  /* A row at least, or as tall as what's in it (a skill's name can be taller than its bar, see
+   * .skill), so the group fits its names and its bars */
+  grid-template-rows: repeat(var(--rows), minmax(var(--row), auto));
   row-gap: calc(var(--row-gap) * var(--row));
   padding: calc(var(--group-padding) * var(--row)) calc(0.5 * var(--row));
   /* Its border (and the border's glow): a light purple, the same on every group */
@@ -127,7 +143,8 @@
   grid-column: 1 / -1;
   grid-template-columns: subgrid;
   align-items: center;
-  height: var(--row);
+  /* Its bar's height, or its name's if taller (see .name), so the name stays in its row */
+  min-height: var(--row);
 }
 
 .name {
@@ -172,7 +189,8 @@
 
 /* ---- The bar: a purple pill holding the segments ---- */
 .bar {
-  height: 100%;
+  /* A row tall, centered in its row when the name makes it taller */
+  height: var(--row);
   padding: calc(var(--bar-padding) * var(--row)) calc(0.4 * var(--row));
   border: 2px solid var(--color-title-purple);
   border-radius: 9999px;
